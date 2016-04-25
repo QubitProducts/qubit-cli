@@ -1,0 +1,23 @@
+{
+  "name": "experience-previewer",
+  "version": "1.0.0",
+  "description": "a utility for previewing experiences built using the qubit experience platform",
+  "main": "index.js",
+  "bin": {
+    "experience-previewer": "bin/experience-previewer"
+  },
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "css-loader": "^0.23.1",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.0",
+    "webpack-dev-server": "^1.14.1"
+  }
+}

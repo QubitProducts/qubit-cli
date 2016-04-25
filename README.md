@@ -3,6 +3,8 @@
 This is an attempt to experiment with new ways to facilitate experience development within the deliver platform
 
 ## demo
+![experience-preview-demo](https://cloud.githubusercontent.com/assets/640611/14802248/bf9cc210-0b47-11e6-9866-ec2050dbd1b0.gif)
+
 
 ### extension
 1. go to chrome://extensions
