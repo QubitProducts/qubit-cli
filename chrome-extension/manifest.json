@@ -1,0 +1,15 @@
+{
+    "name": "ExperiencePreviewer",
+    "version": "0.0.1",
+    "manifest_version": 2,
+    "description" : "Description ...",
+    "icons": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "content_scripts": [{
+        "matches": ["*://*/*local_experience_previewer*"],
+        "js": [ "index.js" ]
+    }]
+}
