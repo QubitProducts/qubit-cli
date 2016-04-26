@@ -1,6 +1,6 @@
 module.exports = {
   entry: {
-    app: ['./loader', 'webpack-dev-server/client']
+    app: ['./index', 'webpack-dev-server/client']
   },
   output: {
     path: process.cwd(),

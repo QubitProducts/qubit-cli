@@ -22,8 +22,9 @@ now open any page and add 'local_experience_previewer&activate' to the url query
 ```
 - activation.js // develop advanced activations
 - global.js // develop global code
-- index.js // develop execution code
+- execution.js // develop execution code
 - variation.css // develop variation css
+- index.js // entry point
 ```
 
 you can use this workflow to:
