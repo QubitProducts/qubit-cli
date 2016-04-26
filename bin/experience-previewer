@@ -2,21 +2,4 @@
 var WebpackDevServer = require('webpack-dev-server')
 var webpack = require('webpack')
 var config = require('./webpack.conf.js')
-config.context = process.cwd()
-var compiler = webpack(config)
-
-var server = new WebpackDevServer(compiler, {
-  contentBase: process.cwd(),
-  compress: true,
-  filename: 'bundle.js',
-  watchOptions: {
-    aggregateTimeout: 300,
-    poll: 1000
-  },
-  quiet: true,
-  noInfo: false,
-  publicPath: '/',
-  stats: { colors: true }
-})
-
-server.listen(1234)
+new WebpackDevServer(webpack(config), config.devServer).listen(1234)
