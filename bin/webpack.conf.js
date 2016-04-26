@@ -1,6 +1,7 @@
 module.exports = {
+  devtool: 'source-map',
   entry: {
-    app: ['./loader', 'webpack-dev-server/client']
+    app: ['./index', 'webpack-dev-server/client']
   },
   output: {
     path: process.cwd(),
@@ -10,5 +11,18 @@ module.exports = {
     loaders: [
       { test: /\.css$/, loader: 'style-loader!css-loader' }
     ]
+  },
+  devServer: {
+    contentBase: process.cwd(),
+    compress: true,
+    filename: 'bundle.js',
+    watchOptions: {
+      aggregateTimeout: 300,
+      poll: 1000
+    },
+    quiet: true,
+    noInfo: false,
+    publicPath: '/',
+    stats: { colors: true }
   }
 }

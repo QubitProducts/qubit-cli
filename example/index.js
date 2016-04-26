@@ -1,3 +1,10 @@
-module.exports = function execution (options) {
-  alert('execute!')
-}
+var activation = require('./activation')
+activation({}, function (shouldActivate) {
+  if (!shouldActivate) {
+    console.log('activation returned false')
+    return
+  }
+  require('./global')
+  require('./variation.css')
+  require('./execution')({})
+})
