@@ -12,7 +12,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": {
+    "name": "Alan Clarke",
+    "email": "alan@qubit.com",
+    "url": "qubit.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qubitdigital/experience-previewer.git"
+  },
   "license": "UNLICENSED",
   "dependencies": {
     "css-loader": "^0.23.1",
