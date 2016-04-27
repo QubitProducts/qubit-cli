@@ -16,7 +16,6 @@ npm link
 cd ./example
 experience-previewer
 ```
-
 now open any page and add 'local_experience_previewer&activate' to the url querystring or hash
 
 ```
@@ -31,3 +30,14 @@ you can use this workflow to:
 - build tests locally in your local editor
 - write and run local unit tests
 - benefit from features such as live reload while developing
+
+### some extra hacks
+- to load modules from the page add
+```
+var require = window.__qubit.amd.require
+```
+to the top of your file (e.g. execution.js or activation.js)
+
+- to share code between modules export an object from global.js and interact with it from each file - this is a shared instance
+
+- if you're requiring modules and adding unit tests, you'll need to shim window.__qubit.require, see example/test/test-execution.js for how to do this
