@@ -9,7 +9,7 @@
       "128": "icons/icon128.png"
     },
     "content_scripts": [{
-        "matches": ["*://*/*local_experience_previewer*"],
+        "matches": ["<all_urls>"],
         "js": [ "index.js" ]
     }]
 }

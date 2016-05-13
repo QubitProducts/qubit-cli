@@ -26,6 +26,7 @@
     "css-loader": "^0.23.1",
     "less": "^2.6.1",
     "less-loader": "^2.2.3",
+    "script-loader": "^0.7.0",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.0",
     "webpack-dev-server": "^1.14.1"
