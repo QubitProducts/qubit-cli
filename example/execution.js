@@ -1,4 +1,3 @@
-module.exports = function execution (options) {
-  console.log('running execution.js')
-  alert('execute!')
+function execution (options) {
+  console.log(someGlobalVariable)
 }
