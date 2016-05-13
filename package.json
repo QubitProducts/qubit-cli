@@ -1,10 +1,10 @@
 {
-  "name": "experience-previewer",
+  "name": "xp-cli",
   "version": "1.0.0",
   "description": "a utility for previewing experiences built using the qubit experience platform",
   "main": "index.js",
   "bin": {
-    "experience-previewer": "bin/experience-previewer"
+    "xp": "bin/xp"
   },
   "directories": {
     "example": "example"
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/qubitdigital/experience-previewer.git"
+    "url": "git+https://github.com/qubitdigital/xp-cli.git"
   },
   "license": "UNLICENSED",
   "dependencies": {
