@@ -1,5 +1,22 @@
 #!/usr/bin/env node
+var fs = require('fs')
+var path = require('path')
 var WebpackDevServer = require('webpack-dev-server')
 var webpack = require('webpack')
 var config = require('../webpack.conf.js')
-new WebpackDevServer(webpack(config), config.devServer).listen(1234)
+new WebpackDevServer(webpack(config), config.devServer).listen(1234);
+['activation.js', 'execution.js', 'global.js', 'variation.css'].forEach(create)
+
+function create (filename) {
+  fs.stat(path.join(process.cwd(), filename), function (err, stat) {
+    if (!err) return
+    if (err.code === 'ENOENT') {
+      fs.readFile(path.join(__dirname, '../example', filename), function (err, contents) {
+        if (err) return console.error(err)
+        fs.writeFile(path.join(process.cwd(), filename), contents, function (err) {
+          if (err) return console.error(err)
+        })
+      })
+    }
+  })
+}
