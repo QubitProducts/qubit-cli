@@ -24,5 +24,5 @@ function waitFor (thing, cb, i) {
 }
 
 function qubit () {
-  return window.__qubit
+  return window.__qubit && window.__qubit.amd && window.__qubit.amd.require
 }
