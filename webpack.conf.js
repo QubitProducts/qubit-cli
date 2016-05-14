@@ -1,11 +1,21 @@
+var path = require('path')
+var webpack = require('webpack')
+var cwd = process.cwd()
+
 module.exports = {
   devtool: 'source-map',
   entry: {
-    app: ['./index', 'webpack-dev-server/client']
+    app: [
+      path.join(__dirname, 'src/index'),
+      'webpack-dev-server/client'
+    ]
   },
   output: {
-    path: process.cwd(),
+    path: cwd,
     filename: 'bundle.js'
+  },
+  resolve: {
+    root: cwd
   },
   module: {
     loaders: [
@@ -13,7 +23,7 @@ module.exports = {
     ]
   },
   devServer: {
-    contentBase: process.cwd(),
+    contentBase: cwd,
     compress: true,
     filename: 'bundle.js',
     watchOptions: {
