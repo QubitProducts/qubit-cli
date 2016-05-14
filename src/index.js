@@ -1,17 +1,16 @@
 // this is boilerplate entry logic to glue everything together
 // still required for now
-
 waitFor(qubit, run)
 
 function run () {
-  require('script!./global')
-  require('../qubit-loader!./activation')({}, function (shouldActivate) {
+  require('script!global')
+  require('../qubit-loader!activation')({}, function (shouldActivate) {
     if (!shouldActivate) {
       console.log('activation returned false')
       return
     }
-    require('./variation.css')
-    require('../qubit-loader!./execution')({})
+    require('variation.css')
+    require('../qubit-loader!execution')({})
   })
 }
 

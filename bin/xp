@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 var WebpackDevServer = require('webpack-dev-server')
 var webpack = require('webpack')
-var config = require('./webpack.conf.js')
+var config = require('../webpack.conf.js')
 new WebpackDevServer(webpack(config), config.devServer).listen(1234)
