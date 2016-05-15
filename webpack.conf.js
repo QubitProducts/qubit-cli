@@ -15,7 +15,7 @@ module.exports = {
     filename: 'bundle.js'
   },
   resolve: {
-    root: cwd
+    root: [cwd, path.join(__dirname, 'node_modules')]
   },
   module: {
     loaders: [
