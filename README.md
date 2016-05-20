@@ -22,6 +22,7 @@ notes:
 - xp will create example files in the current working directory if they don't already exist
 - the default activation rule is that the url contains 'activate'
 - xp will not execute until window.__qubit is detected
+- when running experiences over https protocol, click the shield in the address bar to allow loading the script
 
 
 ```
