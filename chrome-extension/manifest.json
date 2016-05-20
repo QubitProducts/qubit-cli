@@ -1,15 +1,25 @@
 {
-    "name": "ExperiencePreviewer",
-    "version": "0.0.1",
-    "manifest_version": 2,
-    "description" : "Description ...",
-    "icons": {
-      "16": "icons/icon16.png",
-      "48": "icons/icon48.png",
-      "128": "icons/icon128.png"
-    },
-    "content_scripts": [{
-        "matches": ["<all_urls>"],
-        "js": [ "index.js" ]
-    }]
+  "name": "xp-cli",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "xp-cli chrome extension",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": false
+  },
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["index.js"]
+  }],
+  "permissions": [
+    "cookies",
+    "*://*.app.qubit.com/*"
+  ]
 }
