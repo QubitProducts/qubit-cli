@@ -1,52 +1,42 @@
-# XP
+# ![xp-logo](./logo.png)
 
-This is an attempt to experiment with new ways to facilitate experience development within the deliver platform
+A client to facilitate the local development of experiences for the qubit platform
 
-## demo
-![xp-demo](https://cloud.githubusercontent.com/assets/640611/14802248/bf9cc210-0b47-11e6-9866-ec2050dbd1b0.gif)
+- build experiences locally in your editor/ide of choice
+- write and run local unit tests
+- bypass the build queue
+- execute/demo on sites that don't have qubit tech
+- live reload
 
 
-### extension
+## Usage
+
+### 1) install extension
 1. go to chrome://extensions
-2. load and enable the extension at ./chrome-extension
+2. load and enable the extension at ./chrome
 
-### server
+### 2) run cli
 ```
 npm install -g qubitdigital/xp-cli
-mkdir some-experiment
-cd some-experiment
+mkdir dev-123
+cd dev-123
 xp
+// navigate to some experiment
 ```
-
-notes:
-- xp will create example files in the current working directory if they don't already exist
-- the default activation rule is that the url contains 'activate'
-- xp will not execute until window.__qubit is detected
-- when running experiences over https protocol, click the shield in the address bar to allow loading the script
-
 
 ```
 files:
 - activation.js // develop advanced activations
 - global.js // develop global code
 - execution.js // develop execution code
-- variation.css // develop variation css (this is actually less)
+- variation.css // develop variation css/less
 ```
-
-you can use this workflow to:
-- build tests locally in your local editor
-- write and run local unit tests
-- benefit from features such as live reload while developing
 
 
 ```
-changelog:
-- the project is now called xp-cli and lives at http://github.com/qubitdigital/xp-cli
-- the executable is now called xp, so you type xp instead of experience-previewer
-- you don't need a querystring param anymore, it executes on every page
-- activation.js, execution.js and global.js are now semantically identical to webapp, you can copy/paste between them (no need for module.exports, no need to do require = window.__qubit.amd.require and global.js executes in global context)
-- xp will automatically wait until window.__qubit is defined
-- variation.css supports less
-- the index.js boilerplate is no longer required
-- xp auto scaffolds missing files in the current directory when run
+notes:
+- xp will produce sample files in the current folder if they are missing
+- the default activation rule is that the url contains 'activate'
+- xp will not execute until window.__qubit.amd is detected
+- when running experiences over https protocol, click the shield in the address bar to allow loading the script
 ```
