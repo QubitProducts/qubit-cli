@@ -4,16 +4,21 @@ waitFor(qubit, run)
 
 function run () {
   require('script!global')
-  require('../qubit-loader!activation')({}, function (pass) {
+  var ret = require('../qubit-loader!activation')({}, function (pass) {
     var shouldActivate = pass || typeof pass === 'undefined'
     if (!shouldActivate) {
       console.log('activation returned false')
       return
     }
     console.log('activation returned true')
-    require('variation.css')
-    require('../qubit-loader!execution')({})
+    execute()
   })
+  if (ret === true) execute()
+}
+
+function execute () {
+  require('variation.css')
+  require('../../qubit-loader!execution')({})
 }
 
 function waitFor (thing, cb, i) {

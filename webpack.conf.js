@@ -1,12 +1,11 @@
 var path = require('path')
-var webpack = require('webpack')
 var cwd = process.cwd()
 
 module.exports = {
   devtool: 'source-map',
   entry: {
-    app: [
-      path.join(__dirname, 'src/index'),
+    experience: [
+      path.join(__dirname, 'src/client/index'),
       'webpack-dev-server/client'
     ]
   },
