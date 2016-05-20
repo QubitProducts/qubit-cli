@@ -1,5 +1,16 @@
 #!/usr/bin/env node
+var program = require('commander')
+var pkg = require('../package.json')
+var createServer = require('../src/server')
+var scaffold = require('../src/server/lib/code/scaffold')
 var log = require('../src/server/lib/utils/log')
-require('../src/server/lib/code/scaffold')(process.cwd(), null, false, log)
-require('../src/server').listen(1234)
-log(`xp listening on port ${1234}`)
+
+program
+  .version(pkg.version)
+  .option('-p, --port [port]', 'use custom [port]', Number, 1234)
+  .option('-w, --wait', 'wait for window.__qubit.amd')
+  .parse(process.argv)
+
+scaffold(process.cwd(), null, false, log)
+createServer(program).listen(program.port)
+log(`xp listening on port ${program.port}`)
