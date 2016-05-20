@@ -1,10 +1,24 @@
 var confirmer = require('confirmer')
+var queue = []
 
-module.exports = function confirm (msg) {
-  return confirmer(msg).then(function (result) {
+module.exports = function confirm (question) {
+  var l = queue.length
+  queue.push(l
+    ? queue[l - 1].then(() => getConfirmation(question).then(unshift))
+    : getConfirmation(question).then(unshift)
+  )
+  return queue[l]
+}
+
+function unshift (result) {
+  queue.unshift()
+  return result
+}
+
+function getConfirmation (question) {
+  return confirmer(question).then(function (result) {
     if (!result) {
-      // cleanup
-      var lines = msg.match(/\n/g)
+      var lines = question.match(/\n/g)
       lines = (lines ? lines.length : 0) + 1
       process.stdout.moveCursor(0, -lines)
       process.stdout.clearScreenDown()

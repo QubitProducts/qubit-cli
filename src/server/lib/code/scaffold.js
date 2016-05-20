@@ -3,15 +3,12 @@ var chalk = require('chalk')
 var fs = require('fs-promise')
 var examples = require('./examples')
 var confirm = require('../utils/confirm')
-var sequence = require('../utils/sequence')
 var addExtension = require('../utils/add-extension')
 
 module.exports = function scaffold (dest, codes, ask, log) {
   return examples.then(examples => {
     if (!codes) return scaffold(dest, examples, ask, log)
-    return sequence(Object.keys(codes), next)
-
-    function next (name) {
+    return Promise.all(Object.keys(codes).map(function next (name) {
       var value = codes[name]
       var file = path.join(dest, addExtension(name))
       var msg
@@ -25,7 +22,7 @@ module.exports = function scaffold (dest, codes, ask, log) {
             return fs.writeFile(file, value)
           }
         })
-    }
+    }))
   })
 }
 

@@ -2,7 +2,7 @@ var url = require('urlite')
 var chalk = require('chalk')
 var events = require('../lib/utils/events')
 var confirm = require('../lib/utils/confirm')
-var getCode = require('../lib/code/fetch')
+var fetchCode = require('../lib/code/fetch')
 var readCode = require('../lib/code/read')
 var updateCode = require('../lib/code/update')
 var scaffold = require('../lib/code/scaffold')
@@ -25,7 +25,7 @@ module.exports = function syncMode (req, res, next) {
     auth: req.body.value
   }
 
-  return getCode(data)
+  return fetchCode(data)
     .then(requestSync)
     .then(() => res.json({ message: 'ok' }), console.error)
 
