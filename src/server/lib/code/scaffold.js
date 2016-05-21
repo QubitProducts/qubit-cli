@@ -26,7 +26,7 @@ module.exports = function scaffold (dest, codes, ask, log) {
   })
 }
 
-function shouldOverwrite (file, remoteValue, exampleValue, ask) {
+function shouldOverwrite (file, newValue, defaultValue, ask) {
   return exists(file).then(exists => {
     // file does not exist - overwrite
     if (!exists) return true
@@ -35,9 +35,9 @@ function shouldOverwrite (file, remoteValue, exampleValue, ask) {
     return fs.readFile(file).then(currentValue => {
       currentValue = String(currentValue)
       // file is same as remote - no need to overwrite
-      if (currentValue === remoteValue) return false
+      if (currentValue === newValue) return false
       // file is just the example file - ok to overwrite
-      if (currentValue === exampleValue) return true
+      if (currentValue === defaultValue) return true
       // file exists and is different from example - ask permission
       return ask ? confirm(ask) : false
     })
