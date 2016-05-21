@@ -1,6 +1,11 @@
+/* globals __WAIT__ */
 // this is boilerplate entry logic to glue everything together
 // still required for now
-waitFor(qubit, run)
+if (__WAIT__) {
+  waitFor(qubit, run)
+} else {
+  run()
+}
 
 function run () {
   require('script!global')
