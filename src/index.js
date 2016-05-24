@@ -4,8 +4,9 @@ waitFor(qubit, run)
 
 function run () {
   require('script!global')
-  require('../qubit-loader!activation')({}, function (shouldActivate) {
-    if (!shouldActivate && shouldActivate !== undefined) {
+  require('../qubit-loader!activation')({}, function (pass) {
+    var shouldActivate = pass || typeof pass === 'undefined'
+    if (!shouldActivate) {
       console.log('activation returned false')
       return
     }
