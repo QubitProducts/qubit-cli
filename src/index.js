@@ -10,6 +10,7 @@ function run () {
       console.log('activation returned false')
       return
     }
+    console.log('activation returned true')
     require('variation.css')
     require('../qubit-loader!execution')({})
   })
