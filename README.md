@@ -13,7 +13,7 @@ A client to facilitate the local development of experiences for the qubit platfo
 
 ### 1) install extension
 1. go to chrome://extensions
-2. load and enable the extension at ./chrome
+2. load and enable the extension at ./chrome-extension
 
 ### 2) run cli
 ```
@@ -21,7 +21,7 @@ npm install -g qubitdigital/xp-cli
 mkdir dev-123
 cd dev-123
 xp
-// navigate to some experiment
+// navigate to some experiment in your web browser
 ```
 
 ```
@@ -32,6 +32,16 @@ files:
 - variation.css // develop variation css/less
 ```
 
+```
+Usage: xp [options]
+
+Options:
+
+  -h, --help         output usage information
+  -V, --version      output the version number
+  -p, --port [port]  use custom [port] //  note you need to manually modify the extension for this to work
+  -w, --wait         wait for window.__qubit.amd
+```
 
 ```
 notes:
