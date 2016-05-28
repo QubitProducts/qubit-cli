@@ -1,22 +1,29 @@
 #!/usr/bin/env node
-var fs = require('fs')
+var program = require('commander')
 var path = require('path')
-var WebpackDevServer = require('webpack-dev-server')
-var webpack = require('webpack')
-var config = require('../webpack.conf.js')
-new WebpackDevServer(webpack(config), config.devServer).listen(1234);
-['activation.js', 'execution.js', 'global.js', 'variation.css'].forEach(create)
+var exec = require('child_process').exec
+var pkg = require('../package.json')
+var createServer = require('../src/server')
+var scaffold = require('../src/server/lib/code/scaffold')
+var log = require('../src/server/lib/utils/log')
 
-function create (filename) {
-  fs.stat(path.join(process.cwd(), filename), function (err, stat) {
-    if (!err) return
-    if (err.code === 'ENOENT') {
-      fs.readFile(path.join(__dirname, '../example', filename), function (err, contents) {
-        if (err) return console.error(err)
-        fs.writeFile(path.join(process.cwd(), filename), contents, function (err) {
-          if (err) return console.error(err)
-        })
-      })
-    }
+program
+  .command('open')
+  .description('open xp folder in finder, e.g. to locate chrome-extension')
+  .action(function () {
+    exec(`open ${path.dirname(__dirname)}`)
   })
+
+program
+  .version(pkg.version)
+  .option('-p, --port [port]', 'use custom [port]', Number, 1234)
+  .option('-w, --wait', 'wait for window.__qubit.amd')
+  .parse(process.argv)
+
+if (!program.args.length) serve(program)
+
+function serve (opts) {
+  scaffold(process.cwd(), null, false, log)
+  createServer(opts).listen(opts.port)
+  log(`xp listening on port ${opts.port}`)
 }
