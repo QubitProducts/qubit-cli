@@ -16,13 +16,19 @@ function unshift (result) {
 }
 
 function getConfirmation (question) {
-  return confirmer(question).then(function (result) {
-    if (!result) {
-      var lines = question.match(/\n/g)
-      lines = (lines ? lines.length : 0) + 1
-      process.stdout.moveCursor(0, -lines)
-      process.stdout.clearScreenDown()
-    }
-    return result
+  return new Promise(function (resolve, reject) {
+    setTimeout(function () {
+      return confirmer(question)
+        .then(function (result) {
+          if (!result) {
+            var lines = question.match(/\n/g)
+            lines = (lines ? lines.length : 0) + 1
+            process.stdout.moveCursor(0, -lines)
+            process.stdout.clearScreenDown()
+          }
+          return result
+        })
+        .then(resolve, reject)
+    }, 10)
   })
 }
