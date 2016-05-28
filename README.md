@@ -43,10 +43,8 @@ Options:
   -w, --wait         wait for window.__qubit.amd
 ```
 
-```
 notes:
 - xp will produce sample files in the current folder if they are missing
 - the default activation rule is that the url contains 'activate'
-- xp will not execute until window.__qubit.amd is detected
+- to make xp wait for window.__qubit.amd to be present, use the 'wait' flag: ``` xp --wait ```
 - when running experiences over https protocol, click the shield in the address bar to allow loading the script
-```
