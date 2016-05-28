@@ -18,7 +18,9 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.css$/, loader: 'style-loader!css-loader!less-loader' }
+      { test: /(execution|activation)\.js$/, loader: path.join(__dirname, 'xp-loader') },
+      { test: /global\.js$/, loader: 'script' },
+      { test: /\.css$/, loader: 'style!css!less' }
     ]
   },
   devServer: {

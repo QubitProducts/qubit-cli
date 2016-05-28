@@ -1,29 +1,28 @@
 /* globals __WAIT__ */
-// this is boilerplate entry logic to glue everything together
-// still required for now
 if (__WAIT__) {
   waitFor(qubit, run)
 } else {
   run()
 }
 
+var opts = {}
 function run () {
-  require('script!global')
-  var ret = require('../qubit-loader!activation')({}, function (pass) {
+  require('global')
+  var ret = require('activation')(opts, function (pass) {
     var shouldActivate = pass || typeof pass === 'undefined'
     if (!shouldActivate) {
       console.log('activation returned false')
       return
     }
     console.log('activation returned true')
-    execute()
+    execute(opts)
   })
-  if (ret === true) execute()
+  if (ret === true) execute(opts)
 }
 
-function execute () {
+function execute (opts) {
   require('variation.css')
-  require('../../qubit-loader!execution')({})
+  require('execution')(opts)
 }
 
 function waitFor (thing, cb, i) {
