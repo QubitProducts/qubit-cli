@@ -8,11 +8,11 @@ var scaffold = require('../src/server/lib/code/scaffold')
 var log = require('../src/server/lib/utils/log')
 
 program
-.command('open')
-.description('open xp folder in finder, e.g. to locate chrome-extension')
-.action(function () {
-  exec(`open ${path.dirname(__dirname)}`)
-})
+  .command('open')
+  .description('open xp folder in finder, e.g. to locate chrome-extension')
+  .action(function () {
+    exec(`open ${path.dirname(__dirname)}`)
+  })
 
 program
   .version(pkg.version)
