@@ -1,5 +1,15 @@
 var path = require('path')
+var fs = require('fs')
 var cwd = process.cwd()
+
+var certDir = path.resolve(process.env.HOME, '.qubitcert')
+var secure = {}
+if (fs.statSync(certDir).isDirectory()) {
+  secure.https = {
+    cert: fs.readFileSync(path.resolve(certDir, 'qubit_serve.crt')),
+    key: fs.readFileSync(path.resolve(certDir, 'qubit_serve.key'))
+  }
+}
 
 module.exports = {
   devtool: 'source-map',
@@ -18,12 +28,12 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /(execution|activation)\.js$/, loader: path.join(__dirname, 'xp-loader') },
+      { test: /^(execu|activa)tion\.js$/, loader: path.join(__dirname, 'xp-loader') },
       { test: /global\.js$/, loader: 'script' },
       { test: /\.css$/, loader: 'style!css!less' }
     ]
   },
-  devServer: {
+  devServer: Object.assign({
     contentBase: cwd,
     compress: true,
     filename: 'bundle.js',
@@ -35,5 +45,5 @@ module.exports = {
     noInfo: false,
     publicPath: '/',
     stats: { colors: true }
-  }
+  }, secure)
 }
