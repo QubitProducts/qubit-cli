@@ -1,5 +1,6 @@
 var chalk = require('chalk')
-module.exports = function log (msg) {
+module.exports = function log () {
+  var msg = Array.prototype.join.call(arguments, ' ')
   console.log(chalk.gray(`${now()}:  ${chalk.white(msg)}`))
 }
 

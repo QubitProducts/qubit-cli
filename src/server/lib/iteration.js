@@ -4,7 +4,7 @@ module.exports = { get: getIteration, set: setIteration }
 function getIteration (data) {
   var url = `${data.domain}/p/${data.propertyId}/` +
     `smart_serve/experiments/${data.experimentId}` +
-    `?embed=recent_iterations,schedule,goals`
+    '?embed=recent_iterations,schedule,goals'
   return fetch.get(url, data.auth).then(function (resp) {
     return resp.data.recent_iterations.draft
   })
@@ -13,7 +13,7 @@ function getIteration (data) {
 function setIteration (data, codes) {
   var url = `${data.domain}/p/${data.propertyId}/` +
     `smart_serve/experiments/${data.experimentId}` +
-    `?embed=recent_iterations,schedule,goals`
+    '?embed=recent_iterations,schedule,goals'
   return fetch.get(url, data.auth)
     .then(function (resp) {
       var experiment = resp.data

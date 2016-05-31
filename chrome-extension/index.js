@@ -1,4 +1,6 @@
 /* globals chrome */
+var log = console.log.bind(console)
+
 if (isEditor()) {
   connect()
 } else {
@@ -10,12 +12,12 @@ function connect () {
   chrome.runtime.sendMessage({
     xp: true,
     url: window.location.href
-  }, console.log)
+  }, log)
 }
 
 function inject () {
   var script = document.createElement('script')
-  script.src = 'http://localhost:1234/bundle.js'
+  script.src = 'https://localhost:1234/bundle.js'
   document.body.appendChild(script)
 }
 

@@ -4,7 +4,7 @@ module.exports = { get: getVariation, set: setVariation }
 function getVariation (data) {
   var url = `${data.domain}/p/${data.propertyId}/` +
     `smart_serve/experiments/${data.experimentId}/` +
-    `recent_iterations/draft/variations`
+    'recent_iterations/draft/variations'
   return fetch.get(url, data.auth).then(function (resp) {
     return resp.data.find((v) => v.master_id === Number(data.masterId))
   })
