@@ -13,7 +13,9 @@ module.exports = function createServer (options) {
   }))
   var compiler = webpack(config)
   compiler.plugin('done', (data) => emitter.emit('rebuild', data))
-  var server = new WebpackDevServer(compiler, config.devServer)
+  var server = new WebpackDevServer(compiler, Object.assign(config.devServer, {
+    https: options.certs
+  }))
   server.app.use(bodyParser.json())
   server.app.post('/sync', sync(emitter))
   return server

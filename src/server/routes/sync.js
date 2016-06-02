@@ -50,7 +50,7 @@ Would you like ${chalk.green.bold('xp')} to try to connect to this experiment? $
           .then(() => {
             process.stdout.moveCursor(0, -1)
             process.stdout.clearScreenDown()
-            log(`synced!`)
+            log('synced!')
           }).catch(error)
       })
     }

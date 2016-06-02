@@ -20,7 +20,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 })
 
 function connect (request, cookie) {
-  return fetch('http://localhost:1234/sync', {
+  return fetch('https://localhost:1234/sync', {
     mode: 'cors',
     method: 'post',
     headers: {

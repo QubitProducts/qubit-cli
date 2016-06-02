@@ -1,5 +1,7 @@
 # ![xp-logo](./logo.png)
 
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+
 A client to facilitate the local development of experiences for the qubit platform
 
 - build experiences locally in your editor/ide of choice
