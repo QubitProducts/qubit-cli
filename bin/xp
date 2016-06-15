@@ -18,7 +18,8 @@ program
 program
   .version(pkg.version)
   .option('-p, --port [port]', 'use custom [port]', Number, 1234)
-  .option('-w, --wait', 'wait for window.__qubit.amd')
+  .option('-r, --require', 'wait for window.__qubit.amd')
+  .option('-w, --watch', 'watch for file changes and auto refresh on change')
   .parse(process.argv)
 
 if (!program.args.length) serve(program)
