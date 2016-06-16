@@ -35,17 +35,25 @@ files:
 ```
 
 ```
-Usage: xp [options]
+Usage: xp [options] [command]
+
+
+Commands:
+
+  open   open xp folder in finder, e.g. to locate chrome-extension
 
 Options:
 
   -h, --help         output usage information
   -V, --version      output the version number
-  -p, --port [port]  use custom [port] //  note you need to manually modify the extension for this to work
-  -w, --wait         wait for window.__qubit.amd
+  -p, --port [port]  use custom [port]
+  -r, --require      wait for window.__qubit.amd
+  -w, --watch        watch for file changes and auto refresh on change
 ```
 
 notes:
 - xp will produce sample files in the current folder if they are missing
 - the default activation rule is that the url contains 'activate'
-- to make xp wait for window.__qubit.amd to be present, use the 'wait' flag: ``` xp --wait ```
+- to make xp wait for window.__qubit.amd to be present, use the 'require' flag: ``` xp --require
+- if it isn't working after an update, try reloading the extension
+ ```
