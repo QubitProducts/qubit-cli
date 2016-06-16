@@ -11,6 +11,7 @@ module.exports = function createServer (options) {
   config.plugins.push(new webpack.DefinePlugin({
     __WAIT__: !!options.wait
   }))
+  if (!options.watch) config.entry.experience.pop()
   var compiler = webpack(config)
   compiler.plugin('done', (data) => emitter.emit('rebuild', data))
   var server = new WebpackDevServer(compiler, Object.assign(config.devServer, {
