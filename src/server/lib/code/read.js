@@ -11,12 +11,12 @@ module.exports = function readCode (dir) {
   ]
   return Promise.all(names.map(function (name) {
     var src = path.join(dir, addExtension(name))
-    return fs.readFile(src)
+    return fs.readFile(src).catch(() => false)
   }))
   .then(function (codes) {
     var result = {}
     var l = names.length
-    while (l--) result[names[l]] = String(codes[l])
+    while (l--) if (codes[l]) result[names[l]] = String(codes[l])
     return result
   })
 }

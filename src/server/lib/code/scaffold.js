@@ -13,12 +13,12 @@ module.exports = function scaffold (dest, codes, ask, log) {
       var file = path.join(dest, addExtension(name))
       var msg
       if (ask) {
-        msg = `Should ${chalk.green.bold('xp')} overwrite your local ${chalk.green.bold(name)} file with remote's?`
+        msg = `Do you want ${chalk.green.bold('xp')} to overwrite your local ${chalk.green.bold(name)} file?`
       }
       return shouldOverwrite(file, value, examples[name], msg)
         .then((result) => {
           if (result) {
-            if (log) log(`overwriting local ${chalk.green.bold(name)} file...`)
+            if (log) log(`writing to local ${chalk.green.bold(name)} file...`)
             return fs.writeFile(file, value)
           }
         })
