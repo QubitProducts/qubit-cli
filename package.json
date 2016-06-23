@@ -33,6 +33,7 @@
     "fs-promise": "^0.5.0",
     "less": "^2.6.1",
     "less-loader": "^2.2.3",
+    "no-op": "^1.0.3",
     "qubit-cli": "qubitdigital/qubit-cli",
     "script-loader": "^0.7.0",
     "style-loader": "^0.13.1",
