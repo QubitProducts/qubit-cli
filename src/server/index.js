@@ -9,7 +9,7 @@ module.exports = function createServer (options) {
   var emitter = createEmitter()
   config.plugins = config.plugins || []
   config.plugins.push(new webpack.DefinePlugin({
-    __WAIT__: !!options.wait
+    __WAIT__: !!options.require
   }))
   if (!options.watch) config.entry.experience.pop()
   var compiler = webpack(config)
