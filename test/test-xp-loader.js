@@ -8,7 +8,7 @@ describe('xp-loader', function () {
     })
   })
   describe('require', function () {
-    it('should replace with window.__qubit.amd.require with require', function () {
+    it('should replace require with window.__qubit.amd.require', function () {
       expect(loader('require(')).to.eql('module.exports = window.__qubit.amd.require(')
     })
   })
@@ -19,8 +19,8 @@ describe('xp-loader', function () {
   })
   describe('remember-preview', function () {
     it('should replace remember-preview with no-op', function () {
-      expect(loader('require("@qubit/remember-preview"')).to.eql("module.exports = require('no-op'")
-      expect(loader("require('@qubit/remember-preview'")).to.eql("module.exports = require('no-op'")
+      expect(loader('require("@qubit/remember-preview"')).to.eql('module.exports = !(function noop () {}')
+      expect(loader("require('@qubit/remember-preview'")).to.eql('module.exports = !(function noop () {}')
     })
   })
 })
