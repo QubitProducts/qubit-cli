@@ -1,5 +1,5 @@
-module.exports = function (content) {
+module.exports = function loader (content) {
   return 'module.exports = ' + content
-    .replace(/require\(/g, 'window.__qubit.amd.require(')
-    .replace('@qubit/remember-preview', 'no-op')
+    .replace(/(^|[^\.])require\(/g, '$1window.__qubit.amd.require(')
+    .replace(/window\.__qubit\.amd\.require\(['"]@qubit\/remember\-preview['"]/g, '!(function noop () {}')
 }
