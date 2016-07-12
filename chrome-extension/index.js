@@ -1,10 +1,30 @@
 /* globals chrome */
 var log = console.log.bind(console)
+var injected = false
 
-if (isEditor()) {
-  connect()
-} else {
-  inject()
+runContent()
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  setXpCliOn(request.xpCliOn)
+  runContent()
+})
+
+function runContent () {
+  if (isEditor()) {
+    connect()
+  } else if (getXpCliOn() === true && injected === false) {
+    inject()
+    injected = true
+  }
+}
+
+function setXpCliOn (val) {
+  window.localStorage.xpCliOn = JSON.stringify(val)
+}
+
+function getXpCliOn () {
+  var val = window.localStorage.xpCliOn || 'true'
+  return JSON.parse(val)
 }
 
 function connect () {
