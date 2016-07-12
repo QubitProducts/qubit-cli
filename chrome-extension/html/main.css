@@ -1,0 +1,83 @@
+html {
+  height: 60px;
+  width: 160px;
+  text-align: center;
+  font-family: Helvetica;
+}
+
+.onoffswitch {
+  position: relative; 
+  width: 60px;
+  -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+  margin: auto;
+}
+
+.onoffswitch-checkbox {
+  display: none;
+}
+
+.onoffswitch-label {
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+  height: 25px;
+  padding: 0;
+  line-height: 25px;
+  border: 2px solid #FFFFFF;
+  border-radius: 25px;
+  background-color: #9E9E9E;
+  transition: background-color 0.3s ease-in;
+}
+
+.onoffswitch-label:before {
+  content: "";
+  display: block;
+  width: 25px;
+  height: 25px;
+  margin: 0px;
+  background: #FFFFFF;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border: 2px solid #B0B0B0;
+  border-radius: 25px;
+  transition: all 0.3s ease-in 0s;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label {
+  background-color: #2CB0B2;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label, .onoffswitch-checkbox:checked + .onoffswitch-label:before {
+ border-color: #2CB0B2;
+}
+
+.onoffswitch-checkbox:checked + .onoffswitch-label:before {
+  left: 35px;
+}
+
+button.format-button {
+  display: none;
+  margin-top: 15px;
+  border: 1px solid #333;
+  background: transparent;
+  cursor: pointer;
+  margin-bottom: 10px;
+  padding: 5px 22px;
+  font-size: 12px;
+}
+
+button.format-button:hover {
+  background: #efefef;
+}
+
+button.format-button:active {
+  padding: 4px 21px;
+  margin-top: 15.5px;
+}
+
+button.format-button:focus {
+    outline: none;
+}
+ 
