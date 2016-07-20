@@ -4,27 +4,29 @@ var injected = false
 
 runContent()
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  setXpCliOn(request.xpCliOn)
-  runContent()
-})
+chrome.storage.onChanged.addListener(runContent)
 
 function runContent () {
   if (isEditor()) {
     connect()
-  } else if (getXpCliOn() === true && injected === false) {
-    inject()
-    injected = true
+  } else if (injected === false) {
+    getXpCliOn(function (xpCliOn) {
+      if (xpCliOn) {
+        inject()
+        injected = true
+      }
+    })
   }
 }
 
-function setXpCliOn (val) {
-  window.localStorage.xpCliOn = JSON.stringify(val)
-}
-
-function getXpCliOn () {
-  var val = window.localStorage.xpCliOn || 'true'
-  return JSON.parse(val)
+function getXpCliOn (callback) {
+  chrome.storage.local.get('xpCliOn', function (result) {
+    if (result && typeof result.xpCliOn === 'boolean') {
+      callback(result.xpCliOn)
+    } else {
+      callback(true)
+    }
+  })
 }
 
 function connect () {

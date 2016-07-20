@@ -3,13 +3,11 @@
   "version": "0.0.1",
   "manifest_version": 2,
   "description": "xp-cli chrome extension",
-  "browser_action": {
-    "default_popup": "html/popup.html"
-  },
+  "browser_action": {},
   "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "16": "icons/on16.png",
+    "48": "icons/on48.png",
+    "128": "icons/on128.png"
   },
   "background": {
     "scripts": [
@@ -22,6 +20,7 @@
     "js": ["index.js"]
   }],
   "permissions": [
+    "storage",
     "cookies",
     "*://*.app.qubit.com/*"
   ]
