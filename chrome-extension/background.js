@@ -30,21 +30,26 @@ function render (xpOn) {
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.xp) {
-    chrome.cookies.get({
-      'url': request.url,
-      'name': 'apsess'
-    }, function (cookie) {
-      if (!cookie) return sendResponse(false)
-      connect(request, cookie)
-      .then(function (response) {
-        return response.json().then(sendResponse)
-      }, function () {
-        sendResponse(false)
-      })
-    })
-    return true
+    getCookie(request, (cookie) => handleCookie(cookie, request, sendResponse))
   }
 })
+
+function getCookie (request, callback) {
+  return chrome.cookies.get({
+    'url': request.url,
+    'name': 'apsess'
+  }, callback)
+}
+
+function handleCookie (cookie, request, sendResponse) {
+  if (!cookie) return sendResponse(false)
+  connect(request, cookie)
+    .then(function (response) {
+      return response.json().then(sendResponse)
+    }, function () {
+      sendResponse(false)
+    })
+}
 
 function connect (request, cookie) {
   return fetch(XP_ENDPOINT, {
