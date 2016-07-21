@@ -1,35 +1,29 @@
 /* globals chrome fetch */
 var XP_ENDPOINT = 'https://localhost:1234/sync'
 
-var ICON = {
+var ICONS = {
   on: 'icons/on48.png',
   off: 'icons/off48.png'
 }
 
-chrome.browserAction.onClicked.addListener(function () {
-  getXpCliOn((xpOn) => setXpCliOn(!xpOn))
-})
-
 getXpCliOn(render)
 
+chrome.browserAction.onClicked.addListener(() => getXpCliOn((xpOn) => setXpCliOn(!xpOn)))
+
 function getXpCliOn (callback) {
-  chrome.storage.local.get('xpOn', function (result) {
-    callback(Boolean(result.xpOn))
-  })
+  chrome.storage.local.get('xpOn', (result) => callback(Boolean(result.xpOn)))
 }
 
 function setXpCliOn (xpOn) {
-  chrome.storage.local.set({ 'xpOn': xpOn }, function () {
-    render(xpOn)
-  })
+  chrome.storage.local.set({ 'xpOn': xpOn }, () => render(xpOn))
 }
 
 function render (xpOn) {
   if (xpOn) {
-    chrome.browserAction.setIcon({ path: ICON.on })
+    chrome.browserAction.setIcon({ path: ICONS.on })
     chrome.browserAction.setTitle({ title: 'XP Cli - ON' })
   } else {
-    chrome.browserAction.setIcon({ path: ICON.off })
+    chrome.browserAction.setIcon({ path: ICONS.off })
     chrome.browserAction.setTitle({ title: 'XP Cli - OFF' })
   }
 }
