@@ -1,54 +1,37 @@
 /* globals chrome fetch */
-var HOST = 'https://localhost:1234/sync'
+var XP_ENDPOINT = 'https://localhost:1234/sync'
 
 var ICON = {
   on: 'icons/on48.png',
   off: 'icons/off48.png'
 }
 
-var XPCLION = true
-
-getXpCliOn(function (xpCliOn) {
-  XPCLION = xpCliOn
-  render()
-  chrome.browserAction.onClicked.addListener(function () {
-    setXpCliOn(!XPCLION)
-  })
+chrome.browserAction.onClicked.addListener(function () {
+  getXpCliOn((xpCliOn) => setXpCliOn(!xpCliOn))
 })
+
+getXpCliOn(render)
 
 function getXpCliOn (callback) {
   chrome.storage.local.get('xpCliOn', function (result) {
-    if (result && typeof result.xpCliOn === 'boolean') {
-      callback(result.xpCliOn)
-    } else {
-      callback(true)
-    }
+    callback(Boolean(result.xpCliOn))
   })
 }
 
 function setXpCliOn (xpCliOn) {
   chrome.storage.local.set({ 'xpCliOn': xpCliOn }, function () {
-    XPCLION = xpCliOn
-    render()
+    render(xpCliOn)
   })
 }
 
-function render () {
-  if (XPCLION) {
-    setTitle('XP Cli - ON')
-    setIcon(ICON.on)
+function render (xpCliOn) {
+  if (xpCliOn) {
+    chrome.browserAction.setIcon({ path: ICON.on })
+    chrome.browserAction.setTitle({ title: 'XP Cli - ON' })
   } else {
-    setTitle('XP Cli - OFF')
-    setIcon(ICON.off)
+    chrome.browserAction.setIcon({ path: ICON.off })
+    chrome.browserAction.setTitle({ title: 'XP Cli - OFF' })
   }
-}
-
-function setIcon (icon) {
-  chrome.browserAction.setIcon({ path: icon })
-}
-
-function setTitle (text) {
-  chrome.browserAction.setTitle({ title: text })
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
@@ -70,7 +53,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 })
 
 function connect (request, cookie) {
-  return fetch(HOST, {
+  return fetch(XP_ENDPOINT, {
     mode: 'cors',
     method: 'post',
     headers: { 'content-type': 'application/json' },
