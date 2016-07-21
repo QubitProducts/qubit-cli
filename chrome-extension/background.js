@@ -7,25 +7,25 @@ var ICON = {
 }
 
 chrome.browserAction.onClicked.addListener(function () {
-  getXpCliOn((xpCliOn) => setXpCliOn(!xpCliOn))
+  getXpCliOn((xpOn) => setXpCliOn(!xpOn))
 })
 
 getXpCliOn(render)
 
 function getXpCliOn (callback) {
-  chrome.storage.local.get('xpCliOn', function (result) {
-    callback(Boolean(result.xpCliOn))
+  chrome.storage.local.get('xpOn', function (result) {
+    callback(Boolean(result.xpOn))
   })
 }
 
-function setXpCliOn (xpCliOn) {
-  chrome.storage.local.set({ 'xpCliOn': xpCliOn }, function () {
-    render(xpCliOn)
+function setXpCliOn (xpOn) {
+  chrome.storage.local.set({ 'xpOn': xpOn }, function () {
+    render(xpOn)
   })
 }
 
-function render (xpCliOn) {
-  if (xpCliOn) {
+function render (xpOn) {
+  if (xpOn) {
     chrome.browserAction.setIcon({ path: ICON.on })
     chrome.browserAction.setTitle({ title: 'XP Cli - ON' })
   } else {

@@ -10,8 +10,8 @@ function runContent () {
   if (isEditor()) {
     connect()
   } else if (injected === false) {
-    getXpCliOn(function (xpCliOn) {
-      if (xpCliOn) {
+    getXpCliOn(function (xpOn) {
+      if (xpOn) {
         inject()
         injected = true
       }
@@ -20,9 +20,9 @@ function runContent () {
 }
 
 function getXpCliOn (callback) {
-  chrome.storage.local.get('xpCliOn', function (result) {
-    if (result && typeof result.xpCliOn === 'boolean') {
-      callback(result.xpCliOn)
+  chrome.storage.local.get('xpOn', function (result) {
+    if (result && typeof result.xpOn === 'boolean') {
+      callback(result.xpOn)
     } else {
       callback(true)
     }
