@@ -6,15 +6,15 @@ var ICONS = {
   off: 'icons/off48.png'
 }
 
-getXpCliOn(render)
+getXpOn(render)
 
-chrome.browserAction.onClicked.addListener(() => getXpCliOn((xpOn) => setXpCliOn(!xpOn)))
+chrome.browserAction.onClicked.addListener(() => getXpOn((xpOn) => setXpOn(!xpOn)))
 
-function getXpCliOn (callback) {
+function getXpOn (callback) {
   chrome.storage.local.get('xpOn', (result) => callback(Boolean(result.xpOn)))
 }
 
-function setXpCliOn (xpOn) {
+function setXpOn (xpOn) {
   chrome.storage.local.set({ 'xpOn': xpOn }, () => render(xpOn))
 }
 
