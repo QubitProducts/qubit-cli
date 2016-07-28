@@ -1,30 +1,21 @@
 /* globals chrome */
-var log = console.log.bind(console)
+const NAMESPACE = 'xp-cli'
+const log = console.log.bind(console)
 var injected = false
 
-runContent()
+chrome.storage.onChanged.addListener(xp)
+xp()
 
-chrome.storage.onChanged.addListener(runContent)
-
-function runContent () {
-  if (isEditor()) {
-    connect()
-  } else if (injected === false) {
-    getXpCliOn(function (xpOn) {
-      if (xpOn) {
+function xp () {
+  chrome.storage.local.get(NAMESPACE, function (obj) {
+    var state = obj[NAMESPACE]
+    if (!state.disabled) {
+      if (isEditor()) {
+        connect()
+      } else if (injected === false) {
         inject()
         injected = true
       }
-    })
-  }
-}
-
-function getXpCliOn (callback) {
-  chrome.storage.local.get('xpOn', function (result) {
-    if (result && typeof result.xpOn === 'boolean') {
-      callback(result.xpOn)
-    } else {
-      callback(true)
     }
   })
 }
