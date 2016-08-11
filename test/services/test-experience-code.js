@@ -52,15 +52,15 @@ describe('experience code service', function () {
         .then((result) => expect(result).to.eql(experienceCodeFixture))
     })
 
-    describe('writeLocal', function () {
+    describe('down', function () {
       it('should scaffold a project from a remote experience', function () {
-        return experienceCodeService.writeLocal('dest', domain, propertyId, experienceId)
+        return experienceCodeService.down('dest', domain, propertyId, experienceId)
         .then(() => expect(scaffoldStub.getCall(0).args).to.eql(['dest', filesFixture]))
       })
     })
   })
 
-  describe('updateRemote', function () {
+  describe('up', function () {
     let updateExperience, updateVariation, restore
     beforeEach(function () {
       updateExperience = sinon.stub().returns(Promise.resolve())
@@ -72,7 +72,7 @@ describe('experience code service', function () {
     })
 
     it('should update experience and variations based on a files object', function () {
-      return experienceCodeService.updateRemote('dest', experienceCodeFixture, filesFixture)
+      return experienceCodeService.up('dest', experienceCodeFixture, filesFixture)
         .then(() => {
           expect(updateExperience.getCall(0).args).to.eql([
             "domain.com",

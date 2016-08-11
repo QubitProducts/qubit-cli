@@ -19,7 +19,7 @@ Would you like ${chalk.green.bold('xp')} to scaffold your local project from thi
     return confirm(msg).then(result => {
       if (!result) return
       console.log(process.cwd(), domain, propertyId, experienceId)
-      return experienceCode.writeLocal(process.cwd(), domain, propertyId, experienceId).then(process.exit)
+      return experienceCode.down(process.cwd(), domain, propertyId, experienceId).then(process.exit)
     })
   }
 }

@@ -28,7 +28,7 @@ function get (domain, propertyId, experienceId) {
   })
 }
 
-function writeLocal (dest, domain, propertyId, experienceId) {
+function down (dest, domain, propertyId, experienceId) {
   return get(domain, propertyId, experienceId).then((experience) => {
     let files = {}
     files['package.json'] = JSON.stringify(createPackageJson(experience), null, 2)
@@ -38,7 +38,7 @@ function writeLocal (dest, domain, propertyId, experienceId) {
   })
 }
 
-function updateRemote (dest, experience, files) {
+function up (dest, experience, files) {
   return Promise.all([
     experienceService.update(
       experience.domain,
@@ -60,4 +60,4 @@ function updateRemote (dest, experience, files) {
   ])
 }
 
-module.exports = { writeLocal, updateRemote, get }
+module.exports = { down, up, get }
