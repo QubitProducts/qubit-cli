@@ -66,7 +66,7 @@ describe('experience code service', function () {
       updateVariation = sinon.stub().returns(Promise.resolve())
       restore = experienceCodeService.__set__({
         experienceService: { update: updateExperience },
-        variationService: { update: updateVariation }
+        variationService: { update: updateVariation, filename: variationService.filename }
       })
     })
 

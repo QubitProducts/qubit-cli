@@ -20,5 +20,18 @@ module.exports = function start (options) {
   }))
   server.app.use(bodyParser.json())
   server.app.post('/connect', require('./routes/connect'))
+
+  if (options.sync) {
+    emitter.on('rebuild', () => {
+      log('syncing...')
+      readCode(process.cwd()).then((codes) => updateCode(data, codes))
+        .then(() => {
+          process.stdout.moveCursor(0, -1)
+          process.stdout.clearScreenDown()
+          log('synced!')
+        }).catch(error)
+    })
+  }
+
   return {server, emitter}
 }

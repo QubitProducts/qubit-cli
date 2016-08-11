@@ -52,8 +52,8 @@ function up (dest, experience, files) {
         experience.property_id,
         experience.id,
         variation.id,
-        variation.execution_code,
-        variation.custom_styles
+        files[variationService.filename(variation) + '.js'],
+        files[variationService.filename(variation) + '.css']
       )
     }))
   ])
