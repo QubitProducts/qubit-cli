@@ -17,7 +17,9 @@ module.exports = function connect (req, res, next) {
     let msg = `You recently navigated to ${chalk.green.bold(req.body.url)}
 Would you like ${chalk.green.bold('xp')} to scaffold your local project from this experiment? ${chalk.green.bold('(y/n)')}`
     return confirm(msg).then(result => {
-      if (result) return experienceCode.writeLocal(process.cwd(), domain, propertyId, experienceId)
+      if (!result) return
+      console.log(process.cwd(), domain, propertyId, experienceId)
+      return experienceCode.writeLocal(process.cwd(), domain, propertyId, experienceId).then(process.exit)
     })
   }
 }

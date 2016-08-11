@@ -10,7 +10,7 @@ function set (domain, authType, token) {
   return get(domain).then((data) => {
     data = data || {}
     data[domain] = data[domain] || {}
-    data[domain][authType] = token
+    data[domain][authType] = decodeURIComponent(token)
     return fs.writeFile(xprcPath(), JSON.stringify(data))
   })
 }
