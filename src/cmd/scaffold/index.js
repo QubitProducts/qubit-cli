@@ -1,9 +1,11 @@
 const path = require('path')
 const scaffold = require('../../lib/scaffold')
 const readFiles = require('../../lib/read-files')
+const scaffoldExample = require('../scaffold-example')
 const exec = require('child_process').exec
 
 module.exports = function scaffoldFromTemplate (template) {
+  if (template === 'example') return scaffoldExample()
   return exec(`npm link ${template}`, {
     cwd: path.resolve(__dirname, '../../../')
   }, (err) => {

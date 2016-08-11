@@ -27,4 +27,4 @@ program
 
 program.parse(process.argv)
 
-if (!program.args.length) scaffoldExample()
+if (!program.args.length) serve('', program)

@@ -12,4 +12,5 @@ module.exports = function serve (variation, opts) {
       xp.server.listen(opts.port, () => log(`xp listening on port ${opts.port}`))
       return xp
     })
+    .catch(console.error)
 }
