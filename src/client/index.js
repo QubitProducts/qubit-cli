@@ -1,4 +1,4 @@
-/* globals __WAIT__ */
+/* globals __WAIT__ __VARIATIONJS__ __VARIATIONCSS__ */
 if (__WAIT__) {
   waitFor(qubit, run)
 } else {
@@ -8,7 +8,7 @@ if (__WAIT__) {
 var opts = {}
 function run () {
   require('global')
-  var ret = require('activation')(opts, function (pass) {
+  var ret = require('triggers')(opts, function (pass) {
     var shouldActivate = pass || typeof pass === 'undefined'
     if (!shouldActivate) {
       console.log('activation returned false')
@@ -21,8 +21,8 @@ function run () {
 }
 
 function execute (opts) {
-  require('variation.css')
-  require('execution')(opts)
+  require(__VARIATIONCSS__)
+  require(__VARIATIONJS__)(opts)
 }
 
 function waitFor (thing, cb, i) {

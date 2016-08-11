@@ -1,52 +1,30 @@
 #!/usr/bin/env node
-var program = require('commander')
-var path = require('path')
-var exec = require('child_process').exec
-var pkg = require('../package.json')
-var createServer = require('../src/server')
-var getCerts = require('../src/server/lib/utils/https')
-var scaffold = require('../src/server/lib/code/scaffold')
-var read = require('../src/server/lib/code/read')
-var log = require('../src/server/lib/utils/log')
+const program = require('commander')
+const path = require('path')
+const exec = require('child_process').exec
+const pkg = require('../package.json')
+const scaffold = require('../src/cmd/scaffold')
+const scaffoldExample = require('../src/cmd/scaffold-example')
+const serve = require('../src/cmd/serve')
 
 program
   .command('open')
   .description('open xp folder in finder, e.g. to locate chrome-extension')
-  .action(function () {
-    exec(`open ${path.dirname(__dirname)}`)
-  })
+  .action(() => exec(`open ${path.dirname(__dirname)}`))
 
 program
   .command('scaffold <template>')
   .description('scaffold a project from a template')
-  .action(function templateScaffolding (template) {
-    exec(`npm link ${template}`, {
-      cwd: __dirname
-    }, (err) => {
-      if (err) return console.error(`could not find ${template} installed on your system`)
-      read(path.dirname(require.resolve(template)))
-        .then((codes) => {
-          return scaffold(process.cwd(), codes, true, log)
-        })
-    })
-  })
+  .action(scaffold)
 
 program
   .version(pkg.version)
-  .option('-p, --port [port]', 'use custom [port]', Number, 1234)
+  .arguments('<variation>')
+  .option('-p, --port [port]', 'use custom [port]', Number, 41337)
   .option('-r, --require', 'wait for window.__qubit.amd')
   .option('-w, --watch', 'watch for file changes and auto refresh on change')
-  .parse(process.argv)
+  .action(serve)
 
-if (!program.args.length) serve(program)
+program.parse(process.argv)
 
-function serve (opts) {
-  scaffold(process.cwd(), null, false, log)
-  return getCerts()
-    .then(function (certs) {
-      opts.certs = certs
-      return createServer(opts).listen(opts.port, () => {
-        log(`xp listening on port ${opts.port}`)
-      })
-    })
-}
+if (!program.args.length) scaffoldExample()

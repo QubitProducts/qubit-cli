@@ -1,14 +1,13 @@
 var path = require('path')
 var cwd = process.cwd()
 
+
 module.exports = {
   devtool: 'source-map',
-  entry: {
-    experience: [
-      path.join(__dirname, 'src/client/index'),
-      'webpack-dev-server/client'
-    ]
-  },
+  entry: [
+    path.join(__dirname, 'src/client/index'),
+    'webpack-dev-server/client'
+  ],
   output: {
     path: cwd,
     filename: 'bundle.js'
@@ -18,7 +17,7 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /(execution|activation)\.js$/, loader: path.join(__dirname, 'xp-loader') },
+      { test: /(triggers)\.js$/, loader: 'xp-loader' },
       { test: /global\.js$/, loader: 'script' },
       { test: /\.css$/, loader: 'style!css!less' }
     ]

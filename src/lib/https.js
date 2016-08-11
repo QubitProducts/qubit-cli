@@ -1,20 +1,17 @@
-var fs = require('fs-promise')
-var path = require('path')
-var os = require('os')
-var setupCertificates = require('qubit-cli/lib/commands/setup').execute
-var qubitCertDir = path.resolve(os.homedir(), '.qubitcert')
-var keyPath = path.join(qubitCertDir, 'qubit_serve.key')
-var certPath = path.join(qubitCertDir, 'qubit_serve.crt')
+const fs = require('fs-promise')
+const path = require('path')
+const os = require('os')
+const setupCertificates = require('qubit-cli/lib/commands/setup').execute
+const qubitCertDir = path.resolve(os.homedir(), '.qubitcert')
+const keyPath = path.join(qubitCertDir, 'qubit_serve.key')
+const certPath = path.join(qubitCertDir, 'qubit_serve.crt')
 
 function getCertificates (failedPreviously) {
   return Promise.all([
     fs.readFile(keyPath),
     fs.readFile(certPath)
-  ]).then(function onSuccess (certs) {
-    var https = {
-      key: certs[0],
-      cert: certs[1]
-    }
+  ]).then(function onSuccess ([ key, cert ]) {
+    let https = { key, cert }
     // Prevent webpack-dev-server from overriding our empty `ca` property
     Object.defineProperty(https, 'ca', {
       get: function () { return undefined },

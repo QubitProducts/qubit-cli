@@ -1,1 +1,1 @@
-var someGlobalVariable = 'hello from global'
+console.log('running global.js')

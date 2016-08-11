@@ -1,5 +1,5 @@
-var loader = require('../xp-loader')
-var expect = require('chai').expect
+const loader = require('../xp-loader')
+const {expect} = require('chai')
 
 describe('xp-loader', function () {
   describe('module.exports', function () {

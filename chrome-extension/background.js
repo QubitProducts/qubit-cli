@@ -1,5 +1,5 @@
 /* globals chrome fetch */
-const SYNC_ENDPOINT = 'https://localhost:1234/sync'
+const CONNECT_ENDPOINT = 'https://localhost:41337/connect'
 const NAMESPACE = 'xp-cli'
 const ICONS = {
   on: 'icons/on48.png',
@@ -26,7 +26,7 @@ function render (state) {
 }
 
 function getState (callback) {
-  chrome.storage.local.get(NAMESPACE, (result) => callback(result[NAMESPACE]))
+  chrome.storage.local.get(NAMESPACE, (result) => callback(result[NAMESPACE] || {}))
 }
 
 function setState (state, callback) {
@@ -38,15 +38,16 @@ function setState (state, callback) {
 function connect (url) {
   return new Promise(function (resolve, reject) {
     chrome.cookies.get({
-      'url': url,
-      'name': 'apsess'
+      url: url,
+      name: 'apsess'
     }, function sendCookie (cookie, request, sendResponse) {
       if (!cookie) return reject()
-      return fetch(SYNC_ENDPOINT, {
+      return fetch(CONNECT_ENDPOINT, {
         mode: 'cors',
         method: 'post',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(Object.assign({}, request, {
+          url: url,
           value: cookie && cookie.value
         }))
       }).then(resolve, reject)

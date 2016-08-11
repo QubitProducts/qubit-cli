@@ -1,7 +1,7 @@
 /* globals chrome */
 const NAMESPACE = 'xp-cli'
 const log = console.log.bind(console)
-var injected = false
+let injected = false
 
 chrome.storage.onChanged.addListener(xp)
 xp()
@@ -21,7 +21,7 @@ function xp () {
 }
 
 function connect () {
-  console.log('Attempting to sync with xp')
+  console.log('Attempting to connect with xp')
   chrome.runtime.sendMessage({
     xp: true,
     url: window.location.href
@@ -30,7 +30,7 @@ function connect () {
 
 function inject () {
   var script = document.createElement('script')
-  script.src = 'https://localhost:1234/bundle.js'
+  script.src = 'https://localhost:41337/bundle.js'
   document.body.appendChild(script)
 }
 
