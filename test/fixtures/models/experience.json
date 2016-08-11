@@ -25,7 +25,7 @@
       "activation_rules": [{
         "key": "custom_javascript",
         "type": "code",
-        "value": ""
+        "value": "console.log('triggers')"
       }]
     }
   }

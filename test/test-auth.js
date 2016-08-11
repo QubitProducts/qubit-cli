@@ -10,7 +10,7 @@ const xprcPath = path.join(__dirname, '.xprc')
 describe('auth', function () {
   let restore, domain
   beforeEach(function () {
-    domain = 'mydomain.com'
+    domain = 'domain.com'
     restore = auth.__set__('xprcPath', sinon.stub().returns(xprcPath))
   })
 

@@ -1,6 +1,6 @@
-const scaffold = require('../lib/scaffold')
-const experienceService = require('./experience')
-const variationService = require('./variation')
+let scaffold = require('../lib/scaffold')
+let experienceService = require('./experience')
+let variationService = require('./variation')
 
 function createPackageJson (experience) {
   return {
@@ -15,18 +15,25 @@ function createPackageJson (experience) {
   }
 }
 
+function get (domain, propertyId, experienceId) {
+  return Promise.all([
+    experienceService.get(domain, propertyId, experienceId),
+    variationService.getAll(domain, propertyId, experienceId)
+  ])
+  .then(([experience, variations]) => {
+    return Object.assign(experience, experienceService.extract(experience), {
+      domain: domain,
+      variations: variations.map((variation) => Object.assign({}, variation, variationService.extract(variation)))
+    })
+  })
+}
+
 function writeLocal (dest, domain, propertyId, experienceId) {
-  return experienceService.get(domain, propertyId, experienceId).then((experience) => {
+  return get(domain, propertyId, experienceId).then((experience) => {
     let files = {}
     files['package.json'] = JSON.stringify(createPackageJson(experience), null, 2)
-    files['global.js'] = experience['global.js']
-    files['triggers.js'] = experience['triggers.js']
-    experience.variations.forEach((variation) => {
-      if (!variation.control) {
-        files[variationService.filename(variation)] = variation.code
-        files[variationService.filename(variation)] = variation.css
-      }
-    })
+    Object.assign(files, experienceService.extract(experience))
+    experience.variations.forEach((variation) => Object.assign(files, variationService.extract(variation)))
     return scaffold(dest, files)
   })
 }
@@ -35,7 +42,7 @@ function updateRemote (dest, experience, files) {
   return Promise.all([
     experienceService.update(
       experience.domain,
-      experience.propertyId,
+      experience.property_id,
       experience.id,
       files['global.js'],
       files['triggers.js']
@@ -43,14 +50,14 @@ function updateRemote (dest, experience, files) {
     Promise.all(experience.variations.map((variation) => {
       return variationService.update(
         experience.domain,
-        experience.propertyId,
+        experience.property_id,
         experience.id,
         variation.id,
-        files[variationFilename(variation) + '.js'],
-        files[variationFilename(variation) + '.css']
+        variation.execution_code,
+        variation.custom_styles
       )
     }))
   ])
 }
 
-module.exports = { writeLocal, updateRemote }
+module.exports = { writeLocal, updateRemote, get }

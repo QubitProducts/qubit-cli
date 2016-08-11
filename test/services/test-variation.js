@@ -10,7 +10,7 @@ describe('variation service', function () {
   beforeEach(function () {
     get = sinon.stub()
     put = sinon.stub()
-    domain = 'mydomain.com'
+    domain = 'domain.com'
     propertyId = 123
     experienceId = 321
     variationId = 50112

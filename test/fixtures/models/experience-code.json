@@ -1,0 +1,77 @@
+{
+  "id": 11588,
+  "name": "New styles",
+  "property_id": 2499,
+  "created_at": "2014-06-02T16:51:22.000Z",
+  "updated_at": "2016-08-10T14:32:17.000Z",
+  "version": "3.0.0",
+  "editor_version": 3,
+  "solution_id": 6,
+  "archived": false,
+  "is_processing": false,
+  "recent_iterations": {
+    "published": {
+      "id": 23119,
+      "name": "Iteration 1"
+    },
+    "draft": {
+      "id": 23202,
+      "name": "Iteration 2",
+      "experiment_id": 11588,
+      "created_at": "2014-06-03T12:51:30.000Z",
+      "updated_at": "2016-08-10T14:32:17.000Z",
+      "url": "http://kn8.lt/",
+      "global_code": "console.log('global code')",
+      "activation_rules": [{
+        "key": "custom_javascript",
+        "type": "code",
+        "value": "console.log('triggers')"
+      }]
+    }
+  },
+  "global.js": "console.log('global code')",
+  "triggers.js": "console.log('triggers')",
+  "domain": "domain.com",
+  "variations": [{
+    "id": 50111,
+    "master_id": 49936,
+    "name": "Control",
+    "is_control": true,
+    "iteration_id": 23202,
+    "execution_code": "function () {}",
+    "custom_styles": null,
+    "created_at": "2014-06-03T12:51:30.000Z",
+    "updated_at": "2014-06-03T12:51:30.000Z",
+    "deleted": false,
+    "variation-49936.js": "function () {}",
+    "variation-49936.css": null
+  }, {
+    "id": 50112,
+    "master_id": 49937,
+    "name": "Variation 1",
+    "is_control": false,
+    "iteration_id": 23202,
+    "advanced_mode": true,
+    "execution_code": "function () { console.log('variation 1') }",
+    "custom_styles": "a {\n color: purple; \n}",
+    "created_at": "2014-06-03T12:51:30.000Z",
+    "updated_at": "2016-08-10T14:32:17.000Z",
+    "deleted": false,
+    "variation-49937.js": "function () { console.log('variation 1') }",
+    "variation-49937.css": "a {\n color: purple; \n}"
+  }, {
+    "id": 336711,
+    "master_id": 336711,
+    "name": "Variation 2",
+    "is_control": false,
+    "iteration_id": 23202,
+    "advanced_mode": true,
+    "execution_code": "function () { console.log('variation 2') }",
+    "custom_styles": "a {\n color: green \n}",
+    "created_at": "2016-05-23T09:14:40.000Z",
+    "updated_at": "2016-05-23T09:14:40.000Z",
+    "deleted": false,
+    "variation-336711.js": "function () { console.log('variation 2') }",
+    "variation-336711.css": "a {\n color: green \n}"
+  }]
+}
