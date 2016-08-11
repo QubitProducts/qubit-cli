@@ -25,13 +25,11 @@ module.exports = function start (options) {
   if (options.sync) {
     emitter.on('rebuild', () => {
       log('syncing...')
-
-      readCode(process.cwd()).then((codes) => updateCode(data, codes))
-        .then(() => {
-          process.stdout.moveCursor(0, -1)
-          process.stdout.clearScreenDown()
-          log('synced!')
-        }).catch(error)
+      experienceCodeService(process.cwd()).then(() => {
+        process.stdout.moveCursor(0, -1)
+        process.stdout.clearScreenDown()
+        log('synced!')
+      }).catch(console.error)
     })
   }
 

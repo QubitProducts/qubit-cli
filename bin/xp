@@ -22,7 +22,8 @@ program
   .arguments('<variation>')
   .option('-p, --port [port]', 'use custom [port]', Number, 41337)
   .option('-r, --require', 'wait for window.__qubit.amd')
-  .option('-w, --watch', 'watch for file changes and auto refresh on change')
+  .option('-w, --watch', 'watch for changes and live reload')
+  .option('-s, --sync', 'watch for changes and sync with remote')
   .action(serve)
 
 program.parse(process.argv)
