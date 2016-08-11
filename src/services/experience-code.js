@@ -9,8 +9,7 @@ function createPackageJson (experience) {
     meta: {
       domain: experience.domain,
       propertyId: experience.property_id,
-      experienceId: experience.id,
-      iterationId: experience.recent_iterations.draft.id
+      experienceId: experience.id
     }
   }
 }

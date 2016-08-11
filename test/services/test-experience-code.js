@@ -24,7 +24,6 @@ describe('experience code service', function () {
           "meta": {
             "domain": "domain.com",
             "experienceId": 11588,
-            "iterationId": 23202,
             "propertyId": 2499
           }
         })
