@@ -37,7 +37,16 @@ function down (dest, domain, propertyId, experienceId) {
   })
 }
 
-function up (dest, experience, files) {
+function up (dest) {
+  return readFiles(dest).then(function (files) {
+    let {domain, propertyId, experienceId} = JSON.parse(files['package.json'].meta)
+    return get(domain, propertyId, experienceId).then((experience) => {
+      return update(dest, experience, files)
+    })
+  })
+}
+
+function update (dest, experience, files) {
   return Promise.all([
     experienceService.update(
       experience.domain,
@@ -59,4 +68,4 @@ function up (dest, experience, files) {
   ])
 }
 
-module.exports = { down, up, get }
+module.exports = { down, update, up, get }

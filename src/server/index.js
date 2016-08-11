@@ -2,6 +2,7 @@ const webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
 const bodyParser = require('body-parser')
 const createEmitter = require('event-kitten')
+const experienceCodeService = require('../../services/experienceCodeService')
 const config = require('../../webpack.conf')
 
 module.exports = function start (options) {
@@ -24,6 +25,7 @@ module.exports = function start (options) {
   if (options.sync) {
     emitter.on('rebuild', () => {
       log('syncing...')
+
       readCode(process.cwd()).then((codes) => updateCode(data, codes))
         .then(() => {
           process.stdout.moveCursor(0, -1)
