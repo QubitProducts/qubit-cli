@@ -26,7 +26,7 @@ function render (state) {
 }
 
 function getState (callback) {
-  chrome.storage.local.get(NAMESPACE, (result) => callback(result[NAMESPACE]))
+  chrome.storage.local.get(NAMESPACE, (result) => callback(result[NAMESPACE] || {}))
 }
 
 function setState (state, callback) {
