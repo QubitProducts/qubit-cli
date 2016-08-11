@@ -4,8 +4,6 @@
   "triggers.js": "console.log('triggers')",
   "variation-336711.css": "a {\n color: green \n}",
   "variation-336711.js": "function () { console.log('variation 2') }",
-  "variation-49936.css": null,
-  "variation-49936.js": "function () {}",
   "variation-49937.css": "a {\n color: purple; \n}",
   "variation-49937.js": "function () { console.log('variation 1') }"
 }

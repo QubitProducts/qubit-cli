@@ -1,4 +1,5 @@
 let scaffold = require('../lib/scaffold')
+let readFiles = require('../lib/read-files')
 let experienceService = require('./experience')
 let variationService = require('./variation')
 
@@ -32,40 +33,58 @@ function down (dest, domain, propertyId, experienceId) {
     let files = {}
     files['package.json'] = JSON.stringify(createPackageJson(experience), null, 2)
     Object.assign(files, experienceService.extract(experience))
-    experience.variations.forEach((variation) => Object.assign(files, variationService.extract(variation)))
+    experience.variations.filter((v) => !v.is_control)
+      .forEach((variation) => Object.assign(files, variationService.extract(variation)))
     return scaffold(dest, files)
   })
 }
 
 function up (dest) {
   return readFiles(dest).then(function (files) {
-    let {domain, propertyId, experienceId} = JSON.parse(files['package.json'].meta)
+    let {domain, propertyId, experienceId} = JSON.parse(files['package.json']).meta
     return get(domain, propertyId, experienceId).then((experience) => {
       return update(dest, experience, files)
     })
   })
 }
 
+function experienceHasChanged (experience, files) {
+  return experience['global.js'] !== files['global.js'] ||
+    experience['triggers.js'] !== files['triggers.js']
+}
+
+function variationHasChanged (variation, files) {
+  let filename = variationService.filename(variation)
+  return variation[filename + '.js'] !== files[filename + '.js'] ||
+    variation[filename + '.css'] !== files[filename + '.css']
+}
+
 function update (dest, experience, files) {
-  return Promise.all([
-    experienceService.update(
+  let updates = []
+  if (experienceHasChanged(experience, files)) {
+    updates.push(experienceService.update(
       experience.domain,
       experience.property_id,
       experience.id,
       files['global.js'],
       files['triggers.js']
-    ),
-    Promise.all(experience.variations.map((variation) => {
-      return variationService.update(
-        experience.domain,
-        experience.property_id,
-        experience.id,
-        variation.id,
-        files[variationService.filename(variation) + '.js'],
-        files[variationService.filename(variation) + '.css']
+    ))
+  }
+  experience.variations
+    .filter((v) => !v.is_control && variationHasChanged(v, files))
+    .forEach((variation) => {
+      updates.push(
+        variationService.update(
+          experience.domain,
+          experience.property_id,
+          experience.id,
+          variation.id,
+          files[variationService.filename(variation) + '.js'],
+          files[variationService.filename(variation) + '.css']
+        )
       )
-    }))
-  ])
+    })
+  return Promise.all(updates)
 }
 
 module.exports = { down, update, up, get }

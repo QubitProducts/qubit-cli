@@ -71,23 +71,25 @@ describe('experience code service', function () {
     })
 
     it('should update experience and variations based on a files object', function () {
-      return experienceCodeService.update('dest', experienceCodeFixture, filesFixture)
+      let files = _.mapValues(filesFixture, (v) => v + 1)
+      return experienceCodeService.update('dest', experienceCodeFixture, files)
         .then(() => {
           expect(updateExperience.getCall(0).args).to.eql([
             "domain.com",
             2499,
             11588,
-            "console.log('global code')",
-            "console.log('triggers')"
+            files['global.js'],
+            files['triggers.js']
           ])
-          experienceCodeFixture.variations.forEach((variation, i) => {
+          expect(updateVariation.callCount).to.eql(2)
+          experienceCodeFixture.variations.slice(1).forEach((variation, i) => {
             expect(updateVariation.getCall(i).args).to.eql([
               domain,
               experienceCodeFixture.property_id,
               experienceCodeFixture.id,
               variation.id,
-              variation.execution_code,
-              variation.custom_styles
+              variation.execution_code + 1,
+              variation.custom_styles + 1
             ])
           })
         })
