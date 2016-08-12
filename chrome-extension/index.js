@@ -4,9 +4,9 @@ const log = console.log.bind(console)
 let injected = false
 
 chrome.storage.onChanged.addListener(xp)
-xp()
+xp(false)
 
-function xp () {
+function xp (refreshOnChange) {
   chrome.storage.local.get(NAMESPACE, function (obj) {
     var state = obj[NAMESPACE]
     if (!state.disabled) {
@@ -16,6 +16,8 @@ function xp () {
         inject()
         injected = true
       }
+    } else if (refreshOnChange) {
+      window.location.reload()
     }
   })
 }
