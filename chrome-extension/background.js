@@ -47,6 +47,7 @@ function connect (url) {
         method: 'post',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(Object.assign({}, request, {
+          url: url,
           value: cookie && cookie.value
         }))
       }).then(resolve, reject)
