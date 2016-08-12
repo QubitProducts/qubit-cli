@@ -8,7 +8,7 @@ xp()
 
 function xp () {
   chrome.storage.local.get(NAMESPACE, function (obj) {
-    var state = obj[NAMESPACE]
+    var state = obj[NAMESPACE] || {}
     if (!state.disabled) {
       if (isEditor()) {
         connect()
