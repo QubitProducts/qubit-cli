@@ -14,10 +14,12 @@ function update (domain, propertyId, experienceId, id, code, css) {
   }
 
   function put (variation) {
-    let updated = Object.assign({}, variation, {
-      execution_code: code,
-      custom_styles: css
-    })
+    let updated = {
+      variation: Object.assign({}, variation, {
+        execution_code: code,
+        custom_styles: css
+      })
+    }
     return fetch.put(domain, `${getPath(propertyId, experienceId)}/${id}`, updated)
   }
 }
