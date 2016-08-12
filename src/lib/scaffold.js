@@ -1,6 +1,7 @@
 const path = require('path')
 const chalk = require('chalk')
 const fs = require('fs-promise')
+const exists = require('./exists')
 const log = require('./log')
 let confirm = require('confirmer')
 
@@ -41,15 +42,4 @@ function shouldWrite (dest, name, newValue, shouldConfirm) {
       return shouldConfirm ? confirm(msg) : false
     })
   })
-}
-
-function exists (path) {
-  return fs.stat(path).then(
-    () => true,
-    (err) => err.code === 'ENOENT' ? false : thrower(err)
-  )
-
-  function thrower (err) {
-    throw err
-  }
 }
