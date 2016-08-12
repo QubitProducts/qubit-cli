@@ -14,7 +14,7 @@ module.exports = function start (options) {
     __VARIATIONJS__: "'" + 'xp-loader!' + options.variation.replace(/\.js$/, '') + "'",
     __VARIATIONCSS__: "'" + options.variation.replace(/\.js$/, '.css') + "'"
   }))
-  if (!options.watch) config.entry.pop()
+  if (!options.sync && !options.watch) config.entry.pop()
   let compiler = webpack(config)
   compiler.plugin('done', (data) => emitter.emit('rebuild', data))
   let server = new WebpackDevServer(compiler, Object.assign(config.devServer, {
@@ -28,8 +28,8 @@ module.exports = function start (options) {
     next();
   })
   server.app.post('/connect', require('./routes/connect'))
-
   if (options.sync) {
+    log('watching for changes')
     emitter.on('rebuild', () => {
       log('syncing...')
       experienceCodeService.up(process.cwd()).then(() => {
@@ -39,6 +39,5 @@ module.exports = function start (options) {
       }).catch(console.error)
     })
   }
-
   return {server, emitter}
 }
