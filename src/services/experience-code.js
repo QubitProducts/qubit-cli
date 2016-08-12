@@ -1,5 +1,6 @@
 let scaffold = require('../lib/scaffold')
 let readFiles = require('../lib/read-files')
+let {expect} = require('chai')
 let experienceService = require('./experience')
 let variationService = require('./variation')
 
@@ -39,13 +40,29 @@ function down (dest, domain, propertyId, experienceId) {
   })
 }
 
+function validateFiles (files) {
+  let pkg = JSON.parse(files['package.json'])
+  expect(pkg).to.have.property('meta')
+  expect(pkg.meta).to.contain.keys([
+    'domain',
+    'propertyId',
+    'experienceId'
+  ])
+  expect(pkg.meta.domain).to.be.a('string')
+  expect(pkg.meta.propertyId).to.be.a('number')
+  expect(pkg.meta.experienceId).to.be.a('number')
+  return files
+}
+
 function up (dest) {
-  return readFiles(dest).then(function (files) {
-    let {domain, propertyId, experienceId} = JSON.parse(files['package.json']).meta
-    return get(domain, propertyId, experienceId).then((experience) => {
-      return update(dest, experience, files)
+  return readFiles(dest)
+    .then(validateFiles)
+    .then(function (files) {
+      let {domain, propertyId, experienceId} = JSON.parse(files['package.json']).meta
+      return get(domain, propertyId, experienceId).then((experience) => {
+        return update(dest, experience, files)
+      })
     })
-  })
 }
 
 function experienceHasChanged (experience, files) {
