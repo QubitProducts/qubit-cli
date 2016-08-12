@@ -21,6 +21,12 @@ module.exports = function start (options) {
     https: options.certs
   }))
   server.app.use(bodyParser.json())
+  server.app.use(function nocache (req, res, next) {
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    res.header('Expires', '-1');
+    res.header('Pragma', 'no-cache');
+    next();
+  })
   server.app.post('/connect', require('./routes/connect'))
 
   if (options.sync) {
