@@ -18,8 +18,9 @@ module.exports = function connect (req, res, next) {
 Would you like ${chalk.green.bold('xp')} to scaffold your local project from this experiment? ${chalk.green.bold('(y/n)')}`
     return confirm(msg).then(result => {
       if (!result) return
-      console.log(process.cwd(), domain, propertyId, experienceId)
-      return experienceCode.down(process.cwd(), domain, propertyId, experienceId).then(process.exit)
+      return experienceCode.down(process.cwd(), domain, propertyId, experienceId)
+        .then(() => log('All done!'))
+        .then(process.exit)
     })
   }
 }
