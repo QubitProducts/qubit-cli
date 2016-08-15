@@ -7,7 +7,7 @@ let CWD = process.cwd()
 module.exports = function scaffoldFromTemplate (template) {
   if (template === 'example') return scaffoldExample()
   return exec(`npm link ${template}`, {
-    cwd: path.resolve(__dirname, '../../../')
+    cwd: path.resolve(__dirname, '../../')
   }, (err) => {
     if (err) return console.error(`could not find ${template} installed on your system`)
     let templateDir = path.dirname(require.resolve(template))
