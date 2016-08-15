@@ -17,7 +17,7 @@ module.exports = function scaffoldFromTemplate (template) {
   })
 }
 
-function scaffoldExample (options) {
-  return readFiles(path.resolve(__dirname, '../../../example'))
+function scaffoldExample () {
+  return readFiles(path.resolve(__dirname, '../../example'))
     .then((files) => scaffold(CWD, files, true))
 }
