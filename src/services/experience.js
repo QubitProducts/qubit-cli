@@ -37,7 +37,7 @@ function extract (experience) {
   let rule = iteration.activation_rules.find(rule => rule.key === 'custom_javascript')
   return {
     'global.js': iteration.global_code || '',
-    'triggers.js': (rule && rule.value) || 'function triggers (cb) {\n  cb()\n}'
+    'triggers.js': (rule && rule.value) || 'function triggers (options, cb) {\n  cb()\n}'
   }
 }
 
