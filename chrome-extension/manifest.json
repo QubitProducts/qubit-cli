@@ -22,6 +22,8 @@
   "permissions": [
     "storage",
     "cookies",
-    "*://*.app.qubit.com/*"
+    "https://app.qubit.com/*",
+    "https://staging-dashboard.qubitproducts.com/*",
+    "http://localhost:3000/*"
   ]
 }

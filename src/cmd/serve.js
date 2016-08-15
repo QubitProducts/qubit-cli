@@ -1,6 +1,6 @@
-const start = require('../../server')
-const getCerts = require('../../lib/https')
-const log = require('../../lib/log')
+const start = require('../server')
+const getCerts = require('../lib/https')
+const log = require('../lib/log')
 
 module.exports = function serve (variation, opts) {
   return getCerts()

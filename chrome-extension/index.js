@@ -37,7 +37,6 @@ function inject () {
 }
 
 function isEditor () {
-  var host = /^(localhost:3000|staging\-dashboard\.qubitproducts\.com|app\.qubit\.com)$/
-  var path = /^\/p\/\d+\/experiences\/\d+\/editor\?vid=\d+/
-  return host.test(window.location.host) && path.test(window.location.pathname + window.location.search)
+  var pattern = /^https?:\/\/(app\.qubit\.com|staging\-dashboard\.qubitproducts\.com|localhost:3000)\/p\/\d+\/experiences\/\d+/
+  return pattern.test(window.location.href)
 }

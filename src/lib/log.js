@@ -4,8 +4,8 @@ module.exports = function log () {
   console.log(chalk.gray(`${now()}:  ${chalk.white(msg)}`))
 }
 
-module.exports.catchLog = function logError (fn) {
-  return fn().catch((err) => console.log(chalk.gray(`${now()}:  ${chalk.redd(err.stack)}`)))
+module.exports.error = function logError (err) {
+  return console.log(chalk.gray(`${now()}:  ${err}`))
 }
 
 function now () {

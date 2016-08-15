@@ -1,24 +1,21 @@
-const url = require('url')
 const confirm = require('confirmer')
-const chalk = require('chalk')
+const highlight = require('../../lib/highlight')
 const auth = require('../../lib/auth')
+const log = require('../../lib/log')
+const parseUrl = require('../../lib/parse-url')
 const experienceCode = require('../../services/experience-code')
 
 module.exports = function connect (req, res, next) {
   if (!req.body.url || !req.body.value) return nope(res)
-  let ids = req.body.url.match(/\d+/g).map(Number)
-  if (ids.length < 3) return nope(res)
-  let uri = url.parse(req.body.url)
-  let [propertyId, experienceId] = ids
-  let domain = uri.protocol + '//' + uri.hostname
+  let {domain, propertyId, experienceId} = parseUrl(req.body.url)
   return auth.set(domain, 'COOKIE', req.body.value).then(requestSync).then(() => res.end()).catch(next)
 
   function requestSync (codes) {
-    let msg = `You recently navigated to ${chalk.green.bold(req.body.url)}
-Would you like ${chalk.green.bold('xp')} to scaffold your local project from this experiment? ${chalk.green.bold('(y/n)')}`
+    let msg = `You recently navigated to ${highlight(req.body.url)}
+Would you like ${highlight('xp')} to scaffold your local project from this experiment? ${highlight('(y/n)')}`
     return confirm(msg).then(result => {
       if (!result) return
-      return experienceCode.down(process.cwd(), domain, propertyId, experienceId)
+      return experienceCode.writeToLocal(process.cwd(), domain, propertyId, experienceId)
         .then(() => log('All done!'))
         .then(process.exit)
     })

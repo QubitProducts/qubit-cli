@@ -1,7 +1,6 @@
 var path = require('path')
 var cwd = process.cwd()
 
-
 module.exports = {
   devtool: 'source-map',
   entry: [

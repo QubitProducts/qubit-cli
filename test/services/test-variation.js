@@ -47,10 +47,12 @@ describe('variation service', function () {
           expect(put.getCall(0).args).to.eql([
             domain,
             '/p/123/smart_serve/experiments/321/recent_iterations/draft/variations/' + variationId,
-            Object.assign({}, fixture.find((v) => v.id === variationId), {
-              execution_code: 'code',
-              custom_styles: 'css'
-            })
+            {
+              variation: Object.assign({}, fixture.find((v) => v.id === variationId), {
+                execution_code: 'code',
+                custom_styles: 'css'
+              })
+            }
           ])
         })
     })

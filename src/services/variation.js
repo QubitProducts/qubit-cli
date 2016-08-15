@@ -26,8 +26,8 @@ function update (domain, propertyId, experienceId, id, code, css) {
 
 function extract (variation) {
   let obj = {}
-  obj[`${filename(variation)}.js`] = variation.execution_code
-  obj[`${filename(variation)}.css`] = variation.custom_styles
+  obj[`${filename(variation)}.js`] = variation.execution_code || 'function variation (cb) {\n\n}'
+  obj[`${filename(variation)}.css`] = variation.custom_styles || ''
   return obj
 }
 

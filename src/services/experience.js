@@ -1,4 +1,3 @@
-let variationService = require('./variation')
 let fetch = require('../lib/fetch')
 
 function get (domain, propertyId, experienceId) {
@@ -37,8 +36,8 @@ function extract (experience) {
   let iteration = experience.recent_iterations.draft
   let rule = iteration.activation_rules.find(rule => rule.key === 'custom_javascript')
   return {
-    "global.js": iteration.global_code,
-    "triggers.js": rule && rule.value
+    'global.js': iteration.global_code || '',
+    'triggers.js': (rule && rule.value) || 'function triggers (cb) {\n  cb()\n}'
   }
 }
 

@@ -2,7 +2,7 @@ const webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
 const bodyParser = require('body-parser')
 const createEmitter = require('event-kitten')
-const experienceCodeService = require('../services/experience-code')
+const up = require('../cmd/up')
 const log = require('../lib/log')
 const config = require('../../webpack.conf')
 
@@ -22,22 +22,15 @@ module.exports = function start (options) {
   }))
   server.app.use(bodyParser.json())
   server.app.use(function nocache (req, res, next) {
-    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
-    res.header('Expires', '-1');
-    res.header('Pragma', 'no-cache');
-    next();
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate')
+    res.header('Expires', '-1')
+    res.header('Pragma', 'no-cache')
+    next()
   })
   server.app.post('/connect', require('./routes/connect'))
   if (options.sync) {
     log('watching for changes')
-    emitter.on('rebuild', () => {
-      log('syncing...')
-      experienceCodeService.up(process.cwd()).then(() => {
-        process.stdout.moveCursor(0, -1)
-        process.stdout.clearScreenDown()
-        log('synced!')
-      }).catch(console.error)
-    })
+    emitter.on('rebuild', up)
   }
   return {server, emitter}
 }

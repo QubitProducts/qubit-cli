@@ -1,14 +1,12 @@
 const _ = require('lodash')
 const rewire = require('rewire')
 const experienceService = rewire('../../src/services/experience')
-const variationService = rewire('../../src/services/variation')
 const { expect } = require('chai')
 const sinon = require('sinon')
 const experienceFixture = require('../fixtures/models/experience.json')
-const variationsFixture = require('../fixtures/models/variations.json')
 
 describe('experience service', function () {
-  let restore, get, put, domain, propertyId, experienceId
+  let restore, get, put, domain, propertyId, experienceId, globalCode, triggers
 
   beforeEach(function () {
     get = sinon.stub()
@@ -70,8 +68,8 @@ describe('experience service', function () {
   describe('extract', function () {
     it('should extract the correct params', function () {
       expect(experienceService.extract(experienceFixture)).to.eql({
-        "global.js": "console.log(\"global\")",
-        "triggers.js": "console.log(\"triggers\")"
+        'global.js': 'console.log("global")',
+        'triggers.js': 'console.log("triggers")'
       })
     })
   })

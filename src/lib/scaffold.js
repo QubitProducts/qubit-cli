@@ -1,8 +1,8 @@
 const path = require('path')
 const chalk = require('chalk')
 const fs = require('fs-promise')
-const exists = require('./exists')
 const log = require('./log')
+let exists = require('./exists')
 let confirm = require('confirmer')
 
 module.exports = function scaffold (dest, files, neverOverwrite) {

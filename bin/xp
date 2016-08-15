@@ -4,8 +4,9 @@ const path = require('path')
 const exec = require('child_process').exec
 const pkg = require('../package.json')
 const scaffold = require('../src/cmd/scaffold')
-const scaffoldExample = require('../src/cmd/scaffold-example')
 const serve = require('../src/cmd/serve')
+const up = require('../src/cmd/up')
+const down = require('../src/cmd/down')
 
 program
   .command('open')
@@ -16,6 +17,16 @@ program
   .command('scaffold <template>')
   .description('scaffold a project from a template')
   .action(scaffold)
+
+program
+  .command('up')
+  .description('push experience to remote')
+  .action(up)
+
+program
+  .command('down')
+  .description('pull experience from remote')
+  .action(down)
 
 program
   .version(pkg.version)
