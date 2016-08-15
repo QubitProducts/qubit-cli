@@ -62,6 +62,7 @@ $ xp down // pull down latest version of experience
 ## file reference
 ```
 files:
+- package.json // experience metadata
 - global.js // execute code globally
 - triggers.js // programmatically decide when the experience should execute
 - varition-xxx.js // variation code
