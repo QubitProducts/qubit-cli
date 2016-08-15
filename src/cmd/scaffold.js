@@ -1,7 +1,6 @@
 const path = require('path')
 const scaffold = require('../lib/scaffold')
 const readFiles = require('../lib/read-files')
-const scaffoldExample = require('./scaffold-example')
 const exec = require('child_process').exec
 let CWD = process.cwd()
 
@@ -16,4 +15,9 @@ module.exports = function scaffoldFromTemplate (template) {
       return scaffold(CWD, files)
     })
   })
+}
+
+function scaffoldExample (options) {
+  return readFiles(path.resolve(__dirname, '../../../example'))
+    .then((files) => scaffold(CWD, files, true))
 }

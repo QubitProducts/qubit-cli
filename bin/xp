@@ -9,9 +9,14 @@ const up = require('../src/cmd/up')
 const down = require('../src/cmd/down')
 
 program
-  .command('open')
-  .description('open xp folder in finder, e.g. to locate chrome-extension')
-  .action(() => exec(`open ${path.dirname(__dirname)}`))
+  .command('up')
+  .description('push experience up to remote')
+  .action(up)
+
+program
+  .command('down')
+  .description('pull experience down from remote')
+  .action(down)
 
 program
   .command('scaffold <template>')
@@ -19,14 +24,9 @@ program
   .action(scaffold)
 
 program
-  .command('up')
-  .description('push experience to remote')
-  .action(up)
-
-program
-  .command('down')
-  .description('pull experience from remote')
-  .action(down)
+  .command('open')
+  .description('open xp folder in finder, e.g. to locate chrome-extension')
+  .action(() => exec(`open ${path.dirname(__dirname)}`))
 
 program
   .version(pkg.version)
@@ -36,6 +36,45 @@ program
   .option('-w, --watch', 'watch for changes and live reload')
   .option('-s, --sync', 'watch for changes and sync with remote')
   .action(serve)
+
+program.on('--help', function () {
+  console.log(`
+  Examples:
+
+    $ xp --help
+    $ xp scaffold example
+    $ xp variation.js --watch
+
+    $ xp
+      xp listening on port 41337
+    $ open https://app.qubit.com/p/1234/experiences/5678/editor
+
+      You recently navigated to https://app.qubit.com/p/1234/experiences/5678/editor
+      Would you like xp to scaffold your local project from this experiment? (y/n)
+      writing to local package.json file...
+      writing to local global.js file...
+      writing to local triggers.js file...
+      writing to local variation-49937.js file...
+      writing to local variation-49937.css file...
+      writing to local variation-336711.js file...
+      writing to local variation-336711.css file...
+      All done!
+
+    $ xp variation-336711.js --sync
+
+      watching for changes
+      xp listening on port 41337
+      synced!
+
+    $ xp up
+
+      synced!
+
+    $ xp down
+
+      pulled!
+  `)
+})
 
 program.parse(process.argv)
 
