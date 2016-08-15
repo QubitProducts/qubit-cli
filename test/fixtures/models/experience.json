@@ -21,11 +21,11 @@
       "created_at": "2014-06-03T12:51:30.000Z",
       "updated_at": "2016-08-10T14:32:17.000Z",
       "url": "http://kn8.lt/",
-      "global_code": "console.log('global code')",
+      "global_code": "console.log(\"global code\")",
       "activation_rules": [{
         "key": "custom_javascript",
         "type": "code",
-        "value": "console.log('triggers')"
+        "value": "console.log(\"triggers\")"
       }]
     }
   }

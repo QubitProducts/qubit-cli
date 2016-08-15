@@ -10,7 +10,7 @@
     "example": "example"
   },
   "scripts": {
-    "test": "node_modules/.bin/mocha"
+    "test": "make test"
   },
   "author": {
     "name": "Alan Clarke",
@@ -58,6 +58,7 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "istanbul": "^0.4.4",
     "mocha": "^2.5.3",
     "rewire": "^2.5.2",
     "sinon": "^1.17.5",
