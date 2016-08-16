@@ -5,7 +5,7 @@ const exec = require('child_process').exec
 let CWD = process.cwd()
 
 module.exports = function scaffoldFromTemplate (template) {
-  if (template === 'example') return scaffoldExample()
+  if (template === 'example') template = path.resolve(__dirname, '../../example-template')
   return exec(`npm link ${template}`, {
     cwd: path.resolve(__dirname, '../../')
   }, (err) => {
@@ -15,9 +15,4 @@ module.exports = function scaffoldFromTemplate (template) {
       return scaffold(CWD, files)
     })
   })
-}
-
-function scaffoldExample () {
-  return readFiles(path.resolve(__dirname, '../../example'))
-    .then((files) => scaffold(CWD, files, true))
 }

@@ -57,7 +57,38 @@ $ xp up // save your changes to the cloud
 
 $ xp down // pull down latest version of experience
   pulled!
+
+$ xp variation-336711.js --sync
+  watching for changes
+  xp listening on port 41337
+  synced!
 ```
+## templates
+
+### creating a template
+xp allows you to create, publish and share experience templates
+
+An xp template is a javascript commonjs module with a folder called template in it
+
+See the example-template folder in this project for an example template
+
+```
+mkdir my-experience-template
+cd my-experience-template
+mkdir template
+touch template/variation.js
+npm init
+npm link // make your module available globally on your system
+```
+
+### using a template
+Once your template is installed, to scaffold an experience from the template simply run:
+```
+xp scaffold my-experience-template
+```
+Substituting 'my-experience-template' for the name of your template module
+
+All the files in the template directory will be copied into your current working directory
 
 ## file reference
 ```
@@ -112,16 +143,16 @@ Usage: xp [varaition.js] [options]
       writing to local variation-336711.css file...
       All done!
 
-    $ xp variation-336711.js --sync
-      watching for changes
-      xp listening on port 41337
-      synced!
-
     $ xp up
       synced!
 
     $ xp down
       pulled!
+
+    $ xp variation-336711.js --sync
+      watching for changes
+      xp listening on port 41337
+      synced!
 ```
 
 notes:
