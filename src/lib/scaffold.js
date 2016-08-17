@@ -1,19 +1,24 @@
 const path = require('path')
 const chalk = require('chalk')
 const fs = require('fs-promise')
+const mkdirp = require('mkdirp-promise')
+const co = require('co')
 const log = require('./log')
 let exists = require('./exists')
 let confirm = require('confirmer')
 
-module.exports = function scaffold (dest, files, neverOverwrite) {
-  let keys = Object.keys(files)
-  let next
-  keys.forEach((name) => {
-    next = next
-      ? next.then(() => scaffoldFile(name))
-      : scaffoldFile(name)
-  })
-  return next.catch(console.error)
+module.exports = co.wrap(function * scaffold (dest, files, neverOverwrite) {
+  for (let name in files) {
+    if (files.hasOwnProperty(name)) {
+      let value = files[name]
+      if (typeof value === 'string') {
+        yield scaffoldFile(name)
+      } else {
+        yield mkdirp(path.join(dest, name))
+        yield scaffold(path.join(dest, name), value, neverOverwrite)
+      }
+    }
+  }
 
   function scaffoldFile (name) {
     let value = files[name]
@@ -24,7 +29,7 @@ module.exports = function scaffold (dest, files, neverOverwrite) {
       }
     })
   }
-}
+})
 
 function shouldWrite (dest, name, newValue, shouldConfirm) {
   let msg = `Do you want ${chalk.green.bold('xp')} to overwrite your local ${chalk.green.bold(name)} file?`

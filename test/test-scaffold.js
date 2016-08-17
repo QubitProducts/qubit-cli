@@ -5,8 +5,10 @@ const rewire = require('rewire')
 const sinon = require('sinon')
 const fileExists = rewire('./lib/exists')
 const scaffold = rewire('../src/lib/scaffold')
+const rimraf = require('rimraf-then')
 const fixtureDir = path.join(__dirname, 'fixtures')
 const fixtureC = path.join(fixtureDir, 'c.js')
+const fixtureE = path.join(fixtureDir, 'd/e.js')
 
 describe('scaffold', function () {
   let exists, shouldWrite, files, restore
@@ -19,13 +21,19 @@ describe('scaffold', function () {
       shouldWrite: shouldWrite
     })
     files = {
-      'c.js': '3\n'
+      'c.js': '3\n',
+      'd': {
+        'e.js': '4\n'
+      }
     }
   })
 
   afterEach(() => {
     restore()
-    return fs.unlink(fixtureC).catch((err) => err)
+    return Promise.all([
+      fs.unlink(fixtureC).catch((err) => err),
+      rimraf(path.join(fixtureDir, 'd'))
+    ])
   })
 
   describe('if shouldWrite returns true', function () {
@@ -33,6 +41,11 @@ describe('scaffold', function () {
     it('should write the file', function () {
       return scaffold(fixtureDir, files, false).then(() => {
         return fs.readFile(fixtureC).then((result) => expect(String(result)).to.eql('3\n'))
+      })
+    })
+    it('should recursively create nested files in directories', function () {
+      return scaffold(fixtureDir, files, false).then(() => {
+        return fs.readFile(fixtureE).then((result) => expect(String(result)).to.eql('4\n'))
       })
     })
   })
@@ -55,7 +68,7 @@ describe('scaffold', function () {
 
       it('should call shouldWrite with dest, file, value and shouldConfirm=false', function () {
         return scaffold(fixtureDir, files, neverOverwrite).then(() => {
-          expect(shouldWrite.calledOnce).to.eql(true)
+          expect(shouldWrite.calledTwice).to.eql(true)
           expect(shouldWrite.getCall(0).args).to.eql([fixtureDir, 'c.js', files['c.js'], false])
         })
       })
@@ -67,7 +80,7 @@ describe('scaffold', function () {
 
       it('should call shouldWrite with dest, file, value and shouldConfirm=true', function () {
         return scaffold(fixtureDir, files, neverOverwrite).then(() => {
-          expect(shouldWrite.calledOnce).to.eql(true)
+          expect(shouldWrite.calledTwice).to.eql(true)
           expect(shouldWrite.getCall(0).args).to.eql([fixtureDir, 'c.js', files['c.js'], true])
         })
       })
