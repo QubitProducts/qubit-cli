@@ -1,28 +1,32 @@
 /* globals __WAIT__ __VARIATIONJS__ __VARIATIONCSS__ */
+var PKG = require('package.json') || {}
+var META = PKG.meta
+
 if (__WAIT__) {
-  waitFor(qubit, run)
+  waitFor(qubit, init)
 } else {
-  run()
+  init()
 }
 
-var opts = {}
-function run () {
+function init () {
   require('global')
-  var ret = require('triggers')(opts, function (pass) {
-    var shouldActivate = pass || typeof pass === 'undefined'
-    if (!shouldActivate) {
-      console.log('activation returned false')
-      return
-    }
-    console.log('activation returned true')
-    execute(opts)
-  })
-  if (ret === true) execute(opts)
+  var ret = require('triggers')(META, activate)
+  if (ret === true) execute()
 }
 
-function execute (opts) {
+function activate (pass) {
+  var shouldActivate = pass || typeof pass === 'undefined'
+  if (!shouldActivate) {
+    console.log('activation returned false')
+    return
+  }
+  console.log('activation returned true')
+  execute()
+}
+
+function execute () {
   require(__VARIATIONCSS__)
-  require(__VARIATIONJS__)(opts)
+  require(__VARIATIONJS__)(META)
 }
 
 function waitFor (thing, cb, i) {
