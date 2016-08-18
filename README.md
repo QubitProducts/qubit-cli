@@ -94,7 +94,7 @@ All the files in the template directory will be copied into your current working
 files:
 - package.json // experience metadata
 - global.js // execute code globally
-- triggers.js // programmatically decide when the experience should execute
+- triggers.js // programmatically decide whether the experience should execute
 - varition-xxx.js // variation code
 - variation-xxx.css // variation css
 ```
