@@ -7,6 +7,6 @@ module.exports = function exists (path) {
   )
 }
 
-function thrower (err) {
-  throw err
+function thrower (er) {
+  throw er
 }
