@@ -1,3 +1,3 @@
-function activation (options, cb) {
+function triggers (options, cb) {
   cb()
 }

@@ -20,7 +20,6 @@ npm install -g qubitdigital/xp-cli
 ```
 
 ## basic usage
-
 1. install extension
   - in terminal, type ``` xp open ```
   - in chrome, load chrome://extensions
@@ -103,56 +102,34 @@ files:
 ## help menu
 ```
 Usage: xp [varaition.js] [options]
-         xp <cmd> [options]
+       xp <cmd> [options]
 
 
-  Commands:
+Commands:
 
-    up                   push experience up to remote
-    down                 pull experience down from remote
-    scaffold <template>  scaffold a project from a template
-    open                 open xp folder in finder, e.g. to locate chrome-extension
+  up                   push experience up to remote
+  down                 pull experience down from remote
+  scaffold <template>  scaffold a project from a template
+  open                 open xp folder in finder, e.g. to locate chrome-extension
 
-  Options:
+Options:
 
-    -h, --help         output usage information
-    -V, --version      output the version number
-    -p, --port [port]  use custom [port]
-    -r, --require      wait for window.__qubit.amd
-    -w, --watch        watch for changes and live reload
-    -s, --sync         watch for changes and sync with remote
+  -h, --help         output usage information
+  -V, --version      output the version number
+  -p, --port [port]  use custom [port]
+  -r, --require      wait for window.__qubit.amd
+  -w, --watch        watch for changes and live reload
+  -s, --sync         watch for changes and sync with remote
 
 
-  Examples:
+Examples:
 
-    $ xp --help
-    $ xp scaffold example
-    $ xp variation.js --watch
-
-    $ xp
-      xp listening on port 41337
-    $ open https://app.qubit.com/p/1234/experiences/5678/editor
-      You recently navigated to https://app.qubit.com/p/1234/experiences/5678/editor
-      Would you like xp to scaffold your local project from this experiment? (y/n)
-      writing to local package.json file...
-      writing to local global.js file...
-      writing to local triggers.js file...
-      writing to local variation-49937.js file...
-      writing to local variation-49937.css file...
-      writing to local variation-336711.js file...
-      writing to local variation-336711.css file...
-      All done!
-
-    $ xp up
-      synced!
-
-    $ xp down
-      pulled!
-
-    $ xp variation-336711.js --sync
-      watching for changes
-      xp listening on port 41337
-      synced!
+  $ xp --help
+  $ xp scaffold example
+  $ xp variation.js --watch
+  $ xp variation.js --sync
+  $ xp up
+  $ xp down
 ```
 
 notes:
