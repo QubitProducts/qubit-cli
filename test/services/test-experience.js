@@ -14,8 +14,8 @@ describe('experience service', function () {
     domain = 'domain.com'
     propertyId = 123
     experienceId = 321
-    globalCode = 'console.log("global")'
-    triggers = 'console.log("triggers")'
+    globalCode = 'console.log("new global code")'
+    triggers = 'console.log("new triggers")'
     restore = experienceService.__set__({
       fetch: {get,
         put
@@ -39,7 +39,7 @@ describe('experience service', function () {
   describe('update', function () {
     let getExperienceStub
     beforeEach(function () {
-      getExperienceStub = sinon.stub().returns(Promise.resolve(experienceFixture))
+      getExperienceStub = sinon.stub().returns(Promise.resolve(_.cloneDeep(experienceFixture)))
       restore = experienceService.__set__({
         fetch: {get,
           put
@@ -68,7 +68,7 @@ describe('experience service', function () {
   describe('extract', function () {
     it('should extract the correct params', function () {
       expect(experienceService.extract(experienceFixture)).to.eql({
-        'global.js': 'console.log("global")',
+        'global.js': 'console.log("global code")',
         'triggers.js': 'console.log("triggers")'
       })
     })

@@ -23,7 +23,7 @@ function getCertificates (failedPreviously) {
       if (!failedPreviously) {
         return setupCertificates().then(() => getCertificates(true))
       } else {
-        throw new Error('No self-signed certificates were found in ' + qubitCertDir + ', and xp-cli could not automatically solve this.')
+        throw new Error(`No self-signed certificates were found in ${qubitCertDir}, and xp-cli could not automatically solve this.`)
       }
     }
     throw error

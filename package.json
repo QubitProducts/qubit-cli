@@ -49,7 +49,7 @@
   },
   "standard": {
     "ignore": [
-      "example/**"
+      "example-template/**"
     ],
     "globals": [
       "describe",
