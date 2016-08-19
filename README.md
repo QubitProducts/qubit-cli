@@ -117,7 +117,6 @@ Options:
   -h, --help         output usage information
   -V, --version      output the version number
   -p, --port [port]  use custom [port]
-  -r, --require      wait for window.__qubit.amd
   -w, --watch        watch for changes and live reload
   -s, --sync         watch for changes and sync with remote
 
@@ -133,5 +132,4 @@ Examples:
 ```
 
 notes:
-- to make xp wait for ``` window.__qubit.amd ``` to be present, use the 'require' flag: ``` xp --require ```
 - if it isn't working after an update, you may need to reload the extension

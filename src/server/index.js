@@ -14,7 +14,6 @@ module.exports = function start (options) {
   }
   config.plugins = config.plugins || []
   config.plugins.push(new webpack.DefinePlugin({
-    __WAIT__: !!options.require,
     __VARIATIONJS__: "'" + 'xp-loader!' + options.variation.replace(/\.js$/, '') + "'",
     __VARIATIONCSS__: "'" + options.variation.replace(/\.js$/, '.css') + "'"
   }))
