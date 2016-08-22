@@ -17,10 +17,4 @@ describe('xp-loader', function () {
       expect(loader('window.__qubit.amd.require(')).to.eql('module.exports = window.__qubit.amd.require(')
     })
   })
-  describe('remember-preview', function () {
-    it('should replace remember-preview with no-op', function () {
-      expect(loader('require("@qubit/remember-preview"')).to.eql('module.exports = !(function noop () {}')
-      expect(loader("require('@qubit/remember-preview'")).to.eql('module.exports = !(function noop () {}')
-    })
-  })
 })

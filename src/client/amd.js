@@ -5,7 +5,6 @@ module.exports = function (cb) {
   [
     '@qubit/email-scheduler@*',
     '@qubit/poller@*',
-    '@qubit/remember-preview@*',
     '@qubit/send-uv-event@*',
     'cookieman@*',
     '@qubit/jquery@*',
@@ -16,5 +15,12 @@ module.exports = function (cb) {
     '@qubit/stash-count@*',
     '@qubit/biscotti@*'
   ].join(',')
-  fetchJS(url, cb)
+  fetchJS(url, function () {
+    window.__qubit.amd.define('@qubit/remember-preview', function () {
+      return noop
+    })
+    cb()
+  })
 }
+
+function noop () {}
