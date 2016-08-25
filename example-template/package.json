@@ -1,0 +1,6 @@
+{
+  "name": "example-template",
+  "description": "a simple template for building new experiences",
+  "main": "template/variation.js",
+  "meta": {}
+}

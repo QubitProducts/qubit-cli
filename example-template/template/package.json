@@ -1,0 +1,7 @@
+{
+  "name": "example-experience",
+  "description": "example experience",
+  "version": "1.0.0",
+  "meta": {},
+  "main": "variation.js"
+}

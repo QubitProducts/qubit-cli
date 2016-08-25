@@ -1,0 +1,32 @@
+{
+  "id": 11588,
+  "name": "New styles",
+  "property_id": 2499,
+  "created_at": "2014-06-02T16:51:22.000Z",
+  "updated_at": "2016-08-10T14:32:17.000Z",
+  "version": "3.0.0",
+  "editor_version": 3,
+  "solution_id": 6,
+  "archived": false,
+  "is_processing": false,
+  "recent_iterations": {
+    "published": {
+      "id": 23119,
+      "name": "Iteration 1"
+    },
+    "draft": {
+      "id": 23202,
+      "name": "Iteration 2",
+      "experiment_id": 11588,
+      "created_at": "2014-06-03T12:51:30.000Z",
+      "updated_at": "2016-08-10T14:32:17.000Z",
+      "url": "http://kn8.lt/",
+      "global_code": "console.log(\"global code\")",
+      "activation_rules": [{
+        "key": "custom_javascript",
+        "type": "code",
+        "value": "console.log(\"triggers\")"
+      }]
+    }
+  }
+}

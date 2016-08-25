@@ -1,0 +1,9 @@
+{
+  "global.js": "console.log(\"global code\")",
+  "package.json": "{\n  \"name\": \"qubit-experience-11588\",\n  \"description\": \"New styles\",\n  \"meta\": {\n    \"domain\": \"domain.com\",\n    \"propertyId\": 2499,\n    \"experienceId\": 11588\n  }\n}",
+  "triggers.js": "console.log(\"triggers\")",
+  "variation-336711.css": "a {\n color: green \n}",
+  "variation-336711.js": "function () { console.log('variation 2') }",
+  "variation-49937.css": "a {\n color: purple; \n}",
+  "variation-49937.js": "function () { console.log('variation 1') }"
+}

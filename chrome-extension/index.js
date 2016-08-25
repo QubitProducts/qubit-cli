@@ -1,12 +1,12 @@
 /* globals chrome */
 const NAMESPACE = 'xp-cli'
 const log = console.log.bind(console)
-var injected = false
+let injected = false
 
 chrome.storage.onChanged.addListener(xp)
-xp()
+xp(false)
 
-function xp () {
+function xp (refreshOnChange) {
   chrome.storage.local.get(NAMESPACE, function (obj) {
     var state = obj[NAMESPACE] || {}
     if (!state.disabled) {
@@ -16,12 +16,14 @@ function xp () {
         inject()
         injected = true
       }
+    } else if (refreshOnChange) {
+      window.location.reload()
     }
   })
 }
 
 function connect () {
-  console.log('Attempting to sync with xp')
+  console.log('Attempting to connect with xp')
   chrome.runtime.sendMessage({
     xp: true,
     url: window.location.href
@@ -30,12 +32,11 @@ function connect () {
 
 function inject () {
   var script = document.createElement('script')
-  script.src = 'https://localhost:1234/bundle.js'
+  script.src = 'https://localhost:41337/bundle.js'
   document.body.appendChild(script)
 }
 
 function isEditor () {
-  var host = /^(localhost:3000|staging\-dashboard\.qubitproducts\.com|app\.qubit\.com)$/
-  var path = /^\/p\/\d+\/experiences\/\d+\/editor\?vid=\d+/
-  return host.test(window.location.host) && path.test(window.location.pathname + window.location.search)
+  var pattern = /^https?:\/\/(app\.qubit\.com|staging\-dashboard\.qubitproducts\.com|localhost:3000)\/p\/\d+\/experiences\/\d+/
+  return pattern.test(window.location.href)
 }
