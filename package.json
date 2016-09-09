@@ -10,6 +10,7 @@
     "example": "example"
   },
   "scripts": {
+    "postinstall": "npm install ./xp-loader",
     "test": "make test"
   },
   "author": {
@@ -48,8 +49,7 @@
     "style-loader": "^0.13.1",
     "urlite": "^1.2.7",
     "webpack": "^1.13.1",
-    "webpack-dev-server": "^1.14.1",
-    "xp-loader": "file:xp-loader"
+    "webpack-dev-server": "^1.14.1"
   },
   "standard": {
     "ignore": [
