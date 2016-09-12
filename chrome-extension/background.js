@@ -7,32 +7,63 @@ const ICONS = {
 }
 
 chrome.browserAction.onClicked.addListener(() => {
-  getState((state) => setState({ disabled: !state.disabled }, render))
+  chrome.tabs.query({ active: true }, function (tabs) {
+    let id = tabs.length && tabs[0].id
+    if (id) {
+      getState(id, (state) => setState(id, {
+        enabled: !state.enabled
+      }, render))
+    }
+  })
+})
+
+chrome.tabs.onRemoved.addListener((tabId) => {
+  setState(tabId, {})
 })
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.xp) {
+  if (request.command === 'connect') {
     connect(request.url)
       .then((response) => response.json().then(sendResponse))
       .catch(() => sendResponse(false))
+  } else if (request.command === 'getState') {
+    getState(sender.tab.id, sendResponse)
   }
+  return true
 })
 
-getState(render)
+chrome.tabs.query({ active: true }, function (tabs) {
+  let id = tabs.length && tabs[0].id
+  if (id) getState(id, render)
+})
+
+chrome.tabs.onActivated.addListener(function (activeInfo) {
+  return getState(activeInfo.tabId, render)
+})
 
 function render (state) {
-  chrome.browserAction.setIcon({ path: state.disabled ? ICONS.off : ICONS.on })
-  chrome.browserAction.setTitle({ title: `XP Cli - ${state.disabled ? 'OFF' : 'ON'}` })
+  chrome.browserAction.setIcon({ path: state.enabled ? ICONS.on : ICONS.off })
+  chrome.browserAction.setTitle({ title: `XP Cli - ${state.enabled ? 'ON' : 'OFF'}` })
 }
 
-function getState (callback) {
-  chrome.storage.local.get(NAMESPACE, (result) => callback(result[NAMESPACE] || {}))
+function getState (id, callback) {
+  chrome.storage.local.get(NAMESPACE, (result) => {
+    let state = result[NAMESPACE] || {}
+    state = state[id] || {}
+    if (callback) callback(state)
+  })
 }
 
-function setState (state, callback) {
-  let obj = {}
-  obj[NAMESPACE] = state
-  chrome.storage.local.set(obj, () => callback && callback(state))
+function setState (id, state, callback) {
+  chrome.storage.local.get(NAMESPACE, (obj) => {
+    obj = obj || {}
+    obj[NAMESPACE] = obj[NAMESPACE] || {}
+    obj[NAMESPACE][id] = state
+    if (!state.enabled) delete obj[NAMESPACE][id]
+    chrome.storage.local.set(obj, () => {
+      if (callback) callback(state)
+    })
+  })
 }
 
 function connect (url) {
@@ -50,7 +81,8 @@ function connect (url) {
           url: url,
           value: cookie && cookie.value
         }))
-      }).then(resolve, reject)
+      })
+      .then(resolve, reject)
     })
   })
 }
