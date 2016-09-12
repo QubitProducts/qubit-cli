@@ -1,36 +1,33 @@
 /* globals chrome */
-const NAMESPACE = 'xp-cli'
 const log = console.log.bind(console)
-let injected = false
+let enabled = false
 
-chrome.storage.onChanged.addListener(xp)
-xp(false)
-
-function xp (refreshOnChange) {
-  chrome.storage.local.get(NAMESPACE, function (obj) {
-    var state = obj[NAMESPACE] || {}
-    if (!state.disabled) {
-      if (isEditor()) {
-        connect()
-      } else if (injected === false) {
-        inject()
-        injected = true
-      }
-    } else if (refreshOnChange) {
-      window.location.reload()
-    }
+chrome.storage.onChanged.addListener(function () {
+  chrome.runtime.sendMessage({ command: 'getState' }, function (state) {
+    if (!enabled && state.enabled) return xp(state)
+    if (enabled && !state.enabled) return window.location.reload()
   })
+})
+
+chrome.runtime.sendMessage({ command: 'getState' }, xp)
+
+function xp (state) {
+  if (state.enabled) {
+    if (isEditor()) return connect()
+    if (!enabled) enabled = true
+    appendScript()
+  }
 }
 
 function connect () {
   console.log('Attempting to connect with xp')
   chrome.runtime.sendMessage({
-    xp: true,
+    command: 'connect',
     url: window.location.href
   }, log)
 }
 
-function inject () {
+function appendScript () {
   var script = document.createElement('script')
   script.src = 'https://localhost:41337/bundle.js'
   document.body.appendChild(script)
