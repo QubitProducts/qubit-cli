@@ -7,7 +7,7 @@ const ICONS = {
 }
 
 chrome.browserAction.onClicked.addListener(() => {
-  chrome.tabs.query({ active: true }, function (tabs) {
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     let id = tabs.length && tabs[0].id
     if (id) {
       getState(id, (state) => setState(id, {
@@ -32,7 +32,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   return true
 })
 
-chrome.tabs.query({ active: true }, function (tabs) {
+chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
   let id = tabs.length && tabs[0].id
   if (id) getState(id, render)
 })
