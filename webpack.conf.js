@@ -1,16 +1,23 @@
 var path = require('path')
+var webpack = require('webpack')
 var cwd = process.cwd()
 
 module.exports = {
-  devtool: 'source-map',
+  contentBase: cwd,
   entry: [
     path.join(__dirname, 'src/client/index'),
-    'webpack-dev-server/client'
+    'webpack-hot-middleware/client?path=https://localhost:41337/__webpack_hmr&timeout=20000&reload=true&warn=false&noInfo=true'
   ],
   output: {
-    path: cwd,
+    path: __dirname,
+    publicPath: 'https://localhost:41337/',
     filename: 'bundle.js'
   },
+  devtool: '#source-map',
+  quiet: true,
+  noInfo: true,
+  log: false,
+  stats: false,
   resolve: {
     root: [cwd, path.join(__dirname, 'node_modules')]
   },
@@ -22,17 +29,9 @@ module.exports = {
       { test: /\.json$/, loader: 'json' }
     ]
   },
-  devServer: {
-    contentBase: cwd,
-    compress: true,
-    filename: 'bundle.js',
-    watchOptions: {
-      aggregateTimeout: 300,
-      poll: 1000
-    },
-    quiet: true,
-    noInfo: false,
-    publicPath: '/',
-    stats: { colors: true }
-  }
+  plugins: [
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin()
+  ]
 }
