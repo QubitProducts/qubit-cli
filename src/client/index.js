@@ -20,5 +20,14 @@ function activate (pass) {
 
 function execute () {
   require(__VARIATIONCSS__)
-  require(__VARIATIONJS__)(META)
+  var variation = require(__VARIATIONJS__)
+  var api = variation(META)
+  if (module.hot && api && api.remove) {
+    module.hot.accept()
+    module.hot.dispose(function () {
+      api.remove()
+    })
+  } else {
+    module.hot.decline()
+  }
 }

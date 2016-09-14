@@ -22,8 +22,8 @@
     "type": "git",
     "url": "git+https://github.com/qubitdigital/xp-cli.git"
   },
-  "engines" : {
-    "node" : ">=6.0.0"
+  "engines": {
+    "node": ">=6.0.0"
   },
   "license": "UNLICENSED",
   "dependencies": {
@@ -70,6 +70,7 @@
     "mocha": "^2.5.3",
     "rewire": "^2.5.2",
     "sinon": "^1.17.5",
-    "standard": "^7.1.2"
+    "standard": "^7.1.2",
+    "webpack-hot-middleware": "^2.12.2"
   }
 }
