@@ -44,12 +44,12 @@
     "mkdirp-promise": "^2.0.0",
     "no-op": "^1.0.3",
     "qubit-cli": "qubitdigital/qubit-cli",
-    "rimraf-then": "^1.0.0",
     "script-loader": "^0.7.0",
     "style-loader": "^0.13.1",
     "urlite": "^1.2.7",
     "webpack": "^1.13.1",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-middleware": "^1.7.0",
+    "webpack-hot-middleware": "^2.12.2"
   },
   "standard": {
     "ignore": [
@@ -71,6 +71,6 @@
     "rewire": "^2.5.2",
     "sinon": "^1.17.5",
     "standard": "^7.1.2",
-    "webpack-hot-middleware": "^2.12.2"
+    "rimraf-then": "^1.0.0"
   }
 }
