@@ -7,6 +7,7 @@ const scaffold = require('../src/cmd/scaffold')
 const serve = require('../src/cmd/serve')
 const up = require('../src/cmd/up')
 const down = require('../src/cmd/down')
+const connect = require('../src/cmd/connect')
 
 program
   .command('up')
@@ -17,6 +18,11 @@ program
   .command('down')
   .description('pull experience down from remote')
   .action(down)
+
+program
+  .command('connect')
+  .description('pull down experiences that you are editing in the platform')
+  .action(connect)
 
 program
   .command('scaffold <template>')
