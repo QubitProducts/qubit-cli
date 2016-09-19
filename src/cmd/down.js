@@ -5,7 +5,7 @@ const log = require('../lib/log')
 const {readFile} = require('fs-promise')
 let CWD = process.cwd()
 
-module.exports = function down (options) {
+module.exports = function down () {
   log('pulling...')
   return readFile(path.join(CWD, 'package.json'))
     .then(pkgService.parse)

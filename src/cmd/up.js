@@ -4,7 +4,7 @@ const log = require('../lib/log')
 const readFiles = require('../lib/read-files')
 let CWD = process.cwd()
 
-module.exports = function up (options) {
+module.exports = function up () {
   log('syncing...')
   return readFiles(CWD)
     .then(experienceCodeService.validateFiles)
