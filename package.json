@@ -15,7 +15,9 @@
   },
   "scripts": {
     "postinstall": "npm install ./xp-loader",
-    "test": "make test"
+    "test": "make test",
+    "build-docs": "node_modules/.bin/docpress b",
+    "serve-docs": "node_modules/.bin/docpress s"
   },
   "author": {
     "name": "Alan Clarke",
