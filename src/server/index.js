@@ -1,4 +1,3 @@
-const bodyParser = require('body-parser')
 const express = require('express')
 const createEmitter = require('event-kitten')
 const up = require('../cmd/up')
@@ -32,8 +31,6 @@ module.exports = function start (options) {
     path: '/__webpack_hmr',
     heartbeat: 100
   }))
-  app.use(bodyParser.json())
-  app.post('/connect', require('./routes/connect'))
   const server = https.createServer(options.certs, app)
   return {server, emitter}
 }

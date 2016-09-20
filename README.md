@@ -37,8 +37,8 @@ xp variation.js --watch
 ## connecting to an existing experience
 with xp running, navigate to an experience page:
 ```
-$ xp
-$ xp listening on port 41337
+$ xp connect
+$ navigate to an `edit experience` page for xp to connect to it
 $ open https://app.qubit.com/p/1234/experiences/5678/editor
   You recently navigated to https://app.qubit.com/p/1234/experiences/5678/editor
   Would you like xp to scaffold your local project from this experiment? (y/n)
@@ -56,6 +56,9 @@ $ xp up // save your changes to the cloud
 
 $ xp down // pull down latest version of experience
   pulled!
+
+$ xp variation-336711.js --watch
+  xp listening on port 41337
 
 $ xp variation-336711.js --sync
   watching for changes
@@ -109,6 +112,7 @@ Commands:
 
   up                   push experience up to remote
   down                 pull experience down from remote
+  connect              pull down experiences that you are editing in the platform
   scaffold <template>  scaffold a project from a template
   open                 open xp folder in finder, e.g. to locate chrome-extension
 
@@ -129,6 +133,7 @@ Examples:
   $ xp variation.js --sync
   $ xp up
   $ xp down
+  $ xp connect
 ```
 
 notes:
