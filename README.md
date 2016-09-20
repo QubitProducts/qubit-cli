@@ -1,6 +1,4 @@
-# ![xp-logo](./logo.png)
-
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+# ![xp-cli](https://cloud.githubusercontent.com/assets/640611/18666410/a11b3394-7f23-11e6-99b5-5cbbca6da27f.png)
 
 A client to facilitate local development of experiences for the qubit platform
 
@@ -15,26 +13,37 @@ A client to facilitate local development of experiences for the qubit platform
 - bypass the build queue
 
 ## installation
+
+client
 ```
 npm install -g qubitdigital/xp-cli
 ```
 
+extension
+```
+xp open
+# navigate to chrome://extensions in chrome
+# drag and drop chrome-extension folder into browser
+# ensure 'enabled' checkbox is ticked
+# click 'allow in incognito' if you would like to use xp in incognito mode
+```
+
 ## basic usage
-1. install extension
-  - in terminal, type ``` xp open ```
-  - in chrome, load chrome://extensions
-  - drag and drop chrome-extension folder into browser
-  - ensure 'enabled' checkbox is ticked
-  - click 'allow in incognito' if you would like to use xp in incognito mode
-2. open terminal and run cli:
+
+once you have installed the client and extension
 ```
 mkdir xp-demo
 cd xp-demo
 xp scaffold example
 xp variation.js --watch
+// navigate to a url in chrome
+// click the xp icon in chrome to turn the extension on for your current tab
 ```
 
-## connecting to an existing experience
+## xp connect
+
+xp allows you to connect to and sync with an existing experience created within the qubit platform
+
 with xp running, navigate to an experience page:
 ```
 $ xp connect
@@ -65,15 +74,26 @@ $ xp variation-336711.js --sync
   xp listening on port 41337
   synced!
 ```
-## templates
 
-### creating a template
+## xp up
+
+once your local experience is connected/configured with the correct metadata
+
+you can type ``` xp up ``` to save your changes to push your changes up to the platform
+
+## xp down
+
+once your local experience is connected/configured with the correct metadata
+
+you can type ``` xp down ``` to pull down the experience from the platform
+
+## xp scaffold
+
 xp allows you to create, publish and share experience templates
 
-An xp template is a javascript commonjs module with a folder called template in it
+any commonjs module containing a folder called template can be used by xp to scaffold a new project
 
-See the example-template folder in this project for an example template
-
+creating a template:
 ```
 mkdir my-experience-template
 cd my-experience-template
@@ -83,27 +103,29 @@ npm init
 npm link // make your module available globally on your system
 ```
 
-### using a template
-Once your template is installed, to scaffold an experience from the template simply run:
+using a template:
 ```
 xp scaffold my-experience-template
 ```
-Substituting 'my-experience-template' for the name of your template module
 
-All the files in the template directory will be copied into your current working directory
+tip:
+in order for your folder to be a valid javascript package, you need to have a 'main' entry in your package.json that points to a a javascript file, e.g. ``` template/variation.js ``` otherwise npm will not recognise your folder as a module and you will not be able to install it
 
 ## file reference
+
 ```
 files:
-- package.json // experience metadata
-- global.js // execute code globally
-- triggers.js // programmatically decide whether the experience should execute
-- varition-xxx.js // variation code
-- variation-xxx.css // variation css
+- package.json // metadata
+- global.js // global code
+- triggers.js // activation logic
+- varition-xxx.js // execution code
+- variation-xxx.css // css
 ```
 
 ## help menu
+
 ```
+xp --help
 Usage: xp [varaition.js] [options]
        xp <cmd> [options]
 
@@ -138,3 +160,6 @@ Examples:
 
 notes:
 - if it isn't working after an update, you may need to reload the extension
+
+
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)

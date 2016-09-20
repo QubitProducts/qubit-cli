@@ -9,6 +9,10 @@
   "directories": {
     "example": "example"
   },
+  "docpress": {
+    "github": "qubitdigital/xp-cli",
+    "dist": "docs"
+  },
   "scripts": {
     "postinstall": "npm install ./xp-loader",
     "test": "make test"
@@ -67,11 +71,12 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "docpress": "^0.6.13",
     "istanbul": "^0.4.4",
     "mocha": "^2.5.3",
     "rewire": "^2.5.2",
+    "rimraf-then": "^1.0.0",
     "sinon": "^1.17.5",
-    "standard": "^7.1.2",
-    "rimraf-then": "^1.0.0"
+    "standard": "^7.1.2"
   }
 }

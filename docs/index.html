@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="assets/style.css?t=a44c9e9d">
+    <script src="assets/script.js?t=820b7ffa"></script>
+    <title>xp-cli</title>
+    <meta name="viewport" content="width=device-width">
+  </head>
+  <body class="-menu-visible">
+    <div class="doc-layout">
+      <div class="toggle menu-toggle js-menu-toggle"></div>
+      <div class="body page-index">
+        <div class="header-nav">
+          <div class="right"><a href="https://github.com/qubitdigital/xp-cli" data-title="qubitdigital/xp-cli" class="iconlink">
+              <!-- span.title Open in GitHub--><span class="icon -github"></span></a>
+          </div>
+        </div>
+        <div class="markdown-body"><h1 id=""><img src="https://cloud.githubusercontent.com/assets/640611/18666410/a11b3394-7f23-11e6-99b5-5cbbca6da27f.png" alt="xp-cli"></h1>
+<p>A client to facilitate local development of experiences for the qubit platform</p>
+<ul>
+<li>build experiences locally in your editor/ide of choice</li>
+<li>local previewing and live reload</li>
+<li>use your own workflow and versioning tools etc.</li>
+<li>control when to push your changes up or pull down the latest remote changes</li>
+<li>automatically watch for changes and sync with remote</li>
+<li>create templates and scaffold experiences from them</li>
+<li>execute/demo on sites that don&apos;t have qubit tech</li>
+<li>write and run local unit tests</li>
+<li>bypass the build queue</li>
+</ul>
+<h2 id="installation">installation</h2>
+<p>client</p>
+<pre><code>npm install -g qubitdigital/xp-cli
+</code></pre>
+<p>extension</p>
+<pre><code>xp open
+# navigate to chrome://extensions in chrome
+# drag and drop chrome-extension folder into browser
+# ensure &apos;enabled&apos; checkbox is ticked
+# click &apos;allow in incognito&apos; if you would like to use xp in incognito mode
+</code></pre>
+<h2 id="basic-usage">basic usage</h2>
+<p>once you have installed the client and extension</p>
+<pre><code>mkdir xp-demo
+cd xp-demo
+xp scaffold example
+xp variation.js --watch
+// navigate to a url in chrome
+// click the xp icon in chrome to turn the extension on for your current tab
+</code></pre>
+<h2 id="xp-connect">xp connect</h2>
+<p>xp allows you to connect to and sync with an existing experience created within the qubit platform</p>
+<p>with xp running, navigate to an experience page:</p>
+<pre><code>$ xp connect
+$ navigate to an `edit experience` page for xp to connect to it
+$ open https://app.qubit.com/p/1234/experiences/5678/editor
+  You recently navigated to https://app.qubit.com/p/1234/experiences/5678/editor
+  Would you like xp to scaffold your local project from this experiment? (y/n)
+  writing to local package.json file...
+  writing to local global.js file...
+  writing to local triggers.js file...
+  writing to local variation-49937.js file...
+  writing to local variation-49937.css file...
+  writing to local variation-336711.js file...
+  writing to local variation-336711.css file...
+  All done!
+
+$ xp up // save your changes to the cloud
+  synced!
+
+$ xp down // pull down latest version of experience
+  pulled!
+
+$ xp variation-336711.js --watch
+  xp listening on port 41337
+
+$ xp variation-336711.js --sync
+  watching for changes
+  xp listening on port 41337
+  synced!
+</code></pre>
+<h2 id="xp-up">xp up</h2>
+<p>once your local experience is connected/configured with the correct metadata</p>
+<p>you can type <code>xp up</code> to save your changes to push your changes up to the platform</p>
+<h2 id="xp-down">xp down</h2>
+<p>once your local experience is connected/configured with the correct metadata</p>
+<p>you can type <code>xp down</code> to pull down the experience from the platform</p>
+<h2 id="xp-scaffold">xp scaffold</h2>
+<p>xp allows you to create, publish and share experience templates</p>
+<p>any commonjs module containing a folder called template can be used by xp to scaffold a new project</p>
+<p>creating a template:</p>
+<pre><code>mkdir my-experience-template
+cd my-experience-template
+mkdir template
+touch template/variation.js
+npm init
+npm link // make your module available globally on your system
+</code></pre>
+<p>using a template:</p>
+<pre><code>xp scaffold my-experience-template
+</code></pre>
+<p>tip:
+in order for your folder to be a valid javascript package, you need to have a &apos;main&apos; entry in your package.json that points to a a javascript file, e.g. <code>template/variation.js</code> otherwise npm will not recognise your folder as a module and you will not be able to install it</p>
+<h2 id="file-reference">file reference</h2>
+<pre><code>files:
+- package.json // metadata
+- global.js // global code
+- triggers.js // activation logic
+- varition-xxx.js // execution code
+- variation-xxx.css // css
+</code></pre>
+<h2 id="help-menu">help menu</h2>
+<pre><code>xp --help
+Usage: xp [varaition.js] [options]
+       xp &lt;cmd&gt; [options]
+
+
+Commands:
+
+  up                   push experience up to remote
+  down                 pull experience down from remote
+  connect              pull down experiences that you are editing in the platform
+  scaffold &lt;template&gt;  scaffold a project from a template
+  open                 open xp folder in finder, e.g. to locate chrome-extension
+
+Options:
+
+  -h, --help         output usage information
+  -V, --version      output the version number
+  -p, --port [port]  use custom [port]
+  -w, --watch        watch for changes and live reload
+  -s, --sync         watch for changes and sync with remote
+
+
+Examples:
+
+  $ xp --help
+  $ xp scaffold example
+  $ xp variation.js --watch
+  $ xp variation.js --sync
+  $ xp up
+  $ xp down
+  $ xp connect
+</code></pre>
+<p>notes:</p>
+<ul>
+<li>if it isn&apos;t working after an update, you may need to reload the extension</li>
+</ul>
+<p><a href="http://standardjs.com/"><img src="https://img.shields.io/badge/code%20style-standard-brightgreen.svg" alt="js-standard-style"></a></p>
+
+        </div>
+      </div>
+      <div class="menu toc-menu">
+        <li class="menu-item -level-0 -parent">
+          <ul class="submenu">
+            <li class="menu-item -level-1"><a href="index.html" class="link title -active link-index">xp-cli</a>
+            </li>
+            <li class="menu-item -level-1"><a href="#installation" class="link title link-installation">installation</a>
+            </li>
+            <li class="menu-item -level-1"><a href="#basic-usage" class="link title link-basic-usage">basic usage</a>
+            </li>
+            <li class="menu-item -level-1"><a href="#xp-connect" class="link title link-xp-connect">xp connect</a>
+            </li>
+            <li class="menu-item -level-1"><a href="#xp-up" class="link title link-xp-up">xp up</a>
+            </li>
+            <li class="menu-item -level-1"><a href="#xp-down" class="link title link-xp-down">xp down</a>
+            </li>
+            <li class="menu-item -level-1"><a href="#xp-scaffold" class="link title link-xp-scaffold">xp scaffold</a>
+            </li>
+            <li class="menu-item -level-1"><a href="#file-reference" class="link title link-file-reference">file reference</a>
+            </li>
+            <li class="menu-item -level-1"><a href="#help-menu" class="link title link-help-menu">help menu</a>
+            </li>
+          </ul>
+        </li>
+      </div>
+    </div>
+  </body>
+</html>
