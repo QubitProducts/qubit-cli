@@ -2,15 +2,30 @@
 
 A client to facilitate local development of experiences for the qubit platform
 
-- build experiences locally in your editor/ide of choice
-- local previewing and live reload
-- use your own workflow and versioning tools etc.
-- control when to push your changes up or pull down the latest remote changes
-- automatically watch for changes and sync with remote
-- create templates and scaffold experiences from them
-- execute/demo on sites that don't have qubit tech
+## features
+
+local offline development
+- build experiences locally in your editor/IDE of choice
+- use your own workflow and versioning tools
 - write and run local unit tests
-- bypass the build queue
+
+advanced previewing
+- instant local previewing on any site
+- live hot reloading of your variation and css
+- bypass qubit's remote build queue
+
+remote syncing
+- scaffold your local project from existing experiences in the platform
+- control when to push your changes up or pull down the latest remote changes
+- develop your experience locally and choose when to share it
+- use sync mode to watch for changes and sync with remote automatically
+
+templates
+- create templates to speed up local development
+- publish templates to share ideas and examples with teammates
+- save time and effort by automating boilerplate and common variation code
+- improve code consistency and design by leveraging template reuse
+
 
 ## installation
 

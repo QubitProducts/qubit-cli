@@ -9,6 +9,11 @@
         "slug": "index",
         "headings": [
           {
+            "title": "features",
+            "depth": 2,
+            "id": "features"
+          },
+          {
             "title": "installation",
             "depth": 2,
             "id": "installation"
@@ -58,6 +63,11 @@
       "title": "xp-cli",
       "slug": "index",
       "headings": [
+        {
+          "title": "features",
+          "depth": 2,
+          "id": "features"
+        },
         {
           "title": "installation",
           "depth": 2,
