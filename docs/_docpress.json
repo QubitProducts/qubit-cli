@@ -1,0 +1,107 @@
+{
+  "toc": {
+    "sections": [
+      {
+        "title": "xp-cli",
+        "source": "README.md",
+        "expand": true,
+        "url": "index.html",
+        "slug": "index",
+        "headings": [
+          {
+            "title": "installation",
+            "depth": 2,
+            "id": "installation"
+          },
+          {
+            "title": "basic usage",
+            "depth": 2,
+            "id": "basic-usage"
+          },
+          {
+            "title": "xp connect",
+            "depth": 2,
+            "id": "xp-connect"
+          },
+          {
+            "title": "xp up",
+            "depth": 2,
+            "id": "xp-up"
+          },
+          {
+            "title": "xp down",
+            "depth": 2,
+            "id": "xp-down"
+          },
+          {
+            "title": "xp scaffold",
+            "depth": 2,
+            "id": "xp-scaffold"
+          },
+          {
+            "title": "file reference",
+            "depth": 2,
+            "id": "file-reference"
+          },
+          {
+            "title": "help menu",
+            "depth": 2,
+            "id": "help-menu"
+          }
+        ]
+      }
+    ]
+  },
+  "index": {
+    "index.html": {
+      "source": "README.md",
+      "title": "xp-cli",
+      "slug": "index",
+      "headings": [
+        {
+          "title": "installation",
+          "depth": 2,
+          "id": "installation"
+        },
+        {
+          "title": "basic usage",
+          "depth": 2,
+          "id": "basic-usage"
+        },
+        {
+          "title": "xp connect",
+          "depth": 2,
+          "id": "xp-connect"
+        },
+        {
+          "title": "xp up",
+          "depth": 2,
+          "id": "xp-up"
+        },
+        {
+          "title": "xp down",
+          "depth": 2,
+          "id": "xp-down"
+        },
+        {
+          "title": "xp scaffold",
+          "depth": 2,
+          "id": "xp-scaffold"
+        },
+        {
+          "title": "file reference",
+          "depth": 2,
+          "id": "file-reference"
+        },
+        {
+          "title": "help menu",
+          "depth": 2,
+          "id": "help-menu"
+        }
+      ]
+    }
+  },
+  "sources": {
+    "README.md": "index.html"
+  }
+}
