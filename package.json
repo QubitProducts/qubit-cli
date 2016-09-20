@@ -41,6 +41,7 @@
     "json-loader": "^0.5.4",
     "less": "^2.6.1",
     "less-loader": "^2.2.3",
+    "lodash": "^4.16.0",
     "mkdirp-promise": "^2.0.0",
     "no-op": "^1.0.3",
     "qubit-cli": "qubitdigital/qubit-cli",

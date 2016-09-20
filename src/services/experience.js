@@ -1,3 +1,4 @@
+let _ = require('lodash')
 let fetch = require('../lib/fetch')
 
 function get (domain, propertyId, experienceId) {
@@ -33,10 +34,10 @@ function update (domain, propertyId, experienceId, globalCode, triggers) {
 }
 
 function extract (experience) {
-  let iteration = experience.recent_iterations.draft
-  let rule = iteration.activation_rules.find(rule => rule.key === 'custom_javascript')
+  let rules = _.get(experience, 'recent_iterations.draft.activation_rules')
+  let rule = rules && rules.find(rule => rule.key === 'custom_javascript')
   return {
-    'global.js': iteration.global_code || '',
+    'global.js': _.get(experience, 'recent_iterations.draft.global_code') || '',
     'triggers.js': (rule && rule.value) || 'function triggers (options, cb) {\n  cb()\n}'
   }
 }

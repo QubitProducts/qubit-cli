@@ -1,8 +1,9 @@
-const rewire = require('rewire')
-const variationService = rewire('../../src/services/variation')
+const _ = require('lodash')
 const {expect} = require('chai')
-const sinon = require('sinon')
 const fixture = require('../fixtures/models/variations.json')
+const rewire = require('rewire')
+const sinon = require('sinon')
+const variationService = rewire('../../src/services/variation')
 
 describe('variation service', function () {
   let restore, get, put, domain, propertyId, experienceId, variationId
@@ -59,6 +60,15 @@ describe('variation service', function () {
   })
 
   describe('extract', function () {
+    it('should create a default execution if there isnt one', function () {
+      let variation = _.cloneDeep(fixture[1])
+      _.set(variation, 'execution_code', false)
+      _.set(variation, 'custom_styles', false)
+      expect(variationService.extract(variation)).to.eql({
+        'variation-49937.css': '',
+        'variation-49937.js': 'function variation (cb) {\n\n}'
+      })
+    })
     it('should extract the correct params', function () {
       expect(variationService.extract(fixture[1])).to.eql({
         'variation-49937.css': 'a {\n color: purple; \n}',
