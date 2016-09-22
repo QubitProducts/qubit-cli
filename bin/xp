@@ -61,5 +61,3 @@ program.on('--help', function () {
 })
 
 program.parse(process.argv)
-
-if (!program.args.length) serve('', program)
