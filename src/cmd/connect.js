@@ -1,3 +1,4 @@
+const config = require('config')
 const https = require('https')
 const getCerts = require('../lib/https')
 const log = require('../lib/log')
@@ -11,7 +12,7 @@ module.exports = function connect (opts) {
       app.use(bodyParser.json())
       app.post('/connect', require('../server/routes/connect'))
       const server = https.createServer(certs, app)
-      server.listen(opts.parent.port, () => {
+      server.listen(config.port, () => {
         log('navigate to an `edit experience` page for xp to connect to it')
       })
       return server

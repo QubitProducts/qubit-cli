@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-const program = require('commander')
 const path = require('path')
-const exec = require('child_process').exec
+process.env.NODE_CONFIG_DIR = path.resolve(__dirname, '../config')
+const program = require('commander')
 const pkg = require('../package.json')
 const scaffold = require('../src/cmd/scaffold')
 const serve = require('../src/cmd/serve')
@@ -41,7 +41,6 @@ program
   )
   .version(pkg.version)
   .arguments('<variation>')
-  .option('-p, --port [port]', 'use custom [port]', Number, 41337)
   .option('-w, --watch', 'watch for changes and live reload')
   .option('-s, --sync', 'watch for changes and sync with remote')
   .action(serve)

@@ -157,7 +157,6 @@ Options:
 
   -h, --help         output usage information
   -V, --version      output the version number
-  -p, --port [port]  use custom [port]
   -w, --watch        watch for changes and live reload
   -s, --sync         watch for changes and sync with remote
 
