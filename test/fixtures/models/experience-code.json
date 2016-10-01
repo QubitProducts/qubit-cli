@@ -31,7 +31,6 @@
   },
   "global.js": "console.log(\"global code\")",
   "triggers.js": "console.log(\"triggers\")",
-  "domain": "domain.com",
   "variations": [{
     "id": 50111,
     "master_id": 49936,

@@ -3,14 +3,13 @@ let experienceService = require('./experience')
 let variationService = require('./variation')
 let pkg = require('./pkg')
 
-function get (domain, propertyId, experienceId) {
+function get (propertyId, experienceId) {
   return Promise.all([
-    experienceService.get(domain, propertyId, experienceId),
-    variationService.getAll(domain, propertyId, experienceId)
+    experienceService.get(propertyId, experienceId),
+    variationService.getAll(propertyId, experienceId)
   ])
   .then(([experience, variations]) => {
     return Object.assign(experience, experienceService.extract(experience), {
-      domain: domain,
       variations: variations.map((variation) => Object.assign({}, variation, variationService.extract(variation)))
     })
   })
@@ -32,8 +31,8 @@ function variationHasChanged (variation, files) {
     variation[filename + '.css'] !== files[filename + '.css']
 }
 
-function writeToLocal (dest, domain, propertyId, experienceId) {
-  return get(domain, propertyId, experienceId).then((experience) => {
+function writeToLocal (dest, propertyId, experienceId) {
+  return get(propertyId, experienceId).then((experience) => {
     let files = {}
     files['package.json'] = JSON.stringify(pkg.create(experience), null, 2)
     Object.assign(files, experienceService.extract(experience))
@@ -47,7 +46,6 @@ function update (dest, experience, files) {
   let updates = []
   if (experienceHasChanged(experience, files)) {
     updates.push(experienceService.update(
-      experience.domain,
       experience.property_id,
       experience.id,
       files['global.js'],
@@ -59,7 +57,6 @@ function update (dest, experience, files) {
     .forEach((variation) => {
       updates.push(
         variationService.update(
-          experience.domain,
           experience.property_id,
           experience.id,
           variation.id,

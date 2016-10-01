@@ -1,15 +1,15 @@
 let _ = require('lodash')
 let fetch = require('../lib/fetch')
 
-function get (domain, propertyId, experienceId) {
-  return fetch.get(domain, getPath(propertyId, experienceId))
+function get (propertyId, experienceId) {
+  return fetch.get(getPath(propertyId, experienceId))
 }
 
-function update (domain, propertyId, experienceId, globalCode, triggers) {
-  return get(domain, propertyId, experienceId).then(merge).then(put)
+function update (propertyId, experienceId, globalCode, triggers) {
+  return get(propertyId, experienceId).then(merge).then(put)
 
   function put (experiment) {
-    return fetch.put(domain, getPath(propertyId, experienceId), { experiment })
+    return fetch.put(getPath(propertyId, experienceId), { experiment })
   }
 
   function merge (experience) {

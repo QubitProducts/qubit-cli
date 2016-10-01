@@ -9,8 +9,8 @@ module.exports = function up () {
   return readFiles(CWD)
     .then(experienceCodeService.validateFiles)
     .then(function (files) {
-      let {domain, propertyId, experienceId} = pkgService.parse(files['package.json']).meta
-      return experienceCodeService.get(domain, propertyId, experienceId).then((experience) => {
+      let {propertyId, experienceId} = pkgService.parse(files['package.json']).meta
+      return experienceCodeService.get(propertyId, experienceId).then((experience) => {
         return experienceCodeService.update(CWD, experience, files)
       })
     })

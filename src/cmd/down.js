@@ -11,8 +11,8 @@ module.exports = function down () {
     .then(pkgService.parse)
     .then(pkgService.validate)
     .then((pkg) => {
-      let {domain, propertyId, experienceId} = pkg.meta
-      return experienceCodeService.writeToLocal(CWD, domain, propertyId, experienceId)
+      let {propertyId, experienceId} = pkg.meta
+      return experienceCodeService.writeToLocal(CWD, propertyId, experienceId)
     })
     .then(() => {
       process.stdout.moveCursor(0, -1)

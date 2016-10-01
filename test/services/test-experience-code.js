@@ -9,7 +9,6 @@ const experienceCodeService = rewire('../../src/services/experience-code')
 const experienceService = rewire('../../src/services/experience')
 const variationService = rewire('../../src/services/variation')
 const variationsFixture = require('../fixtures/models/variations.json')
-const domain = 'domain.com'
 const propertyId = 123
 const experienceId = 321
 
@@ -31,13 +30,13 @@ describe('experience code service', function () {
     afterEach(() => restore())
 
     it('should get experiment and variations and extend them with code', function () {
-      return experienceCodeService.get(domain, propertyId, experienceId)
+      return experienceCodeService.get(propertyId, experienceId)
         .then((result) => expect(result).to.eql(experienceCodeFixture))
     })
 
     describe('writeToLocal', function () {
       it('should scaffold a project from a remote experience', function () {
-        return experienceCodeService.writeToLocal('dest', domain, propertyId, experienceId)
+        return experienceCodeService.writeToLocal('dest', propertyId, experienceId)
         .then(() => expect(scaffoldStub.getCall(0).args).to.eql(['dest', filesFixture]))
       })
     })
@@ -61,7 +60,6 @@ describe('experience code service', function () {
       return experienceCodeService.update('dest', experienceCodeFixture, files)
         .then(() => {
           expect(updateExperience.getCall(0).args).to.eql([
-            'domain.com',
             2499,
             11588,
             files['global.js'],
@@ -70,7 +68,6 @@ describe('experience code service', function () {
           expect(updateVariation.callCount).to.eql(2)
           experienceCodeFixture.variations.slice(1).forEach((variation, i) => {
             expect(updateVariation.getCall(i).args).to.eql([
-              domain,
               experienceCodeFixture.property_id,
               experienceCodeFixture.id,
               variation.id,

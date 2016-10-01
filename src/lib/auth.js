@@ -1,10 +1,11 @@
+const config = require('config')
 const os = require('os')
 const fs = require('fs-promise')
 let xprcPath = `${os.homedir()}/.xprc`
 
-function get (domain) {
+function get () {
   return getAll().then((data) => {
-    return data[domain] || {}
+    return data[config.endpoint] || {}
   })
 }
 
@@ -15,10 +16,10 @@ function getAll () {
     .then(JSON.parse)
 }
 
-function set (domain, authType, token) {
+function set (authType, token) {
   return getAll().then((data) => {
-    data[domain] = data[domain] || {}
-    data[domain][authType] = token
+    data[config.endpoint] = data[config.endpoint] || {}
+    data[config.endpoint][authType] = token
     return fs.writeFile(xprcPath, JSON.stringify(data))
   })
 }
