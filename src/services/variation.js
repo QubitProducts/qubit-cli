@@ -1,11 +1,11 @@
 let fetch = require('../lib/fetch')
 
-function getAll (domain, propertyId, experienceId) {
-  return fetch.get(domain, getPath(propertyId, experienceId))
+function getAll (propertyId, experienceId) {
+  return fetch.get(getPath(propertyId, experienceId))
 }
 
-function update (domain, propertyId, experienceId, id, code, css) {
-  return getAll(domain, propertyId, experienceId)
+function update (propertyId, experienceId, id, code, css) {
+  return getAll(propertyId, experienceId)
     .then(find)
     .then(put)
 
@@ -20,7 +20,7 @@ function update (domain, propertyId, experienceId, id, code, css) {
         custom_styles: css
       })
     }
-    return fetch.put(domain, `${getPath(propertyId, experienceId)}/${id}`, updated)
+    return fetch.put(`${getPath(propertyId, experienceId)}/${id}`, updated)
   }
 }
 

@@ -6,12 +6,11 @@ const sinon = require('sinon')
 const variationService = rewire('../../src/services/variation')
 
 describe('variation service', function () {
-  let restore, get, put, domain, propertyId, experienceId, variationId
+  let restore, get, put, propertyId, experienceId, variationId
 
   beforeEach(function () {
     get = sinon.stub()
     put = sinon.stub()
-    domain = 'domain.com'
     propertyId = 123
     experienceId = 321
     variationId = 50112
@@ -24,9 +23,9 @@ describe('variation service', function () {
 
   describe('getAll', function () {
     it('should call fetch with the correct params', function () {
-      variationService.getAll(domain, propertyId, experienceId)
+      variationService.getAll(propertyId, experienceId)
       expect(get.calledOnce).to.eql(true)
-      expect(get.getCall(0).args).to.eql([domain, '/p/123/smart_serve/experiments/321/recent_iterations/draft/variations'])
+      expect(get.getCall(0).args).to.eql(['/p/123/smart_serve/experiments/321/recent_iterations/draft/variations'])
     })
   })
 
@@ -42,11 +41,10 @@ describe('variation service', function () {
     afterEach(() => variationService.getAll.restore())
 
     it('should call fetch with the correct params', function () {
-      return variationService.update(domain, propertyId, experienceId, '50112', 'code', 'css')
+      return variationService.update(propertyId, experienceId, '50112', 'code', 'css')
         .then(() => {
           expect(put.calledOnce).to.eql(true)
           expect(put.getCall(0).args).to.eql([
-            domain,
             '/p/123/smart_serve/experiments/321/recent_iterations/draft/variations/' + variationId,
             {
               variation: Object.assign({}, fixture.find((v) => v.id === variationId), {
