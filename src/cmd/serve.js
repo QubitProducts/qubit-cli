@@ -1,3 +1,4 @@
+const config = require('config')
 const start = require('../server')
 const getCerts = require('../lib/https')
 const log = require('../lib/log')
@@ -9,7 +10,7 @@ module.exports = function serve (variation, opts) {
         certs: certs,
         variation: variation
       }))
-      xp.server.listen(opts.port, () => log(`xp listening on port ${opts.port}`))
+      xp.server.listen(config.port, () => log(`xp listening on port ${config.port}`))
       return xp
     })
     .catch(console.error)
