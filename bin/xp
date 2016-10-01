@@ -2,6 +2,7 @@
 const path = require('path')
 process.env.NODE_CONFIG_DIR = path.resolve(__dirname, '../config')
 const program = require('commander')
+const opn = require('opn')
 const pkg = require('../package.json')
 const exec = require('child_process').exec
 const scaffold = require('../src/cmd/scaffold')
@@ -9,6 +10,12 @@ const serve = require('../src/cmd/serve')
 const up = require('../src/cmd/up')
 const down = require('../src/cmd/down')
 const connect = require('../src/cmd/connect')
+const login = require('../src/cmd/login')
+
+program
+  .command('login')
+  .description('authenticate')
+  .action(login)
 
 program
   .command('up')
@@ -33,7 +40,7 @@ program
 program
   .command('open')
   .description('open xp folder in finder, e.g. to locate chrome-extension')
-  .action(() => exec(`open ${path.dirname(__dirname)}`))
+  .action(() => opn(path.dirname(__dirname)))
 
 program
   .usage(`[varaition.js] [options]

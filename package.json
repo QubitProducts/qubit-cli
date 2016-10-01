@@ -50,6 +50,7 @@
     "less-loader": "^2.2.3",
     "lodash": "^4.16.0",
     "pem": "^1.8.3",
+    "opn": "^4.0.2",
     "script-loader": "^0.7.0",
     "style-loader": "^0.13.1",
     "urlite": "^1.2.7",

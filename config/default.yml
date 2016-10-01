@@ -1,2 +1,9 @@
 port: 41337
 endpoint: https://app.qubit.com
+auth:
+  host: https://qubit.eu.auth0.com/authorize
+  options:
+    client_id: g91lKr0ZuooXxfTS1JGBa8vPYqnAouNU
+    redirect_uri: https://localhost:41337/callback
+    scope: openid
+    response_type: 'code'
