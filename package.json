@@ -14,7 +14,7 @@
     "dist": "docs"
   },
   "scripts": {
-    "postinstall": "npm install ./xp-loader",
+    "postinstall": "npm link ./xp-loader",
     "test": "make test",
     "build-docs": "node_modules/.bin/docpress b",
     "serve-docs": "node_modules/.bin/docpress s"
