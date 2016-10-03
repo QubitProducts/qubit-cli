@@ -51,7 +51,6 @@
     "less-loader": "^2.2.3",
     "lodash": "^4.16.0",
     "mkdirp-promise": "^2.0.0",
-    "no-op": "^1.0.3",
     "qubit-cli": "qubitdigital/qubit-cli",
     "script-loader": "^0.7.0",
     "style-loader": "^0.13.1",
