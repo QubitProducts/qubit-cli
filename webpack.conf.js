@@ -19,13 +19,13 @@ module.exports = {
   log: false,
   stats: false,
   resolve: {
-    root: [cwd, path.join(__dirname, 'node_modules')]
+    root: [cwd, path.join(cwd, 'node_modules'), path.join(__dirname, 'node_modules')]
   },
   module: {
     loaders: [
       { test: /(triggers)\.js$/, loader: 'xp-loader' },
       { test: /global\.js$/, loader: 'script' },
-      { test: /\.css$/, loader: 'style!css!less' },
+      { test: /\.css$/, loader: 'style!raw!less' },
       { test: /\.json$/, loader: 'json' }
     ]
   },
