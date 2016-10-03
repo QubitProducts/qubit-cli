@@ -31,7 +31,7 @@ templates
 
 client
 ```
-npm install -g qubitdigital/xp-cli
+npm install -g qubitdigital/xp-cli --production
 ```
 
 extension
