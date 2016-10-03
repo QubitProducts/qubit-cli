@@ -42,6 +42,7 @@
     "confirmer": "^1.1.1",
     "css-loader": "^0.23.1",
     "event-kitten": "^1.1.0",
+    "express": "^4.14.0",
     "fetch-js": "^1.0.3",
     "fs-promise": "^0.5.0",
     "joi": "^9.0.4",
@@ -51,7 +52,7 @@
     "less-loader": "^2.2.3",
     "lodash": "^4.16.0",
     "mkdirp-promise": "^2.0.0",
-    "qubit-cli": "qubitdigital/qubit-cli",
+    "pem": "^1.8.3",
     "script-loader": "^0.7.0",
     "style-loader": "^0.13.1",
     "urlite": "^1.2.7",
@@ -80,6 +81,6 @@
     "rewire": "^2.5.2",
     "rimraf-then": "^1.0.0",
     "sinon": "^1.17.5",
-    "standard": "^7.1.2"
+    "standard": "^8.3.0"
   }
 }
