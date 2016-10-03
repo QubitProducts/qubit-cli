@@ -40,7 +40,6 @@
     "commander": "^2.9.0",
     "config": "^1.21.0",
     "confirmer": "^1.1.1",
-    "css-loader": "^0.23.1",
     "event-kitten": "^1.1.0",
     "express": "^4.14.0",
     "fetch-js": "^1.0.3",

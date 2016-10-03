@@ -25,7 +25,7 @@ module.exports = {
     loaders: [
       { test: /(triggers)\.js$/, loader: 'xp-loader' },
       { test: /global\.js$/, loader: 'script' },
-      { test: /\.css$/, loader: 'style!css!less' },
+      { test: /\.css$/, loader: 'style!raw!less' },
       { test: /\.json$/, loader: 'json' }
     ]
   },
