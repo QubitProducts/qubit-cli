@@ -16,8 +16,8 @@
   "scripts": {
     "postinstall": "npm link ./xp-loader",
     "test": "make test",
-    "build-docs": "node_modules/.bin/docpress b",
-    "serve-docs": "node_modules/.bin/docpress s"
+    "build-docs": "docpress b",
+    "serve-docs": "docpress s"
   },
   "author": {
     "name": "Alan Clarke",
@@ -76,7 +76,6 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "docpress": "^0.6.13",
     "istanbul": "^0.4.4",
     "mocha": "^2.5.3",
     "rewire": "^2.5.2",
