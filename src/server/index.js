@@ -10,27 +10,29 @@ const webpackConf = require('../../webpack.conf')
 const app = express()
 
 module.exports = function start (options) {
+  options.verbose = options.verbose || false
+  let verboseOpts = {
+    log: options.verbose ? log : false,
+    noInfo: !options.verbose,
+    quiet: !options.verbose,
+    stats: options.verbose,
+    warn: options.verbose
+  }
   let emitter = createEmitter()
   if (options.sync) {
     log('watching for changes')
     emitter.on('rebuild', up)
   }
-  let compiler = webpack(createWebpackConfig(options))
+  let compiler = webpack(Object.assign(createWebpackConfig(options), verboseOpts))
   compiler.plugin('done', (data) => emitter.emit('rebuild', data))
-  app.use(webpackDevMiddleware(compiler, {
-    noInfo: true,
-    quiet: true,
+  app.use(webpackDevMiddleware(compiler, Object.assign({
     publicPath: webpackConf.output.publicPath
-  }))
-  app.use(webpackHotMiddleware(compiler, {
-    log: false,
-    warn: false,
+  }, verboseOpts)))
+  app.use(webpackHotMiddleware(compiler, Object.assign({
     reload: true,
-    noInfo: true,
-    quiet: true,
     path: '/__webpack_hmr',
     heartbeat: 100
-  }))
+  }, verboseOpts)))
   const server = https.createServer(options.certs, app)
   return {server, emitter}
 }
@@ -48,3 +50,4 @@ function createWebpackConfig (options) {
     plugins: plugins
   })
 }
+
