@@ -14,10 +14,6 @@ module.exports = {
     filename: 'bundle.js'
   },
   devtool: '#source-map',
-  quiet: true,
-  noInfo: true,
-  log: false,
-  stats: false,
   resolve: {
     root: [cwd, path.join(cwd, 'node_modules'), path.join(__dirname, 'node_modules')]
   },

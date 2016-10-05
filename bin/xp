@@ -42,6 +42,7 @@ program
   .arguments('<variation>')
   .option('-w, --watch', 'watch for changes and live reload')
   .option('-s, --sync', 'watch for changes and sync with remote')
+  .option('-v, --verbose', 'log verbose output', false)
   .action(serve)
 
 program.on('--help', function () {
