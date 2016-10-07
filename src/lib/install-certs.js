@@ -1,7 +1,6 @@
 const fs = require('fs-promise')
 const pem = require('pem')
 const childProcess = require('child_process')
-const mkdirp = require('mkdirp-promise')
 const log = require('./log')
 const {CERT_DIR, CERT_PATH, KEY_PATH, KEY_OPTIONS} = require('./constants')
 
@@ -11,7 +10,7 @@ module.exports = function setup () {
   log('You will be asked for your sudo password')
   log("If you'd like to inspect/remove the installed certificate, you can find it in your keychain")
 
-  return mkdirp(CERT_DIR)
+  return fs.mkdirp(CERT_DIR)
     .then(createCerts)
     .then(saveCerts)
     .then(chmodCerts)

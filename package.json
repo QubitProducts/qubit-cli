@@ -49,7 +49,6 @@
     "less": "^2.6.1",
     "less-loader": "^2.2.3",
     "lodash": "^4.16.0",
-    "mkdirp-promise": "^2.0.0",
     "pem": "^1.8.3",
     "script-loader": "^0.7.0",
     "style-loader": "^0.13.1",
@@ -78,7 +77,6 @@
     "istanbul": "^0.4.4",
     "mocha": "^3.1.0",
     "rewire": "^2.5.2",
-    "rimraf-then": "^1.0.0",
     "sinon": "^1.17.5",
     "standard": "^8.3.0"
   }

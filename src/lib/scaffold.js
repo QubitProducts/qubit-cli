@@ -1,7 +1,6 @@
 const path = require('path')
 const chalk = require('chalk')
 const fs = require('fs-promise')
-const mkdirp = require('mkdirp-promise')
 const co = require('co')
 const log = require('./log')
 let exists = require('./exists')
@@ -14,7 +13,7 @@ module.exports = co.wrap(function * scaffold (dest, files, neverOverwrite) {
       if (typeof value === 'string') {
         yield scaffoldFile(name)
       } else {
-        yield mkdirp(path.join(dest, name))
+        yield fs.mkdirp(path.join(dest, name))
         yield scaffold(path.join(dest, name), value, neverOverwrite)
       }
     }

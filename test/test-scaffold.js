@@ -6,7 +6,6 @@ const rewire = require('rewire')
 const sinon = require('sinon')
 const exists = rewire('../src/lib/exists')
 const scaffold = rewire('../src/lib/scaffold')
-const rimraf = require('rimraf-then')
 const fixtureDir = path.join(__dirname, 'fixtures')
 const fixtureC = path.join(fixtureDir, 'c.js')
 const fixtureE = path.join(fixtureDir, 'd/e.js')
@@ -34,7 +33,7 @@ describe('scaffold', function () {
 
   afterEach(co.wrap(function * () {
     restore()
-    yield [fs.unlink(fixtureC).catch((err) => err), rimraf(path.join(fixtureDir, 'd'))]
+    yield [fs.unlink(fixtureC).catch((err) => err), fs.remove(path.join(fixtureDir, 'd'))]
   }))
 
   describe('if shouldWriteStub returns true', function () {
