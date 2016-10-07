@@ -9,7 +9,6 @@ function create (experience) {
     name: `qubit-experience-${experience.id}`,
     description: experience.name,
     meta: {
-      cookieDomain: experience.domain,
       propertyId: experience.property_id,
       experienceId: experience.id,
       iterationId: iterationId,
@@ -43,7 +42,6 @@ function validate (pkg) {
 
   let schema = Joi.object({
     meta: Joi.object({
-      cookieDomain: Joi.string().required(),
       propertyId: Joi.number().required(),
       experienceId: Joi.number().required(),
       iterationId: Joi.number(),

@@ -6,7 +6,6 @@ const pkgFixture = require('../fixtures/models/pkg.js')
 let { cookieDomain, experienceId } = pkgFixture.meta
 const parseVariations = pkgService.__get__('parseVariations')
 const variationFixture = pkgFixture.meta.variations[Object.keys(pkgFixture.meta.variations)[0]]
-console.log(variationFixture)
 
 describe('pkg', () => {
   describe('create', function () {
@@ -36,13 +35,6 @@ describe('pkg', () => {
       expect(() => pkgService.validate(Object.assign({}, pkgFixture, {
         meta: Object.assign({}, pkgFixture.meta, {
           experienceId: null
-        })
-      }))).to.throw()
-    })
-    it('it should throw if cookieDomain is missing', () => {
-      expect(() => pkgService.validate(Object.assign({}, pkgFixture, {
-        meta: Object.assign({}, pkgFixture.meta, {
-          cookieDomain: null
         })
       }))).to.throw()
     })

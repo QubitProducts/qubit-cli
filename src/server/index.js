@@ -40,7 +40,8 @@ module.exports = function start (options) {
 function createWebpackConfig (options) {
   let plugins = webpackConf.plugins.slice(0)
   plugins.push(new webpack.DefinePlugin({
-    __VARIATION__: options.variation.replace(/\.\w+$/, '')
+    __VARIATIONJS__: `'xp-loader!${options.variation.replace(/\.js$/, '')}'`,
+    __VARIATIONCSS__: `'${options.variation.replace(/\.js$/, '.css')}'`
   }))
   let entry = webpackConf.entry.slice(0)
   if (!options.sync && !options.watch) entry.pop()

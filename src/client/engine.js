@@ -1,8 +1,11 @@
+/* globals __VARIATIONJS__, __VARIATIONCSS__ */
+
 var amd = require('./amd')
 var pkg = require('./pkg')
 
-module.exports = function experienceEngine (variationName) {
+module.exports = function experienceEngine () {
   var fileOptions = pkg()
+  var variationName = __VARIATIONCSS__.replace(/\.css$/, '')
   var options = fileOptions[variationName]
 
   amd(function init () {
@@ -22,8 +25,8 @@ module.exports = function experienceEngine (variationName) {
   }
 
   function execute () {
-    require(variationName + '.css')
-    var variation = require('xp-loader!' + variationName + '.js')
+    require(__VARIATIONCSS__)
+    var variation = require(__VARIATIONJS__)
     var api = variation(options)
     if (module.hot && api && api.remove) {
       module.hot.accept()

@@ -5,7 +5,6 @@ module.exports = {
     propertyId: 2499,
     experienceId: 11588,
     iterationId: 23202,
-    cookieDomain: 'domain.com',
     variations: {
       'variation-49936': {
         variationIsControl: true,
