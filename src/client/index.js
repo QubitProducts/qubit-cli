@@ -15,11 +15,11 @@ function globalFn () {
   require('global')
 }
 
-function triggerFn (options, cb) {
-  return require('triggers')(options, cb)
+function triggerFn (opts, cb) {
+  return require('triggers')(opts, cb)
 }
 
-function variationFn (options) {
+function variationFn (opts) {
   require(__VARIATIONCSS__)
-  return require(__VARIATIONJS__)(options)
+  return require(__VARIATIONJS__)(opts)
 }
