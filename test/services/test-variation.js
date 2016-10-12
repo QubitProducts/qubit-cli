@@ -70,7 +70,7 @@ describe('variation service', function () {
     it('should extract the correct params', function () {
       expect(variationService.extract(fixture[1])).to.eql({
         'variation-49937.css': 'a {\n color: purple; \n}',
-        'variation-49937.js': "function () { console.log('variation 1') }"
+        'variation-49937.js': 'function () { console.log("variation 1") }'
       })
     })
   })

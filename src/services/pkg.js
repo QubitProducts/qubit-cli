@@ -2,8 +2,7 @@ let _ = require('lodash')
 let Joi = require('joi')
 
 function create (experience) {
-  const iterations = experience.recent_iterations
-  const iterationId = iterations && iterations.draft && iterations.draft.id
+  const iterationId = _.get(experience, 'recent_iterations.draft.id')
 
   return {
     name: `qubit-experience-${experience.id}`,
@@ -12,16 +11,21 @@ function create (experience) {
       propertyId: experience.property_id,
       experienceId: experience.id,
       iterationId: iterationId,
-      variations: parseVariations(experience.variations, experience.domain, experience.id)
+      variations: parseVariations(experience)
     }
   }
 }
 
-function parseVariations (variations, cookieDomain, experienceId) {
+function parseVariations (experience) {
+  const variations = experience.variations
   let parsedVariations = {}
 
   _.each(variations, (variation) => {
     parsedVariations[`variation-${variation.master_id}`] = {
+      experienceId: experience.id,
+      experimentId: experience.id,
+      iterationId: _.get(experience, 'recent_iterations.draft.id'),
+      variationId: variation.id,
       variationIsControl: variation.is_control,
       variationMasterId: variation.master_id
     }

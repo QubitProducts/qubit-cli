@@ -3,7 +3,7 @@ const rewire = require('rewire')
 const pkgService = rewire('../../src/services/pkg')
 const experienceFixture = require('../fixtures/models/experience-code.json')
 const pkgFixture = require('../fixtures/models/pkg.js')
-let { cookieDomain, experienceId } = pkgFixture.meta
+let { cookieDomain } = pkgFixture.meta
 const parseVariations = pkgService.__get__('parseVariations')
 const variationFixture = pkgFixture.meta.variations[Object.keys(pkgFixture.meta.variations)[0]]
 
@@ -24,7 +24,7 @@ describe('pkg', () => {
   })
   describe('parseVariations', () => {
     it('creates options objects for each variation in the experience', () => {
-      expect(parseVariations(experienceFixture.variations, cookieDomain, experienceId)).to.eql(pkgFixture.meta.variations)
+      expect(parseVariations(experienceFixture)).to.eql(pkgFixture.meta.variations)
     })
   })
   describe('validate', () => {

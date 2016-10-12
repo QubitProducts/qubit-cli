@@ -2,7 +2,7 @@ const _ = require('lodash')
 const { expect } = require('chai')
 const experienceCodeFixture = require('../fixtures/models/experience-code.json')
 const experienceFixture = require('../fixtures/models/experience.json')
-const filesFixture = require('../fixtures/models/files.json')
+const filesFixture = require('../fixtures/models/files.js')
 const rewire = require('rewire')
 const sinon = require('sinon')
 const experienceCodeService = rewire('../../src/services/experience-code')
@@ -37,7 +37,18 @@ describe('experience code service', function () {
     describe('writeToLocal', function () {
       it('should scaffold a project from a remote experience', function () {
         return experienceCodeService.writeToLocal('dest', propertyId, experienceId)
-        .then(() => expect(scaffoldStub.getCall(0).args).to.eql(['dest', filesFixture]))
+        .then(() => {
+          let args = scaffoldStub.getCall(0).args
+          expect(args[0]).to.eql('dest')
+          expect(Object.keys(args[1]).sort()).to.eql(Object.keys(filesFixture).sort())
+          Object.keys(filesFixture).forEach((key) => {
+            if (key === 'package.json') {
+              expect(JSON.parse(args[1][key])).to.eql(JSON.parse(filesFixture[key]))
+            } else {
+              expect(args[1][key]).to.eql(filesFixture[key])
+            }
+          })
+        })
       })
     })
   })

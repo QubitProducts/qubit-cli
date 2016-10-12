@@ -51,12 +51,12 @@
     "is_control": false,
     "iteration_id": 23202,
     "advanced_mode": true,
-    "execution_code": "function () { console.log('variation 1') }",
+    "execution_code": "function () { console.log(\"variation 1\") }",
     "custom_styles": "a {\n color: purple; \n}",
     "created_at": "2014-06-03T12:51:30.000Z",
     "updated_at": "2016-08-10T14:32:17.000Z",
     "deleted": false,
-    "variation-49937.js": "function () { console.log('variation 1') }",
+    "variation-49937.js": "function () { console.log(\"variation 1\") }",
     "variation-49937.css": "a {\n color: purple; \n}"
   }, {
     "id": 336711,
@@ -65,12 +65,12 @@
     "is_control": false,
     "iteration_id": 23202,
     "advanced_mode": true,
-    "execution_code": "function () { console.log('variation 2') }",
+    "execution_code": "function () { console.log(\"variation 2\") }",
     "custom_styles": "a {\n color: green \n}",
     "created_at": "2016-05-23T09:14:40.000Z",
     "updated_at": "2016-05-23T09:14:40.000Z",
     "deleted": false,
-    "variation-336711.js": "function () { console.log('variation 2') }",
+    "variation-336711.js": "function () { console.log(\"variation 2\") }",
     "variation-336711.css": "a {\n color: green \n}"
   }]
 }

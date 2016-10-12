@@ -2,6 +2,17 @@
   "name": "example-experience",
   "description": "example experience",
   "version": "1.0.0",
-  "meta": {},
+  "meta": {
+    "propertyId": 123,
+    "experienceId": 123,
+    "iterationId": 123,
+    "variations": {
+      "variation": {
+        "variationId": 123,
+        "variationIsControl": false,
+        "variationMasterId": 123
+      }
+    }
+  },
   "main": "variation.js"
 }

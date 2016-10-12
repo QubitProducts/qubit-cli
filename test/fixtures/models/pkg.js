@@ -8,15 +8,18 @@ module.exports = {
     variations: {
       'variation-49936': {
         variationIsControl: true,
-        variationMasterId: 49936
+        variationMasterId: 49936,
+        variationId: 50111
       },
       'variation-49937': {
         variationIsControl: false,
-        variationMasterId: 49937
+        variationMasterId: 49937,
+        variationId: 50112
       },
       'variation-336711': {
         variationIsControl: false,
-        variationMasterId: 336711
+        variationMasterId: 336711,
+        variationId: 336711
       }
     }
   }
