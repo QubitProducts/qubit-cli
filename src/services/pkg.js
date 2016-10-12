@@ -22,9 +22,6 @@ function parseVariations (experience) {
 
   _.each(variations, (variation) => {
     parsedVariations[`variation-${variation.master_id}`] = {
-      experienceId: experience.id,
-      experimentId: experience.id,
-      iterationId: _.get(experience, 'recent_iterations.draft.id'),
       variationId: variation.id,
       variationIsControl: variation.is_control,
       variationMasterId: variation.master_id
@@ -39,6 +36,7 @@ function validate (pkg) {
 
   _.forEach(pkg.variations, (variationData, variationMasterId) => {
     variations[pkg.variations[variationMasterId]] = Joi.object({
+      variationId: Joi.number().required(),
       variationIsControl: Joi.boolean().required(),
       variationMasterId: Joi.number().required()
     }).required().unknown()
