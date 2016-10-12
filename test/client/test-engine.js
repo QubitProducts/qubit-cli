@@ -21,20 +21,18 @@ describe('engine', function () {
     describe('activation returns false', function () {
       beforeEach(function () {
         callCallback = false
+        engine(options, globalFn, activationFn, variationFn)
       })
 
       it('should execute global', function () {
-        engine(options, globalFn, activationFn, variationFn)
         expect(globalFn.calledOnce).to.eql(true)
       })
 
       it('should execute triggers', function () {
-        engine(options, globalFn, activationFn, variationFn)
         expect(activationFn.calledOnce).to.eql(true)
       })
 
       it('should not exectute the variation', function () {
-        engine(options, globalFn, activationFn, variationFn)
         expect(variationFn.calledOnce).to.eql(false)
       })
     })
@@ -42,20 +40,18 @@ describe('engine', function () {
     describe('activation returns true', function () {
       beforeEach(function () {
         callCallback = true
+        engine(options, globalFn, activationFn, variationFn)
       })
 
       it('should execute global', function () {
-        engine(options, globalFn, activationFn, variationFn)
         expect(globalFn.calledOnce).to.eql(true)
       })
 
       it('should execute triggers', function () {
-        engine(options, globalFn, activationFn, variationFn)
         expect(activationFn.calledOnce).to.eql(true)
       })
 
       it('should exectute the variation', function () {
-        engine(options, globalFn, activationFn, variationFn)
         expect(variationFn.calledOnce).to.eql(true)
       })
     })
@@ -71,20 +67,18 @@ describe('engine', function () {
     describe('activation returns false', function () {
       beforeEach(function () {
         callCallback = false
+        engine(options, globalFn, activationFn, variationFn)
       })
 
       it('should execute global', function () {
-        engine(options, globalFn, activationFn, variationFn)
         expect(globalFn.calledOnce).to.eql(true)
       })
 
       it('should execute triggers', function () {
-        engine(options, globalFn, activationFn, variationFn)
         expect(activationFn.calledOnce).to.eql(true)
       })
 
       it('should not execute variation', function () {
-        engine(options, globalFn, activationFn, variationFn)
         expect(variationFn.called).to.eql(false)
       })
     })
@@ -92,20 +86,18 @@ describe('engine', function () {
     describe('activation returns true', function () {
       beforeEach(function () {
         callCallback = true
+        engine(options, globalFn, activationFn, variationFn)
       })
 
       it('should execute global', function () {
-        engine(options, globalFn, activationFn, variationFn)
         expect(globalFn.calledOnce).to.eql(true)
       })
 
       it('should execute triggers', function () {
-        engine(options, globalFn, activationFn, variationFn)
         expect(activationFn.calledOnce).to.eql(true)
       })
 
       it('should execute variationFn', function () {
-        engine(options, globalFn, activationFn, variationFn)
         expect(variationFn.calledOnce).to.eql(true)
       })
     })
