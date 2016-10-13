@@ -1,50 +1,80 @@
-const pkgService = require('../../src/services/pkg')
 const { expect } = require('chai')
-const experienceFixture = require('../fixtures/models/experience.json')
-const pkgFixture = {
-  name: 'qubit-experience-11588',
-  description: 'New styles',
-  meta: {
-    experienceId: 11588,
-    propertyId: 2499
-  }
-}
+const rewire = require('rewire')
+const pkgService = rewire('../../src/services/pkg')
+const experienceFixture = require('../fixtures/models/experience-code.json')
+const pkgFixture = require('../fixtures/models/pkg.js')
+let { cookieDomain } = pkgFixture.meta
+const parseVariations = pkgService.__get__('parseVariations')
+const variationFixture = pkgFixture.meta.variations[Object.keys(pkgFixture.meta.variations)[0]]
 
-describe('pkg', function () {
+describe('pkg', () => {
   describe('create', function () {
-    it('should create a package.json', function () {
-      expect(pkgService.create(Object.assign({}, experienceFixture)))
+    it('should create a package.json', () => {
+      expect(pkgService.create(Object.assign({}, experienceFixture, { cookieDomain })))
         .to.eql(pkgFixture)
     })
   })
-  describe('parse', function () {
-    it('should parse package json', function () {
+  describe('parse', () => {
+    it('should parse package json', () => {
       expect(pkgService.parse(JSON.stringify(pkgFixture))).to.eql(pkgFixture)
     })
-    it('should handle an empty file', function () {
+    it('should handle an empty file', () => {
       expect(pkgService.parse('')).to.eql({})
     })
   })
-  describe('validate', function () {
-    it('it should not throw if pkg is valid', function () {
+  describe('parseVariations', () => {
+    it('creates options objects for each variation in the experience', () => {
+      expect(parseVariations(experienceFixture)).to.eql(pkgFixture.meta.variations)
+    })
+  })
+  describe('validate', () => {
+    it('it should not throw if pkg is valid', () => {
       expect(pkgService.validate(pkgFixture)).to.eql(pkgFixture)
     })
-    it('it should throw if meta is not there', function () {
-      expect(() => pkgService.validate(Object.assign({}, pkgFixture, {
-        meta: null
-      }))).to.throw()
-    })
-    it('it should throw if experienceId is missing', function () {
+    it('it should throw if experienceId is missing', () => {
       expect(() => pkgService.validate(Object.assign({}, pkgFixture, {
         meta: Object.assign({}, pkgFixture.meta, {
           experienceId: null
         })
       }))).to.throw()
     })
-    it('it should throw if propertyId is missing', function () {
+    it('it should throw if iterationId is missing', () => {
+      expect(() => pkgService.validate(Object.assign({}, pkgFixture, {
+        meta: Object.assign({}, pkgFixture.meta, {
+          iterationId: null
+        })
+      }))).to.throw()
+    })
+    it('it should throw if propertyId is missing', () => {
       expect(() => pkgService.validate(Object.assign({}, pkgFixture, {
         meta: Object.assign({}, pkgFixture.meta, {
           propertyId: null
+        })
+      }))).to.throw()
+    })
+    it('it should throw if variations is missing', () => {
+      expect(() => pkgService.validate(Object.assign({}, pkgFixture, {
+        meta: Object.assign({}, pkgFixture.meta, {
+          variations: null
+        })
+      }))).to.throw()
+    })
+    it('it should throw if a variation does not contain a meta object', () => {
+      expect(() => pkgService.validate(Object.assign({}, variationFixture, {
+        meta: null
+      }))).to.throw()
+    })
+    it('it should throw if a variation\'s meta object does not contain variationMasterId', () => {
+      expect(() => pkgService.validate(Object.assign({}, variationFixture, {
+        meta: Object.assign({}, variationFixture.meta, {
+          variationMasterId: null
+        })
+      }))).to.throw()
+    })
+    it('it should throw if a variation\'s meta object does not contain variationIsControl', () => {
+      expect(() => pkgService.validate(Object.assign({}, variationFixture, {
+        meta: Object.assign({}, variationFixture.meta, {
+          variationIsControl: null
         })
       }))).to.throw()
     })

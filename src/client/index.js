@@ -1,33 +1,25 @@
-/* globals __VARIATIONJS__ __VARIATIONCSS__ */
-var PKG = require('package.json') || {}
-var META = PKG.meta
+/* globals __VARIATIONJS__, __VARIATIONCSS__ */
+var amd = require('./amd')
+var engine = require('./engine')
+var options = require('./options')
+var key = __VARIATIONCSS__.replace(/\.css$/, '')
+var opts = options(require('package.json'), key)
 
-require('./amd')(function init () {
-  require('global')
-  var ret = require('triggers')(META, activate)
-  if (ret === true) execute()
-})
+amd(init)
 
-function activate (pass) {
-  var shouldActivate = pass || typeof pass === 'undefined'
-  if (!shouldActivate) {
-    console.log('activation returned false')
-    return
-  }
-  console.log('activation returned true')
-  execute()
+function init () {
+  engine(opts, globalFn, triggerFn, variationFn)
 }
 
-function execute () {
+function globalFn () {
+  require('global')
+}
+
+function triggerFn (opts, cb) {
+  return require('triggers')(opts, cb)
+}
+
+function variationFn (opts) {
   require(__VARIATIONCSS__)
-  var variation = require(__VARIATIONJS__)
-  var api = variation(META)
-  if (module.hot && api && api.remove) {
-    module.hot.accept()
-    module.hot.dispose(function () {
-      api.remove()
-    })
-  } else {
-    module.hot.decline()
-  }
+  return require(__VARIATIONJS__)(opts)
 }
