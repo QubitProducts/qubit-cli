@@ -13,15 +13,6 @@ module.exports = function experienceEngine (options, globalFn, triggerFn, variat
   }
 
   function execute () {
-    var api = variationFn(options)
-    if (!module.hot) return
-    if (api && api.remove) {
-      module.hot.accept()
-      module.hot.dispose(function () {
-        api.remove()
-      })
-    } else {
-      module.hot.decline()
-    }
+    return variationFn(options)
   }
 }

@@ -21,5 +21,13 @@ function triggerFn (opts, cb) {
 
 function variationFn (opts) {
   require(__VARIATIONCSS__)
-  return require(__VARIATIONJS__)(opts)
+  var api = require(__VARIATIONJS__)(opts)
+  if (api && api.remove) {
+    module.hot.accept()
+    module.hot.dispose(function () {
+      api.remove()
+    })
+  } else {
+    module.hot.decline()
+  }
 }
