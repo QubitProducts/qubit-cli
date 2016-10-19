@@ -1,15 +1,25 @@
-require('jsdom-global')()
-
 var rewire = require('rewire')
 var transform = rewire('../../src/client/options')
 var expect = require('chai').expect
 var pkgFixture = require('../fixtures/models/pkg')
 var variationName = Object.keys(pkgFixture.meta.variations)[0]
-var testData = {
-  test: 1
-}
+var testData = { test: 1 }
 
 describe('transform', function () {
+  var originalWindow
+  beforeEach(function () {
+    originalWindow = global.window
+    global.window = {
+      location: {
+        host: 'cookieDomain'
+      }
+    }
+  })
+
+  afterEach(function () {
+    global.window = originalWindow
+  })
+
   it('exports an object with a state attribute', function () {
     expect(transform(pkgFixture, variationName)).to.have.property('state')
   })
@@ -48,7 +58,7 @@ describe('transform', function () {
     })
 
     it('gets enriched with a cookieDomain attribute', function () {
-      expect(meta.cookieDomain).to.eql('')
+      expect(meta.cookieDomain).to.eql('cookieDomain')
     })
 
     it('gets enriched with a trackingId attribute', function () {
