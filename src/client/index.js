@@ -9,6 +9,26 @@ amd(init)
 
 function init () {
   engine(opts, globalFn, triggerFn, variationFn)
+  window.__qubit = window.__qubit || { smartserve: {} }
+  window.__qubit.smartserve = window.__qubit.smartserve || {}
+  overrideStart(window.__qubit.smartserve, function () {
+    return engine(opts, noop, triggerFn, variationFn)
+  })
+}
+
+function overrideStart (smartserve, cb) {
+  var start
+  Object.defineProperty(smartserve, 'start', {
+    get: function () {
+      return function () {
+        cb()
+        return start.apply(smartserve, arguments)
+      }
+    },
+    set: function (newStart) {
+      start = newStart
+    }
+  })
 }
 
 function globalFn () {
@@ -31,3 +51,5 @@ function variationFn (opts) {
     module.hot.decline()
   }
 }
+
+function noop () {}
