@@ -19,9 +19,12 @@ module.exports = function scaffoldFromTemplate (template) {
         return readFiles(templateDir).then((files) => {
           let fileMap = Object.assign({}, files)
           // merge package.json instead of overwriting
-          fileMap['package.json'] = Object.assign({}, pkg, fileMap['package.json'])
+          fileMap['package.json'] = JSON.stringify(Object.assign({}, pkg, fileMap['package.json']), null, 2)
 
           let variations = _.get(pkg, 'meta.variations')
+
+          if (files['global.js']) fileMap['global.js'] = _.template(files['global.js'])(pkg.meta)
+          if (files['triggers.js']) fileMap['triggers.js'] = _.template(files['triggers.js'])(pkg.meta)
 
           // if experience has known variants, seed them from template
           if (variations && Object.keys(variations).length) {
@@ -29,8 +32,8 @@ module.exports = function scaffoldFromTemplate (template) {
               let meta = Object.assign({}, pkg.meta, variation)
 
               // allow templates to contain dynamic content based on package metadata
-              fileMap[fileName + '.js'] = _.template(files['variation.js'])(meta)
-              fileMap[fileName + '.css'] = _.template(files['variation.css'])(meta)
+              if (files['variation.js']) fileMap[fileName + '.js'] = _.template(files['variation.js'])(meta)
+              if (files['variation.css']) fileMap[fileName + '.css'] = _.template(files['variation.css'])(meta)
             })
             delete fileMap['variation.js']
             delete fileMap['variation.css']
@@ -38,6 +41,7 @@ module.exports = function scaffoldFromTemplate (template) {
 
           return scaffold(CWD, fileMap)
         })
+        .catch((err) => console.log(err.stack))
       })
   })
 }
