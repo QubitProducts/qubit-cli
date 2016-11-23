@@ -5,7 +5,9 @@ var options = require('./options')
 var key = __VARIATIONCSS__.replace(/\.css$/, '')
 var opts = options(require('package.json'), key)
 
-amd(init)
+window.__qubit = window.__qubit || {}
+window.__qubit.amd = amd()
+init()
 
 function init () {
   engine(opts, globalFn, triggerFn, variationFn)

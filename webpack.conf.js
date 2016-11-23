@@ -13,6 +13,7 @@ module.exports = {
     publicPath: 'https://localhost:41337/',
     filename: 'bundle.js'
   },
+  amd: { jQuery: true },
   devtool: '#source-map',
   resolve: {
     root: [cwd, path.join(cwd, 'node_modules'), path.join(__dirname, 'node_modules')]
