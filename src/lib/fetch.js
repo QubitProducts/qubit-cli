@@ -10,15 +10,22 @@ module.exports = {
 function fetchWithAuth (method) {
   return function (path, data) {
     return auth.get().then((auths) => {
-      if (auths.TOKEN) throw new Error('Auth type not implemented yet')
-      if (auths.COOKIE) {
-        return axios(config.endpoint + path, {
-          method,
-          data,
-          headers: { 'Cookie': `apsess=${auths.COOKIE}` }
-        }).then((resp) => resp.data)
+      if (!auths.authToken && !auths.COOKIE) {
+        throw new Error('UNAUTHORIZED, please visit an experiment editor page')
       }
-      throw new Error('UNAUTHORIZED, please visit an experiment editor page')
+
+      let headers
+      if (auths.authToken) {
+        headers = { 'Authorization': `Bearer: ${auths.authToken}` }
+      } else if (auths.COOKIE) {
+        headers = { 'Cookie': `apsess=${auths.COOKIE}` }
+      }
+
+      return axios(config.endpoint + path, {
+        method,
+        data,
+        headers
+      }).then((resp) => resp.data)
     })
   }
 }
