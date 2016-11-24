@@ -40,20 +40,34 @@ function globalFn () {
   require('global')
 }
 
+function executeAgainOnCodeChange (api) {
+  module.hot.accept()
+  module.hot.dispose(api.remove)
+}
+
+function decline (api) {
+  module.hot.decline()
+  return api
+}
+
 function triggerFn (opts, cb) {
-  return require('triggers')(opts, cb)
+  var api = require('triggers')(opts, cb)
+
+  if (api && api.remove) {
+    executeAgainOnCodeChange(api)
+  } else {
+    return decline(api)
+  }
 }
 
 function variationFn (opts) {
   require(__VARIATIONCSS__)
-  const api = require(__VARIATIONJS__)(opts)
+  var api = require(__VARIATIONJS__)(opts)
+
   if (api && api.remove) {
-    module.hot.accept()
-    module.hot.dispose(function () {
-      api.remove()
-    })
+    executeAgainOnCodeChange(api)
   } else {
-    module.hot.decline()
+    return decline(api)
   }
 }
 
