@@ -11,22 +11,25 @@ function init () {
   engine(opts, globalFn, triggerFn, variationFn)
   window.__qubit = window.__qubit || { smartserve: {} }
   window.__qubit.smartserve = window.__qubit.smartserve || {}
+  window.__qubit.xp = window.__qubit.xp || {}
+
   overrideStart(window.__qubit.smartserve, function () {
     return engine(opts, noop, triggerFn, variationFn)
   })
 }
 
 function overrideStart (smartserve, cb) {
-  var start
+  window.__qubit.xp.start = window.__qubit.xp.start || null
   Object.defineProperty(smartserve, 'start', {
+    configurable: true,
     get: function () {
       return function () {
         cb()
-        return start.apply(smartserve, arguments)
+        return window.__qubit.xp.start.apply(smartserve, arguments)
       }
     },
     set: function (newStart) {
-      start = newStart
+      window.__qubit.xp.start = newStart
     }
   })
 }
