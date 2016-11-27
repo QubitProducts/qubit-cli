@@ -3,7 +3,7 @@ module.exports = function experienceEngine (options, globalFn, triggerFn, variat
   if (triggerFn(options, activate)) execute()
 
   function activate (pass) {
-    var shouldActivate = pass || typeof pass === 'undefined'
+    const shouldActivate = pass || typeof pass === 'undefined'
     if (!shouldActivate) {
       console.log('activation returned false')
       return

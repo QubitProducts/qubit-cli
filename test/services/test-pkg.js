@@ -1,82 +1,32 @@
+const _ = require('lodash')
 const { expect } = require('chai')
-const rewire = require('rewire')
-const pkgService = rewire('../../src/services/pkg')
-const experienceFixture = require('../fixtures/models/experience-code.json')
-const pkgFixture = require('../fixtures/models/pkg.js')
-let { cookieDomain } = pkgFixture.meta
-const parseVariations = pkgService.__get__('parseVariations')
-const variationFixture = pkgFixture.meta.variations[Object.keys(pkgFixture.meta.variations)[0]]
+const pkgService = require('../../src/services/pkg')
+const pkgFixture = require('../fixtures/models/pkg.json')
+const experienceFixture = require('../fixtures/models/experience.json')
+const variationsFixture = require('../fixtures/models/variations.json')
 
-describe('pkg', () => {
-  describe('create', function () {
-    it('should create a package.json', () => {
-      expect(pkgService.create(Object.assign({}, experienceFixture, { cookieDomain })))
-        .to.eql(pkgFixture)
+describe('pkgService', () => {
+  let experience, variations, pkg
+  beforeEach(() => {
+    experience = _.cloneDeep(experienceFixture)
+    variations = _.cloneDeep(variationsFixture)
+    pkg = _.cloneDeep(pkgFixture)
+  })
+
+  describe('getCode', function () {
+    it('should build a package.json file from an experience and its variations', () => {
+      expect(JSON.parse(pkgService.getCode(experience, variations)['package.json'])).to.eql(pkgFixture)
     })
   })
-  describe('parse', () => {
-    it('should parse package json', () => {
-      expect(pkgService.parse(JSON.stringify(pkgFixture))).to.eql(pkgFixture)
-    })
-    it('should handle an empty file', () => {
-      expect(pkgService.parse('')).to.eql({})
-    })
-  })
-  describe('parseVariations', () => {
-    it('creates options objects for each variation in the experience', () => {
-      expect(parseVariations(experienceFixture)).to.eql(pkgFixture.meta.variations)
-    })
-  })
-  describe('validate', () => {
-    it('it should not throw if pkg is valid', () => {
-      expect(pkgService.validate(pkgFixture)).to.eql(pkgFixture)
-    })
-    it('it should throw if experienceId is missing', () => {
-      expect(() => pkgService.validate(Object.assign({}, pkgFixture, {
-        meta: Object.assign({}, pkgFixture.meta, {
-          experienceId: null
-        })
-      }))).to.throw()
-    })
-    it('it should throw if iterationId is missing', () => {
-      expect(() => pkgService.validate(Object.assign({}, pkgFixture, {
-        meta: Object.assign({}, pkgFixture.meta, {
-          iterationId: null
-        })
-      }))).to.throw()
-    })
-    it('it should throw if propertyId is missing', () => {
-      expect(() => pkgService.validate(Object.assign({}, pkgFixture, {
-        meta: Object.assign({}, pkgFixture.meta, {
-          propertyId: null
-        })
-      }))).to.throw()
-    })
-    it('it should throw if variations is missing', () => {
-      expect(() => pkgService.validate(Object.assign({}, pkgFixture, {
-        meta: Object.assign({}, pkgFixture.meta, {
-          variations: null
-        })
-      }))).to.throw()
-    })
-    it('it should throw if a variation does not contain a meta object', () => {
-      expect(() => pkgService.validate(Object.assign({}, variationFixture, {
-        meta: null
-      }))).to.throw()
-    })
-    it('it should throw if a variation\'s meta object does not contain variationMasterId', () => {
-      expect(() => pkgService.validate(Object.assign({}, variationFixture, {
-        meta: Object.assign({}, variationFixture.meta, {
-          variationMasterId: null
-        })
-      }))).to.throw()
-    })
-    it('it should throw if a variation\'s meta object does not contain variationIsControl', () => {
-      expect(() => pkgService.validate(Object.assign({}, variationFixture, {
-        meta: Object.assign({}, variationFixture.meta, {
-          variationIsControl: null
-        })
-      }))).to.throw()
+
+  describe('setCode', () => {
+    it('should modify an experience object appropriately given a package.json', () => {
+      let files = {}
+      pkg.meta.name = 'new-name'
+      files['package.json'] = JSON.stringify(pkg)
+      expect(pkgService.setCode(experience, files)).to.eql(Object.assign({}, experience, {
+        name: 'new-name'
+      }))
     })
   })
 })

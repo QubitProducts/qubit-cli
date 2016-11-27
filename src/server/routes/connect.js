@@ -3,23 +3,27 @@ const highlight = require('../../lib/highlight')
 const auth = require('../../lib/auth')
 const log = require('../../lib/log')
 const parseUrl = require('../../lib/parse-url')
-const experienceCode = require('../../services/experience-code')
+const scaffold = require('../../lib/scaffold')
+const codeService = require('../../services/code')
+const CWD = process.cwd()
 
-module.exports = function connect (req, res, next) {
-  if (!req.body.url || !req.body.value) return nope(res)
-  let {propertyId, experienceId} = parseUrl(req.body.url)
-  return auth.set('COOKIE', req.body.value).then(requestSync).then(() => res.end()).catch(next)
-
-  function requestSync (codes) {
-    let msg = `You recently navigated to ${highlight(req.body.url)}
-Would you like ${highlight('xp')} to scaffold your local project from this experiment? ${highlight('(y/n)')}`
-    return confirm(msg).then(result => {
-      if (!result) return
-      return experienceCode.writeToLocal(process.cwd(), propertyId, experienceId)
-        .then(() => log('All done!'))
-        .then(process.exit)
-    })
+module.exports = async function connect (req, res, next) {
+  try {
+    if (!req.body.url || !req.body.value) return nope(res)
+    const {propertyId, experienceId} = parseUrl(req.body.url)
+    await auth.set('COOKIE', req.body.value)
+    const msg = `You recently navigated to ${highlight(req.body.url)}
+  Would you like ${highlight('xp')} to scaffold your local project from this experiment? ${highlight('(y/n)')}`
+    const yes = await confirm(msg)
+    if (!yes) return
+    const files = await codeService.get(propertyId, experienceId)
+    await scaffold(CWD, files, false)
+    log('All done!')
+    process.exit()
+  } catch (e) {
+    log.error(e)
   }
+  res.end()
 }
 
 function nope (res, msg) {

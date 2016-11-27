@@ -1,9 +1,9 @@
 /* globals __VARIATIONJS__, __VARIATIONCSS__ */
-var amd = require('./amd')
-var engine = require('./engine')
-var options = require('./options')
-var key = __VARIATIONCSS__.replace(/\.css$/, '')
-var opts = options(require('package.json'), key)
+const amd = require('./amd')
+const engine = require('./engine')
+const options = require('./options')
+const key = __VARIATIONCSS__.replace(/\.css$/, '')
+const opts = options(require('package.json'), key)
 
 window.__qubit = window.__qubit || {}
 window.__qubit.amd = amd()
@@ -23,7 +23,7 @@ function triggerFn (opts, cb) {
 
 function variationFn (opts) {
   require(__VARIATIONCSS__)
-  var api = require(__VARIATIONJS__)(opts)
+  const api = require(__VARIATIONJS__)(opts)
   if (api && api.remove) {
     module.hot.accept()
     module.hot.dispose(function () {

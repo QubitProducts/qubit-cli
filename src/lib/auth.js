@@ -3,25 +3,20 @@ const os = require('os')
 const fs = require('fs-promise')
 let xprcPath = `${os.homedir()}/.xprc`
 
-function get () {
-  return getAll().then((data) => {
-    return data[config.endpoint] || {}
-  })
+async function get () {
+  const data = await getAll()
+  return data[config.endpoint] || {}
 }
 
-function getAll () {
-  return fs.readFile(xprcPath)
-    .catch(() => '{}')
-    .then(String)
-    .then(JSON.parse)
+async function getAll () {
+  return JSON.parse(String(await fs.readFile(xprcPath).catch(() => '{}')))
 }
 
-function set (authType, token) {
-  return getAll().then((data) => {
-    data[config.endpoint] = data[config.endpoint] || {}
-    data[config.endpoint][authType] = token
-    return fs.writeFile(xprcPath, JSON.stringify(data))
-  })
+async function set (authType, token) {
+  const data = await getAll()
+  data[config.endpoint] = data[config.endpoint] || {}
+  data[config.endpoint][authType] = token
+  return fs.writeFile(xprcPath, JSON.stringify(data))
 }
 
 module.exports = { get, set }

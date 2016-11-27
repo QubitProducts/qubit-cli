@@ -1,77 +1,73 @@
 const _ = require('lodash')
-const {expect} = require('chai')
-const fixture = require('../fixtures/models/variations.json')
-const rewire = require('rewire')
+const { expect } = require('chai')
 const sinon = require('sinon')
-const variationService = rewire('../../src/services/variation')
+const fetch = require('../../src/lib/fetch')
+const variationService = require('../../src/services/variation')
+const variationsFixture = require('../fixtures/models/variations.json')
 
-describe('variation service', function () {
-  let restore, get, put, propertyId, experienceId, variationId
+describe('variationService', function () {
+  let sandbox, propertyId, experienceId, variationId, variations
 
-  beforeEach(function () {
-    get = sinon.stub()
-    put = sinon.stub()
+  beforeEach(() => {
     propertyId = 123
-    experienceId = 321
-    variationId = 50112
-    restore = variationService.__set__({
-      fetch: { get, put }
-    })
+    experienceId = 456
+    variationId = 789
+    variations = _.cloneDeep(variationsFixture)
+    sandbox = sinon.sandbox.create()
+    sandbox.stub(fetch, 'get')
+    sandbox.stub(fetch, 'put')
   })
 
-  afterEach(() => restore())
+  afterEach(() => sandbox.restore())
 
   describe('getAll', function () {
-    it('should call fetch with the correct params', function () {
-      variationService.getAll(propertyId, experienceId)
-      expect(get.calledOnce).to.eql(true)
-      expect(get.getCall(0).args).to.eql(['/p/123/smart_serve/experiments/321/recent_iterations/draft/variations'])
+    it('should correctly call fetch', function () {
+      variationService.get(propertyId, experienceId)
+      expect(fetch.get.calledOnce).to.eql(true)
+      expect(fetch.get.getCall(0).args).to.eql([
+        '/p/123/smart_serve/experiments/456/recent_iterations/draft/variations'
+      ])
     })
   })
 
-  describe('update', function () {
-    beforeEach(function () {
-      sinon.stub(variationService, 'getAll').returns(Promise.resolve(fixture))
-      restore = variationService.__set__({
-        fetch: { get, put },
-        getAll: variationService.getAll
-      })
-    })
-
-    afterEach(() => variationService.getAll.restore())
-
-    it('should call fetch with the correct params', function () {
-      return variationService.update(propertyId, experienceId, '50112', 'code', 'css')
-        .then(() => {
-          expect(put.calledOnce).to.eql(true)
-          expect(put.getCall(0).args).to.eql([
-            '/p/123/smart_serve/experiments/321/recent_iterations/draft/variations/' + variationId,
-            {
-              variation: Object.assign({}, fixture.find((v) => v.id === variationId), {
-                execution_code: 'code',
-                custom_styles: 'css'
-              })
-            }
-          ])
-        })
+  describe('get', function () {
+    it('should correctly call fetch', function () {
+      variationService.get(propertyId, experienceId, variationId)
+      expect(fetch.get.calledOnce).to.eql(true)
+      expect(fetch.get.getCall(0).args).to.eql([
+        '/p/123/smart_serve/experiments/456/recent_iterations/draft/variations/789'
+      ])
     })
   })
 
-  describe('extract', function () {
-    it('should create a default execution if there isnt one', function () {
-      let variation = _.cloneDeep(fixture[1])
-      _.set(variation, 'execution_code', false)
-      _.set(variation, 'custom_styles', false)
-      expect(variationService.extract(variation)).to.eql({
-        'variation-49937.css': '',
-        'variation-49937.js': 'function variation (cb) {\n\n}'
+  describe('set', function () {
+    it('should correctly call fetch', function () {
+      variationService.set(propertyId, experienceId, variationId, variations[0])
+      expect(fetch.put.calledOnce).to.eql(true)
+      expect(fetch.put.getCall(0).args).to.eql([
+        '/p/123/smart_serve/experiments/456/recent_iterations/draft/variations/789',
+        {variation: variations[0]}
+      ])
+    })
+  })
+
+  describe('getCode', function () {
+    it('should build a files object from a variation', () => {
+      expect(variationService.getCode(variations[1])).to.eql({
+        'variation-4.js': 'function () { console.log("variation 1") }',
+        'variation-4.css': 'a {\n color: purple; \n}'
       })
     })
-    it('should extract the correct params', function () {
-      expect(variationService.extract(fixture[1])).to.eql({
-        'variation-49937.css': 'a {\n color: purple; \n}',
-        'variation-49937.js': 'function () { console.log("variation 1") }'
+  })
+
+  describe('setCode', () => {
+    it('should modify a variation object appropriately given a files object', () => {
+      let newVariation = variationService.setCode(variations[2], {
+        'variation-6.js': 'function () { console.log("variation 1") }',
+        'variation-6.css': 'a {\n color: purple; \n}'
       })
+      expect(newVariation).to.have.deep.property('execution_code', 'function () { console.log("variation 1") }')
+      expect(newVariation).to.have.deep.property('custom_styles', 'a {\n color: purple; \n}')
     })
   })
 })

@@ -1,23 +1,18 @@
-const path = require('path')
-const experienceCodeService = require('../services/experience-code')
-const pkgService = require('../services/pkg')
+const codeService = require('../services/code')
 const log = require('../lib/log')
-const {readFile} = require('fs-promise')
+const scaffold = require('../lib/scaffold')
+const getPkg = require('../lib/get-pkg')
 let CWD = process.cwd()
 
-module.exports = function down () {
-  log('pulling...')
-  return readFile(path.join(CWD, 'package.json'))
-    .then(pkgService.parse)
-    .then(pkgService.validate)
-    .then((pkg) => {
-      let {propertyId, experienceId} = pkg.meta
-      return experienceCodeService.writeToLocal(CWD, propertyId, experienceId)
-    })
-    .then(() => {
-      process.stdout.moveCursor(0, -1)
-      process.stdout.clearScreenDown()
-      log('pulled!')
-    })
-    .catch(log.error)
+module.exports = async function down () {
+  try {
+    log('pulling...')
+    const pkg = await getPkg()
+    const {propertyId, experienceId} = pkg.meta
+    const files = await codeService.get(propertyId, experienceId)
+    await scaffold(CWD, files, false)
+    log('pulled!')
+  } catch (e) {
+    log.error(e)
+  }
 }

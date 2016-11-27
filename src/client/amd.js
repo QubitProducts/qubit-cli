@@ -1,5 +1,5 @@
-var microAmd = require('micro-amd')
-var map = {
+const microAmd = require('micro-amd')
+const map = {
   '@qubit/biscotti': require('@qubit/biscotti'),
   '@qubit/email-scheduler': require('@qubit/email-scheduler'),
   '@qubit/exit-checker': require('@qubit/exit-checker'),
@@ -16,7 +16,7 @@ var map = {
 }
 
 module.exports = function createAMD () {
-  var amd = microAmd({ base: '//d22rutvoghj3db.cloudfront.net' })
-  for (var id in map) if (map.hasOwnProperty(id)) amd.define(id, () => map[id])
+  const amd = microAmd({ base: '//d22rutvoghj3db.cloudfront.net' })
+  for (let id in map) if (map.hasOwnProperty(id)) amd.define(id, () => map[id])
   return amd
 }

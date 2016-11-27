@@ -3,5 +3,8 @@
 BIN = node_modules/.bin
 
 test:
-	$(BIN)/istanbul cover $(BIN)/_mocha -- --recursive
+	NODE_ENV=test $(BIN)/mocha --require async-to-gen/register --recursive
+	make lint
+
+lint:
 	$(BIN)/standard

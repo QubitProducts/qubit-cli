@@ -1,5 +1,5 @@
 module.exports = function parseUrl (uri) {
-  let ids = uri.match(/\/\d+/g).map(s => s.substr(1)).map(Number)
+  const ids = uri.match(/\/\d+/g).map(s => s.substr(1)).map(Number)
   if (ids.length < 2) throw new Error('expected url to have propertyId and experienceId')
   let [propertyId, experienceId] = ids
   return {
