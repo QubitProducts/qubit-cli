@@ -1,8 +1,8 @@
-var experienceState = {}
+const experienceState = {}
 
 module.exports = function transform (pkg, key) {
-  var variationOpts = (pkg.meta.variations && pkg.meta.variations[key]) || {}
-  var meta = Object.assign({}, pkg.meta, variationOpts)
+  const variationOpts = (pkg.meta.variations && pkg.meta.variations[key]) || {}
+  const meta = Object.assign({}, pkg.meta, variationOpts)
 
   function set (key, data) {
     experienceState[key] = data

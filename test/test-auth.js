@@ -41,16 +41,5 @@ describe('auth', function () {
         expect(result).to.have.property(type, token)
       })
     })
-    // it('should not overwrite previous domain', function () {
-    //   return auth.set(type, token)
-    //     .then(() => Promise.all([
-    //       auth.get(),
-    //       auth.get( + 1)
-    //     ]))
-    //     .then(([auth1, auth2]) => {
-    //       expect(auth1).to.have.property(type, token)
-    //       expect(auth2).to.have.property(type, token)
-    //     })
-    // })
   })
 })

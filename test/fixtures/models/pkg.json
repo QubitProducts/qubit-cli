@@ -1,0 +1,27 @@
+{
+  "name": "qubit-experience-456",
+  "description": "An experience powered by qubit",
+  "meta": {
+    "name": "New styles",
+    "propertyId": 123,
+    "experienceId": 456,
+    "iterationId": 101112,
+    "variations": {
+      "variation-2": {
+        "variationIsControl": true,
+        "variationMasterId": 2,
+        "variationId": 1
+      },
+      "variation-4": {
+        "variationIsControl": false,
+        "variationMasterId": 4,
+        "variationId": 3
+      },
+      "variation-6": {
+        "variationIsControl": false,
+        "variationMasterId": 6,
+        "variationId": 5
+      }
+    }
+  }
+}

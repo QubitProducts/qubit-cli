@@ -1,99 +1,62 @@
 const _ = require('lodash')
 const { expect } = require('chai')
-const rewire = require('rewire')
 const sinon = require('sinon')
+const fetch = require('../../src/lib/fetch')
+const experienceService = require('../../src/services/experience')
 const experienceFixture = require('../fixtures/models/experience.json')
-const experienceService = rewire('../../src/services/experience')
 
-describe('experience service', function () {
-  let restore, get, put, propertyId, experienceId, globalCode, triggers
+describe('experienceService', function () {
+  let sandbox, propertyId, experienceId, experience
 
-  beforeEach(function () {
-    get = sinon.stub()
-    put = sinon.stub()
+  beforeEach(() => {
     propertyId = 123
-    experienceId = 321
-    globalCode = 'console.log("new global code")'
-    triggers = 'console.log("new triggers")'
-    restore = experienceService.__set__({
-      fetch: {get,
-        put
-      }
-    })
+    experienceId = 456
+    experience = _.cloneDeep(experienceFixture)
+    sandbox = sinon.sandbox.create()
+    sandbox.stub(fetch, 'get')
+    sandbox.stub(fetch, 'put')
   })
 
-  afterEach(() => restore())
+  afterEach(() => sandbox.restore())
 
   describe('get', function () {
-    it('should call fetch with the correct params', function () {
+    it('should correctly call fetch', function () {
       experienceService.get(propertyId, experienceId)
-      expect(get.calledOnce).to.eql(true)
-      expect(get.getCall(0).args).to.eql([
-        '/p/123/smart_serve/experiments/321?embed=recent_iterations,schedule,goals'
+      expect(fetch.get.calledOnce).to.eql(true)
+      expect(fetch.get.getCall(0).args).to.eql([
+        '/p/123/smart_serve/experiments/456?embed=recent_iterations,schedule,goals'
       ])
     })
   })
 
-  describe('update', function () {
-    let getExperienceStub
-    beforeEach(function () {
-      getExperienceStub = sinon.stub()
-      restore = experienceService.__set__({
-        fetch: { get, put },
-        get: getExperienceStub
-      })
-    })
-
-    it('should add activation_rules if there isnt one', function () {
-      let fixture = _.cloneDeep(experienceFixture)
-      _.set(fixture, 'recent_iterations.draft.activation_rules', '')
-      getExperienceStub.returns(Promise.resolve(fixture))
-      return experienceService.update(propertyId, experienceId, globalCode, triggers)
-        .then(() => {
-          let expected = _.cloneDeep(experienceFixture)
-          expected.recent_iterations.draft.global_code = globalCode
-          expected.recent_iterations.draft.activation_rules[0].value = triggers
-          expect(put.calledOnce).to.eql(true)
-          expect(put.getCall(0).args).to.eql([
-            `/p/${propertyId}/smart_serve/experiments/${experienceId}?embed=recent_iterations,schedule,goals`, {
-              experiment: expected
-            }
-          ])
-        })
-    })
-
-    it('should call fetch with the correct params', function () {
-      getExperienceStub.returns(Promise.resolve(_.cloneDeep(experienceFixture)))
-      return experienceService.update(propertyId, experienceId, globalCode, triggers)
-        .then(() => {
-          let expected = _.cloneDeep(experienceFixture)
-          expected.recent_iterations.draft.global_code = globalCode
-          expected.recent_iterations.draft.activation_rules[0].value = triggers
-          expect(put.calledOnce).to.eql(true)
-          expect(put.getCall(0).args).to.eql([
-            `/p/${propertyId}/smart_serve/experiments/${experienceId}?embed=recent_iterations,schedule,goals`, {
-              experiment: expected
-            }
-          ])
-        })
+  describe('set', function () {
+    it('should correctly call fetch', function () {
+      experienceService.set(propertyId, experienceId, experience)
+      expect(fetch.put.calledOnce).to.eql(true)
+      expect(fetch.put.getCall(0).args).to.eql([
+        '/p/123/smart_serve/experiments/456?embed=recent_iterations,schedule,goals',
+        {experiment: experience}
+      ])
     })
   })
 
-  describe('extract', function () {
-    it('should create default global/trigger code if experience doesnt have one', function () {
-      let fixture = _.cloneDeep(experienceFixture)
-      _.set(fixture, 'recent_iterations.draft.global_code', '')
-      _.set(fixture, 'recent_iterations.draft.activation_rules', '')
-      expect(experienceService.extract(fixture)).to.eql({
-        'global.js': '',
-        'triggers.js': 'function triggers (options, cb) {\n  cb()\n}'
-      })
-    })
-    it('should extract the correct params', function () {
-      expect(experienceService.extract(experienceFixture)).to.eql({
+  describe('getCode', function () {
+    it('should build a files object from an experience', () => {
+      expect(experienceService.getCode(experience)).to.eql({
         'global.js': 'console.log("global code")',
         'triggers.js': 'console.log("triggers")'
       })
+    })
+  })
+
+  describe('setCode', () => {
+    it('should modify an experience object appropriately given a files object', () => {
+      let newExperience = experienceService.setCode(experience, {
+        'global.js': 'console.log("some other global code")',
+        'triggers.js': 'console.log("some other triggers")'
+      })
+      expect(newExperience).to.have.deep.property('recent_iterations.draft.global_code', 'console.log("some other global code")')
+      expect(newExperience).to.have.deep.property('recent_iterations.draft.activation_rules.0.value', 'console.log("some other triggers")')
     })
   })
 })

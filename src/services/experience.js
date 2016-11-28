@@ -1,49 +1,49 @@
-let _ = require('lodash')
-let fetch = require('../lib/fetch')
+const _ = require('lodash')
+const fetch = require('../lib/fetch')
+const GLOBAL = ''
+const TRIGGERS = 'function triggers (options, cb) {\n  cb()\n}'
+const DEFAULTS = { GLOBAL, TRIGGERS }
 
 function get (propertyId, experienceId) {
   return fetch.get(getPath(propertyId, experienceId))
 }
 
-function update (propertyId, experienceId, globalCode, triggers) {
-  return get(propertyId, experienceId).then(merge).then(put)
+function set (propertyId, experienceId, val) {
+  return fetch.put(getPath(propertyId, experienceId), { experiment: val })
+}
 
-  function put (experiment) {
-    return fetch.put(getPath(propertyId, experienceId), { experiment })
-  }
-
-  function merge (experience) {
-    let draft = experience.recent_iterations.draft
-    let rules = draft.activation_rules || []
-    let customJs = rules.find(rule => rule.key === 'custom_javascript')
-    if (customJs) {
-      customJs.value = triggers
-    } else {
-      rules.push({
-        key: 'custom_javascript',
-        type: 'code',
-        value: triggers
-      })
-    }
-    Object.assign(draft, {
-      global_code: globalCode,
-      activation_rules: rules
-    })
-    return experience
+function getCode (experience) {
+  const rules = _.get(experience, 'recent_iterations.draft.activation_rules')
+  const rule = rules && rules.find(rule => rule.key === 'custom_javascript')
+  return {
+    'global.js': _.get(experience, 'recent_iterations.draft.global_code') || GLOBAL,
+    'triggers.js': (rule && rule.value) || TRIGGERS
   }
 }
 
-function extract (experience) {
-  let rules = _.get(experience, 'recent_iterations.draft.activation_rules')
-  let rule = rules && rules.find(rule => rule.key === 'custom_javascript')
-  return {
-    'global.js': _.get(experience, 'recent_iterations.draft.global_code') || '',
-    'triggers.js': (rule && rule.value) || 'function triggers (options, cb) {\n  cb()\n}'
+function setCode (experience, files) {
+  experience = _.cloneDeep(experience)
+  const draft = experience.recent_iterations.draft
+  const rules = draft.activation_rules || []
+  const customJs = rules.find(rule => rule.key === 'custom_javascript')
+  if (customJs) {
+    customJs.value = files['triggers.js']
+  } else {
+    rules.push({
+      key: 'custom_javascript',
+      type: 'code',
+      value: files['triggers.js'] || TRIGGERS
+    })
   }
+  Object.assign(draft, {
+    global_code: files['global.js'] || GLOBAL,
+    activation_rules: rules
+  })
+  return experience
 }
 
 function getPath (propertyId, experienceId) {
   return `/p/${propertyId}/smart_serve/experiments/${experienceId}?embed=recent_iterations,schedule,goals`
 }
 
-module.exports = { get, update, extract }
+module.exports = { get, set, getCode, setCode, DEFAULTS }

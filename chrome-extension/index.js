@@ -15,7 +15,7 @@ if (isEditor()) {
 }
 
 function isEditor () {
-  var pattern = /^https?:\/\/(app\.qubit\.com|staging\-dashboard\.qubitproducts\.com|localhost:3000)\/p\/\d+\/experiences\/\d+/
+  var pattern = /^https?:\/\/(app\.qubit\.com|staging-dashboard\.qubitproducts\.com|localhost:3000)\/p\/\d+\/experiences\/\d+/
   return pattern.test(window.location.href)
 }
 

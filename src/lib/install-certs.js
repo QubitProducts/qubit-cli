@@ -47,8 +47,8 @@ function installCerts () {
       cmd = 'sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ' + CERT_PATH
       break
     case 'linux':
-      var certDir
-      var updateCmd
+      let certDir
+      let updateCmd
 
       if (childProcess.spawnSync('which', ['update-ca-certificates']).status === 0) {
         certDir = '/usr/local/share/ca-certificates'

@@ -6,15 +6,15 @@ const getCerts = require('../lib/get-certs')
 const log = require('../lib/log')
 const app = express()
 
-module.exports = function connect (opts) {
-  return getCerts().then((certs) => {
+module.exports = async function connect (opts) {
+  try {
+    const certs = await getCerts()
     app.use(bodyParser.json())
     app.post('/connect', require('../server/routes/connect'))
     const server = https.createServer(certs, app)
-    server.listen(config.port, () => {
-      log('navigate to an `edit experience` page for xp to connect to it')
-    })
+    server.listen(config.port, () => log('navigate to an `edit experience` page for xp to connect to it'))
     return server
-  })
-  .catch(console.error)
+  } catch (e) {
+    log.error(e)
+  }
 }

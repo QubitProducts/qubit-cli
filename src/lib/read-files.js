@@ -12,7 +12,7 @@ function readFiles (dest) {
   }
 
   function readFile (file) {
-    let target = path.join(dest, file)
+    const target = path.join(dest, file)
     return fs.readFile(target).then(String, (err) => {
       if (err.code === 'EISDIR') return readFiles(target)
       return err
