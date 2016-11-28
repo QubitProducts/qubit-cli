@@ -43,7 +43,7 @@
     "@qubit/social-proof": "^1.1.5",
     "@qubit/stash-count": "^1.3.8",
     "@qubit/uv-api": "^4.1.0",
-    "async-to-gen": "^1.2.0",
+    "async-to-gen": "github:alanclarke/async-to-gen",
     "axios": "^0.12.0",
     "body-parser": "^1.15.1",
     "chalk": "^1.1.3",
