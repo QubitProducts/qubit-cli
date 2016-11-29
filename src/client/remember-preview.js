@@ -1,11 +1,16 @@
-module.exports = function rememberPreview (minutes, additionalVariations, cookieDomain) {
+var cookie = require('cookieman')
+var now = require('now-plus')
+
+module.exports = function rememberPreview (minutes, additionalVariations, domain) {
   if (additionalVariations && additionalVariations.length) {
-    minutes = minutes || 15
     var variations = window.encodeURIComponent('[' + additionalVariations.join(',') + ']')
-    var date = new Date()
-    var domain = cookieDomain ? ' domain=' + cookieDomain + ';' : ''
-    date.setTime(date.getTime() + (minutes * 60 * 1000))
-    document.cookie = 'smartserve_preview=true; expires=' + date.toGMTString() + '; path=/;' + domain
-    document.cookie = 'etcForceCreative=' + variations + '; expires=' + date.toUTCString() + '; path=/;' + domain
+    var cookieOptions = {
+      expires: now.plus(minutes || 15, 'minutes'),
+      path: '/',
+      domain: domain
+    }
+
+    cookie.set('smartserve_preview', 'true', cookieOptions)
+    cookie.set('etcForceCreative', variations, cookieOptions)
   }
 }

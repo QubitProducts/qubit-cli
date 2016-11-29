@@ -1,54 +1,71 @@
+var _ = require('lodash')
+var sinon = require('sinon')
+var cookieman = require('cookieman')
 var rememberPreview = require('../../src/client/remember-preview')
 var expect = require('chai').expect
 
 describe('rememberPreview', function () {
-  var originalDocument
-  var originalWindow
+  var db, restorable, originalWindow
   beforeEach(function () {
-    originalDocument = global.document
-    global.document = {
-      cookie: ''
-    }
-
+    db = {}
+    restorable = [
+      sinon.stub(cookieman, 'set', function (key, val) {
+        db[key] = decodeURIComponent(val)
+      }),
+      sinon.stub(cookieman, 'val', function (key) {
+        return decodeURIComponent(db[key])
+      }),
+      sinon.stub(cookieman, 'get', function (key) {
+        return decodeURIComponent(db[key])
+      })
+    ]
     originalWindow = global.window
     global.window = {
-      encodeURIComponent: function () {
-        return arguments[0]
+      encodeURIComponent: _.identity,
+      decodeURIComponent: _.identity,
+      location: {
+        host: 'blowtrump.com'
       }
     }
   })
 
   afterEach(function () {
-    global.document = originalDocument
     global.window = originalWindow
+    while (restorable.length) restorable.pop().restore()
   })
 
   describe('when called without arguments', function () {
-    it('will not set a cookie', function () {
+    it('will not set cookies', function () {
       rememberPreview()
-      expect(document.cookie).to.eql('')
+      expect(cookieman.set.called).to.eql(false)
+      expect(db).to.eql({})
     })
   })
 
-  describe('when called with arguments', function () {
-    it('will set preview cookies if additional variations are passed in', function () {
-      rememberPreview(30, [123456])
-      expect(/etcForceCreative/.test(document.cookie)).to.eql(true)
-    })
-
-    it('will not set preview cookies if additional variations are not passed in', function () {
+  describe('when called with only minutes until the cookies should expire', function () {
+    it('will not set preview cookies', function () {
       rememberPreview(30)
-      expect(document.cookie).to.eql('')
+      expect(cookieman.set.called).to.eql(false)
+      expect(db).to.eql({})
     })
+  })
 
-    it('will not add a cookie domain to the cookies if it is not passed in', function () {
+  describe('when called with extra variations to preview', function () {
+    it('will set the smartserve_preview cookie', function () {
       rememberPreview(30, [123456])
-      expect(/domain=\.domain\.com;/.test(document.cookie)).to.eql(false)
+      expect(db.smartserve_preview).to.eql('true')
     })
 
-    it('will add a cookie domain to the cookies if it is passed in', function () {
-      rememberPreview(30, [123456], '.domain.com')
-      expect(/domain=\.domain\.com;/.test(document.cookie)).to.eql(true)
+    it('will set the etcForceCreative cookie', function () {
+      rememberPreview(30, [123, 456])
+      expect(db.etcForceCreative).to.eql('[123,456]')
+    })
+
+    it('will add a path to the cookies', function () {
+      rememberPreview(30, [123456])
+      expect(cookieman.set.callCount).to.eql(2)
+      expect(cookieman.set.getCall(0).args[2].path).to.eql('/')
+      expect(cookieman.set.getCall(1).args[2].path).to.eql('/')
     })
   })
 })
