@@ -23,10 +23,12 @@ describe('pkgService', () => {
     it('should modify an experience object appropriately given a package.json', () => {
       let files = {}
       pkg.meta.name = 'new-name'
+      pkg.meta.previewUrl = 'new-url'
+      let expected = _.cloneDeep(experience)
+      expected.name = pkg.meta.name
+      expected.recent_iterations.draft.url = pkg.meta.previewUrl
       files['package.json'] = JSON.stringify(pkg)
-      expect(pkgService.setCode(experience, files)).to.eql(Object.assign({}, experience, {
-        name: 'new-name'
-      }))
+      expect(pkgService.setCode(experience, files)).to.eql(expected)
     })
   })
 })

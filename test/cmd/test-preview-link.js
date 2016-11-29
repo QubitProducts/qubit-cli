@@ -1,21 +1,24 @@
 // no package json, no variant inside, no previewUrl, no isControlkey ref'd. etc.
+const _ = require('lodash')
 const { expect } = require('chai')
 const rewire = require('rewire')
-const previewLink = rewire('../../src/cmd/preview-link')
+const previewLinks = rewire('../../src/cmd/preview-link')
+const pkgFixture = rewire('../fixtures/models/pkg.json')
+const linkFixture = rewire('../fixtures/models/links.json')
 
-previewLink.__set__('CWD', './test/fixtures/models/packageJsons')
-
-describe.only('previewLink', function () {
-  it('should return a promise', function () {
-    expect(previewLink()).to.have.property('then')
-  })
-  it('should log as many links as there are variations', function () {
-    previewLink().then((links) => {
-      expect(links).to.have.length(2)
+describe('previewLink', function () {
+  let restore
+  beforeEach(function () {
+    restore = previewLinks.__set__({
+      getPkg: () => Promise.resolve(_.cloneDeep(pkgFixture))
     })
   })
-  // it('should throw if package.json is missing', () => {
-  //   previewLink.__set__('CWD', './test/fixtures/models')
-  //   expect(previewLink()).to.throw() // halp
-  // })
+
+  afterEach(function () {
+    restore()
+  })
+
+  it('should return an array of preview links, one for each variant', async function () {
+    expect(await previewLinks()).to.eql(linkFixture)
+  })
 })

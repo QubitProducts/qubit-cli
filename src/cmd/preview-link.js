@@ -1,5 +1,5 @@
 const _ = require('lodash')
-const getPkg = require('../lib/get-pkg')
+let getPkg = require('../lib/get-pkg')
 
 module.exports = async function previewLinks () {
   let pkg = await getPkg()
