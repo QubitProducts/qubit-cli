@@ -11,6 +11,7 @@ function getCode (experience, variations) {
       propertyId: experience.property_id,
       experienceId: experience.id,
       iterationId: _.get(experience, 'recent_iterations.draft.id'),
+      previewUrl: _.get(experience, 'recent_iterations.draft.url'),
       variations: variations.reduce((memo, variation) => {
         memo[getFilename(variation)] = {
           variationId: variation.id,
@@ -28,6 +29,7 @@ function setCode (experience, files) {
   experience = _.cloneDeep(experience)
   const pkg = JSON.parse(files['package.json'])
   experience.name = _.get(pkg, 'meta.name')
+  _.set(experience, 'recent_iterations.draft.url', _.get(pkg, 'meta.previewUrl'))
   return experience
 }
 

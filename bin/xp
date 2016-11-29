@@ -5,11 +5,13 @@ process.env.NODE_CONFIG_DIR = path.resolve(__dirname, '../config')
 const program = require('commander')
 const pkg = require('../package.json')
 const exec = require('child_process').exec
+const log = require('../src/lib/log')
 const scaffold = require('../src/cmd/scaffold')
 const serve = require('../src/cmd/serve')
 const up = require('../src/cmd/up')
 const down = require('../src/cmd/down')
 const connect = require('../src/cmd/connect')
+const previewLink = require('../src/cmd/preview-link')
 
 program
   .command('up')
@@ -37,7 +39,12 @@ program
   .action(() => exec(`open ${path.dirname(__dirname)}`))
 
 program
-  .usage(`[varaition.js] [options]
+  .command('preview-link')
+  .description('log sharable preview links for your variations')
+  .action(() => previewLink().then((links) => links.map((link) => log(link))), log.error)
+
+program
+  .usage(`[variation.js] [options]
          xp <cmd> [options]`)
   .version(pkg.version)
   .arguments('<variation>')

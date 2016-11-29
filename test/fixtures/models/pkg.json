@@ -6,6 +6,7 @@
     "propertyId": 123,
     "experienceId": 456,
     "iterationId": 101112,
+    "previewUrl": "http://blowtrump.com",
     "variations": {
       "variation-2": {
         "variationIsControl": true,
