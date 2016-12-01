@@ -15,8 +15,8 @@ module.exports = async function scaffoldFromTemplate (template) {
     try {
       if (err) return log.error(new Error(`could not find ${template} installed on your system`))
       const templateDir = path.dirname(require.resolve(template))
-      const pkg = await getPkg()
       const templateFiles = await readFiles(path.join(templateDir))
+      const pkg = await getPkg().catch(() => false) || { meta: {} }
       const files = {}
       // merge package.json instead of overwriting
       if (templateFiles['package.json']) files['package.json'] = JSON.stringify(Object.assign({}, pkg, JSON.parse(templateFiles['package.json'])), null, 2)
@@ -44,4 +44,3 @@ module.exports = async function scaffoldFromTemplate (template) {
     }
   })
 }
-
