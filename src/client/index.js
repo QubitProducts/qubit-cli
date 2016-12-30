@@ -57,6 +57,7 @@ function handleHotReload (api) {
 function triggerFn (opts, cb) {
   var api = require('triggers')(opts, cb)
   handleHotReload(api)
+  return api
 }
 
 function variationFn (opts) {
