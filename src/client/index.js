@@ -41,34 +41,28 @@ function globalFn () {
 }
 
 function executeAgainOnCodeChange (api) {
-  module.hot.accept()
-  module.hot.dispose(api.remove)
+  var hot = module.hot
+  hot.accept()
+  hot.dispose(api.remove)
 }
 
-function decline (api) {
-  module.hot.decline()
-  return api
+function handleHotReload (api) {
+  if (api && api.remove) {
+    executeAgainOnCodeChange(api)
+  } else {
+    module.hot.decline()
+  }
 }
 
 function triggerFn (opts, cb) {
   var api = require('triggers')(opts, cb)
-
-  if (api && api.remove) {
-    executeAgainOnCodeChange(api)
-  } else {
-    return decline(api)
-  }
+  handleHotReload(api)
 }
 
 function variationFn (opts) {
   require(__VARIATIONCSS__)
   var api = require(__VARIATIONJS__)(opts)
-
-  if (api && api.remove) {
-    executeAgainOnCodeChange(api)
-  } else {
-    return decline(api)
-  }
+  handleHotReload(api)
 }
 
 function noop () {}
