@@ -1,39 +1,34 @@
 const _ = require('lodash')
-const connect = require('./connect')
+const connect = require('../server/lib/connect')
 const template = require('./template')
 const down = require('./down')
 const getPkg = require('../lib/get-pkg')
 const parseUrl = require('../lib/parse-url')
+const log = require('../lib/log')
 
 module.exports = async function pull (id) {
-  let opts = arguments[arguments.length - 1].parent.args.slice(0, -1)
-
-  if (opts.length && _.every(opts, isId)) {
-    let [propertyId, experienceId] = opts.map(Number)
-    return down(propertyId, experienceId)
-  }
-
-  if (opts.length && isUrl(id)) {
-    let url = id
-    let {experienceId, propertyId} = parseUrl(url)
-    return down(propertyId, experienceId)
-  }
-
-  // scaffold from template
-  if (opts.length && isName(id)) {
-    return template(id)
-  }
-
-  // try to get from package.json and fallback on connect route
-  if (!opts.length) {
+  try {
     let propertyId, experienceId
-    try {
-      const pkg = await getPkg()
-      propertyId = pkg.meta.propertyId
-      experienceId = pkg.meta.experienceId
-    } catch (err) {}
-    if (!propertyId || !experienceId) return connect()
-    return down(propertyId, experienceId)
+    let opts = arguments[arguments.length - 1].parent.args.slice(0, -1)
+
+    if (opts.length && _.every(opts, isId)) {
+      [propertyId, experienceId] = opts.map(Number)
+    } else if (opts.length && isUrl(id)) {
+      ({propertyId, experienceId} = parseUrl(id))
+    } else if (opts.length && isName(id)) {
+      // scaffold from template
+      return template(id)
+    } else if (!opts.length) {
+      // try to get from package.json and fallback on connect route
+      try {
+        ({propertyId, experienceId} = (await getPkg()).meta)
+      } catch (err) {}
+    }
+
+    if (propertyId && experienceId) return await down(propertyId, experienceId)
+    return await connect()
+  } catch (err) {
+    log.error(err)
   }
 }
 

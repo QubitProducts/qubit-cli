@@ -38,9 +38,9 @@ module.exports = async function fromTemplate (template) {
         if (templateFiles['variation.js']) files['variation.js'] = _.template(templateFiles['variation.js'])(meta)
         if (templateFiles['variation.css']) files['variation.css'] = _.template(templateFiles['variation.css'])(meta)
       }
-      return scaffold(CWD, files, false)
-    } catch (e) {
-      log.error(e)
+      return await scaffold(CWD, files, false)
+    } catch (err) {
+      log.error(err)
     }
   })
 }

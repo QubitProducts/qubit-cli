@@ -1,4 +1,4 @@
-require('../../src/server/routes/connect')
+require('../../src/server/lib/connect')
 
 describe('connect', function () {
 
