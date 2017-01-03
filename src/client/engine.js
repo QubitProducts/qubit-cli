@@ -1,6 +1,6 @@
 module.exports = function experienceEngine (options, globalFn, triggerFn, variationFn) {
   globalFn()
-  if (triggerFn(options, activate)) execute()
+  if (triggerFn(options, activate) === true) execute()
 
   function activate (pass) {
     const shouldActivate = pass || typeof pass === 'undefined'
