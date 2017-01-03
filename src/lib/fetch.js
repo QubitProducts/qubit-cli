@@ -4,7 +4,8 @@ const axios = require('axios')
 
 module.exports = {
   get: fetchWithAuth('GET'),
-  put: fetchWithAuth('PUT')
+  put: fetchWithAuth('PUT'),
+  post: fetchWithAuth('POST')
 }
 
 function fetchWithAuth (method) {

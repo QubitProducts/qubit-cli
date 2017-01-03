@@ -9,7 +9,13 @@ const log = require('../src/lib/log')
 const pull = require('../src/cmd/pull')
 const serve = require('../src/cmd/serve')
 const push = require('../src/cmd/push')
+const create = require('../src/cmd/create')
 const previewLink = require('../src/cmd/preview-link')
+
+program
+  .command('create <propertyId>')
+  .description('create an experience')
+  .action(create)
 
 program
   .command('push')

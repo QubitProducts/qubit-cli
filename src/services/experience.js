@@ -1,8 +1,9 @@
 const _ = require('lodash')
 const fetch = require('../lib/fetch')
 const GLOBAL = ''
+const EXPERIENCE = require('./experience.json')
 const TRIGGERS = 'function triggers (options, cb) {\n  cb()\n}'
-const DEFAULTS = { GLOBAL, TRIGGERS }
+const DEFAULTS = { GLOBAL, TRIGGERS, EXPERIENCE }
 
 function get (propertyId, experienceId) {
   return fetch.get(getPath(propertyId, experienceId))
@@ -10,6 +11,10 @@ function get (propertyId, experienceId) {
 
 function set (propertyId, experienceId, val) {
   return fetch.put(getPath(propertyId, experienceId), { experiment: val })
+}
+
+function create (propertyId) {
+  return fetch.post(getPath(propertyId), { experiment: Object.assign({}, EXPERIENCE, { propertyId }) })
 }
 
 function getCode (experience) {
@@ -43,7 +48,9 @@ function setCode (experience, files) {
 }
 
 function getPath (propertyId, experienceId) {
-  return `/p/${propertyId}/smart_serve/experiments/${experienceId}?embed=recent_iterations,schedule,goals`
+  let url = `/p/${propertyId}/smart_serve/experiments`
+  if (experienceId) url += `/${experienceId}?embed=recent_iterations,schedule,goals`
+  return url
 }
 
-module.exports = { get, set, getCode, setCode, DEFAULTS }
+module.exports = { get, set, create, getCode, setCode, DEFAULTS }
