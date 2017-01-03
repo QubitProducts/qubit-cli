@@ -6,32 +6,25 @@ const program = require('commander')
 const pkg = require('../package.json')
 const exec = require('child_process').exec
 const log = require('../src/lib/log')
-const scaffold = require('../src/cmd/scaffold')
+const pull = require('../src/cmd/pull')
 const serve = require('../src/cmd/serve')
-const up = require('../src/cmd/up')
-const down = require('../src/cmd/down')
-const connect = require('../src/cmd/connect')
+const push = require('../src/cmd/push')
 const previewLink = require('../src/cmd/preview-link')
 
 program
-  .command('up')
+  .command('push')
   .description('push experience up to remote')
-  .action(up)
+  .action(push)
 
 program
-  .command('down')
-  .description('pull experience down from remote')
-  .action(down)
-
-program
-  .command('connect')
-  .description('pull down experiences that you are editing in the platform')
-  .action(connect)
-
-program
-  .command('scaffold <template>')
-  .description('scaffold a project from a template')
-  .action(scaffold)
+  .command('pull')
+  .usage(`
+         xp pull // pull from remote
+         xp pull example // pull from template
+         xp pull propertyId experienceId // pull from experience
+  `)
+  .description('pull experience from template, remote or experience editor')
+  .action(pull)
 
 program
   .command('open')
@@ -58,11 +51,11 @@ program.on('--help', function () {
   Examples:
 
     $ xp --help
-    $ xp scaffold example
+    $ xp pull example
     $ xp variation.js --watch
     $ xp variation.js --sync
-    $ xp up
-    $ xp down
+    $ xp push
+    $ xp pull
     $ xp connect
   `)
 })

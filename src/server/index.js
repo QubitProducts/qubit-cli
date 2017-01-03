@@ -1,6 +1,6 @@
 const express = require('express')
 const createEmitter = require('event-kitten')
-const up = require('../cmd/up')
+const push = require('../cmd/push')
 const log = require('../lib/log')
 const webpack = require('webpack')
 const https = require('https')
@@ -21,7 +21,7 @@ module.exports = function start (options) {
   const emitter = createEmitter()
   if (options.sync) {
     log('watching for changes')
-    emitter.on('rebuild', up)
+    emitter.on('rebuild', push)
   }
   const compiler = webpack(Object.assign(createWebpackConfig(options), verboseOpts))
   compiler.plugin('done', (data) => emitter.emit('rebuild', data))

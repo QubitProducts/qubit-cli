@@ -6,7 +6,7 @@ const getCerts = require('../lib/get-certs')
 const log = require('../lib/log')
 const app = express()
 
-module.exports = async function connect (opts) {
+module.exports = async function connect () {
   try {
     const certs = await getCerts()
     app.use(bodyParser.json())

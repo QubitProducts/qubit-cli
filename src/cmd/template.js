@@ -7,7 +7,7 @@ const getPkg = require('../lib/get-pkg')
 const log = require('../lib/log')
 let CWD = process.cwd()
 
-module.exports = async function scaffoldFromTemplate (template) {
+module.exports = async function fromTemplate (template) {
   if (template === 'example') template = path.resolve(__dirname, '../../example-template')
   return exec(`npm link ${template}`, {
     cwd: path.resolve(__dirname, '../../')
