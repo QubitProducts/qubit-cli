@@ -15,6 +15,7 @@ advanced previewing
 - bypass qubit's remote build queue
 
 remote syncing
+- create new experiences with a single command
 - scaffold your local project from existing experiences in the platform
 - control when to push your changes up or pull down the latest remote changes
 - develop your experience locally and choose when to share it
@@ -161,37 +162,43 @@ files:
 
 ```
 xp --help
-Usage: xp [variation.js] [options]
-       xp <cmd> [options]
+
+  Usage: xp [variation.js] [options]
+         xp <cmd> [options]
 
 
-Commands:
+  Commands:
 
-  pull           pull experience from template, remote or experience editor
-  push           push experience up to remote
-  open           open xp folder in finder, e.g. to locate chrome-extension
-  preview-link   log sharable preview links for your variations
+    create <propertyId>  create an experience
+    push                 push experience up to remote
+    pull                 pull experience from template, remote or experience editor
+    open                 open xp folder in finder, e.g. to locate chrome-extension
+    preview-link         log sharable preview links for your variations
 
-Options:
+  Options:
 
-  -h, --help     output usage information
-  -V, --version  output the version number
-  -w, --watch    watch for changes and live reload
-  -s, --sync     watch for changes and sync with remote
-  -v, --verbose  log verbose output
+    -h, --help     output usage information
+    -V, --version  output the version number
+    -w, --watch    watch for changes and live reload
+    -s, --sync     watch for changes and sync with remote
+    -v, --verbose  log verbose output
 
 
-Examples:
+  Examples:
 
-  $ xp --help
-  $ xp pull
-  $ xp pull 2499 1234
-  $ xp pull https://app.qubit.com/p/2499/experiences/84069/editor
-  $ xp pull example
-  $ xp variation.js --watch
-  $ xp variation.js --sync
-  $ xp push
-  $ xp connect
+    $ xp --help
+    $ xp pull
+    $ xp pull 2499 1234
+    $ xp pull https://app.qubit.com/p/2499/experiences/84069/editor
+    $ xp pull example
+
+    $ xp create
+    $ xp pull example
+
+    $ xp variation.js --watch
+    $ xp variation.js --sync
+    $ xp push
+    $ xp pull
 ```
 
 notes:
