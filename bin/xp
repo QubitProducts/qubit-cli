@@ -9,7 +9,13 @@ const log = require('../src/lib/log')
 const pull = require('../src/cmd/pull')
 const serve = require('../src/cmd/serve')
 const push = require('../src/cmd/push')
+const create = require('../src/cmd/create')
 const previewLink = require('../src/cmd/preview-link')
+
+program
+  .command('create <propertyId>')
+  .description('create an experience')
+  .action(create)
 
 program
   .command('push')
@@ -51,12 +57,18 @@ program.on('--help', function () {
   Examples:
 
     $ xp --help
+    $ xp pull
+    $ xp pull 2499 1234
+    $ xp pull https://app.qubit.com/p/2499/experiences/84069/editor
     $ xp pull example
+
+    $ xp create
+    $ xp pull example
+
     $ xp variation.js --watch
     $ xp variation.js --sync
     $ xp push
     $ xp pull
-    $ xp connect
   `)
 })
 
