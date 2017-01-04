@@ -16,7 +16,8 @@ function fetchWithAuth (method) {
         method,
         data,
         headers: { 'Cookie': `apsess=${auths.COOKIE}` }
-      }).then((resp) => resp.data)
+      })
+      .then((resp) => resp.data)
     }
     throw new Error('UNAUTHORIZED, please visit an experiment editor page')
   }
