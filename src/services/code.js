@@ -4,10 +4,10 @@ const variationService = require('./variation')
 const pkgService = require('./pkg')
 
 async function get (propertyId, experienceId) {
-  const [experience, variations] = await Promise.all([
-    experienceService.get(propertyId, experienceId),
-    variationService.getAll(propertyId, experienceId)
-  ])
+  const [experience, variations] = [
+    await experienceService.get(propertyId, experienceId),
+    await variationService.getAll(propertyId, experienceId)
+  ]
   return getCode(experience, variations)
 }
 

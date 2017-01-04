@@ -7,7 +7,7 @@ module.exports = async function push () {
     const pkg = await getPkg()
     const {propertyId, experienceId} = pkg.meta
     await up(propertyId, experienceId)
-  } catch (e) {
-    log.error(e)
+  } catch (err) {
+    log.error(err)
   }
 }

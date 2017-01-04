@@ -4,10 +4,7 @@ const {CERT_PATH, KEY_PATH, CERT_DIR} = require('./constants')
 
 module.exports = async function getCerts (isRetry) {
   try {
-    const [key, cert] = await Promise.all([
-      fs.readFile(KEY_PATH),
-      fs.readFile(CERT_PATH)
-    ])
+    const [key, cert] = await Promise.all([ fs.readFile(KEY_PATH), fs.readFile(CERT_PATH) ])
     return { key, cert }
   } catch (err) {
     if (err instanceof Error && err.code === 'ENOENT') {

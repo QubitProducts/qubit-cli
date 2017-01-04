@@ -12,7 +12,7 @@ module.exports = async function create (propertyId) {
     const files = await codeService.get(propertyId, experience.id)
     await scaffold(CWD, files, false)
     log('synced!')
-  } catch (e) {
-    log.error(e)
+  } catch (err) {
+    log.error(err)
   }
 }

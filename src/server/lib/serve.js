@@ -1,15 +1,15 @@
-const express = require('express')
 const createEmitter = require('event-kitten')
-const push = require('../cmd/push')
-const log = require('../lib/log')
-const webpack = require('webpack')
-const https = require('https')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
-const webpackConf = require('../../webpack.conf')
-const app = express()
+const webpack = require('webpack')
+const webpackConf = require('../../../webpack.conf')
+const push = require('../../cmd/push')
+const log = require('../../lib/log')
+const createApp = require('../app')
 
-module.exports = function start (options) {
+module.exports = async function serve (options) {
+  let app = await createApp()
+
   options.verbose = options.verbose || false
   const verboseOpts = {
     log: options.verbose ? log : false,
@@ -33,8 +33,10 @@ module.exports = function start (options) {
     path: '/__webpack_hmr',
     heartbeat: 100
   }, verboseOpts)))
-  const server = https.createServer(options.certs, app)
-  return {server, emitter}
+
+  return await app.start().then(() => {
+    return { app, emitter }
+  })
 }
 
 function createWebpackConfig (options) {

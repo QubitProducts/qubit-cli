@@ -24,24 +24,19 @@
             "id": "basic-usage"
           },
           {
-            "title": "xp connect",
+            "title": "xp pull",
             "depth": 2,
-            "id": "xp-connect"
+            "id": "xp-pull"
           },
           {
-            "title": "xp up",
+            "title": "xp push",
             "depth": 2,
-            "id": "xp-up"
+            "id": "xp-push"
           },
           {
-            "title": "xp down",
+            "title": "templates",
             "depth": 2,
-            "id": "xp-down"
-          },
-          {
-            "title": "xp scaffold",
-            "depth": 2,
-            "id": "xp-scaffold"
+            "id": "templates"
           },
           {
             "title": "file reference",
@@ -61,6 +56,7 @@
     "index.html": {
       "source": "README.md",
       "title": "xp-cli",
+      "pageTitle": "xp-cli",
       "slug": "index",
       "headings": [
         {
@@ -79,24 +75,19 @@
           "id": "basic-usage"
         },
         {
-          "title": "xp connect",
+          "title": "xp pull",
           "depth": 2,
-          "id": "xp-connect"
+          "id": "xp-pull"
         },
         {
-          "title": "xp up",
+          "title": "xp push",
           "depth": 2,
-          "id": "xp-up"
+          "id": "xp-push"
         },
         {
-          "title": "xp down",
+          "title": "templates",
           "depth": 2,
-          "id": "xp-down"
-        },
-        {
-          "title": "xp scaffold",
-          "depth": 2,
-          "id": "xp-scaffold"
+          "id": "templates"
         },
         {
           "title": "file reference",
