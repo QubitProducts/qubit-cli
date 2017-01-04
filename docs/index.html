@@ -2,17 +2,41 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="assets/style.css?t=a44c9e9d">
-    <script src="assets/script.js?t=820b7ffa"></script>
+    <link rel="stylesheet" href="assets/style.css?t=615badd5">
+    <script src="assets/script.js?t=42463e55"></script>
     <title>xp-cli</title>
     <meta name="viewport" content="width=device-width">
   </head>
   <body class="-menu-visible">
     <div class="doc-layout">
       <div class="toggle menu-toggle js-menu-toggle"></div>
+      <div class="menu toc-menu">
+        <li class="menu-item -level-0 -parent">
+          <ul class="submenu">
+            <li class="menu-item -level-1"><a class="link title -active link-index" href="index.html">xp-cli</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-features" href="#features">features</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-installation" href="#installation">installation</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-basic-usage" href="#basic-usage">basic usage</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-xp-pull" href="#xp-pull">xp pull</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-xp-push" href="#xp-push">xp push</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-templates" href="#templates">templates</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-file-reference" href="#file-reference">file reference</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-help-menu" href="#help-menu">help menu</a>
+            </li>
+          </ul>
+        </li>
+      </div>
       <div class="body page-index">
         <div class="header-nav">
-          <div class="right"><a href="https://github.com/qubitdigital/xp-cli" data-title="qubitdigital/xp-cli" class="iconlink">
+          <div class="right"><a class="iconlink" href="https://github.com/qubitdigital/xp-cli" data-title="qubitdigital/xp-cli">
               <!-- span.title Open in GitHub--><span class="icon -github"></span></a>
           </div>
         </div>
@@ -33,6 +57,7 @@
 </ul>
 <p>remote syncing</p>
 <ul>
+<li>create new experiences with a single command</li>
 <li>scaffold your local project from existing experiences in the platform</li>
 <li>control when to push your changes up or pull down the latest remote changes</li>
 <li>develop your experience locally and choose when to share it</li>
@@ -47,7 +72,7 @@
 </ul>
 <h2 id="installation">installation</h2>
 <p>client</p>
-<pre><code>npm install -g qubitdigital/xp-cli
+<pre><code>npm install -g qubitdigital/xp-cli --production
 </code></pre>
 <p>extension</p>
 <pre><code>xp open
@@ -60,15 +85,15 @@
 <p>once you have installed the client and extension</p>
 <pre><code>mkdir xp-demo
 cd xp-demo
-xp scaffold example
+xp pull example
 xp variation.js --watch
 // navigate to a url in chrome
 // click the xp icon in chrome to turn the extension on for your current tab
 </code></pre>
-<h2 id="xp-connect">xp connect</h2>
-<p>xp allows you to connect to and sync with an existing experience created within the qubit platform</p>
-<p>with xp running, navigate to an experience page:</p>
-<pre><code>$ xp connect
+<h2 id="xp-pull">xp pull</h2>
+<p>xp pull allows you to scaffold an experience from a template or a remote experience:</p>
+<p>by navigating to the experience:</p>
+<pre><code>$ xp pull
 $ navigate to an `edit experience` page for xp to connect to it
 $ open https://app.qubit.com/p/1234/experiences/5678/editor
   You recently navigated to https://app.qubit.com/p/1234/experiences/5678/editor
@@ -81,14 +106,31 @@ $ open https://app.qubit.com/p/1234/experiences/5678/editor
   writing to local variation-336711.js file...
   writing to local variation-336711.css file...
   All done!
-
-$ xp up // save your changes to the cloud
-  synced!
-
-$ xp down // pull down latest version of experience
+</code></pre>
+<p>// by pasting the editor url:</p>
+<pre><code>$ xp pull https://app.qubit.com/p/1234/experiences/5678/editor
+  pulling...
   pulled!
-
-$ xp variation-336711.js --watch
+</code></pre>
+<p>// by explicitly passing in propertyId and experienceId</p>
+<pre><code>$ xp pull 1234 5678
+  pulling...
+  pulled!
+</code></pre>
+<p>// from a template:</p>
+<pre><code>$ xp pull example
+  writing to local package.json file...
+  writing to local global.js file...
+  writing to local triggers.js file...
+  writing to local variation.js file...
+  writing to local variation.css file...
+</code></pre>
+<p>once you have scaffolded your files from an existing experience, you can always pull down the latest remote changes with <code>xp pull</code></p>
+<pre><code>$ xp pull // pull down latest version of experience
+  pulled!
+</code></pre>
+<p>start building and previewing your experience:</p>
+<pre><code>$ xp variation-336711.js --watch
   xp listening on port 41337
 
 $ xp variation-336711.js --sync
@@ -96,13 +138,9 @@ $ xp variation-336711.js --sync
   xp listening on port 41337
   synced!
 </code></pre>
-<h2 id="xp-up">xp up</h2>
-<p>once your local experience is connected/configured with the correct metadata</p>
-<p>you can type <code>xp up</code> to save your changes to push your changes up to the platform</p>
-<h2 id="xp-down">xp down</h2>
-<p>once your local experience is connected/configured with the correct metadata</p>
-<p>you can type <code>xp down</code> to pull down the experience from the platform</p>
-<h2 id="xp-scaffold">xp scaffold</h2>
+<h2 id="xp-push">xp push</h2>
+<p>once your local experience is connected/configured with the correct metadata you can run <code>xp push</code> to push your changes up to the platform</p>
+<h2 id="templates">templates</h2>
 <p>xp allows you to create, publish and share experience templates</p>
 <p>any commonjs module containing a folder called template can be used by xp to scaffold a new project</p>
 <p>creating a template:</p>
@@ -114,7 +152,7 @@ npm init
 npm link // make your module available globally on your system
 </code></pre>
 <p>using a template:</p>
-<pre><code>xp scaffold my-experience-template
+<pre><code>xp pull my-experience-template
 </code></pre>
 <p>tip:
 in order for your folder to be a valid javascript package, you need to have a &apos;main&apos; entry in your package.json that points to a a javascript file, e.g. <code>template/variation.js</code> otherwise npm will not recognise your folder as a module and you will not be able to install it</p>
@@ -128,36 +166,43 @@ in order for your folder to be a valid javascript package, you need to have a &a
 </code></pre>
 <h2 id="help-menu">help menu</h2>
 <pre><code>xp --help
-Usage: xp [varaition.js] [options]
-       xp &lt;cmd&gt; [options]
+
+  Usage: xp [variation.js] [options]
+         xp &lt;cmd&gt; [options]
 
 
-Commands:
+  Commands:
 
-  up                   push experience up to remote
-  down                 pull experience down from remote
-  connect              pull down experiences that you are editing in the platform
-  scaffold &lt;template&gt;  scaffold a project from a template
-  open                 open xp folder in finder, e.g. to locate chrome-extension
+    create &lt;propertyId&gt;  create an experience
+    push                 push experience up to remote
+    pull                 pull experience from template, remote or experience editor
+    open                 open xp folder in finder, e.g. to locate chrome-extension
+    preview-link         log sharable preview links for your variations
 
-Options:
+  Options:
 
-  -h, --help         output usage information
-  -V, --version      output the version number
-  -p, --port [port]  use custom [port]
-  -w, --watch        watch for changes and live reload
-  -s, --sync         watch for changes and sync with remote
+    -h, --help     output usage information
+    -V, --version  output the version number
+    -w, --watch    watch for changes and live reload
+    -s, --sync     watch for changes and sync with remote
+    -v, --verbose  log verbose output
 
 
-Examples:
+  Examples:
 
-  $ xp --help
-  $ xp scaffold example
-  $ xp variation.js --watch
-  $ xp variation.js --sync
-  $ xp up
-  $ xp down
-  $ xp connect
+    $ xp --help
+    $ xp pull
+    $ xp pull 2499 1234
+    $ xp pull https://app.qubit.com/p/2499/experiences/84069/editor
+    $ xp pull example
+
+    $ xp create
+    $ xp pull example
+
+    $ xp variation.js --watch
+    $ xp variation.js --sync
+    $ xp push
+    $ xp pull
 </code></pre>
 <p>notes:</p>
 <ul>
@@ -166,32 +211,6 @@ Examples:
 <p><a href="http://standardjs.com/"><img src="https://img.shields.io/badge/code%20style-standard-brightgreen.svg" alt="js-standard-style"></a></p>
 
         </div>
-      </div>
-      <div class="menu toc-menu">
-        <li class="menu-item -level-0 -parent">
-          <ul class="submenu">
-            <li class="menu-item -level-1"><a href="index.html" class="link title -active link-index">xp-cli</a>
-            </li>
-            <li class="menu-item -level-1"><a href="#features" class="link title link-features">features</a>
-            </li>
-            <li class="menu-item -level-1"><a href="#installation" class="link title link-installation">installation</a>
-            </li>
-            <li class="menu-item -level-1"><a href="#basic-usage" class="link title link-basic-usage">basic usage</a>
-            </li>
-            <li class="menu-item -level-1"><a href="#xp-connect" class="link title link-xp-connect">xp connect</a>
-            </li>
-            <li class="menu-item -level-1"><a href="#xp-up" class="link title link-xp-up">xp up</a>
-            </li>
-            <li class="menu-item -level-1"><a href="#xp-down" class="link title link-xp-down">xp down</a>
-            </li>
-            <li class="menu-item -level-1"><a href="#xp-scaffold" class="link title link-xp-scaffold">xp scaffold</a>
-            </li>
-            <li class="menu-item -level-1"><a href="#file-reference" class="link title link-file-reference">file reference</a>
-            </li>
-            <li class="menu-item -level-1"><a href="#help-menu" class="link title link-help-menu">help menu</a>
-            </li>
-          </ul>
-        </li>
       </div>
     </div>
   </body>
