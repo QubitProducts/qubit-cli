@@ -16,7 +16,7 @@ const map = {
 }
 
 module.exports = function createAMD () {
-  const amd = microAmd({ base: '//d22rutvoghj3db.cloudfront.net' })
+  const amd = microAmd({ base: '//d22rutvoghj3db.cloudfront.net/' })
   for (let id in map) if (map.hasOwnProperty(id)) amd.define(id, () => map[id])
   return amd
 }
