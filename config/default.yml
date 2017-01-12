@@ -1,2 +1,7 @@
 port: 41337
 endpoint: https://app.qubit.com
+auth:
+  port: 41338
+  url: https://qubit.auth0.com
+  xpClientId: BlkYEHauoKWvGcN2my1TGlqh5dHHuW30
+  apertureClientId: dbiUqhi4U6m7oYpEPKzJbJu3ZHVFImf0

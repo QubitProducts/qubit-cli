@@ -20,7 +20,6 @@ function isEditor () {
 }
 
 function connect () {
-  console.log('Attempting to connect with xp')
   chrome.runtime.sendMessage({
     command: 'connect',
     url: window.location.href

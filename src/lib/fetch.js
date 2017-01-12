@@ -2,7 +2,8 @@ const config = require('config')
 const axios = require('axios')
 const auth = require('./auth')
 const log = require('./log')
-const refresh = require('../server/lib/refresh')
+const getToken = require('./get-token')
+const login = require('../server/lib/login')
 const NOT_FOUND = new Error('NOT_FOUND, the experience you requested does not exist')
 
 module.exports = {
@@ -13,20 +14,23 @@ module.exports = {
 
 function fetchWithAuth (method) {
   return async function fetch (path, data) {
+    let headers
     const auths = await auth.get()
-    if (auths.TOKEN) throw new Error('Auth type not implemented yet')
-    return axios(config.endpoint + path, {
-      method,
-      data,
-      headers: { 'Cookie': `apsess=${auths.COOKIE}` }
-    })
-    .then(handler, handler)
+
+    if (auths.ID_TOKEN) {
+      let token = await getToken(auths.ID_TOKEN)
+      headers = { 'Authorization': `Bearer ${token}` }
+    } else {
+      return login().then(() => fetch(path, data))
+    }
+
+    return axios(config.endpoint + path, { method, data, headers }).then(handler, handler)
 
     function handler (resp) {
       if (resp.status === 404) throw NOT_FOUND
       if (typeof resp.data === 'string' && resp.data.includes('login.css')) {
         log.error('UNAUTHORIZED')
-        return refresh().then(() => fetch(path, data))
+        return login().then(() => fetch(path, data))
       }
       return resp.data
     }
