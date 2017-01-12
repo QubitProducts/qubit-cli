@@ -33,7 +33,7 @@ module.exports = async function pull (id) {
 }
 
 function isName (str) {
-  return /^\w+$/.test(String(str))
+  return /^[\w-]+$/.test(String(str))
 }
 
 function isUrl (str) {
