@@ -23,9 +23,16 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.command === 'connect') {
-    connect(request.url)
-      .then((response) => response.json().then(sendResponse))
-      .catch(() => sendResponse(false))
+    return fetch(CONNECT_ENDPOINT, {
+      mode: 'cors',
+      method: 'post',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        url: request.url
+      })
+    })
+    .then((response) => response.json().then(sendResponse))
+    .catch(() => sendResponse(false))
   } else if (request.command === 'getState') {
     getState(sender.tab.id, sendResponse)
   }
@@ -62,27 +69,6 @@ function setState (id, state, callback) {
     if (!state.enabled) delete obj[NAMESPACE][id]
     chrome.storage.local.set(obj, () => {
       if (callback) callback(state)
-    })
-  })
-}
-
-function connect (url) {
-  return new Promise(function (resolve, reject) {
-    chrome.cookies.get({
-      url: url,
-      name: 'apsess'
-    }, function sendCookie (cookie, request, sendResponse) {
-      if (!cookie) return reject()
-      return fetch(CONNECT_ENDPOINT, {
-        mode: 'cors',
-        method: 'post',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(Object.assign({}, request, {
-          url: url,
-          value: cookie && cookie.value
-        }))
-      })
-      .then(resolve, reject)
     })
   })
 }

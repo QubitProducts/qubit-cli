@@ -169,6 +169,7 @@ xp --help
 
   Commands:
 
+    login                login to the platform
     create <propertyId>  create an experience
     push                 push experience up to remote
     pull                 pull experience from template, remote or experience editor
@@ -187,18 +188,20 @@ xp --help
   Examples:
 
     $ xp --help
+
+    $ xp login
+
     $ xp pull
     $ xp pull 2499 1234
     $ xp pull https://app.qubit.com/p/2499/experiences/84069/editor
     $ xp pull example
 
     $ xp create
-    $ xp pull example
 
     $ xp variation.js --watch
     $ xp variation.js --sync
+
     $ xp push
-    $ xp pull
 ```
 
 notes:

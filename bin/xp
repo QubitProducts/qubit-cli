@@ -15,7 +15,7 @@ const login = require('../src/cmd/login')
 
 program
   .command('login')
-  .description('login to Qubit Experiences')
+  .description('login to the platform')
   .action(login)
 
 program
@@ -63,14 +63,19 @@ program.on('--help', function () {
   Examples:
 
     $ xp --help
+
     $ xp login
+
     $ xp pull
     $ xp pull 2499 1234
     $ xp pull https://app.qubit.com/p/2499/experiences/84069/editor
     $ xp pull example
+
     $ xp create
+
     $ xp variation.js --watch
     $ xp variation.js --sync
+
     $ xp push
   `)
 })
