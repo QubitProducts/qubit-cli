@@ -12,6 +12,7 @@ const push = require('../src/cmd/push')
 const create = require('../src/cmd/create')
 const previewLink = require('../src/cmd/preview-link')
 const login = require('../src/cmd/login')
+const open = require('../src/cmd/open')
 
 program
   .command('login')
@@ -40,6 +41,11 @@ program
 
 program
   .command('open')
+  .description('opens the overview page for an experience')
+  .action(open)
+
+program
+  .command('extension')
   .description('open xp folder in finder, e.g. to locate chrome-extension')
   .action(() => exec(`open ${path.dirname(__dirname)}`))
 
@@ -66,6 +72,8 @@ program.on('--help', function () {
 
     $ xp login
 
+    $ xp extension
+
     $ xp pull
     $ xp pull 2499 1234
     $ xp pull https://app.qubit.com/p/2499/experiences/84069/editor
@@ -77,6 +85,8 @@ program.on('--help', function () {
     $ xp variation.js --sync
 
     $ xp push
+
+    $ xp open
   `)
 })
 
