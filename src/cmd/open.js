@@ -1,8 +1,10 @@
 let getPkg = require('../lib/get-pkg')
-let spawn = require('child_process').spawn
+let opn = require('opn')
 
 module.exports = async function open () {
   const pkg = await getPkg()
   const { propertyId, experienceId } = pkg.meta
-  spawn('open', [`https://app.qubit.com/p/${propertyId}/experiences/${experienceId}`])
+  const dashboardURL = `https://app.qubit.com/p/${propertyId}/experiences/${experienceId}`
+  console.log(`Opening experience overview page: ${dashboardURL}`)
+  opn(dashboardURL, { wait: false })
 }
