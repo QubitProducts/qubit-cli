@@ -5,28 +5,21 @@ process.env.NODE_CONFIG_DIR = path.resolve(__dirname, '../config')
 const program = require('commander')
 const pkg = require('../package.json')
 const exec = require('child_process').exec
-const log = require('../src/lib/log')
-const pull = require('../src/cmd/pull')
-const serve = require('../src/cmd/serve')
-const push = require('../src/cmd/push')
-const create = require('../src/cmd/create')
-const previewLink = require('../src/cmd/preview-link')
-const login = require('../src/cmd/login')
 
 program
   .command('login')
   .description('login to the platform')
-  .action(login)
+  .action(createCmd('login'))
 
 program
   .command('create <propertyId>')
   .description('create an experience')
-  .action(create)
+  .action(createCmd('create'))
 
 program
   .command('push')
   .description('push experience up to remote')
-  .action(push)
+  .action(createCmd('push'))
 
 program
   .command('pull')
@@ -36,7 +29,7 @@ program
          xp pull propertyId experienceId // pull from experience
   `)
   .description('pull experience from template, remote or experience editor')
-  .action(pull)
+  .action(createCmd('pull'))
 
 program
   .command('open')
@@ -46,7 +39,7 @@ program
 program
   .command('preview-link')
   .description('log sharable preview links for your variations')
-  .action(() => previewLink().then((links) => links.map((link) => log(link))), log.error)
+  .action(createCmd('preview-link'))
 
 program
   .usage(`[variation.js] [options]
@@ -56,7 +49,7 @@ program
   .option('-w, --watch', 'watch for changes and live reload')
   .option('-s, --sync', 'watch for changes and sync with remote')
   .option('-v, --verbose', 'log verbose output', false)
-  .action(serve)
+  .action(createCmd('serve'))
 
 program.on('--help', function () {
   console.log(`
@@ -81,3 +74,9 @@ program.on('--help', function () {
 })
 
 program.parse(process.argv)
+
+function createCmd (name) {
+  return function cmd () {
+    return require(`../src/cmd/${name}`).apply(null, arguments)
+  }
+}
