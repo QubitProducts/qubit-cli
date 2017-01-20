@@ -16,7 +16,7 @@ module.exports = async function fromTemplate (template) {
       if (err) return log.error(new Error(`could not find ${template} installed on your system`))
       const templateDir = path.dirname(require.resolve(template))
       const templateFiles = await readFiles(path.join(templateDir))
-      const pkg = await getPkg().catch(() => false) || { meta: {} }
+      const pkg = await getPkg().catch(dummyPkg)
       const files = {}
       // merge package.json instead of overwriting
       if (templateFiles['package.json']) files['package.json'] = JSON.stringify(Object.assign({}, pkg, JSON.parse(templateFiles['package.json'])), null, 2)
@@ -43,4 +43,25 @@ module.exports = async function fromTemplate (template) {
       log.error(err)
     }
   })
+}
+
+function dummyPkg () {
+  return {
+    'name': 'xp-experience-1',
+    'description': 'An experience powered by qubit xp',
+    'meta': {
+      'name': 'New styles',
+      'propertyId': 1,
+      'experienceId': 2,
+      'iterationId': 3,
+      'previewUrl': 'http://example.com',
+      'variations': {
+        'variation': {
+          'variationIsControl': false,
+          'variationMasterId': 4,
+          'variationId': 3
+        }
+      }
+    }
+  }
 }
