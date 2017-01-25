@@ -1,5 +1,6 @@
 const _ = require('lodash')
 const fetch = require('../lib/fetch')
+const withMetrics = require('../lib/with-metrics')
 const GLOBAL = ''
 const EXPERIENCE = require('./experience.json')
 const TRIGGERS = 'function triggers (options, cb) {\n  cb()\n}'
@@ -10,11 +11,11 @@ function get (propertyId, experienceId) {
 }
 
 function set (propertyId, experienceId, val) {
-  return fetch.put(getPath(propertyId, experienceId), { experiment: val })
+  return fetch.put(getPath(propertyId, experienceId), { experiment: withMetrics(val) })
 }
 
 function create (propertyId) {
-  return fetch.post(getPath(propertyId), { experiment: Object.assign({}, EXPERIENCE, { propertyId }) })
+  return fetch.post(getPath(propertyId), { experiment: Object.assign({}, withMetrics(EXPERIENCE, {created: true}), { propertyId }) })
 }
 
 function getCode (experience) {
@@ -49,7 +50,7 @@ function setCode (experience, files) {
 
 function getPath (propertyId, experienceId) {
   let url = `/p/${propertyId}/smart_serve/experiments`
-  if (experienceId) url += `/${experienceId}?embed=recent_iterations,schedule,goals`
+  if (experienceId) url += `/${experienceId}?embed=recent_iterations`
   return url
 }
 
