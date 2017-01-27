@@ -6,6 +6,7 @@ const exec = require('child_process').exec
 const getPkg = require('../lib/get-pkg')
 const log = require('../lib/log')
 let CWD = process.cwd()
+_.templateSettings.interpolate = /<%=([\s\S]+?)%>/g
 
 module.exports = async function fromTemplate (template) {
   if (template === 'example') template = path.resolve(__dirname, '../../example-template')
