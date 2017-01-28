@@ -23,35 +23,36 @@ module.exports = async function fromTemplate (name) {
   return exec(`npm link ${name}`, {
     cwd: path.resolve(__dirname, '../../')
   }, async (err) => {
+    let template
     try {
       if (err) return log.error(new Error(`could not find ${name} installed on your system`))
-      const template = await getTemplateFiles(name)
+      template = await getTemplateFiles(name)
       const pkg = await getPkg().catch(() => ({}))
-      const files = {}
+      const output = {}
 
-      // merge package.json instead of overwriting
-      if (template['package.json']) files['package.json'] = mergePkg(pkg, template['package.json'])
-      if (template['global.js']) files['global.js'] = _.template(template['global.js'])(pkg.meta || defaultMeta)
-      if (template['triggers.js']) files['triggers.js'] = _.template(template['triggers.js'])(pkg.meta || defaultMeta)
+      if (templateHas('package.json')) output['package.json'] = mergePkg(pkg, template['package.json'])
+      if (templateHas('global.js')) output['global.js'] = _.template(template['global.js'])(pkg.meta || defaultMeta)
+      if (templateHas('triggers.js')) output['triggers.js'] = _.template(template['triggers.js'])(pkg.meta || defaultMeta)
 
-      // if experience has known variants, seed them from template
       if (hasVariations(pkg)) {
         _.each(pkg.meta.variations, (variation, filename) => {
           if (variation.variationIsControl) return
-
           const meta = pkg.meta ? Object.assign({}, pkg.meta, variation) : defaultMeta
-          // allow templates to contain dynamic content based on package metadata
-          if (template['variation.js']) files[`${filename}.js`] = _.template(template['variation.js'])(meta)
-          if (template['variation.css']) files[`${filename}.css`] = _.template(template['variation.css'])(meta)
+          if (templateHas('variation.js')) output[`${filename}.js`] = _.template(template['variation.js'])(meta)
+          if (templateHas('variation.css')) output[`${filename}.css`] = _.template(template['variation.css'])(meta)
         })
       } else {
         const meta = pkg.meta ? Object.assign({}, pkg.meta) : defaultMeta
-        if (template['variation.js']) files['variation.js'] = _.template(template['variation.js'])(meta)
-        if (template['variation.css']) files['variation.css'] = _.template(template['variation.css'])(meta)
+        if (templateHas('variation.js')) output['variation.js'] = _.template(template['variation.js'])(meta)
+        if (templateHas('variation.css')) output['variation.css'] = _.template(template['variation.css'])(meta)
       }
-      return await scaffold(CWD, files, false)
+      return await scaffold(CWD, output, false)
     } catch (err) {
       log.error(err.stack)
+    }
+
+    function templateHas (name) {
+      return template[name]
     }
   })
 }
