@@ -12,6 +12,7 @@ const create = require('../src/cmd/create')
 const previewLink = require('../src/cmd/preview-link')
 const login = require('../src/cmd/login')
 const open = require('../src/cmd/open')
+const templatize = require('../src/cmd/templatize')
 const opn = require('opn')
 
 program
@@ -38,6 +39,11 @@ program
   `)
   .description('pull experience from template, remote or experience editor')
   .action(pull)
+
+program
+  .command('templatize')
+  .description('create a template from an experience')
+  .action(templatize)
 
 program
   .command('open')

@@ -2,7 +2,7 @@ const _ = require('lodash')
 const path = require('path')
 const scaffold = require('../lib/scaffold')
 const readFiles = require('../lib/read-files')
-const exec = require('child_process').exec
+const execa = require('execa')
 const getPkg = require('../lib/get-pkg')
 const log = require('../lib/log')
 let CWD = process.cwd()
@@ -25,36 +25,30 @@ _.templateSettings.interpolate = /<%=([\s\S]+?)%>/g
 
 module.exports = async function fromTemplate (name) {
   if (name === 'example') name = path.resolve(__dirname, '../../example-template')
-  return exec(`npm link ${name}`, {
-    cwd: path.resolve(__dirname, '../../')
-  }, async (err) => {
-    let output
-    try {
-      if (err) return log.error(new Error(`could not find ${name} installed on your system`))
-      const pkg = await getPkg().catch(() => ({}))
+  let output
 
-      output = await getTemplateFiles(name)
+  const pkg = await getPkg().catch(() => ({}))
 
-      if (hasVariations(pkg)) {
-        _.each(pkg.meta.variations, (variation, filename) => {
-          if (!variation.variationIsControl) {
-            output[`${filename}.js`] = output['variation.js']
-            output[`${filename}.css`] = output['variation.css']
-          }
-        })
-        delete output['variation.js']
-        delete output['variation.css']
+  await execa('npm', ['link', name], { cwd: path.resolve(__dirname, '../../') })
+
+  output = await getTemplateFiles(name)
+
+  if (hasVariations(pkg)) {
+    _.each(pkg.meta.variations, (variation, filename) => {
+      if (!variation.variationIsControl) {
+        output[`${filename}.js`] = output['variation.js']
+        output[`${filename}.css`] = output['variation.css']
       }
+    })
+    delete output['variation.js']
+    delete output['variation.css']
+  }
 
-      output = resolveTemplateVariables(output, pkg.meta || defaultMeta)
+  output = resolveTemplateVariables(output, pkg.meta || defaultMeta)
 
-      if (output['package.json']) output['package.json'] = mergePkg(pkg, output['package.json'])
+  if (output['package.json']) output['package.json'] = mergePkg(pkg, output['package.json'])
 
-      return await scaffold(CWD, output, false)
-    } catch (err) {
-      log.error(err.stack)
-    }
-  })
+  return await scaffold(CWD, output, false)
 }
 
 function resolveTemplateVariables (files, meta) {
