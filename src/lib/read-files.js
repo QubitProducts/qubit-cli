@@ -1,9 +1,12 @@
 const path = require('path')
 const fs = require('fs-promise')
 const _ = require('lodash')
+const defaultIgnore = /^(\.git|node_modules)/
 
-function readFiles (dest) {
-  return fs.readdir(dest).then(reduce)
+function readFiles (dest, ignore) {
+  ignore = ignore || defaultIgnore
+
+  return fs.readdir(dest).then(filter).then(reduce)
 
   function reduce (files) {
     return Promise.all(files.map(readFile))
@@ -14,9 +17,14 @@ function readFiles (dest) {
   function readFile (file) {
     const target = path.join(dest, file)
     return fs.readFile(target).then(String, (err) => {
-      if (err.code === 'EISDIR') return readFiles(target)
+      if (err.code === 'EISDIR') return readFiles(target, ignore)
       return err
     })
+  }
+
+  function filter (files) {
+    if (!ignore) return files
+    return files.filter((file) => !ignore.test(file))
   }
 }
 

@@ -5,6 +5,7 @@ const down = require('./down')
 const getPkg = require('../lib/get-pkg')
 const parseUrl = require('../lib/parse-url')
 const log = require('../lib/log')
+const {isName, isUrl, isId} = require('../lib/is-type')
 
 module.exports = async function pull (id) {
   try {
@@ -30,16 +31,4 @@ module.exports = async function pull (id) {
   } catch (err) {
     log.error(err)
   }
-}
-
-function isName (str) {
-  return /^[\w-]+$/.test(String(str))
-}
-
-function isUrl (str) {
-  return /^http/.test(String(str))
-}
-
-function isId (str) {
-  return /^\d+/.test(String(str))
 }
