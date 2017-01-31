@@ -11,6 +11,10 @@ module.exports = async function serve (options) {
   let app = await createApp()
 
   options.verbose = options.verbose || false
+  if (/(triggers|global|.css$)/.test(options.variation)) {
+    log('hint: you should be watching the entry point for your experience, i.e. your variation file!')
+  }
+
   const verboseOpts = {
     log: options.verbose ? log : false,
     noInfo: !options.verbose,
