@@ -64,7 +64,7 @@ program
   .usage(`[variation.js] [options]
          xp <cmd> [options]`)
   .version(pkg.version)
-  .arguments('<variation>')
+  .arguments('[variation]')
   .option('-w, --watch', 'watch for changes and live reload')
   .option('-s, --sync', 'watch for changes and sync with remote')
   .option('-v, --verbose', 'log verbose output', false)
@@ -97,3 +97,6 @@ program.on('--help', function () {
 })
 
 program.parse(process.argv)
+
+if (!program.args.length) serve(null, program)
+

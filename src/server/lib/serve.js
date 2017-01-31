@@ -4,16 +4,26 @@ const webpackHotMiddleware = require('webpack-hot-middleware')
 const webpack = require('webpack')
 const webpackConf = require('../../../webpack.conf')
 const push = require('../../cmd/push')
+const pickVariation = require('../../lib/pick-variation')
 const log = require('../../lib/log')
 const createApp = require('../app')
+let CWD = process.cwd()
 
 module.exports = async function serve (options) {
-  let app = await createApp()
-
+  const app = await createApp()
   options.verbose = options.verbose || false
+
   if (/(triggers|global|.css$)/.test(options.variation)) {
     log('hint: you should be watching the entry point for your experience, i.e. your variation file!')
   }
+
+  if (!options.variation) {
+    options.variation = await pickVariation(CWD)
+    log(`using ${options.variation}`)
+  }
+
+  // make .js optional
+  options.variation = options.variation.replace(/\.js$/, '')
 
   const verboseOpts = {
     log: options.verbose ? log : false,
@@ -46,8 +56,8 @@ module.exports = async function serve (options) {
 function createWebpackConfig (options) {
   const plugins = webpackConf.plugins.slice(0)
   plugins.push(new webpack.DefinePlugin({
-    __VARIATIONJS__: `'xp-loader!${options.variation.replace(/\.js$/, '')}'`,
-    __VARIATIONCSS__: `'${options.variation.replace(/\.js$/, '.css')}'`
+    __VARIATIONJS__: `'xp-loader!${options.variation}.js'`,
+    __VARIATIONCSS__: `'${options.variation}.css'`
   }))
   const entry = webpackConf.entry.slice(0)
   if (!options.sync && !options.watch) entry.pop()
