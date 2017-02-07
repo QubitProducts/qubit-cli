@@ -1,6 +1,6 @@
 const log = require('../lib/log')
 const getPkg = require('../lib/get-pkg')
-const opn = require('opn')
+let opn = require('opn')
 
 module.exports = async function open () {
   const pkg = (await getPkg().catch()) || {}

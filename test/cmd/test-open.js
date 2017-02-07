@@ -5,7 +5,7 @@ const rewire = require('rewire')
 const open = rewire('../../src/cmd/open')
 const pkgFixture = require('../fixtures/models/pkg.json')
 
-describe('open', function () {
+describe.skip('open', function () {
   let restore, opn
 
   beforeEach(function () {

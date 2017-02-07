@@ -4,7 +4,6 @@ const scaffold = require('../lib/scaffold')
 const readFiles = require('../lib/read-files')
 const execa = require('execa')
 const getPkg = require('../lib/get-pkg')
-const log = require('../lib/log')
 let CWD = process.cwd()
 const defaultMeta = {
   name: 'XP experience',
