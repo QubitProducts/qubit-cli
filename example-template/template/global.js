@@ -1,1 +1,1 @@
-console.log('running global.js')
+console.log('executing global')
