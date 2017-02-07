@@ -24,7 +24,7 @@ describe('experienceService', function () {
       experienceService.get(propertyId, experienceId)
       expect(fetch.get.calledOnce).to.eql(true)
       expect(fetch.get.getCall(0).args).to.eql([
-        '/p/123/smart_serve/experiments/456?embed=recent_iterations,schedule,goals'
+        '/p/123/smart_serve/experiments/456?embed=recent_iterations'
       ])
     })
   })
@@ -32,11 +32,13 @@ describe('experienceService', function () {
   describe('set', function () {
     it('should correctly call fetch', function () {
       experienceService.set(propertyId, experienceId, experience)
+      let args = fetch.put.getCall(0).args
       expect(fetch.put.calledOnce).to.eql(true)
-      expect(fetch.put.getCall(0).args).to.eql([
-        '/p/123/smart_serve/experiments/456?embed=recent_iterations,schedule,goals',
-        {experiment: experience}
-      ])
+      expect(args[0]).to.eql('/p/123/smart_serve/experiments/456?embed=recent_iterations')
+      let meta = args[1].experiment.meta
+      delete args[1].experiment.meta
+      expect(args[1]).to.eql({experiment: experience})
+      expect(meta.includes('{"xp":{"pushes":1,"lastPush"')).to.eql(true)
     })
   })
 
