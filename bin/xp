@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 require('async-to-gen/register')
+const chalk = require('chalk')
 const path = require('path')
 process.env.NODE_CONFIG_DIR = path.resolve(__dirname, '../config')
 const program = require('commander')
@@ -61,42 +62,58 @@ program
   .action(() => previewLink().then((links) => links.map((link) => log(link))), log.error)
 
 program
-  .usage(`[variation.js] [options]
-         xp <cmd> [options]`)
+  .usage(`[options] <cmd>`)
   .version(pkg.version)
   .arguments('[variation]')
   .option('-w, --watch', 'watch for changes and live reload')
-  .option('-s, --sync', 'watch for changes and sync with remote')
+  .option('-s, --sync', 'watch for changes, live reload and also sync with remote on every change')
   .option('-v, --verbose', 'log verbose output', false)
   .action(serve)
 
 program.on('--help', function () {
-  console.log(`
-  Examples:
+  console.log(`  To install the extension:
+  $ ${chalk.green.bold('xp extension')}
+  then drag the chrome-extension folder into chrome
 
-    $ xp --help
+  To quickly hack on something with no side effects:
+  $ ${chalk.green.bold('xp pull example')}
+  $ ${chalk.green.bold('xp --watch')}
+  Now open chrome and turn on xp by clicking on the extension icon
+  you should see the background of the page turn ${chalk.yellow.bold('yellow')}!
 
-    $ xp login
+  To pull down an existing experience:
+  - If you know the propertyId and experienceId: ${chalk.green.bold('xp pull propertyId experienceId')}
+  - If you know the url: ${chalk.green.bold('xp pull https://app.qubit.com/p/{propertyId}/experiences/{experienceId}')}
+  - Otherwise, type ${chalk.green.bold('xp pull')} and navigate to your experience and xp will guide you from there
 
-    $ xp extension
+  To create a new experience in the platform:
+  $ ${chalk.green.bold('xp create propertyId')}
+  note: propertyId is the number after /p/ in our urls
 
-    $ xp pull
-    $ xp pull 2499 1234
-    $ xp pull https://app.qubit.com/p/2499/experiences/84069/editor
-    $ xp pull example
+  To save your changes to the platform:
+  $ ${chalk.green.bold('xp push')}
 
-    $ xp create
+  To generate a template from a local experience:
+  $ ${chalk.green.bold('xp templatize')}
 
-    $ xp variation.js --watch
-    $ xp variation.js --sync
+  To pull an existing template into a local experience:
+  $ ${chalk.green.bold('xp pull name-of-template')}
 
-    $ xp push
+  To enable hot reloading:
+  Implement a remove function in your variation file like so:
 
-    $ xp open
+  function execution (options) {
+    console.log('executing variation')
+    return {
+      remove: function remove () {
+        // undo any changes e.g. $modal.remove()
+      }
+    }
+  }
+
   `)
 })
 
 program.parse(process.argv)
 
 if (!program.args.length) serve(null, program)
-

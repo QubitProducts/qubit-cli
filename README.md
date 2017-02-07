@@ -30,178 +30,86 @@ templates
 
 ## installation
 
-client
 ```
-npm install -g qubitdigital/xp-cli --production
-```
-
-extension
-```
-xp open
-# navigate to chrome://extensions in chrome
-# drag and drop chrome-extension folder into browser
-# ensure 'enabled' checkbox is ticked
-# click 'allow in incognito' if you would like to use xp in incognito mode
+npm install -gp qubitdigital/xp-cli
 ```
 
-## basic usage
+## setup
 
-once you have installed the client and extension
 ```
-mkdir xp-demo
-cd xp-demo
+xp extension
+```
+then drag the chrome-extension folder into chrome
+
+## to quickly hack on something with no side effects:
+
+```
 xp pull example
-xp variation.js --watch
-// navigate to a url in chrome
-// click the xp icon in chrome to turn the extension on for your current tab
+xp --watch
 ```
+Now open chrome and turn on xp by clicking on the extension icon. You should see the background of the page turn yellow!
 
-## xp pull
+## to pull down an existing experience:
 
-xp pull allows you to scaffold an experience from a template or a remote experience:
-
-by navigating to the experience:
+- If you know the propertyId and experienceId:
 ```
-$ xp pull
-$ navigate to an `edit experience` page for xp to connect to it
-$ open https://app.qubit.com/p/1234/experiences/5678/editor
-  You recently navigated to https://app.qubit.com/p/1234/experiences/5678/editor
-  Would you like xp to scaffold your local project from this experiment? (y/n)
-  writing to local package.json file...
-  writing to local global.js file...
-  writing to local triggers.js file...
-  writing to local variation-49937.js file...
-  writing to local variation-49937.css file...
-  writing to local variation-336711.js file...
-  writing to local variation-336711.css file...
-  All done!
+xp pull <propertyId> <experienceId>
 ```
-
-// by pasting the editor url:
+- If you know the url:
 ```
-$ xp pull https://app.qubit.com/p/1234/experiences/5678/editor
-  pulling...
-  pulled!
+xp pull https://app.qubit.com/p/{propertyId}/experiences/{experienceId}
 ```
+- Otherwise, type ``` xp pull ``` and navigate to your experience, xp will guide you from there
 
-// by explicitly passing in propertyId and experienceId
-```
-$ xp pull 1234 5678
-  pulling...
-  pulled!
-```
-
-// from a template:
-```
-$ xp pull example
-  writing to local package.json file...
-  writing to local global.js file...
-  writing to local triggers.js file...
-  writing to local variation.js file...
-  writing to local variation.css file...
-```
-
-once you have scaffolded your files from an existing experience, you can always pull down the latest remote changes with ```xp pull```
-```
-$ xp pull // pull down latest version of experience
-  pulled!
-```
-
-start building and previewing your experience:
-```
-$ xp variation-336711.js --watch
-  xp listening on port 41337
-
-$ xp variation-336711.js --sync
-  watching for changes
-  xp listening on port 41337
-  synced!
-```
-
-## xp push
-
-once your local experience is connected/configured with the correct metadata you can run ``` xp push ``` to push your changes up to the platform
-
-
-## templates
-
-xp allows you to create, publish and share experience templates
-
-any commonjs module containing a folder called template can be used by xp to scaffold a new project
-
-creating a template:
-```
-mkdir my-experience-template
-cd my-experience-template
-mkdir template
-touch template/variation.js
-npm init
-npm link // make your module available globally on your system
-```
-
-using a template:
-```
-xp pull my-experience-template
-```
-
-tip:
-in order for your folder to be a valid javascript package, you need to have a 'main' entry in your package.json that points to a a javascript file, e.g. ``` template/variation.js ``` otherwise npm will not recognise your folder as a module and you will not be able to install it
-
-## file reference
+## to create a new experience in the platform:
 
 ```
-files:
-- package.json // metadata
-- global.js // global code
-- triggers.js // activation logic
-- varition-xxx.js // execution code
-- variation-xxx.css // css
+xp create <propertyId>
 ```
+note: propertyId is the number after /p/ in our urls
 
-## help menu
+## to save your changes to the platform:
 
 ```
-xp --help
+xp push
+```
 
-  Usage: xp [variation.js] [options]
-         xp <cmd> [options]
+## to generate a template from your experience:
 
+```
+xp templatize
+```
 
-  Commands:
+## to pull a template into a local experience:
 
-    login                login to the platform
-    create <propertyId>  create an experience
-    push                 push experience up to remote
-    pull                 pull experience from template, remote or experience editor
-    open                 open xp folder in finder, e.g. to locate chrome-extension
-    preview-link         log sharable preview links for your variations
+```
+xp pull name-of-template
+```
 
-  Options:
+## to make an xp template available worldwide:
 
-    -h, --help     output usage information
-    -V, --version  output the version number
-    -w, --watch    watch for changes and live reload
-    -s, --sync     watch for changes and sync with remote
-    -v, --verbose  log verbose output
+```
+git push or npm publish
+```
 
+## to install a template for use locally:
 
-  Examples:
+```
+npm install -g template-repo-or-package
+```
 
-    $ xp --help
+## :fire: hot reloading!
+to use the super cool hot reloading feature, all you need to do is implement a remove function in your variation file like so:
 
-    $ xp login
-
-    $ xp pull
-    $ xp pull 2499 1234
-    $ xp pull https://app.qubit.com/p/2499/experiences/84069/editor
-    $ xp pull example
-
-    $ xp create
-
-    $ xp variation.js --watch
-    $ xp variation.js --sync
-
-    $ xp push
+```js
+function execution (options) {
+  console.log('executing variation')
+  return {
+    remove: function remove () {
+      // undo any changes e.g. $modal.remove()
+    }
+  }
+}
 ```
 
 notes:
