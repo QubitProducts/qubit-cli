@@ -19,17 +19,25 @@
             </li>
             <li class="menu-item -level-1"><a class="link title link-installation" href="#installation">installation</a>
             </li>
-            <li class="menu-item -level-1"><a class="link title link-basic-usage" href="#basic-usage">basic usage</a>
+            <li class="menu-item -level-1"><a class="link title link-setup" href="#setup">setup</a>
             </li>
-            <li class="menu-item -level-1"><a class="link title link-xp-pull" href="#xp-pull">xp pull</a>
+            <li class="menu-item -level-1"><a class="link title link-to-quickly-hack-on-something-with-no-side-effects:" href="#to-quickly-hack-on-something-with-no-side-effects:">to quickly hack on something with no side effects:</a>
             </li>
-            <li class="menu-item -level-1"><a class="link title link-xp-push" href="#xp-push">xp push</a>
+            <li class="menu-item -level-1"><a class="link title link-to-pull-down-an-existing-experience:" href="#to-pull-down-an-existing-experience:">to pull down an existing experience:</a>
             </li>
-            <li class="menu-item -level-1"><a class="link title link-templates" href="#templates">templates</a>
+            <li class="menu-item -level-1"><a class="link title link-to-create-a-new-experience-in-the-platform:" href="#to-create-a-new-experience-in-the-platform:">to create a new experience in the platform:</a>
             </li>
-            <li class="menu-item -level-1"><a class="link title link-file-reference" href="#file-reference">file reference</a>
+            <li class="menu-item -level-1"><a class="link title link-to-save-your-changes-to-the-platform:" href="#to-save-your-changes-to-the-platform:">to save your changes to the platform:</a>
             </li>
-            <li class="menu-item -level-1"><a class="link title link-help-menu" href="#help-menu">help menu</a>
+            <li class="menu-item -level-1"><a class="link title link-to-generate-a-template-from-your-experience:" href="#to-generate-a-template-from-your-experience:">to generate a template from your experience:</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-to-pull-a-template-into-a-local-experience:" href="#to-pull-a-template-into-a-local-experience:">to pull a template into a local experience:</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-to-make-an-xp-template-available-worldwide:" href="#to-make-an-xp-template-available-worldwide:">to make an xp template available worldwide:</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-to-install-a-template-for-use-locally:" href="#to-install-a-template-for-use-locally:">to install a template for use locally:</a>
+            </li>
+            <li class="menu-item -level-1"><a class="link title link-:fire:-hot-reloading!" href="#:fire:-hot-reloading!">:fire: hot reloading!</a>
             </li>
           </ul>
         </li>
@@ -71,138 +79,60 @@
 <li>improve code consistency and design by leveraging template reuse</li>
 </ul>
 <h2 id="installation">installation</h2>
-<p>client</p>
-<pre><code>npm install -g qubitdigital/xp-cli --production
+<pre><code>npm install -gp qubitdigital/xp-cli
 </code></pre>
-<p>extension</p>
-<pre><code>xp open
-# navigate to chrome://extensions in chrome
-# drag and drop chrome-extension folder into browser
-# ensure &apos;enabled&apos; checkbox is ticked
-# click &apos;allow in incognito&apos; if you would like to use xp in incognito mode
+<h2 id="setup">setup</h2>
+<pre><code>xp extension
 </code></pre>
-<h2 id="basic-usage">basic usage</h2>
-<p>once you have installed the client and extension</p>
-<pre><code>mkdir xp-demo
-cd xp-demo
-xp pull example
-xp variation.js --watch
-// navigate to a url in chrome
-// click the xp icon in chrome to turn the extension on for your current tab
+<p>then drag the chrome-extension folder into chrome</p>
+<h2 id="to-quickly-hack-on-something-with-no-side-effects:">to quickly hack on something with no side effects:</h2>
+<pre><code>xp pull example
+xp --watch
 </code></pre>
-<h2 id="xp-pull">xp pull</h2>
-<p>xp pull allows you to scaffold an experience from a template or a remote experience:</p>
-<p>by navigating to the experience:</p>
-<pre><code>$ xp pull
-$ navigate to an `edit experience` page for xp to connect to it
-$ open https://app.qubit.com/p/1234/experiences/5678/editor
-  You recently navigated to https://app.qubit.com/p/1234/experiences/5678/editor
-  Would you like xp to scaffold your local project from this experiment? (y/n)
-  writing to local package.json file...
-  writing to local global.js file...
-  writing to local triggers.js file...
-  writing to local variation-49937.js file...
-  writing to local variation-49937.css file...
-  writing to local variation-336711.js file...
-  writing to local variation-336711.css file...
-  All done!
+<p>Now open chrome and turn on xp by clicking on the extension icon. You should see the background of the page turn yellow!</p>
+<h2 id="to-pull-down-an-existing-experience:">to pull down an existing experience:</h2>
+<ul>
+<li>If you know the propertyId and experienceId:</li>
+</ul>
+<pre><code>xp pull &lt;propertyId&gt; &lt;experienceId&gt;
 </code></pre>
-<p>// by pasting the editor url:</p>
-<pre><code>$ xp pull https://app.qubit.com/p/1234/experiences/5678/editor
-  pulling...
-  pulled!
+<ul>
+<li>If you know the url:</li>
+</ul>
+<pre><code>xp pull https://app.qubit.com/p/{propertyId}/experiences/{experienceId}
 </code></pre>
-<p>// by explicitly passing in propertyId and experienceId</p>
-<pre><code>$ xp pull 1234 5678
-  pulling...
-  pulled!
+<ul>
+<li>Otherwise, type <code>xp pull</code> and navigate to your experience, xp will guide you from there</li>
+</ul>
+<h2 id="to-create-a-new-experience-in-the-platform:">to create a new experience in the platform:</h2>
+<pre><code>xp create &lt;propertyId&gt;
 </code></pre>
-<p>// from a template:</p>
-<pre><code>$ xp pull example
-  writing to local package.json file...
-  writing to local global.js file...
-  writing to local triggers.js file...
-  writing to local variation.js file...
-  writing to local variation.css file...
+<p>note: propertyId is the number after /p/ in our urls</p>
+<h2 id="to-save-your-changes-to-the-platform:">to save your changes to the platform:</h2>
+<pre><code>xp push
 </code></pre>
-<p>once you have scaffolded your files from an existing experience, you can always pull down the latest remote changes with <code>xp pull</code></p>
-<pre><code>$ xp pull // pull down latest version of experience
-  pulled!
+<h2 id="to-generate-a-template-from-your-experience:">to generate a template from your experience:</h2>
+<pre><code>xp templatize
 </code></pre>
-<p>start building and previewing your experience:</p>
-<pre><code>$ xp variation-336711.js --watch
-  xp listening on port 41337
-
-$ xp variation-336711.js --sync
-  watching for changes
-  xp listening on port 41337
-  synced!
+<h2 id="to-pull-a-template-into-a-local-experience:">to pull a template into a local experience:</h2>
+<pre><code>xp pull name-of-template
 </code></pre>
-<h2 id="xp-push">xp push</h2>
-<p>once your local experience is connected/configured with the correct metadata you can run <code>xp push</code> to push your changes up to the platform</p>
-<h2 id="templates">templates</h2>
-<p>xp allows you to create, publish and share experience templates</p>
-<p>any commonjs module containing a folder called template can be used by xp to scaffold a new project</p>
-<p>creating a template:</p>
-<pre><code>mkdir my-experience-template
-cd my-experience-template
-mkdir template
-touch template/variation.js
-npm init
-npm link // make your module available globally on your system
+<h2 id="to-make-an-xp-template-available-worldwide:">to make an xp template available worldwide:</h2>
+<pre><code>git push or npm publish
 </code></pre>
-<p>using a template:</p>
-<pre><code>xp pull my-experience-template
+<h2 id="to-install-a-template-for-use-locally:">to install a template for use locally:</h2>
+<pre><code>npm install -g template-repo-or-package
 </code></pre>
-<p>tip:
-in order for your folder to be a valid javascript package, you need to have a &apos;main&apos; entry in your package.json that points to a a javascript file, e.g. <code>template/variation.js</code> otherwise npm will not recognise your folder as a module and you will not be able to install it</p>
-<h2 id="file-reference">file reference</h2>
-<pre><code>files:
-- package.json // metadata
-- global.js // global code
-- triggers.js // activation logic
-- varition-xxx.js // execution code
-- variation-xxx.css // css
-</code></pre>
-<h2 id="help-menu">help menu</h2>
-<pre><code>xp --help
-
-  Usage: xp [variation.js] [options]
-         xp &lt;cmd&gt; [options]
-
-
-  Commands:
-
-    create &lt;propertyId&gt;  create an experience
-    push                 push experience up to remote
-    pull                 pull experience from template, remote or experience editor
-    open                 open xp folder in finder, e.g. to locate chrome-extension
-    preview-link         log sharable preview links for your variations
-
-  Options:
-
-    -h, --help     output usage information
-    -V, --version  output the version number
-    -w, --watch    watch for changes and live reload
-    -s, --sync     watch for changes and sync with remote
-    -v, --verbose  log verbose output
-
-
-  Examples:
-
-    $ xp --help
-    $ xp pull
-    $ xp pull 2499 1234
-    $ xp pull https://app.qubit.com/p/2499/experiences/84069/editor
-    $ xp pull example
-
-    $ xp create
-    $ xp pull example
-
-    $ xp variation.js --watch
-    $ xp variation.js --sync
-    $ xp push
-    $ xp pull
+<h2 id=":fire:-hot-reloading!">:fire: hot reloading!</h2>
+<p>to use the super cool hot reloading feature, all you need to do is implement a remove function in your variation file like so:</p>
+<pre><code class="lang-js"><span class="hljs-function"><span class="pl-k">function</span> <span class="pl-ent">execution</span> (<span class="hljs-params">options</span>) </span>{
+  <span class="pl-c1">console</span>.log(<span class="pl-s">&apos;executing variation&apos;</span>)
+  <span class="pl-k">return</span> {
+    <span class="hljs-attr">remove</span>: <span class="hljs-function"><span class="pl-k">function</span> <span class="pl-ent">remove</span> (<span class="hljs-params"></span>) </span>{
+      <span class="pl-c">// undo any changes e.g. $modal.remove()</span>
+    }
+  }
+}
 </code></pre>
 <p>notes:</p>
 <ul>

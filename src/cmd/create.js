@@ -7,9 +7,9 @@ let CWD = process.cwd()
 module.exports = async function create (propertyId) {
   try {
     propertyId = Number(propertyId)
-    if (!propertyId) throw new Error('please specify a propertyId')
+    if (!propertyId) return log(`Please specify a propertyId!`)
     let experience = await experienceService.create(propertyId)
-    if (!experience.id) throw new Error('failed to create experience')
+    if (!experience.id) return log(`I'm afraid we could not create an experience at this time`)
     log(`created experience ${experience.id}`)
     const files = await codeService.get(propertyId, experience.id)
     await scaffold(CWD, files, false)
