@@ -11,9 +11,7 @@ const log = require('../lib/log')
 let CWD = process.cwd()
 
 module.exports = async function templatize () {
-  let pkg = await getPkg().catch()
-
-  if (!pkg) return log('nothing to templatize, try running xp pull first!')
+  let pkg = (await getPkg().catch()) || {}
 
   let tmpPkg = { version: '1.0.0', main: 'index.js' }
 
@@ -27,14 +25,15 @@ module.exports = async function templatize () {
 
   let files = await readFiles(CWD)
 
-  addTemplateVariables(files, pkg)
-
-  _.each(pkg.meta.variations, (variation, filename) => {
-    files['variation.js'] = files[`${filename}.js`]
-    files['variation.css'] = files[`${filename}.css`]
-    delete files[`${filename}.js`]
-    delete files[`${filename}.css`]
-  })
+  if (pkg.meta) {
+    addTemplateVariables(files, pkg)
+    _.each(pkg.meta.variations, (variation, filename) => {
+      files['variation.js'] = files[`${filename}.js`]
+      files['variation.css'] = files[`${filename}.css`]
+      delete files[`${filename}.js`]
+      delete files[`${filename}.css`]
+    })
+  }
 
   files['package.json'] = JSON.stringify({ 'xp-template': tmpPkg.name })
 
@@ -54,11 +53,11 @@ module.exports = async function templatize () {
 function addTemplateVariables (files, pkg) {
   _.each(files, (file, filename) => {
     _.each(['propertyId', 'experienceId', 'iterationId'], (key) => {
-      files[filename] = addTemplateVariable(pkg.meta, file, key)
+      if (pkg.meta[key]) files[filename] = addTemplateVariable(pkg.meta, file, key)
     })
     _.each(pkg.meta.variations, (variation) => {
       _.each(['variationId', 'variationMasterId'], (key) => {
-        files[filename] = addTemplateVariable(variation, file, key)
+        if (variation[key]) files[filename] = addTemplateVariable(variation, file, key)
       })
     })
   })
