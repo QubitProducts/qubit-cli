@@ -17,14 +17,14 @@ const templatize = require('../src/cmd/templatize')
 const opn = require('opn')
 
 program
-  .command('login')
-  .description('login to the platform')
-  .action(login)
-
-program
   .command('create <propertyId>')
   .description('create an experience')
   .action(create)
+
+program
+  .command('pull')
+  .description(`pull into local experience from platform or template`)
+  .action(pull)
 
 program
   .command('push')
@@ -32,34 +32,24 @@ program
   .action(push)
 
 program
-  .command('pull')
-  .usage(`
-         xp pull // pull from remote
-         xp pull example // pull from template
-         xp pull propertyId experienceId // pull from experience
-  `)
-  .description('pull experience from template, remote or experience editor')
-  .action(pull)
-
-program
   .command('templatize')
   .description('create a template from an experience')
   .action(templatize)
 
 program
+  .command('preview-link')
+  .description('log sharable cross-browser preview links for your variations')
+  .action(() => previewLink().then((links) => links.map((link) => log(link))), log.error)
+
+program
   .command('open')
-  .description('opens the overview page for an experience')
+  .description('open the overview page for your local experience')
   .action(open)
 
 program
   .command('extension')
-  .description('open xp folder in finder, e.g. to locate chrome-extension')
-  .action(() => opn(`${path.dirname(__dirname)}`))
-
-program
-  .command('preview-link')
-  .description('log sharable preview links for your variations')
-  .action(() => previewLink().then((links) => links.map((link) => log(link))), log.error)
+  .description('open folder containing chrome extension, drag into chrome to install')
+  .action(() => opn(`${path.dirname(__dirname)}`, { wait: false }))
 
 program
   .usage(`[options] <cmd>`)
@@ -70,8 +60,15 @@ program
   .option('-v, --verbose', 'log verbose output', false)
   .action(serve)
 
+program
+  .command('login')
+  .description('login to the qubit platform')
+  .action(login)
+
 program.on('--help', function () {
-  console.log(`  To install the extension:
+  console.log(`  Tutorial:
+
+  To install the extension:
   $ ${chalk.green.bold('xp extension')}
   then drag the chrome-extension folder into chrome
 
@@ -82,9 +79,9 @@ program.on('--help', function () {
   you should see the background of the page turn ${chalk.yellow.bold('yellow')}!
 
   To pull down an existing experience:
-  - If you know the propertyId and experienceId: ${chalk.green.bold('xp pull propertyId experienceId')}
-  - If you know the url: ${chalk.green.bold('xp pull https://app.qubit.com/p/{propertyId}/experiences/{experienceId}')}
-  - Otherwise, type ${chalk.green.bold('xp pull')} and navigate to your experience and xp will guide you from there
+  - ${chalk.green.bold('xp pull propertyId experienceId')} if you know the propertyId and experienceId
+  - ${chalk.green.bold('xp pull https://app.qubit.com/p/{propertyId}/experiences/{experienceId}')} if you know the url
+  - Otherwise, type ${chalk.green.bold('xp pull')} then navigate to your experience and xp will guide you from there
 
   To create a new experience in the platform:
   $ ${chalk.green.bold('xp create propertyId')}
