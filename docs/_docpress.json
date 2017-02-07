@@ -19,34 +19,54 @@
             "id": "installation"
           },
           {
-            "title": "basic usage",
+            "title": "setup",
             "depth": 2,
-            "id": "basic-usage"
+            "id": "setup"
           },
           {
-            "title": "xp pull",
+            "title": "to quickly hack on something with no side effects:",
             "depth": 2,
-            "id": "xp-pull"
+            "id": "to-quickly-hack-on-something-with-no-side-effects:"
           },
           {
-            "title": "xp push",
+            "title": "to pull down an existing experience:",
             "depth": 2,
-            "id": "xp-push"
+            "id": "to-pull-down-an-existing-experience:"
           },
           {
-            "title": "templates",
+            "title": "to create a new experience in the platform:",
             "depth": 2,
-            "id": "templates"
+            "id": "to-create-a-new-experience-in-the-platform:"
           },
           {
-            "title": "file reference",
+            "title": "to save your changes to the platform:",
             "depth": 2,
-            "id": "file-reference"
+            "id": "to-save-your-changes-to-the-platform:"
           },
           {
-            "title": "help menu",
+            "title": "to generate a template from your experience:",
             "depth": 2,
-            "id": "help-menu"
+            "id": "to-generate-a-template-from-your-experience:"
+          },
+          {
+            "title": "to pull a template into a local experience:",
+            "depth": 2,
+            "id": "to-pull-a-template-into-a-local-experience:"
+          },
+          {
+            "title": "to make an xp template available worldwide:",
+            "depth": 2,
+            "id": "to-make-an-xp-template-available-worldwide:"
+          },
+          {
+            "title": "to install a template for use locally:",
+            "depth": 2,
+            "id": "to-install-a-template-for-use-locally:"
+          },
+          {
+            "title": ":fire: hot reloading!",
+            "depth": 2,
+            "id": ":fire:-hot-reloading!"
           }
         ]
       }
@@ -70,34 +90,54 @@
           "id": "installation"
         },
         {
-          "title": "basic usage",
+          "title": "setup",
           "depth": 2,
-          "id": "basic-usage"
+          "id": "setup"
         },
         {
-          "title": "xp pull",
+          "title": "to quickly hack on something with no side effects:",
           "depth": 2,
-          "id": "xp-pull"
+          "id": "to-quickly-hack-on-something-with-no-side-effects:"
         },
         {
-          "title": "xp push",
+          "title": "to pull down an existing experience:",
           "depth": 2,
-          "id": "xp-push"
+          "id": "to-pull-down-an-existing-experience:"
         },
         {
-          "title": "templates",
+          "title": "to create a new experience in the platform:",
           "depth": 2,
-          "id": "templates"
+          "id": "to-create-a-new-experience-in-the-platform:"
         },
         {
-          "title": "file reference",
+          "title": "to save your changes to the platform:",
           "depth": 2,
-          "id": "file-reference"
+          "id": "to-save-your-changes-to-the-platform:"
         },
         {
-          "title": "help menu",
+          "title": "to generate a template from your experience:",
           "depth": 2,
-          "id": "help-menu"
+          "id": "to-generate-a-template-from-your-experience:"
+        },
+        {
+          "title": "to pull a template into a local experience:",
+          "depth": 2,
+          "id": "to-pull-a-template-into-a-local-experience:"
+        },
+        {
+          "title": "to make an xp template available worldwide:",
+          "depth": 2,
+          "id": "to-make-an-xp-template-available-worldwide:"
+        },
+        {
+          "title": "to install a template for use locally:",
+          "depth": 2,
+          "id": "to-install-a-template-for-use-locally:"
+        },
+        {
+          "title": ":fire: hot reloading!",
+          "depth": 2,
+          "id": ":fire:-hot-reloading!"
         }
       ]
     }
