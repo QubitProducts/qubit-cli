@@ -4,18 +4,19 @@ const scaffold = require('../lib/scaffold')
 const readFiles = require('../lib/read-files')
 const execa = require('execa')
 const getPkg = require('../lib/get-pkg')
+const ROOT_DIR = path.resolve(__dirname, '../../')
 let CWD = process.cwd()
 const defaultMeta = {
   name: 'XP experience',
-  propertyId: 1,
-  experienceId: 2,
-  iterationId: 3,
-  previewUrl: 'htt://example.com',
+  propertyId: null,
+  experienceId: null,
+  iterationId: null,
+  previewUrl: null,
   variations: {
     variation: {
       variationIsControl: false,
-      variationMasterId: 4,
-      variationId: 3
+      variationMasterId: null,
+      variationId: null
     }
   }
 }
@@ -23,12 +24,12 @@ const defaultMeta = {
 _.templateSettings.interpolate = /<%=([\s\S]+?)%>/g
 
 module.exports = async function fromTemplate (name) {
-  if (name === 'example') name = path.resolve(__dirname, '../../example-template')
+  if (name === 'example') name = path.resolve(__dirname, '../../example')
   let output
+  name = formatName(name)
 
-  const pkg = await getPkg().catch(() => ({}))
-
-  await execa('npm', ['link', name], { cwd: path.resolve(__dirname, '../../') })
+  const pkg = await getPkg()
+  await execa('npm', ['link', name], { cwd: ROOT_DIR })
 
   output = await getTemplateFiles(name)
 
@@ -73,4 +74,10 @@ async function getTemplateFiles (template) {
   let templateDir = path.dirname(require.resolve(template))
   if (!/\/template$/.test(templateDir)) templateDir = path.join(templateDir, 'template')
   return await readFiles(path.join(templateDir))
+}
+
+function formatName (name) {
+  let top = path.basename(name)
+  top = `xp-tmp-${top.replace(/(xp-tmp-)+/, '')}`
+  return path.join(path.dirname(name), top)
 }

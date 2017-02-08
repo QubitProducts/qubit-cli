@@ -80,7 +80,7 @@
   },
   "standard": {
     "ignore": [
-      "example-template/**",
+      "xp-tmp-example/**",
       "docs"
     ],
     "globals": [

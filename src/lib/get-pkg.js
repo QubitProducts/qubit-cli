@@ -3,5 +3,11 @@ const fs = require('fs-promise')
 let CWD = process.cwd()
 
 module.exports = async function getPkg () {
-  return JSON.parse(String(await fs.readFile(path.join(CWD, 'package.json'))))
+  try {
+    let file = await fs.readFile(path.join(CWD, 'package.json'))
+    return JSON.parse(String(file))
+  } catch (err) {
+    if (err.message.includes('ENOENT: no such file')) return {}
+    throw err
+  }
 }

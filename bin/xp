@@ -79,12 +79,12 @@ program.on('--help', function () {
   you should see the background of the page turn ${chalk.yellow.bold('yellow')}!
 
   To pull down an existing experience:
-  - ${chalk.green.bold('xp pull propertyId experienceId')} if you know the propertyId and experienceId
+  - ${chalk.green.bold('xp pull <propertyId> <experienceId>')} if you know the propertyId and experienceId
   - ${chalk.green.bold('xp pull https://app.qubit.com/p/{propertyId}/experiences/{experienceId}')} if you know the url
   - Otherwise, type ${chalk.green.bold('xp pull')} then navigate to your experience and xp will guide you from there
 
   To create a new experience in the platform:
-  $ ${chalk.green.bold('xp create propertyId')}
+  $ ${chalk.green.bold('xp create <propertyId>')}
   note: propertyId is the number after /p/ in our urls
 
   To save your changes to the platform:
@@ -94,7 +94,7 @@ program.on('--help', function () {
   $ ${chalk.green.bold('xp templatize')}
 
   To pull an existing template into a local experience:
-  $ ${chalk.green.bold('xp pull name-of-template')}
+  $ ${chalk.green.bold('xp pull <templateName>')}
 
   To enable hot reloading:
   Implement a remove function in your variation file like so:

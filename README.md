@@ -41,7 +41,7 @@ xp extension
 ```
 then drag the chrome-extension folder into chrome
 
-## to quickly hack on something with no side effects:
+## quick start:
 
 ```
 xp pull example
@@ -83,7 +83,7 @@ xp templatize
 ## to pull a template into a local experience:
 
 ```
-xp pull name-of-template
+xp pull <templateName>
 ```
 
 ## to make an xp template available worldwide:
@@ -95,7 +95,7 @@ git push or npm publish
 ## to install a template for use locally:
 
 ```
-npm install -g template-repo-or-package
+npm install -g xp-tmp-<templateName>
 ```
 
 ## :fire: hot reloading!
