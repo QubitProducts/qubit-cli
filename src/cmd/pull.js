@@ -21,9 +21,7 @@ module.exports = async function pull (id) {
       return template(id)
     } else if (!opts.length) {
       // try to get from package.json and fallback on connect route
-      try {
-        ({propertyId, experienceId} = (await getPkg()).meta)
-      } catch (err) {}
+      ({propertyId, experienceId} = ((await getPkg()).meta || {}))
     }
 
     if (propertyId && experienceId) return await down(propertyId, experienceId)

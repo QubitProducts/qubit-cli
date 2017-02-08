@@ -3,7 +3,7 @@ const getPkg = require('../lib/get-pkg')
 let opn = require('opn')
 
 module.exports = async function open () {
-  const pkg = (await getPkg().catch()) || {}
+  const pkg = await getPkg()
   pkg.meta = pkg.meta || {}
   const { propertyId, experienceId } = pkg.meta
   if (!propertyId || !experienceId) {

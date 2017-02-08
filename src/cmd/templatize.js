@@ -11,7 +11,7 @@ const log = require('../lib/log')
 let CWD = process.cwd()
 
 module.exports = async function templatize () {
-  let pkg = (await getPkg().catch()) || {}
+  let pkg = await getPkg()
 
   let tmpPkg = { version: '1.0.0', main: 'index.js' }
 
