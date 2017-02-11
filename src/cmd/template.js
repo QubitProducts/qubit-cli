@@ -29,7 +29,8 @@ module.exports = async function fromTemplate (name) {
   name = formatName(name)
 
   const pkg = await getPkg()
-  await execa('npm', ['link', name], { cwd: ROOT_DIR })
+
+  await execa('npm', ['link', moduleName(name)], { cwd: ROOT_DIR })
 
   output = await getTemplateFiles(name)
 
@@ -80,4 +81,8 @@ function formatName (name) {
   let top = path.basename(name)
   top = `xp-tmp-${top.replace(/(xp-tmp-)+/, '')}`
   return path.join(path.dirname(name), top)
+}
+
+function moduleName (str) {
+  return str.match(/^(?:@[^/]+\/)?[^/]+/)[0]
 }
