@@ -1,3 +1,4 @@
+const input = require('input')
 const experienceService = require('../services/experience')
 const codeService = require('../services/code')
 const scaffold = require('../lib/scaffold')
@@ -8,7 +9,8 @@ module.exports = async function create (propertyId) {
   try {
     propertyId = Number(propertyId)
     if (!propertyId) return log(`Please specify a propertyId!`)
-    let experience = await experienceService.create(propertyId)
+    let name = clean(await input.text('What would you like to call your experience?', { default: 'Created by xp' }))
+    let experience = await experienceService.create(propertyId, name)
     if (!experience.id) return log(`I'm afraid we could not create an experience at this time`)
     log(`created experience ${experience.id}`)
     const files = await codeService.get(propertyId, experience.id)
@@ -17,4 +19,8 @@ module.exports = async function create (propertyId) {
   } catch (err) {
     log.error(err)
   }
+}
+
+function clean (str) {
+  return str.trim()
 }

@@ -14,8 +14,9 @@ function set (propertyId, experienceId, val) {
   return fetch.put(getPath(propertyId, experienceId), { experiment: withMetrics(val) })
 }
 
-function create (propertyId) {
-  return fetch.post(getPath(propertyId), { experiment: Object.assign({}, withMetrics(EXPERIENCE, {created: true}), { propertyId }) })
+function create (propertyId, name) {
+  let experiment = Object.assign({}, withMetrics(EXPERIENCE, { created: true }), { propertyId, name })
+  return fetch.post(getPath(propertyId), { experiment })
 }
 
 function getCode (experience) {
