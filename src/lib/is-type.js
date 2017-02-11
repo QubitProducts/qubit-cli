@@ -1,7 +1,7 @@
-module.exports = { isName, isUrl, isId }
+module.exports = { isName, isUrl, isId, isPath, isSubmodule }
 
 function isName (str) {
-  return /^[\w-]+$/.test(String(str))
+  return /^[\w-/.]+$/.test(String(str))
 }
 
 function isUrl (str) {
@@ -10,4 +10,12 @@ function isUrl (str) {
 
 function isId (str) {
   return /^\d+/.test(String(str))
+}
+
+function isPath (str) {
+  return /^[./]/.test(str)
+}
+
+function isSubmodule (str) {
+  return /[/]/.test(str.replace(/^@[^/]+\//, '')) && !isPath(str)
 }
