@@ -4,6 +4,7 @@ const scaffold = require('../lib/scaffold')
 const readFiles = require('../lib/read-files')
 const execa = require('execa')
 const getPkg = require('../lib/get-pkg')
+const {isPath} = require('../lib/is-type')
 const ROOT_DIR = path.resolve(__dirname, '../../')
 let CWD = process.cwd()
 const defaultMeta = {
@@ -84,5 +85,7 @@ function formatName (name) {
 }
 
 function moduleName (str) {
-  return str.match(/^(?:@[^/]+\/)?[^/]+/)[0]
+  return isPath(str)
+    ? str
+    : str.match(/^(?:@[^/]+\/)?[^/]+/)[0]
 }
