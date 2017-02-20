@@ -19,4 +19,11 @@ async function set (authType, token) {
   return fs.writeFile(xprcPath, JSON.stringify(data))
 }
 
-module.exports = { get, set }
+async function rm (authType) {
+  const data = await getAll()
+  data[config.endpoint] = data[config.endpoint] || {}
+  delete data[config.endpoint][authType]
+  return fs.writeFile(xprcPath, JSON.stringify(data))
+}
+
+module.exports = { get, set, rm }

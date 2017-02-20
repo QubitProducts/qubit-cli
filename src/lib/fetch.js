@@ -14,15 +14,19 @@ module.exports = {
 
 function fetchWithAuth (method) {
   return async function fetch (path, data) {
-    let headers
+    let headers, token
     const auths = await auth.get()
 
     if (auths.ID_TOKEN) {
-      let token = await getToken(auths.ID_TOKEN)
-      headers = { 'Authorization': `Bearer ${token}` }
-    } else {
-      return login().then(() => fetch(path, data))
+      try {
+        token = await getToken(auths.ID_TOKEN)
+        headers = { 'Authorization': `Bearer ${token}` }
+      } catch (err) {
+        log('Could not authenticate, reinitiating login flow')
+      }
     }
+
+    if (!headers) return login().then(() => fetch(path, data))
 
     return axios(config.endpoint + path, { method, data, headers }).then(handler, handler)
 
@@ -32,6 +36,7 @@ function fetchWithAuth (method) {
         log.error('UNAUTHORIZED')
         return login().then(() => fetch(path, data))
       }
+      if (resp.data === 'Unauthorized') return login().then(() => fetch(path, data))
       return resp.data
     }
   }
