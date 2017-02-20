@@ -25,6 +25,7 @@ module.exports = async function login () {
     app.get('/callback', async (req, res, next) => {
       try {
         const idToken = await getIdToken(req.query.code, verifier)
+        await auth.rm('BEARER_TOKEN', idToken)
         await auth.set('ID_TOKEN', idToken)
         res.send('You are now logged in!. You can now close this tab.')
         await app.stop()
