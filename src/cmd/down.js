@@ -6,6 +6,6 @@ let CWD = process.cwd()
 module.exports = async function down (propertyId, experienceId) {
   const files = await codeService.get(propertyId, experienceId)
   log('pulling...')
-  await scaffold(CWD, files, false)
+  await scaffold(CWD, files, false, true)
   log('pulled!')
 }

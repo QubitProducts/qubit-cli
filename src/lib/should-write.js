@@ -20,8 +20,10 @@ module.exports = async function shouldWrite (dest, name, newValue, shouldConfirm
   // file exists and is different - ask permission
   if (shouldConfirm) {
     let result = await confirm(msg)
-    process.stdout.moveCursor(0, -1)
-    process.stdout.clearScreenDown()
+    if (process) {
+      process.stdout.moveCursor(0, -1)
+      process.stdout.clearScreenDown()
+    }
     return result
   }
   return false
