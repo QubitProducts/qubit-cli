@@ -1,5 +1,6 @@
 port: 41337
 endpoint: https://app.qubit.com
+updateCheckInterval: 86400000
 auth:
   port: 41338
   url: https://qubit.auth0.com
