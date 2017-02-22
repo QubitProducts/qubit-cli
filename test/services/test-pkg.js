@@ -1,9 +1,9 @@
 const _ = require('lodash')
 const { expect } = require('chai')
 const pkgService = require('../../src/services/pkg')
-const pkgFixture = require('../fixtures/models/pkg.json')
-const experienceFixture = require('../fixtures/models/experience.json')
-const variationsFixture = require('../fixtures/models/variations.json')
+const pkgFixture = require('../fixtures//pkg.json')
+const experienceFixture = require('../fixtures//experience.json')
+const variationsFixture = require('../fixtures//variations.json')
 
 describe('pkgService', () => {
   let experience, variations, pkg

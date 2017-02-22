@@ -4,9 +4,9 @@ const sinon = require('sinon')
 const codeService = require('../../src/services/code')
 const experienceService = require('../../src/services/experience')
 const variationService = require('../../src/services/variation')
-const experienceFixture = require('../fixtures/models/experience.json')
-const variationsFixture = require('../fixtures/models/variations.json')
-const filesFixture = require('../fixtures/models/files')
+const experienceFixture = require('../fixtures//experience.json')
+const variationsFixture = require('../fixtures//variations.json')
+const filesFixture = require('../fixtures//files')
 
 describe('codeService', function () {
   let sandbox, propertyId, experienceId, experience, variations, files
