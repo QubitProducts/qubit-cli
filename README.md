@@ -31,7 +31,7 @@ templates
 ## installation
 
 ```
-npm install -gp qubitdigital/xp-cli
+npm install -gp @qubit/xp-cli
 ```
 
 ## setup
