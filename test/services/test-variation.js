@@ -3,7 +3,7 @@ const { expect } = require('chai')
 const sinon = require('sinon')
 const fetch = require('../../src/lib/fetch')
 const variationService = require('../../src/services/variation')
-const variationsFixture = require('../fixtures/models/variations.json')
+const variationsFixture = require('../fixtures//variations.json')
 
 describe('variationService', function () {
   let sandbox, propertyId, experienceId, variationId, variations

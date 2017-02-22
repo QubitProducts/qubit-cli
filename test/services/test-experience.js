@@ -3,7 +3,7 @@ const { expect } = require('chai')
 const sinon = require('sinon')
 const fetch = require('../../src/lib/fetch')
 const experienceService = require('../../src/services/experience')
-const experienceFixture = require('../fixtures/models/experience.json')
+const experienceFixture = require('../fixtures//experience.json')
 
 describe('experienceService', function () {
   let sandbox, propertyId, experienceId, experience

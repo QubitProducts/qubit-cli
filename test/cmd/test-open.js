@@ -3,7 +3,7 @@ const sinon = require('sinon')
 const { expect } = require('chai')
 const rewire = require('rewire')
 const open = rewire('../../src/cmd/open')
-const pkgFixture = require('../fixtures/models/pkg.json')
+const pkgFixture = require('../fixtures//pkg.json')
 
 describe.skip('open', function () {
   let restore, opn

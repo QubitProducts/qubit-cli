@@ -3,8 +3,8 @@ const _ = require('lodash')
 const { expect } = require('chai')
 const rewire = require('rewire')
 const previewLinks = rewire('../../src/cmd/preview-link')
-const pkgFixture = rewire('../fixtures/models/pkg.json')
-const linkFixture = rewire('../fixtures/models/links.json')
+const pkgFixture = rewire('../fixtures//pkg.json')
+const linkFixture = rewire('../fixtures//links.json')
 
 describe('previewLink', function () {
   let restore

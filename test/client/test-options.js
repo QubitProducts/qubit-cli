@@ -1,7 +1,7 @@
 var rewire = require('rewire')
 var transform = rewire('../../src/client/options')
 var expect = require('chai').expect
-var pkgFixture = require('../fixtures/models/pkg')
+var pkgFixture = require('../fixtures//pkg')
 var variationName = Object.keys(pkgFixture.meta.variations)[0]
 var testData = { test: 1 }
 
