@@ -1,17 +1,14 @@
 const _ = require('lodash')
-let getPkg = require('../lib/get-pkg')
-let log = require('../lib/log')
+const getPkg = require('../lib/get-pkg')
+const log = require('../lib/log')
+const getPreviewLinks = require('../lib/preview-links')
 
-module.exports = async function previewLinks () {
-  let pkg = await getPkg()
-  pkg.meta = pkg.meta || {}
-  const {propertyId, previewUrl} = pkg.meta
-  if (!propertyId || !previewUrl) {
+module.exports = async function previewLink () {
+  const pkg = await getPkg()
+  if (!_.get(pkg, 'meta.variations') || !_.get(pkg, 'meta.previewUrl') || !_.get(pkg, 'meta.propertyId')) {
     log(`sorry! this feature assumes you have already setup an experience locally`)
     return log(`it uses the package.json metadata to construct the preview link for an existing experience`)
   }
-  return _.values(pkg.meta.variations).filter((v) => !v.variationIsControl).map(getLink)
-  function getLink (v) {
-    return `${previewUrl}#smartserve_p=${propertyId}&smartserve_preview=1&bypass_segments=&etcForceCreative=${v.variationId}`
-  }
+  const links = await getPreviewLinks(pkg.meta)
+  links.map(link => log(link))
 }

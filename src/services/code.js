@@ -17,7 +17,7 @@ async function set (propertyId, experienceId, files) {
   newExperience = pkgService.setCode(newExperience, files)
   if (!_.isEqual(oldExperience, newExperience)) await experienceService.set(propertyId, experienceId, newExperience)
   const variations = await variationService.getAll(propertyId, experienceId)
-  _.each(variations, async(oldVariation) => {
+  _.each(variations, async (oldVariation) => {
     if (oldVariation.is_control) return
     const newVariation = variationService.setCode(oldVariation, files)
     if (!_.isEqual(oldVariation, newVariation)) await variationService.set(propertyId, experienceId, oldVariation.id, newVariation)
