@@ -38,7 +38,6 @@ describe('experienceService', function () {
       let meta = args[1].experiment.meta
       delete args[1].experiment.meta
       expect(args[1]).to.eql({experiment: experience})
-      console.log(meta)
       expect(_.omit(JSON.parse(meta), ['xp.lastPush'])).to.eql({
         xp: {
           pushes: 1,

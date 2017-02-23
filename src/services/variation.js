@@ -1,5 +1,5 @@
 const fetch = require('../lib/fetch')
-const EXECUTION = 'function variation (cb) {\n\n}'
+const EXECUTION = 'function execution (options) { // eslint-disable-line no-unused-vars\n\n}\n'
 const CSS = ''
 const DEFAULTS = { EXECUTION, CSS }
 
@@ -18,6 +18,7 @@ function set (propertyId, experienceId, variationId, val) {
 function getCode (variation) {
   const code = {}
   const filename = getFilename(variation)
+  if (variation.execution_code === 'function (options) {}') delete variation.execution_code
   code[`${filename}.js`] = variation.execution_code || EXECUTION
   code[`${filename}.css`] = variation.custom_styles || CSS
   return code
