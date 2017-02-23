@@ -38,12 +38,12 @@ describe('experienceService', function () {
       let meta = args[1].experiment.meta
       delete args[1].experiment.meta
       expect(args[1]).to.eql({experiment: experience})
-      expect(_.omit(JSON.parse(meta), ['xp.lastPush'])).to.eql({
+      expect(_.omit(JSON.parse(meta), ['xp.lastPush', 'xp.version'])).to.eql({
         xp: {
-          pushes: 1,
-          version: '1.4.0'
+          pushes: 1
         }
       })
+      expect(JSON.parse(meta).xp).to.contain.keys('version', 'lastPush')
     })
   })
 
