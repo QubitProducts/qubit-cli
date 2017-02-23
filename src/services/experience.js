@@ -3,7 +3,7 @@ const fetch = require('../lib/fetch')
 const withMetrics = require('../lib/with-metrics')
 const GLOBAL = ''
 const EXPERIENCE = require('./experience.json')
-const TRIGGERS = 'function triggers (options, cb) {\n  cb()\n}'
+const TRIGGERS = 'function triggers (options, cb) { // eslint-disable-line no-unused-vars\n  cb()\n}\n'
 const DEFAULTS = { GLOBAL, TRIGGERS, EXPERIENCE }
 
 function get (propertyId, experienceId) {
