@@ -29,7 +29,7 @@ module.exports = async function checkDiff (propertyId, experienceId) {
       if (files.hasOwnProperty(name)) {
         const value = files[name]
         const localValue = localFiles[name]
-        if (typeof value === 'string' && name !== 'package.json') {
+        if (typeof value === 'string') {
           const diff = value !== localValue
 
           if (diff) { // If there is a diff then generate a diff output.
