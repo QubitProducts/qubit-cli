@@ -13,10 +13,12 @@ module.exports = async function checkDiff (propertyId, experienceId) {
 
   if (fileDiffs.length) {
     log('Showing changes to local files...')
-    for (let files of fileDiffs) {
-      files.forEach(function (part) {
-        const color = part.added ? 'green' : part.removed ? 'red' : 'grey'
-        process.stderr.write(part.value[color])
+    for (let diffObj of fileDiffs) {
+      const { fileName, file } = diffObj
+      process.stderr.write(fileName['blue'] + '\n')
+      file.forEach((parts) => {
+        const color = parts.added ? 'green' : parts.removed ? 'red' : 'grey'
+        process.stderr.write(parts.value[color] + '\n')
       })
     }
   } else {
@@ -34,7 +36,7 @@ module.exports = async function checkDiff (propertyId, experienceId) {
 
           if (diff) { // If there is a diff then generate a diff output.
             const diff = jsdiff.diffLines(value, localValue, [{ignoreWhitespace: true}])
-            diffs.push(diff)
+            diffs.push({fileName: name.toUpperCase(), file: diff})
           }
         }
       }
