@@ -5,7 +5,7 @@ const readFiles = require('../lib/read-files')
 const jsdiff = require('diff')
 let CWD = process.cwd()
 
-module.exports = async function checkDiff (propertyId, experienceId) {  
+module.exports = async function checkDiff (propertyId, experienceId) {
   log('Comparing files...')
   const files = await codeService.get(propertyId, experienceId)
   const localFiles = await readFiles(CWD)
@@ -14,16 +14,14 @@ module.exports = async function checkDiff (propertyId, experienceId) {
   if (fileDiffs.length) {
     log('Showing changes to local files...')
     for (let files of fileDiffs) {
-      files.forEach(function(part){
-        const color = part.added ? 'green' :
-          part.removed ? 'red' : 'grey'
+      files.forEach(function (part) {
+        const color = part.added ? 'green' : part.removed ? 'red' : 'grey'
         process.stderr.write(part.value[color])
       })
     }
   } else {
     log('Both versions are the same!')
   }
- 
 
   function checkDiff (localFiles, files) {
     let diffs = []
@@ -32,12 +30,12 @@ module.exports = async function checkDiff (propertyId, experienceId) {
         const value = files[name]
         const localValue = localFiles[name]
         if (typeof value === 'string' && name !== 'package.json') {
-         const diff = value !== localValue
+          const diff = value !== localValue
 
-         if (diff) { // If there is a diff then generate a diff output.
-          const diff = jsdiff.diffLines(value, localValue, [{ignoreWhitespace: true}])
-          diffs.push(diff)
-         }
+          if (diff) { // If there is a diff then generate a diff output.
+            const diff = jsdiff.diffLines(value, localValue, [{ignoreWhitespace: true}])
+            diffs.push(diff)
+          }
         }
       }
     }
