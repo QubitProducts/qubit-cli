@@ -28,7 +28,7 @@ module.exports = async function checkDiff (propertyId, experienceId) {
   function checkDiff (localFiles, files) {
     let diffs = []
     for (let name in files) {
-      if (files.hasOwnProperty(name)) {
+      if (files.hasOwnProperty(name) && localFiles.hasOwnProperty(name)) {
         const value = files[name]
         const localValue = localFiles[name]
         if (typeof value === 'string') {
