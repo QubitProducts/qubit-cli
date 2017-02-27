@@ -1,4 +1,4 @@
-require('colors')
+const chalk = require('chalk')
 const codeService = require('../services/code')
 const log = require('../lib/log')
 const readFiles = require('../lib/read-files')
@@ -14,11 +14,11 @@ module.exports = async function checkDiff (propertyId, experienceId) {
   if (fileDiffs.length) {
     log('Showing diff between local and remote files...')
     for (let diffObj of fileDiffs) {
-      const { fileName, file } = diffObj
-      process.stderr.write(fileName['blue'] + '\n')
-      file.forEach(parts => {
+      const { fileName, diff } = diffObj
+      process.stderr.write(`${chalk.blue.bold(fileName)} \n \n`)
+      diff.forEach(parts => {
         const color = parts.added ? 'green' : parts.removed ? 'red' : 'grey'
-        process.stderr.write(`${parts.value[color]} \n`)
+        process.stderr.write(`${chalk[color](parts.value)} \n`)
       })
     }
   } else {
@@ -28,16 +28,14 @@ module.exports = async function checkDiff (propertyId, experienceId) {
   function checkDiff (localFiles, files) {
     let diffs = []
     for (let name in files) {
-      if (files.hasOwnProperty(name) && localFiles.hasOwnProperty(name)) {
+      if (files[name] && localFiles[name]) {
         const value = files[name]
         const localValue = localFiles[name]
-        if (typeof value === 'string' && typeof localValue === 'string') {
-          const diff = value !== localValue
+        const diff = value !== localValue
 
-          if (diff) { // If there is a diff then generate a diff output.
-            const diff = jsdiff.diffLines(value, localValue, [{ignoreWhitespace: true}])
-            diffs.push({fileName: name.toUpperCase(), file: diff})
-          }
+        if (diff) { // If there is a diff then generate a diff output.
+          const diff = jsdiff.diffLines(value, localValue, [{ignoreWhitespace: true}])
+          diffs.push({fileName: name.toUpperCase(), diff: diff})
         }
       }
     }
