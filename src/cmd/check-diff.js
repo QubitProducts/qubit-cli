@@ -15,10 +15,10 @@ module.exports = async function checkDiff (propertyId, experienceId) {
     log('Showing diff between local and remote files...')
     for (let diffObj of fileDiffs) {
       const { fileName, diff } = diffObj
-      console.log(`${chalk.blue.bold(fileName)} \n \n`)
+      console.log(`${chalk.blue.bold(fileName)} \n`)
       diff.forEach(parts => {
         const color = parts.added ? 'green' : parts.removed ? 'red' : 'grey'
-        console.log(`${chalk[color](parts.value)} \n`)
+        console.log(`${chalk[color](parts.value)}`)
       })
     }
   } else {
