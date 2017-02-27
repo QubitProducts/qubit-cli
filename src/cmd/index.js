@@ -10,6 +10,7 @@ const pull = require('./pull')
 const push = require('./push')
 const serve = require('./serve')
 const templatize = require('./templatize')
+const compare = require('./compare')
 
 module.exports = function run (pkg) {
   program
@@ -36,6 +37,11 @@ module.exports = function run (pkg) {
     .command('preview-link')
     .description('log sharable cross-browser preview links for your variations')
     .action(previewLink, log.error)
+
+  program
+    .command('compare')
+    .description('compare local and remote versions of an experience')
+    .action(compare)
 
   program
     .command('open')
