@@ -11,7 +11,7 @@ function get (propertyId, experienceId) {
 }
 
 function set (propertyId, experienceId, val) {
-  return fetch.put(getPath(propertyId, experienceId), { experiment: withMetrics(val) })
+  return fetch.put(getPath(propertyId, experienceId), { experiment: val })
 }
 
 function create (propertyId, name) {
@@ -30,6 +30,7 @@ function getCode (experience) {
 
 function setCode (experience, files) {
   experience = _.cloneDeep(experience)
+  const pkg = (files['package.json'] && JSON.parse(files['package.json'])) || {}
   const draft = experience.recent_iterations.draft
   const rules = draft.activation_rules || []
   const customJs = rules.find(rule => rule.key === 'custom_javascript')
@@ -46,7 +47,7 @@ function setCode (experience, files) {
     global_code: files['global.js'] || GLOBAL,
     activation_rules: rules
   })
-  return experience
+  return withMetrics(experience, { templates: _.get(pkg, 'meta.templates') || [] })
 }
 
 function getPath (propertyId, experienceId) {

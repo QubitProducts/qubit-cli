@@ -1,31 +1,34 @@
-var rewire = require('rewire')
-var transform = rewire('../../src/client/options')
-var expect = require('chai').expect
-var pkgFixture = require('../fixtures//pkg')
-var variationName = Object.keys(pkgFixture.meta.variations)[0]
-var testData = { test: 1 }
+const _ = require('lodash')
+const rewire = require('rewire')
+const transform = rewire('../../src/client/options')
+const expect = require('chai').expect
+const pkgFixture = require('../fixtures/pkg.json')
+const variationName = Object.keys(pkgFixture.meta.variations)[0]
+const testData = { test: 1 }
 
 describe('transform', function () {
-  var originalWindow
+  let pkg, restore
   beforeEach(function () {
-    originalWindow = global.window
-    global.window = {
-      location: {
-        host: 'cookieDomain'
+    pkg = _.cloneDeep(pkgFixture)
+    restore = transform.__set__({
+      window: {
+        location: {
+          host: 'cookieDomain'
+        }
       }
-    }
+    })
   })
 
   afterEach(function () {
-    global.window = originalWindow
+    restore()
   })
 
   it('exports an object with a state attribute', function () {
-    expect(transform(pkgFixture, variationName)).to.have.property('state')
+    expect(transform(pkg, variationName)).to.have.property('state')
   })
 
   it('exports an object with a meta attribute', function () {
-    expect(transform(pkgFixture, variationName)).to.have.property('meta')
+    expect(transform(pkg, variationName)).to.have.property('meta')
   })
 
   describe('state object', function () {
@@ -33,7 +36,7 @@ describe('transform', function () {
 
     beforeEach(function () {
       transform.__set__('experienceState', {})
-      state = transform(pkgFixture, variationName).state
+      state = transform(pkg, variationName).state
     })
 
     it('has a set function that stores data against a key', function () {
@@ -54,7 +57,7 @@ describe('transform', function () {
   describe('meta object', function () {
     var meta
     beforeEach(function () {
-      meta = transform(pkgFixture, variationName).meta
+      meta = transform(pkg, variationName).meta
     })
 
     it('gets enriched with a cookieDomain attribute', function () {

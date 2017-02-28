@@ -35,15 +35,7 @@ describe('experienceService', function () {
       let args = fetch.put.getCall(0).args
       expect(fetch.put.calledOnce).to.eql(true)
       expect(args[0]).to.eql('/p/123/smart_serve/experiments/456?embed=recent_iterations')
-      let meta = args[1].experiment.meta
-      delete args[1].experiment.meta
-      expect(args[1]).to.eql({experiment: experience})
-      expect(_.omit(JSON.parse(meta), ['xp.lastPush', 'xp.version'])).to.eql({
-        xp: {
-          pushes: 1
-        }
-      })
-      expect(JSON.parse(meta).xp).to.contain.keys('version', 'lastPush')
+      expect(args[1]).to.eql({ experiment: experience })
     })
   })
 

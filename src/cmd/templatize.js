@@ -35,13 +35,13 @@ module.exports = async function templatize () {
     })
   }
 
-  files['package.json'] = JSON.stringify({ 'xp-template': tmpPkg.name })
+  delete files['package.json']
 
   log(`...creating template at ${templateDir}`)
 
   await scaffold(path.join(templateDir, 'template'), files, false)
 
-  await fs.writeFile(path.join(templateDir, 'package.json'), JSON.stringify(tmpPkg))
+  await fs.writeFile(path.join(templateDir, 'package.json'), JSON.stringify(tmpPkg, null, 2))
 
   await fs.writeFile(path.join(templateDir, 'index.js'), '')
 

@@ -8,5 +8,6 @@ module.exports = function withMetrics (experience, extra) {
   }, meta.xp, extra)
   meta.xp.pushes++
   meta.xp.lastPush = new Date()
+  meta.xp.version = pkg.version
   return Object.assign({}, experience, { meta: JSON.stringify(meta) })
 }
