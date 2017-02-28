@@ -3,6 +3,7 @@ const {getFilename} = require('./variation')
 
 function getCode (experience, variations) {
   const files = {}
+  const experienceMeta = experience.meta ? JSON.parse(experience.meta) : {}
   files['package.json'] = JSON.stringify({
     name: `qubit-experience-${experience.id}`,
     description: 'An experience powered by qubit',
@@ -19,7 +20,8 @@ function getCode (experience, variations) {
           variationMasterId: variation.master_id
         }
         return memo
-      }, {})
+      }, {}),
+      templates: _.get(experienceMeta, 'xp.templates') || []
     }
   }, null, 2)
   return files
