@@ -4,32 +4,20 @@ const scaffold = require('../lib/scaffold')
 const readFiles = require('../lib/read-files')
 const execa = require('execa')
 const getPkg = require('../lib/get-pkg')
-const {isPath} = require('../lib/is-type')
+const mergePkg = require('../lib/merge-pkg')
+const templateName = require('../lib/template-name')
+const moduleName = require('../lib/module-name')
+const hasVariations = require('../lib/has-variations')
+const resolveTemplate = require('../lib/resolve-template')
 const ROOT_DIR = path.resolve(__dirname, '../../')
 let CWD = process.cwd()
-const defaultMeta = {
-  name: 'XP experience',
-  propertyId: null,
-  experienceId: null,
-  iterationId: null,
-  previewUrl: null,
-  variations: {
-    variation: {
-      variationIsControl: false,
-      variationMasterId: null,
-      variationId: null
-    }
-  }
-}
 
-_.templateSettings.interpolate = /<%=([\s\S]+?)%>/g
-
-module.exports = async function fromTemplate (name) {
-  if (name === 'example') name = path.resolve(__dirname, '../../example')
+module.exports = async function template (name) {
   let output
-  name = formatName(name)
-
   const pkg = await getPkg()
+  if (name === 'example') name = path.resolve(__dirname, '../../example')
+
+  name = templateName(name)
 
   await execa('npm', ['link', moduleName(name)], { cwd: ROOT_DIR })
 
@@ -46,37 +34,15 @@ module.exports = async function fromTemplate (name) {
     delete output['variation.css']
   }
 
-  output = resolveTemplateVariables(output, pkg.meta || defaultMeta)
+  output = resolveTemplate(output, pkg.meta)
 
-  output['package.json'] = output['package.json'] ? JSON.parse(output['package.json']) : {}
+  const outPkg = mergePkg(pkg, output['package.json'])
 
-  output['package.json'] = mergePkg(pkg, output['package.json'], name)
+  outPkg.meta = addTemplateMetrics(outPkg.meta, path.basename(name))
+
+  output['package.json'] = JSON.stringify(outPkg, null, 2)
 
   return await scaffold(CWD, output, false)
-}
-
-function resolveTemplateVariables (files, meta) {
-  return Object.keys(files).reduce((memo, filename) => {
-    let localMeta = Object.assign({}, meta, _.get(meta, `variations.${filename.replace(/\.\w+$/, '')}`))
-    let value = typeof files[filename] === 'string'
-      ? _.template(files[filename])(localMeta)
-      : resolveTemplateVariables(files[filename], localMeta)
-    memo[filename] = value
-    return memo
-  }, {})
-}
-
-function hasVariations (pkg) {
-  return _.get(pkg, 'meta.variations') && Object.keys(_.get(pkg, 'meta.variations')).length
-}
-
-function mergePkg (localPkg, templatePkg, templateName) {
-  const pkg = Object.assign({}, localPkg, templatePkg)
-  _.set(pkg, 'meta', Object.assign({}, templatePkg.meta, localPkg.meta))
-  const metrics = _.get(pkg, 'meta.templates') || []
-  metrics.push(path.basename(templateName))
-  _.set(pkg, 'meta.templates', _.uniq(metrics))
-  return JSON.stringify(pkg, null, 2)
 }
 
 async function getTemplateFiles (template) {
@@ -85,14 +51,8 @@ async function getTemplateFiles (template) {
   return await readFiles(path.join(templateDir))
 }
 
-function formatName (name) {
-  let top = path.basename(name)
-  top = `xp-tmp-${top.replace(/(xp-tmp-)+/, '')}`
-  return path.join(path.dirname(name), top)
-}
-
-function moduleName (str) {
-  return isPath(str)
-    ? str
-    : str.match(/^(?:@[^/]+\/)?[^/]+/)[0]
+function addTemplateMetrics (meta, templateName) {
+  return Object.assign({}, meta, {
+    templates: _.uniq(meta.templates.concat([templateName]))
+  })
 }
