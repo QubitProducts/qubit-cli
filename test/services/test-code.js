@@ -47,7 +47,18 @@ describe('codeService', function () {
       experience.name += 1
       _.set(experience, 'recent_iterations.draft.global_code', files['global.js'])
       _.set(experience, 'recent_iterations.draft.activation_rules.0.value', files['triggers.js'])
-      expect(experienceService.set.getCall(0).args).to.eql([propertyId, experienceId, experience])
+      let [actualPropertyId, actualExperienceId, actualExperience] = experienceService.set.getCall(0).args
+      expect(actualPropertyId).to.eql(propertyId)
+      expect(actualExperienceId).to.eql(experienceId)
+      expect(_.omit(actualExperience, 'meta')).to.eql(experience)
+      let meta = JSON.parse(actualExperience.meta)
+      expect(_.omit(meta, ['xp.lastPush', 'xp.version'])).to.eql({
+        xp: {
+          pushes: 1,
+          templates: []
+        }
+      })
+      expect(meta.xp).to.contain.keys('version', 'lastPush')
       expect(variationService.set.callCount).to.eql(2)
       _.each(variations, (variation, i) => {
         if (variation.is_control) return

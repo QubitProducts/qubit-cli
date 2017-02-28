@@ -48,7 +48,9 @@ module.exports = async function fromTemplate (name) {
 
   output = resolveTemplateVariables(output, pkg.meta || defaultMeta)
 
-  if (output['package.json']) output['package.json'] = mergePkg(pkg, output['package.json'])
+  output['package.json'] = output['package.json'] ? JSON.parse(output['package.json']) : {}
+
+  output['package.json'] = mergePkg(pkg, output['package.json'], name)
 
   return await scaffold(CWD, output, false)
 }
@@ -68,8 +70,13 @@ function hasVariations (pkg) {
   return _.get(pkg, 'meta.variations') && Object.keys(_.get(pkg, 'meta.variations')).length
 }
 
-function mergePkg (localPkg, templatePkg) {
-  return JSON.stringify(Object.assign({}, localPkg, JSON.parse(templatePkg)), null, 2)
+function mergePkg (localPkg, templatePkg, templateName) {
+  const pkg = Object.assign({}, localPkg, templatePkg)
+  _.set(pkg, 'meta', Object.assign({}, templatePkg.meta, localPkg.meta))
+  const metrics = _.get(pkg, 'meta.templates') || []
+  metrics.push(path.basename(templateName))
+  _.set(pkg, 'meta.templates', _.uniq(metrics))
+  return JSON.stringify(pkg, null, 2)
 }
 
 async function getTemplateFiles (template) {
