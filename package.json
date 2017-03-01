@@ -1,6 +1,6 @@
 {
   "name": "@qubit/xp-cli",
-  "version": "1.10.2",
+  "version": "1.10.3",
   "description": "a utility for previewing experiences built using the qubit experience platform",
   "main": "index.js",
   "bin": {
