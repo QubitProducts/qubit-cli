@@ -6,6 +6,7 @@ const extension = require('./extension')
 const login = require('./login')
 const open = require('./open')
 const previewLink = require('./preview-link')
+const clone = require('./clone')
 const pull = require('./pull')
 const push = require('./push')
 const serve = require('./serve')
@@ -19,8 +20,13 @@ module.exports = function run (pkg) {
     .action(create)
 
   program
+    .command('clone')
+    .description(`clone a remote experience from platform`)
+    .action(clone)
+
+  program
     .command('pull')
-    .description(`pull into local experience from platform or template`)
+    .description(`pull remote changes or template into local experience`)
     .action(pull)
 
   program
@@ -80,10 +86,10 @@ module.exports = function run (pkg) {
       Now open chrome and turn on xp by clicking on the extension icon
       you should see the background of the page turn ${chalk.yellow.bold('yellow')}!
 
-      To pull down an existing experience:
-      - ${chalk.green.bold('xp pull <propertyId> <experienceId>')} if you know the propertyId and experienceId
-      - ${chalk.green.bold('xp pull https://app.qubit.com/p/{propertyId}/experiences/{experienceId}')} if you know the url
-      - Otherwise, type ${chalk.green.bold('xp pull')} then navigate to your experience and xp will guide you from there
+      To clone an existing experience:
+      - ${chalk.green.bold('xp clone <propertyId> <experienceId>')} if you know the propertyId and experienceId
+      - ${chalk.green.bold('xp clone https://app.qubit.com/p/{propertyId}/experiences/{experienceId}')} if you know the url
+      - Otherwise, type ${chalk.green.bold('xp clone')} then navigate to your experience and xp will guide you from there
 
       To create a new experience in the platform:
       $ ${chalk.green.bold('xp create <propertyId>')}
@@ -91,6 +97,9 @@ module.exports = function run (pkg) {
 
       To save your changes to the platform:
       $ ${chalk.green.bold('xp push')}
+
+      To pull remote changes from the platform:
+      $ ${chalk.green.bold('xp pull')}
 
       To generate a template from a local experience:
       $ ${chalk.green.bold('xp templatize')}

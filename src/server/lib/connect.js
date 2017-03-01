@@ -2,10 +2,8 @@ const confirm = require('confirmer')
 const highlight = require('../../lib/highlight')
 const log = require('../../lib/log')
 const parseUrl = require('../../lib/parse-url')
-const scaffold = require('../../lib/scaffold')
-const codeService = require('../../services/code')
+const down = require('../../services/down')
 const createApp = require('../app')
-const CWD = process.cwd()
 
 module.exports = async function connect () {
   let app = await createApp()
@@ -22,9 +20,7 @@ module.exports = async function connect () {
       const yes = await confirm(msg)
       if (!yes) return
       await app.stop()
-      const files = await codeService.get(propertyId, experienceId)
-      await scaffold(CWD, files, false)
-      resolve()
+      resolve(await down(propertyId, experienceId))
     })
   })
 }

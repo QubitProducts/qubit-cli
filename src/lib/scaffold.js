@@ -2,8 +2,9 @@ const path = require('path')
 const chalk = require('chalk')
 const fs = require('fs-promise')
 const log = require('./log')
-let shouldWrite = require('./should-write')
-let shouldRemove = require('./should-remove')
+const exists = require('./exists')
+const shouldWrite = require('./should-write')
+const shouldRemove = require('./should-remove')
 
 module.exports = async function scaffold (dest, files, neverOverwrite, removeExtraneous) {
   for (let name in files) {
@@ -18,7 +19,7 @@ module.exports = async function scaffold (dest, files, neverOverwrite, removeExt
     }
   }
 
-  if (removeExtraneous) {
+  if (removeExtraneous && await exists(dest)) {
     const actual = await fs.readdir(dest)
     const extraneous = actual.filter(file => !Object.keys(files).includes(file))
     await Promise.all(extraneous.map(async file => {

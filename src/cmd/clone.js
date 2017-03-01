@@ -1,12 +1,12 @@
 const _ = require('lodash')
+const path = require('path')
 const connect = require('../server/lib/connect')
-const template = require('./template')
 const down = require('../services/down')
-const getPkg = require('../lib/get-pkg')
 const scaffold = require('../lib/scaffold')
 const parseUrl = require('../lib/parse-url')
 const log = require('../lib/log')
-const {isName, isUrl, isId} = require('../lib/is-type')
+const experienceFilename = require('../lib/experience-filename')
+const {isUrl, isId} = require('../lib/is-type')
 const CWD = process.cwd()
 
 module.exports = async function pull (id) {
@@ -18,22 +18,16 @@ module.exports = async function pull (id) {
       [propertyId, experienceId] = opts.map(Number)
     } else if (opts.length && isUrl(id)) {
       ({propertyId, experienceId} = parseUrl(id))
-    } else if (opts.length && isName(id)) {
-      // scaffold from template
-      return template(id)
-    } else if (!opts.length) {
-      // try to get from package.json and fallback on connect route
-      ({propertyId, experienceId} = ((await getPkg()).meta || {}))
     }
-
-    let files
+    let experience, files
     if (propertyId && experienceId) {
-      ({files} = await down(propertyId, experienceId))
+      ({experience, files} = await down(propertyId, experienceId))
     } else {
-      ({files} = await connect())
+      ({experience, files} = await connect())
     }
 
-    return scaffold(CWD, files, false, true)
+    let dest = path.join(CWD, experienceFilename(experience))
+    return scaffold(dest, files, false, true)
   } catch (err) {
     log.error(err)
   }
