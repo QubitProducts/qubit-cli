@@ -1,3 +1,4 @@
+const path = require('path')
 const input = require('input')
 const experienceService = require('../services/experience')
 const codeService = require('../services/code')
@@ -14,7 +15,8 @@ module.exports = async function create (propertyId) {
     if (!experience.id) return log(`I'm afraid we could not create an experience at this time`)
     log(`created experience ${experience.id}`)
     const files = await codeService.get(propertyId, experience.id)
-    await scaffold(CWD, files, false)
+    const dest = path.join(CWD, experience.id + '-' + experience.name.toLowerCase().replace(/[^\w]/g, '-'))
+    await scaffold(dest, files, false)
     log('synced!')
   } catch (err) {
     log.error(err)
