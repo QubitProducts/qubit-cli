@@ -1,6 +1,7 @@
+const _ = require('lodash')
 module.exports = function experienceEngine (options, globalFn, triggerFn, variationFn) {
   globalFn()
-  if (triggerFn(options, activate) === true) execute()
+  if (triggerFn(_.cloneDeep(options), activate) === true) execute()
 
   function activate (pass) {
     const shouldActivate = pass || typeof pass === 'undefined'
@@ -13,6 +14,6 @@ module.exports = function experienceEngine (options, globalFn, triggerFn, variat
   }
 
   function execute () {
-    return variationFn(options)
+    return variationFn(_.cloneDeep(options))
   }
 }

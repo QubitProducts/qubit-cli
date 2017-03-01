@@ -21,6 +21,7 @@ function getCode (experience, variations) {
         }
         return memo
       }, {}),
+      visitor: {},
       templates: _.get(experienceMeta, 'xp.templates') || []
     }
   }, null, 2)
