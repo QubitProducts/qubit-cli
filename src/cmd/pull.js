@@ -26,7 +26,7 @@ module.exports = async function pull (id) {
     } else if (!opts.length) {
       pkg = await getPkg()
       // try to get from package.json and fallback on connect route
-      ;({propertyId, experienceId} = (pkg.meta || {}))
+      ;({propertyId, experienceId} = _.get(pkg, 'meta') || {})
     }
 
     let files
@@ -35,11 +35,10 @@ module.exports = async function pull (id) {
     } else {
       ({files} = await connect())
     }
-
-    if (pkg.meta) files['package.json'] = JSON.stringify(mergePkg(pkg, files['package.json']), null, 2)
-
-    log(`pulling`)
-    return scaffold(CWD, files, false, true)
+    log(`pulling experience`)
+    if (_.get(pkg, 'meta')) files['package.json'] = JSON.stringify(mergePkg(pkg, files['package.json']), null, 2)
+    await scaffold(CWD, files, false, true)
+    log(`experience pulled`)
   } catch (err) {
     log.error(err)
   }

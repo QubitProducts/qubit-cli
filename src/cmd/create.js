@@ -14,11 +14,12 @@ module.exports = async function create (propertyId) {
     let name = clean(await input.text('What would you like to call your experience?', { default: 'Created by xp' }))
     let experience = await experienceService.create(propertyId, name)
     if (!experience.id) return log(`I'm afraid we could not create an experience at this time`)
-    log(`created experience ${experience.id}`)
+    log(`creating experience`)
     const files = await codeService.get(propertyId, experience.id)
-    const dest = path.join(CWD, experienceFilename(experience))
+    const filename = experienceFilename(experience)
+    const dest = path.join(CWD, filename)
     await scaffold(dest, files, false)
-    log('synced!')
+    log(`created at ${filename}`)
   } catch (err) {
     log.error(err)
   }
