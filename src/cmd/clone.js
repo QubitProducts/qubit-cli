@@ -26,7 +26,9 @@ module.exports = async function pull (id) {
       ({experience, files} = await connect())
     }
 
-    let dest = path.join(CWD, experienceFilename(experience))
+    let filename = experienceFilename(experience)
+    let dest = path.join(CWD, filename)
+    log(`cloning into ${filename}`)
     return scaffold(dest, files, false, true)
   } catch (err) {
     log.error(err)

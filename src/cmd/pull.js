@@ -38,6 +38,7 @@ module.exports = async function pull (id) {
 
     if (pkg.meta) files['package.json'] = JSON.stringify(mergePkg(pkg, files['package.json']), null, 2)
 
+    log(`pulling`)
     return scaffold(CWD, files, false, true)
   } catch (err) {
     log.error(err)

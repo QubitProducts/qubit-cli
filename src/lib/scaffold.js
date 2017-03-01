@@ -3,8 +3,8 @@ const chalk = require('chalk')
 const fs = require('fs-promise')
 const log = require('./log')
 const exists = require('./exists')
-const shouldWrite = require('./should-write')
-const shouldRemove = require('./should-remove')
+let shouldWrite = require('./should-write')
+let shouldRemove = require('./should-remove')
 
 module.exports = async function scaffold (dest, files, neverOverwrite, removeExtraneous) {
   for (let name in files) {
