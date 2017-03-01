@@ -78,34 +78,43 @@ module.exports = function run (pkg) {
 
       To install the extension:
       $ ${chalk.green.bold('xp extension')}
-      then drag the chrome-extension folder into chrome
+      then drag the chrome-extension folder into the chrome extensions pane
 
-      To quickly hack on something with no side effects:
+      Previewing with local server:
       $ ${chalk.green.bold('xp pull example')}
       $ ${chalk.green.bold('xp --watch')}
       Now open chrome and turn on xp by clicking on the extension icon
       you should see the background of the page turn ${chalk.yellow.bold('yellow')}!
+      Change the css in varaition.css, and the preview should update on the fly!
 
       To clone an existing experience:
       - ${chalk.green.bold('xp clone <propertyId> <experienceId>')} if you know the propertyId and experienceId
       - ${chalk.green.bold('xp clone https://app.qubit.com/p/{propertyId}/experiences/{experienceId}')} if you know the url
       - Otherwise, type ${chalk.green.bold('xp clone')} then navigate to your experience and xp will guide you from there
 
-      To create a new experience in the platform:
+      To create a new experience:
       $ ${chalk.green.bold('xp create <propertyId>')}
       note: propertyId is the number after /p/ in our urls
 
-      To save your changes to the platform:
+      To push your changes up to the platform
       $ ${chalk.green.bold('xp push')}
 
       To pull remote changes from the platform:
       $ ${chalk.green.bold('xp pull')}
 
-      To generate a template from a local experience:
+      To generate a template from your local experience files:
       $ ${chalk.green.bold('xp templatize')}
 
-      To pull an existing template into a local experience:
+      To scaffold an experience from a template:
       $ ${chalk.green.bold('xp pull <templateName>')}
+
+      To make an xp template available for sharing:
+      publish to npm or git
+      consumers can then simply install like so:
+
+      $ ${chalk.green.bold('npm install -g xp-tmp-example')}
+      $ ${chalk.green.bold('npm install -g github:user/xp-tmp-example')}
+      $ ${chalk.green.bold('npm install -g github:user/xp-multi-template-repo/example')}
 
       To enable hot reloading:
       Implement a remove function in your variation file like so:

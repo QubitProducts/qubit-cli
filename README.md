@@ -1,8 +1,8 @@
-# ![xp-cli](https://cloud.githubusercontent.com/assets/640611/18666410/a11b3394-7f23-11e6-99b5-5cbbca6da27f.png)
+# ![extension icon](./chrome-extension/icons/on48.png) ![xp-cli](https://cloud.githubusercontent.com/assets/640611/18666410/a11b3394-7f23-11e6-99b5-5cbbca6da27f.png)
 
 A client to facilitate local development of experiences for the qubit platform
 
-## features
+## Features
 
 local offline development
 - build experiences locally in your editor/IDE of choice
@@ -28,78 +28,81 @@ templates
 - improve code consistency and design by leveraging template reuse
 
 
-## installation
+## Installation
 
 ```
 npm install -gp @qubit/xp-cli
 ```
 
-## setup
+## Setup
 
 ```
 xp extension
 ```
-then drag the chrome-extension folder into chrome
+then drag the chrome-extension folder into the chrome extensions pane
 
-## quick start:
+## Previewing with local server:
 
 ```
 xp pull example
 xp --watch
 ```
-Now open chrome and turn on xp by clicking on the extension icon. You should see the background of the page turn yellow!
+Now open chrome and turn on xp by clicking on the extension icon ![extension icon](./chrome-extension/icons/off16.png). You should see the background of the page turn yellow! Change the css in varaition.css, and the preview should update on the fly!
 
-## to pull down an existing experience:
 
+## To clone an existing experience
 - If you know the propertyId and experienceId:
 ```
-xp pull <propertyId> <experienceId>
+xp clone <propertyId> <experienceId>
 ```
 - If you know the url:
 ```
-xp pull https://app.qubit.com/p/{propertyId}/experiences/{experienceId}
+xp clone https://app.qubit.com/p/{propertyId}/experiences/{experienceId}
 ```
-- Otherwise, type ``` xp pull ``` and navigate to your experience, xp will guide you from there
+- Otherwise, type ``` xp clone ``` and navigate to your experience, xp will guide you from there
 
-## to create a new experience in the platform:
+## To create a new experience:
 
 ```
 xp create <propertyId>
 ```
 note: propertyId is the number after /p/ in our urls
 
-## to save your changes to the platform:
+## To push your changes up to the platform:
 
 ```
 xp push
 ```
 
-## to generate a template from your experience:
+## To pull remote changes from the platform:
+```
+xp pull
+```
+
+## To generate a template from your local experience files:
 
 ```
 xp templatize
 ```
 
-## to pull a template into a local experience:
+## To scaffold an experience from a template:
 
 ```
 xp pull <templateName>
 ```
 
-## to make an xp template available worldwide:
+## To make an xp template available for sharing:
+
+publish to npm or git. Consumers can then simply install like so:
 
 ```
-git push or npm publish
+npm install -g xp-tmp-example
+npm install -g github:user/xp-tmp-example
+npm install -g github:user/xp-multi-template-repo/example
 ```
 
-## to install a template for use locally:
-
-```
-npm install -g xp-tmp-<templateName>
-```
-
-## :fire: hot reloading!
-to use the super cool hot reloading feature, all you need to do is implement a remove function in your variation file like so:
+## :fire: Hot reloading!
+Implement a remove function in your variation file like so:
 
 ```js
 function execution (options) {
