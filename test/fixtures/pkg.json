@@ -7,18 +7,22 @@
     "experienceId": 456,
     "iterationId": 101112,
     "previewUrl": "http://blowtrump.com",
+    "remoteUpdatedAt": "2016-08-10T14:32:17.000Z",
     "variations": {
       "variation-2": {
+        "remoteUpdatedAt": "2014-06-03T12:51:30.000Z",
         "variationIsControl": true,
         "variationMasterId": 2,
         "variationId": 1
       },
       "variation-4": {
+        "remoteUpdatedAt": "2016-08-10T14:32:17.000Z",
         "variationIsControl": false,
         "variationMasterId": 4,
         "variationId": 3
       },
       "variation-6": {
+        "remoteUpdatedAt": "2016-05-23T09:14:40.000Z",
         "variationIsControl": false,
         "variationMasterId": 6,
         "variationId": 5

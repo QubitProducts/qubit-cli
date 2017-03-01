@@ -31,6 +31,7 @@ module.exports = function run (pkg) {
 
   program
     .command('push')
+    .option('--force', 'force push changes even though the remote is different')
     .description('push experience up to remote')
     .action(push)
 

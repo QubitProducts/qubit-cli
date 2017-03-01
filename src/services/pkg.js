@@ -13,11 +13,13 @@ function getCode (experience, variations) {
       experienceId: experience.id,
       iterationId: _.get(experience, 'recent_iterations.draft.id'),
       previewUrl: _.get(experience, 'recent_iterations.draft.url'),
+      remoteUpdatedAt: _.get(experience, 'recent_iterations.draft.updated_at'),
       variations: variations.reduce((memo, variation) => {
         memo[getFilename(variation)] = {
           variationId: variation.id,
           variationIsControl: variation.is_control,
-          variationMasterId: variation.master_id
+          variationMasterId: variation.master_id,
+          remoteUpdatedAt: variation.updated_at
         }
         return memo
       }, {}),
