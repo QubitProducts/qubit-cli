@@ -1,8 +1,12 @@
 const experienceState = {}
+const _ = require('lodash')
+const defaultVisitor = require('./visitor')
 
 module.exports = function transform (pkg, key) {
-  const variationOpts = (pkg && pkg.meta && pkg.meta.variations && pkg.meta.variations[key]) || {}
+  const variationOpts = _.get(pkg, `pkg.meta.variations.${key}`) || {}
   const meta = Object.assign({}, pkg.meta, variationOpts)
+  const visitor = Object.assign({}, defaultVisitor, _.get(pkg.meta.visitor))
+  delete meta.visitor
 
   function set (key, data) {
     experienceState[key] = data
@@ -25,6 +29,7 @@ module.exports = function transform (pkg, key) {
       get: get,
       set: set
     },
+    getVisitorState: () => _.cloneDeep(visitor),
     meta: meta
   }
 }
