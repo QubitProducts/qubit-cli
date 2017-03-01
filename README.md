@@ -68,6 +68,7 @@ xp create <propertyId>
 ```
 note: propertyId is the number after /p/ in our urls
 
+
 ## To push your changes up to the platform:
 
 ```
@@ -78,6 +79,12 @@ xp push
 ```
 xp pull
 ```
+
+## To see a diff between the local file and the platform
+```
+xp diff
+```
+
 
 ## To generate a template from your local experience files:
 
