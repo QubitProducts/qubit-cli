@@ -3,15 +3,15 @@ const chalk = require('chalk')
 const log = require('../lib/log')
 const create = require('./create')
 const extension = require('./extension')
-const login = require('./login')
 const open = require('./open')
 const previewLink = require('./preview-link')
 const clone = require('./clone')
 const pull = require('./pull')
 const push = require('./push')
 const serve = require('./serve')
+const login = require('./login')
 const templatize = require('./templatize')
-const compare = require('./compare')
+const diff = require('./diff')
 
 module.exports = function run (pkg) {
   program
@@ -40,14 +40,9 @@ module.exports = function run (pkg) {
     .action(templatize)
 
   program
-    .command('preview-link')
-    .description('log sharable cross-browser preview links for your variations')
-    .action(previewLink, log.error)
-
-  program
-    .command('compare')
+    .command('diff')
     .description('compare local and remote versions of an experience')
-    .action(compare)
+    .action(diff)
 
   program
     .command('open')
@@ -55,9 +50,19 @@ module.exports = function run (pkg) {
     .action(open)
 
   program
+    .command('preview-link')
+    .description('log sharable cross-browser preview links for your variations')
+    .action(previewLink, log.error)
+
+  program
     .command('extension')
-    .description('open folder containing chrome extension, drag into chrome to install')
+    .description('open folder containing chrome extension, drag into chrome extensions pane to install')
     .action(extension)
+
+  program
+      .command('login')
+      .description('login to the qubit platform')
+      .action(login)
 
   program
     .usage(`[options] <cmd>`)
@@ -67,11 +72,6 @@ module.exports = function run (pkg) {
     .option('-s, --sync', 'watch for changes, live reload and also sync with remote on every change')
     .option('-v, --verbose', 'log verbose output', false)
     .action(serve)
-
-  program
-    .command('login')
-    .description('login to the qubit platform')
-    .action(login)
 
   program.on('--help', function () {
     console.log(`  Tutorial:
