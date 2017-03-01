@@ -3,14 +3,15 @@ const chalk = require('chalk')
 const log = require('../lib/log')
 const create = require('./create')
 const extension = require('./extension')
-const login = require('./login')
 const open = require('./open')
 const previewLink = require('./preview-link')
+const clone = require('./clone')
 const pull = require('./pull')
 const push = require('./push')
 const serve = require('./serve')
+const login = require('./login')
 const templatize = require('./templatize')
-const compare = require('./compare')
+const diff = require('./diff')
 
 module.exports = function run (pkg) {
   program
@@ -19,8 +20,13 @@ module.exports = function run (pkg) {
     .action(create)
 
   program
+    .command('clone')
+    .description(`clone a remote experience from platform`)
+    .action(clone)
+
+  program
     .command('pull')
-    .description(`pull into local experience from platform or template`)
+    .description(`pull remote changes or template into local experience`)
     .action(pull)
 
   program
@@ -34,14 +40,9 @@ module.exports = function run (pkg) {
     .action(templatize)
 
   program
-    .command('preview-link')
-    .description('log sharable cross-browser preview links for your variations')
-    .action(previewLink, log.error)
-
-  program
-    .command('compare')
+    .command('diff')
     .description('compare local and remote versions of an experience')
-    .action(compare)
+    .action(diff)
 
   program
     .command('open')
@@ -49,9 +50,19 @@ module.exports = function run (pkg) {
     .action(open)
 
   program
+    .command('preview-link')
+    .description('log sharable cross-browser preview links for your variations')
+    .action(previewLink, log.error)
+
+  program
     .command('extension')
-    .description('open folder containing chrome extension, drag into chrome to install')
+    .description('open folder containing chrome extension, drag into chrome extensions pane to install')
     .action(extension)
+
+  program
+      .command('login')
+      .description('login to the qubit platform')
+      .action(login)
 
   program
     .usage(`[options] <cmd>`)
@@ -62,53 +73,60 @@ module.exports = function run (pkg) {
     .option('-v, --verbose', 'log verbose output', false)
     .action(serve)
 
-  program
-    .command('login')
-    .description('login to the qubit platform')
-    .action(login)
-
   program.on('--help', function () {
     console.log(`  Tutorial:
 
-      To install the extension:
-      $ ${chalk.green.bold('xp extension')}
-      then drag the chrome-extension folder into chrome
+    To install the extension:
+    $ ${chalk.green.bold('xp extension')}
+    then drag the chrome-extension folder into the chrome extensions pane
 
-      To quickly hack on something with no side effects:
-      $ ${chalk.green.bold('xp pull example')}
-      $ ${chalk.green.bold('xp --watch')}
-      Now open chrome and turn on xp by clicking on the extension icon
-      you should see the background of the page turn ${chalk.yellow.bold('yellow')}!
+    Previewing with local server:
+    $ ${chalk.green.bold('xp pull example')}
+    $ ${chalk.green.bold('xp --watch')}
+    Now open chrome and turn on xp by clicking on the extension icon
+    you should see the background of the page turn ${chalk.yellow.bold('yellow')}!
+    Change the css in varaition.css, and the preview should update on the fly!
 
-      To pull down an existing experience:
-      - ${chalk.green.bold('xp pull <propertyId> <experienceId>')} if you know the propertyId and experienceId
-      - ${chalk.green.bold('xp pull https://app.qubit.com/p/{propertyId}/experiences/{experienceId}')} if you know the url
-      - Otherwise, type ${chalk.green.bold('xp pull')} then navigate to your experience and xp will guide you from there
+    To clone an existing experience:
+    - ${chalk.green.bold('xp clone <propertyId> <experienceId>')} if you know the propertyId and experienceId
+    - ${chalk.green.bold('xp clone https://app.qubit.com/p/{propertyId}/experiences/{experienceId}')} if you know the url
+    - Otherwise, type ${chalk.green.bold('xp clone')} then navigate to your experience and xp will guide you from there
 
-      To create a new experience in the platform:
-      $ ${chalk.green.bold('xp create <propertyId>')}
-      note: propertyId is the number after /p/ in our urls
+    To create a new experience:
+    $ ${chalk.green.bold('xp create <propertyId>')}
+    note: propertyId is the number after /p/ in our urls
 
-      To save your changes to the platform:
-      $ ${chalk.green.bold('xp push')}
+    To push your changes up to the platform
+    $ ${chalk.green.bold('xp push')}
 
-      To generate a template from a local experience:
-      $ ${chalk.green.bold('xp templatize')}
+    To pull remote changes from the platform:
+    $ ${chalk.green.bold('xp pull')}
 
-      To pull an existing template into a local experience:
-      $ ${chalk.green.bold('xp pull <templateName>')}
+    To generate a template from your local experience files:
+    $ ${chalk.green.bold('xp templatize')}
 
-      To enable hot reloading:
-      Implement a remove function in your variation file like so:
+    To scaffold an experience from a template:
+    $ ${chalk.green.bold('xp pull <templateName>')}
 
-      function execution (options) {
-        console.log('executing variation')
-        return {
-          remove: function remove () {
-            // undo any changes e.g. $modal.remove()
-          }
+    To make an xp template available for sharing:
+    publish to npm or git
+    consumers can then simply install like so:
+
+    $ ${chalk.green.bold('npm install -g xp-tmp-example')}
+    $ ${chalk.green.bold('npm install -g github:user/xp-tmp-example')}
+    $ ${chalk.green.bold('npm install -g github:user/xp-multi-template-repo/example')}
+
+    To enable hot reloading:
+    Implement a remove function in your variation file like so:
+
+    function execution (options) {
+      console.log('executing variation')
+      return {
+        remove: function remove () {
+          // undo any changes e.g. $modal.remove()
         }
-      }`)
+      }
+    }`)
   })
 
   program.parse(process.argv)

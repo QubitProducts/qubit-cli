@@ -2,6 +2,7 @@ const path = require('path')
 const chalk = require('chalk')
 const fs = require('fs-promise')
 const log = require('./log')
+const exists = require('./exists')
 let shouldWrite = require('./should-write')
 let shouldRemove = require('./should-remove')
 
@@ -18,7 +19,7 @@ module.exports = async function scaffold (dest, files, neverOverwrite, removeExt
     }
   }
 
-  if (removeExtraneous) {
+  if (removeExtraneous && await exists(dest)) {
     const actual = await fs.readdir(dest)
     const extraneous = actual.filter(file => !Object.keys(files).includes(file))
     await Promise.all(extraneous.map(async file => {
@@ -31,7 +32,7 @@ module.exports = async function scaffold (dest, files, neverOverwrite, removeExt
     let result = await shouldWrite(dest, name, value, !neverOverwrite)
     if (result) {
       if (log) log(`writing to local ${chalk.green.bold(name)} file...`)
-      return fs.writeFile(path.join(dest, name), value)
+      return fs.outputFile(path.join(dest, name), value)
     }
   }
 }
