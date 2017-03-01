@@ -31,7 +31,7 @@ module.exports = async function scaffold (dest, files, neverOverwrite, removeExt
     let result = await shouldWrite(dest, name, value, !neverOverwrite)
     if (result) {
       if (log) log(`writing to local ${chalk.green.bold(name)} file...`)
-      return fs.writeFile(path.join(dest, name), value)
+      return fs.outputFile(path.join(dest, name), value)
     }
   }
 }
