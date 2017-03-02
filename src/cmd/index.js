@@ -4,7 +4,8 @@ const log = require('../lib/log')
 const create = require('./create')
 const extension = require('./extension')
 const open = require('./open')
-const previewLink = require('./preview-link')
+const link = require('./link')
+const qa = require('./qa')
 const clone = require('./clone')
 const pull = require('./pull')
 const push = require('./push')
@@ -46,13 +47,23 @@ module.exports = function run (pkg) {
 
   program
     .command('open')
-    .description('open the overview page for your local experience')
+    .option('--preview', 'push first. open the preview link for your local experience')
+    .option('--settings', 'open the settings page on app.qubit.com for your local experience')
+    .option('--editor', 'open the editor page on app.qubit.com for your local experience')
+    .description('open the overview page on app.qubit.com for your local experience')
     .action(open)
 
   program
-    .command('preview-link')
-    .description('log sharable cross-browser preview links for your variations')
-    .action(previewLink, log.error)
+    .command('link')
+    .option('--app', 'logs and copies the app.qubit.com link')
+    .option('--preview', 'logs and copies the preview link(s)')
+    .description('log and copy shareable links for your experience')
+    .action(link, log.error)
+
+  program
+    .command('qa')
+    .description('generate and copy a PR ready QA comment')
+    .action(qa)
 
   program
     .command('extension')
@@ -60,9 +71,9 @@ module.exports = function run (pkg) {
     .action(extension)
 
   program
-      .command('login')
-      .description('login to the qubit platform')
-      .action(login)
+    .command('login')
+    .description('login to the qubit platform')
+    .action(login)
 
   program
     .usage(`[options] <cmd>`)

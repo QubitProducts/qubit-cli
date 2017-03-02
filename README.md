@@ -80,11 +80,27 @@ xp push
 xp pull
 ```
 
-## To see a diff between the local file and the platform
+## To see a diff between the local file and the platform:
 ```
 xp diff
 ```
 
+## To open experience overview on app.qubit.com:
+```
+xp open
+```
+`--preview`, `--settings`, `--editor` being options
+
+## To get and copy to clipboard relevant links (option required): 
+```
+xp link
+```
+`--app` and `--preview` being options
+
+## To generate, prefill, and copy to clipboard the QA template:
+```
+xp qa
+```
 
 ## To generate a template from your local experience files:
 
