@@ -1,6 +1,8 @@
 const _ = require('lodash')
 const rewire = require('rewire')
+global.window = {}
 const transform = rewire('../../src/client/options')
+delete global.window
 const expect = require('chai').expect
 const pkgFixture = require('../fixtures/pkg.json')
 const variationName = Object.keys(pkgFixture.meta.variations)[0]
@@ -65,7 +67,7 @@ describe('transform', function () {
     })
 
     it('gets enriched with a trackingId attribute', function () {
-      expect(meta.trackingId).to.eql('qubitproducts')
+      expect(meta.trackingId).to.eql('tracking_id')
     })
 
     it('gets enriched with a visitorId attribute', function () {

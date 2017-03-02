@@ -1,6 +1,6 @@
-var sinon = require('sinon')
-var engine = require('../../src/client/engine')
-var expect = require('chai').expect
+const sinon = require('sinon')
+const engine = require('../../src/client/engine')
+const expect = require('chai').expect
 
 describe('engine', function () {
   var globalFn, activationFn, variationFn, callCallback, options

@@ -1,8 +1,8 @@
-var _ = require('lodash')
-var sinon = require('sinon')
-var cookieman = require('cookieman')
-var rememberPreview = require('../../src/client/remember-preview')
-var expect = require('chai').expect
+const _ = require('lodash')
+const sinon = require('sinon')
+const cookieman = require('cookieman')
+const rememberPreview = require('../../src/client/remember-preview')
+const expect = require('chai').expect
 
 describe('rememberPreview', function () {
   var db, restorable, originalWindow
