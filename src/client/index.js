@@ -1,45 +1,21 @@
-/* globals __VARIATIONJS__, __VARIATIONCSS__ */
+/* globals __VARIATIONJS__ __VARIATIONCSS__ __CWD__ */
+const context = require.context(__CWD__)
 const _ = require('lodash')
 const amd = require('./amd')
 const engine = require('./engine')
 const options = require('./options')
 const key = __VARIATIONCSS__.replace(/\.css$/, '')
 const opts = options(require('package.json'), key)
-const cleanup = []
+const modules = { variation: {}, triggers: {} }
 
 _.set(window, '__qubit.amd', amd())
 
 init()
 
 function init () {
-  _.set(window, '__qubit.xp', {})
   engine(opts, globalFn, triggerFn, variationFn)
-  restartOnPageView()
-}
-
-function globalFn () {
-  require('global')
-}
-
-function triggerFn (opts, cb) {
-  const api = require('triggers')(opts, cb)
-  if (_.get(api, 'remove')) cleanup.push(api.remove)
-  handleHotReload(api)
-  return api
-}
-
-function variationFn (opts) {
-  require(__VARIATIONCSS__)
-  const api = require(__VARIATIONJS__)(opts)
-  if (_.get(api, 'remove')) cleanup.push(api.remove)
-  handleHotReload(api)
-}
-
-function restartOnPageView () {
-  const viewRegex = /^([^.]+\.)?[a-z]{2}View$/
-  waitFor(() => window.__qubit.uv, 50, function () {
-    window.uv.once(viewRegex, () => window.uv.on(viewRegex, restart)).replay()
-  })
+  onSecondPageView(restart)
+  registerHotReloads()
 }
 
 function restart (api) {
@@ -48,16 +24,57 @@ function restart (api) {
 }
 
 function destroy () {
-  while (cleanup.length) cleanup.pop()()
+  let { removeStyles, remove } = modules.variation
+  if (removeStyles) removeStyles()
+  if (remove) remove()
+  ;({ remove } = modules.triggers)
+  if (remove) remove()
 }
 
-function handleHotReload (api) {
-  if (api && api.remove) {
-    const hot = module.hot
-    hot.accept()
-    hot.dispose(destroy)
-  } else {
-    module.hot.decline()
+function globalFn () {
+  eval.call(window, require('global')) // eslint-disable-line
+}
+
+function triggerFn (opts, cb) {
+  modules.triggers = require('triggers') || _.noop
+  opts = Object.assign({}, opts, { log: opts.log('triggers') })
+  const remove = _.get(modules.triggers(opts, cb), 'remove')
+  modules.triggers.remove = remove && _.once(remove)
+}
+
+function variationFn (opts) {
+  modules.variation = require(__VARIATIONJS__) || _.noop
+  const style = require(__VARIATIONCSS__)
+  style.ref()
+  opts = Object.assign({}, opts, { log: opts.log('variation') })
+  const remove = _.get(require(__VARIATIONJS__)(opts), 'remove')
+  modules.variation.remove = remove && _.once(remove)
+  modules.variation.removeStyles = _.once(() => style.unref())
+}
+
+function onSecondPageView (cb) {
+  const viewRegex = /^([^.]+\.)?[a-z]{2}View$/
+  waitFor(() => window.__qubit.uv, 50, () => {
+    window.uv.once(viewRegex, () => window.uv.on(viewRegex, cb)).replay()
+  })
+}
+
+function registerHotReloads () {
+  if (!module.hot) return
+  module.hot.accept(allModules(), () => {
+    const variation = require(__VARIATIONJS__)
+    const triggers = require('triggers')
+    if (cold(variation, modules.variation, modules.variation.remove)) return window.location.reload()
+    if (cold(triggers, modules.triggers, modules.triggers.remove)) return window.location.reload()
+    restart()
+  })
+
+  function allModules () {
+    return _.uniq(context.keys().map(key => context.resolve(key))).concat([require.resolve(__VARIATIONJS__)])
+  }
+
+  function cold (current, old, remove) {
+    return (current && current !== old && !remove)
   }
 }
 
