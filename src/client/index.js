@@ -43,15 +43,19 @@ function restartOnPageView () {
 }
 
 function restart (api) {
-  while (cleanup.length) cleanup.pop()()
+  destroy()
   engine(opts, _.noop, triggerFn, variationFn)
+}
+
+function destroy () {
+  while (cleanup.length) cleanup.pop()()
 }
 
 function handleHotReload (api) {
   if (api && api.remove) {
     const hot = module.hot
     hot.accept()
-    hot.dispose(api.remove)
+    hot.dispose(destroy)
   } else {
     module.hot.decline()
   }

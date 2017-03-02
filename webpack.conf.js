@@ -3,10 +3,9 @@ var webpack = require('webpack')
 var cwd = process.cwd()
 
 module.exports = {
-  contentBase: cwd,
   entry: [
     path.join(__dirname, 'src/client/index'),
-    'webpack-hot-middleware/client?path=https://localhost:41337/__webpack_hmr&timeout=20000&reload=true&warn=false&noInfo=true'
+    'webpack-hot-middleware/client?path=https://localhost:41337/__webpack_hmr&timeout=20000&reload=true&&noInfo=true'
   ],
   output: {
     path: __dirname,
@@ -16,19 +15,21 @@ module.exports = {
   amd: { jQuery: true },
   devtool: '#source-map',
   resolve: {
-    root: [cwd, path.join(cwd, 'node_modules'), path.join(__dirname, 'node_modules')]
+    modules: [cwd, path.join(cwd, 'node_modules'), path.join(__dirname, 'node_modules')]
+  },
+  resolveLoader: {
+    modules: [path.join(__dirname, 'node_modules')]
   },
   module: {
     loaders: [
-      { test: /(triggers)\.js$/, loader: 'xp-loader' },
-      { test: /global\.js$/, loader: 'script' },
-      { test: /\.css$/, loader: 'style!raw!less' },
-      { test: /\.json$/, loader: 'json' }
+      { test: /(triggers)\.js$/, loader: '@qubit/xp-loader' },
+      // { test: /global\.js$/, loader: 'script-loader' },
+      { test: /\.css$/, loader: 'style-loader!raw-loader!less-loader' },
+      { test: /\.json$/, loader: 'json-loader' }
     ]
   },
   plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.HotModuleReplacementPlugin()
   ]
 }

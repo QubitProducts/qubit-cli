@@ -44,6 +44,7 @@
     "@qubit/social-proof": "^1.1.5",
     "@qubit/stash-count": "^1.3.8",
     "@qubit/uv-api": "^4.1.0",
+    "@qubit/xp-loader": "^1.0.0",
     "async-to-gen": "github:alanclarke/async-to-gen",
     "axios": "^0.12.0",
     "body-parser": "^1.15.1",
@@ -74,14 +75,13 @@
     "qs": "^6.3.0",
     "script-loader": "^0.7.0",
     "server-destroy": "^1.0.1",
-    "style-loader": "^0.13.1",
+    "style-loader": "^0.13.2",
     "sync-p": "^1.1.3",
     "update-notifier": "^2.1.0",
     "urlite": "^1.2.7",
-    "webpack": "^1.13.1",
-    "webpack-dev-middleware": "^1.7.0",
-    "webpack-hot-middleware": "^2.12.2",
-    "xp-loader": "github:qubitdigital/xp-loader"
+    "webpack": "^2.2.1",
+    "webpack-dev-middleware": "^1.10.1",
+    "webpack-hot-middleware": "^2.17.1"
   },
   "standard": {
     "ignore": [
