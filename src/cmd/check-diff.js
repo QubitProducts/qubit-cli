@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const chalk = require('chalk')
 const codeService = require('../services/code')
 const log = require('../lib/log')
@@ -7,13 +8,16 @@ let CWD = process.cwd()
 
 module.exports = async function checkDiff (propertyId, experienceId) {
   log('Comparing files...')
-  const files = await codeService.get(propertyId, experienceId)
+  let diffs = []
+  const remoteFiles = await codeService.get(propertyId, experienceId)
   const localFiles = await readFiles(CWD)
-  const fileDiffs = checkDiff(localFiles, files)
+  checkDiffs(localFiles, remoteFiles)
+  checkDiffs(remoteFiles, localFiles)
+  diffs = _.uniqBy(diffs, 'fileName')
 
-  if (fileDiffs.length) {
+  if (diffs.length) {
     log('Showing diff between local and remote files...')
-    for (let diffObj of fileDiffs) {
+    for (let diffObj of diffs) {
       const { fileName, diff } = diffObj
       console.log(`${chalk.blue.bold(fileName)} \n`)
       diff.forEach(parts => {
@@ -25,16 +29,14 @@ module.exports = async function checkDiff (propertyId, experienceId) {
     log('Both versions are the same!')
   }
 
-  function checkDiff (localFiles, files) {
-    let diffs = []
+  function checkDiffs (comparisonFiles, files) {
     for (let name in files) {
-      const remoteVal = files[name]
-      const localVal = localFiles[name]
-      if (remoteVal !== localVal) {
-        const diff = jsdiff.diffLines(remoteVal, localVal, [{ignoreWhitespace: true}])
+      const value = files[name] || ''
+      const compVal = comparisonFiles[name] || ''
+      if (value !== compVal) {
+        const diff = jsdiff.diffLines(value, compVal, [{ignoreWhitespace: true}])
         diffs.push({fileName: name.toUpperCase(), diff: diff})
       }
     }
-    return diffs
   }
 }
