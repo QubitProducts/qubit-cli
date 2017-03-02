@@ -1,10 +1,12 @@
 const _ = require('lodash')
 const log = require('../lib/log')
+const codeService = require('../services/code')
+const readFiles = require('../lib/read-files')
 const getPkg = require('../lib/get-pkg')
 const down = require('../services/down')
-const up = require('./up')
 const diff = require('./diff')
 const chalk = require('chalk')
+let CWD = process.cwd()
 
 module.exports = async function push (options) {
   const pkg = await getPkg()
@@ -12,7 +14,7 @@ module.exports = async function push (options) {
   if (!propertyId || !experienceId) return log('nothing to push')
 
   if (!options.force) {
-    let { files } = await down(propertyId, experienceId)
+    let { files, experience, variations } = await down(propertyId, experienceId)
 
     let remotePkg = JSON.parse(files['package.json'])
     let remoteExperienceUpdatedAt = remotePkg.meta.remoteUpdatedAt
@@ -30,5 +32,8 @@ module.exports = async function push (options) {
     }
   }
 
-  await up(propertyId, experienceId)
+  log('pushing...')
+  let results = await codeService.set(propertyId, experienceId, await readFiles(CWD))
+  console.log(results)
+  log('pushed!')
 }

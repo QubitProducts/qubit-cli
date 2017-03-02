@@ -15,13 +15,18 @@ async function set (propertyId, experienceId, files) {
   const oldExperience = await experienceService.get(propertyId, experienceId)
   let newExperience = experienceService.setCode(oldExperience, files)
   newExperience = pkgService.setCode(newExperience, files)
-  if (!_.isEqual(oldExperience, newExperience)) await experienceService.set(propertyId, experienceId, newExperience)
-  const variations = await variationService.getAll(propertyId, experienceId)
-  _.each(variations, async (oldVariation) => {
-    if (oldVariation.is_control) return
-    const newVariation = variationService.setCode(oldVariation, files)
-    if (!_.isEqual(oldVariation, newVariation)) await variationService.set(propertyId, experienceId, oldVariation.id, newVariation)
-  })
+  return {
+    experience: _.isEqual(oldExperience, newExperience)
+      ? oldExperience
+      : await experienceService.set(propertyId, experienceId, newExperience),
+    variations: await Promise.all(variationService.getAll(propertyId, experienceId).map(async oldVariation => {
+      if (oldVariation.is_control) return oldVariation
+      const newVariation = variationService.setCode(oldVariation, files)
+      return _.isEqual(oldVariation, newVariation)
+        ? oldVariation
+        : await variationService.set(propertyId, experienceId, oldVariation.id, newVariation)
+    }))
+  }
 }
 
 function getCode (experience, variations) {
