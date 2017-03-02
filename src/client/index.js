@@ -1,69 +1,84 @@
-/* globals __VARIATIONJS__, __VARIATIONCSS__ */
+/* globals __VARIATIONJS__ __VARIATIONCSS__ __CWD__ */
+const context = require.context(__CWD__)
+const _ = require('lodash')
 const amd = require('./amd')
 const engine = require('./engine')
 const options = require('./options')
 const key = __VARIATIONCSS__.replace(/\.css$/, '')
 const opts = options(require('package.json'), key)
+const modules = { variation: {}, triggers: {} }
 
-window.__qubit = window.__qubit || {}
-window.__qubit.amd = amd()
+_.set(window, '__qubit.amd', amd())
+
 init()
 
 function init () {
   engine(opts, globalFn, triggerFn, variationFn)
-  window.__qubit = window.__qubit || { smartserve: {} }
-  window.__qubit.smartserve = window.__qubit.smartserve || {}
-  window.__qubit.xp = window.__qubit.xp || {}
-
-  overrideStart(window.__qubit.smartserve, function () {
-    return engine(opts, noop, triggerFn, variationFn)
-  })
+  onSecondPageView(restart)
+  registerHotReloads()
 }
 
-function overrideStart (smartserve, cb) {
-  window.__qubit.xp.start = window.__qubit.xp.start || null
-  Object.defineProperty(smartserve, 'start', {
-    configurable: true,
-    get: function () {
-      return function () {
-        cb()
-        return window.__qubit.xp.start.apply(smartserve, arguments)
-      }
-    },
-    set: function (newStart) {
-      window.__qubit.xp.start = newStart
-    }
-  })
+function restart (api) {
+  destroy()
+  engine(opts, _.noop, triggerFn, variationFn)
+}
+
+function destroy () {
+  let { removeStyles, remove } = modules.variation
+  if (removeStyles) removeStyles()
+  if (remove) remove()
+  ;({ remove } = modules.triggers)
+  if (remove) remove()
 }
 
 function globalFn () {
-  require('global')
-}
-
-function executeAgainOnCodeChange (api) {
-  var hot = module.hot
-  hot.accept()
-  hot.dispose(api.remove)
-}
-
-function handleHotReload (api) {
-  if (api && api.remove) {
-    executeAgainOnCodeChange(api)
-  } else {
-    module.hot.decline()
-  }
+  eval.call(window, require('global')) // eslint-disable-line
 }
 
 function triggerFn (opts, cb) {
-  var api = require('triggers')(opts, cb)
-  handleHotReload(api)
-  return api
+  modules.triggers = require('triggers') || _.noop
+  opts = Object.assign({}, opts, { log: opts.log('triggers') })
+  const remove = _.get(modules.triggers(opts, cb), 'remove')
+  modules.triggers.remove = remove && _.once(remove)
 }
 
 function variationFn (opts) {
-  require(__VARIATIONCSS__)
-  var api = require(__VARIATIONJS__)(opts)
-  handleHotReload(api)
+  modules.variation = require(__VARIATIONJS__) || _.noop
+  const style = require(__VARIATIONCSS__)
+  style.ref()
+  opts = Object.assign({}, opts, { log: opts.log('variation') })
+  const remove = _.get(require(__VARIATIONJS__)(opts), 'remove')
+  modules.variation.remove = remove && _.once(remove)
+  modules.variation.removeStyles = _.once(() => style.unref())
 }
 
-function noop () {}
+function onSecondPageView (cb) {
+  const viewRegex = /^([^.]+\.)?[a-z]{2}View$/
+  waitFor(() => window.__qubit.uv, 50, () => {
+    window.uv.once(viewRegex, () => window.uv.on(viewRegex, cb)).replay()
+  })
+}
+
+function registerHotReloads () {
+  if (!module.hot) return
+  module.hot.accept(allModules(), () => {
+    const variation = require(__VARIATIONJS__)
+    const triggers = require('triggers')
+    if (cold(variation, modules.variation, modules.variation.remove)) return window.location.reload()
+    if (cold(triggers, modules.triggers, modules.triggers.remove)) return window.location.reload()
+    restart()
+  })
+
+  function allModules () {
+    return _.uniq(context.keys().map(key => context.resolve(key))).concat([require.resolve(__VARIATIONJS__)])
+  }
+
+  function cold (current, old, remove) {
+    return (current && current !== old && !remove)
+  }
+}
+
+function waitFor (test, ms, cb) {
+  if (test()) return cb()
+  setTimeout(() => waitFor(test, ms, cb), ms)
+}

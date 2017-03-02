@@ -37,7 +37,7 @@ module.exports = async function serve (options) {
     log('watching for changes')
     emitter.on('rebuild', push)
   }
-  const compiler = webpack(Object.assign(createWebpackConfig(options), verboseOpts))
+  const compiler = webpack(Object.assign(createWebpackConfig(options)))
   compiler.plugin('done', (data) => emitter.emit('rebuild', data))
   app.use(webpackDevMiddleware(compiler, Object.assign({
     publicPath: webpackConf.output.publicPath
@@ -56,7 +56,8 @@ module.exports = async function serve (options) {
 function createWebpackConfig (options) {
   const plugins = webpackConf.plugins.slice(0)
   plugins.push(new webpack.DefinePlugin({
-    __VARIATIONJS__: `'xp-loader!${options.variation}.js'`,
+    __CWD__: `'${CWD}'`,
+    __VARIATIONJS__: `'@qubit/xp-loader!${options.variation}.js'`,
     __VARIATIONCSS__: `'${options.variation}.css'`
   }))
   const entry = webpackConf.entry.slice(0)
