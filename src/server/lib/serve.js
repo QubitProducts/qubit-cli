@@ -56,6 +56,7 @@ module.exports = async function serve (options) {
 function createWebpackConfig (options) {
   const plugins = webpackConf.plugins.slice(0)
   plugins.push(new webpack.DefinePlugin({
+    __CWD__: `'${CWD}'`,
     __VARIATIONJS__: `'@qubit/xp-loader!${options.variation}.js'`,
     __VARIATIONCSS__: `'${options.variation}.css'`
   }))
