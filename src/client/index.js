@@ -1,69 +1,63 @@
 /* globals __VARIATIONJS__, __VARIATIONCSS__ */
+const _ = require('lodash')
 const amd = require('./amd')
 const engine = require('./engine')
 const options = require('./options')
 const key = __VARIATIONCSS__.replace(/\.css$/, '')
 const opts = options(require('package.json'), key)
+const cleanup = []
 
-window.__qubit = window.__qubit || {}
-window.__qubit.amd = amd()
+_.set(window, '__qubit.amd', amd())
+
 init()
 
 function init () {
+  _.set(window, '__qubit.xp', {})
   engine(opts, globalFn, triggerFn, variationFn)
-  window.__qubit = window.__qubit || { smartserve: {} }
-  window.__qubit.smartserve = window.__qubit.smartserve || {}
-  window.__qubit.xp = window.__qubit.xp || {}
-
-  overrideStart(window.__qubit.smartserve, function () {
-    return engine(opts, noop, triggerFn, variationFn)
-  })
-}
-
-function overrideStart (smartserve, cb) {
-  window.__qubit.xp.start = window.__qubit.xp.start || null
-  Object.defineProperty(smartserve, 'start', {
-    configurable: true,
-    get: function () {
-      return function () {
-        cb()
-        return window.__qubit.xp.start.apply(smartserve, arguments)
-      }
-    },
-    set: function (newStart) {
-      window.__qubit.xp.start = newStart
-    }
-  })
+  restartOnPageView()
 }
 
 function globalFn () {
   require('global')
 }
 
-function executeAgainOnCodeChange (api) {
-  var hot = module.hot
-  hot.accept()
-  hot.dispose(api.remove)
-}
-
-function handleHotReload (api) {
-  if (api && api.remove) {
-    executeAgainOnCodeChange(api)
-  } else {
-    module.hot.decline()
-  }
-}
-
 function triggerFn (opts, cb) {
-  var api = require('triggers')(opts, cb)
+  const api = require('triggers')(opts, cb)
+  if (_.get(api, 'remove')) cleanup.push(api.remove)
   handleHotReload(api)
   return api
 }
 
 function variationFn (opts) {
   require(__VARIATIONCSS__)
-  var api = require(__VARIATIONJS__)(opts)
+  const api = require(__VARIATIONJS__)(opts)
+  if (_.get(api, 'remove')) cleanup.push(api.remove)
   handleHotReload(api)
 }
 
-function noop () {}
+function restartOnPageView () {
+  const viewRegex = /^([^.]+\.)?[a-z]{2}View$/
+  waitFor(() => window.__qubit.uv, 50, function () {
+    window.uv.once(viewRegex, () => window.uv.on(viewRegex, restart)).replay()
+  })
+}
+
+function restart (api) {
+  while (cleanup.length) cleanup.pop()()
+  engine(opts, _.noop, triggerFn, variationFn)
+}
+
+function handleHotReload (api) {
+  if (api && api.remove) {
+    const hot = module.hot
+    hot.accept()
+    hot.dispose(api.remove)
+  } else {
+    module.hot.decline()
+  }
+}
+
+function waitFor (test, ms, cb) {
+  if (test()) return cb()
+  setTimeout(() => waitFor(test, ms, cb), ms)
+}
