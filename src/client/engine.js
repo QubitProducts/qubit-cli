@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const log = require('./log')
 module.exports = function experienceEngine (options, globalFn, triggerFn, variationFn) {
   globalFn()
   if (triggerFn(_.cloneDeep(options), activate) === true) execute()
@@ -6,10 +7,10 @@ module.exports = function experienceEngine (options, globalFn, triggerFn, variat
   function activate (pass) {
     const shouldActivate = pass || typeof pass === 'undefined'
     if (!shouldActivate) {
-      console.log('activation returned false')
+      log.info('activation returned false')
       return
     }
-    console.log('activation returned true')
+    log.info('activation returned true')
     execute()
   }
 
