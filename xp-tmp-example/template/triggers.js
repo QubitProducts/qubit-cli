@@ -1,4 +1,7 @@
 function triggers (options, cb) {
-  console.log('executing triggers')
+  options.log.info('Hello from triggers')
   cb()
+  return {
+    remove: () => options.log.info('Cleaning up triggers')
+  }
 }

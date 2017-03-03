@@ -1,3 +1,6 @@
 function execution (options) {
-  console.log('executing varaition')
+  options.log.info('Hello from varaition')
+  return {
+    remove: () => options.log.info('Cleaning up varaition')
+  }
 }
