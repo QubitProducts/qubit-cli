@@ -6,7 +6,7 @@ const map = {
   '@qubit/jquery': require('@qubit/jquery'),
   '@qubit/mvt': require('@qubit/mvt'),
   '@qubit/poller': require('@qubit/poller'),
-  '@qubit/remember-preview': require('@qubit/remember-preview'),
+  '@qubit/remember-preview': require('./remember-preview'),
   '@qubit/send-uv-event': require('@qubit/send-uv-event'),
   '@qubit/social-proof': require('@qubit/social-proof'),
   '@qubit/stash-count': require('@qubit/stash-count'),
