@@ -1,11 +1,10 @@
-/* globals __VARIATIONJS__ __VARIATIONCSS__ __CWD__ */
+/* globals __VARIATION__ __CWD__ */
 const context = require.context(__CWD__)
 const _ = require('lodash')
 const amd = require('./amd')
 const engine = require('./engine')
 const options = require('./options')
-const key = __VARIATIONCSS__.replace(/\.css$/, '')
-const opts = options(require('package.json'), key)
+const opts = options(require('package.json'), __VARIATION__)
 const modules = { variation: {}, triggers: {} }
 
 _.set(window, '__qubit.amd', amd())
@@ -43,11 +42,11 @@ function triggerFn (opts, cb) {
 }
 
 function variationFn (opts) {
-  modules.variation = require(__VARIATIONJS__) || _.noop
-  const style = require(__VARIATIONCSS__)
+  modules.variation = require(__VARIATION__ + '.js') || _.noop
+  const style = require(__VARIATION__ + '.css')
   style.ref()
   opts = Object.assign({}, opts, { log: opts.log('variation') })
-  const remove = _.get(require(__VARIATIONJS__)(opts), 'remove')
+  const remove = _.get(modules.variation(opts), 'remove')
   modules.variation.remove = remove && _.once(remove)
   modules.variation.removeStyles = _.once(() => style.unref())
 }
@@ -62,7 +61,7 @@ function onSecondPageView (cb) {
 function registerHotReloads () {
   if (!module.hot) return
   module.hot.accept(allModules(), () => {
-    const variation = require(__VARIATIONJS__)
+    const variation = require(__VARIATION__ + '.js')
     const triggers = require('triggers')
     if (cold(variation, modules.variation, modules.variation.remove)) return window.location.reload()
     if (cold(triggers, modules.triggers, modules.triggers.remove)) return window.location.reload()
@@ -70,7 +69,7 @@ function registerHotReloads () {
   })
 
   function allModules () {
-    return _.uniq(context.keys().map(key => context.resolve(key))).concat([require.resolve(__VARIATIONJS__)])
+    return _.uniq(context.keys().map(key => context.resolve(key))).concat([require.resolve(__VARIATION__ + '.js')])
   }
 
   function cold (current, old, remove) {
