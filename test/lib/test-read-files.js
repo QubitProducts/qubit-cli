@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs-promise')
 const {expect} = require('chai')
 const fixtures = path.join(__dirname, 'fixtures/tmp/read-files')
-const readFiles = require('../src/lib/read-files')
+const readFiles = require('../../src/lib/read-files')
 
 describe('read-files', function () {
   beforeEach(() => Promise.all([
