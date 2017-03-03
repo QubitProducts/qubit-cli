@@ -12,16 +12,27 @@ async function get (propertyId, experienceId) {
 }
 
 async function set (propertyId, experienceId, files) {
+  const oldVariations = await variationService.getAll(propertyId, experienceId)
+  const variations = await Promise.all(oldVariations.map(async oldVariation => {
+    if (oldVariation.is_control) return oldVariation
+    const newVariation = variationService.setCode(oldVariation, files)
+    return eql(oldVariation, newVariation)
+      ? oldVariation
+      : await variationService.set(propertyId, experienceId, oldVariation.id, newVariation)
+  }))
+
   const oldExperience = await experienceService.get(propertyId, experienceId)
   let newExperience = experienceService.setCode(oldExperience, files)
   newExperience = pkgService.setCode(newExperience, files)
-  if (!_.isEqual(oldExperience, newExperience)) await experienceService.set(propertyId, experienceId, newExperience)
-  const variations = await variationService.getAll(propertyId, experienceId)
-  _.each(variations, async (oldVariation) => {
-    if (oldVariation.is_control) return
-    const newVariation = variationService.setCode(oldVariation, files)
-    if (!_.isEqual(oldVariation, newVariation)) await variationService.set(propertyId, experienceId, oldVariation.id, newVariation)
-  })
+  const experience = eql(oldExperience, newExperience)
+    ? oldExperience
+    : await experienceService.set(propertyId, experienceId, newExperience)
+
+  return { variations, experience }
+}
+
+function eql (a, b) {
+  return _.isEqual(_.omit(a, ['meta']), _.omit(b, ['meta']))
 }
 
 function getCode (experience, variations) {

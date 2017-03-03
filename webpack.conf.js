@@ -25,7 +25,7 @@ module.exports = {
   module: {
     loaders: [
       { test: /global\.js$/, loader: 'raw-loader' },
-      { test: /(triggers)\.js$/, loader: 'xp-loader' },
+      { test: /(triggers)\.js$/, loader: '@qubit/xp-loader' },
       { test: /\.css$/, loader: 'style-loader/useable!raw-loader!less-loader' },
       { test: /\.json$/, loader: 'json-loader' }
     ]

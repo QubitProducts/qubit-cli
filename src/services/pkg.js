@@ -13,11 +13,13 @@ function getCode (experience, variations) {
       experienceId: experience.id,
       iterationId: _.get(experience, 'recent_iterations.draft.id'),
       previewUrl: _.get(experience, 'recent_iterations.draft.url'),
+      remoteUpdatedAt: normalizeDate(_.get(experience, 'recent_iterations.draft.updated_at')),
       variations: variations.reduce((memo, variation) => {
         memo[getFilename(variation)] = {
           variationId: variation.id,
           variationIsControl: variation.is_control,
-          variationMasterId: variation.master_id
+          variationMasterId: variation.master_id,
+          remoteUpdatedAt: normalizeDate(variation.updated_at)
         }
         return memo
       }, {}),
@@ -26,6 +28,12 @@ function getCode (experience, variations) {
     }
   }, null, 2)
   return files
+}
+
+function normalizeDate (str) {
+  let date = new Date(str)
+  date.setSeconds(date.getSeconds(), 0)
+  return date
 }
 
 function setCode (experience, files) {
