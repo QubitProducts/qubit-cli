@@ -7,8 +7,8 @@ describe('isType', function () {
       expect(isName('blue-template')).to.eql(true)
     })
 
-    it('should return false if string is empty', function () {
-      expect(isName(' ')).to.eql(false)
+    it('should return false if string contains white space', function () {
+      expect(isName('blue template')).to.eql(false)
     })
   })
 
@@ -19,6 +19,16 @@ describe('isType', function () {
 
     it('should return false if string does not start with "http"', function () {
       expect(isUrl('//isnoturl.com')).to.eql(false)
+    })
+  })
+
+  describe('isId', function () {
+    it('should return true if string starts with a digit', function () {
+      expect(isId('123')).to.eql(true)
+    })
+
+    it('should return false if string does not start with a digit', function () {
+      expect(isId('is-not-id')).to.eql(false)
     })
   })
 })
