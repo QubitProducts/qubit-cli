@@ -57,8 +57,7 @@ function createWebpackConfig (options) {
   const plugins = webpackConf.plugins.slice(0)
   plugins.push(new webpack.DefinePlugin({
     __CWD__: `'${CWD}'`,
-    __VARIATIONJS__: `'@qubit/xp-loader!${options.variation}.js'`,
-    __VARIATIONCSS__: `'${options.variation}.css'`
+    __VARIATION__: `'${options.variation}'`
   }))
   const entry = webpackConf.entry.slice(0)
   if (!options.sync && !options.watch) entry.pop()

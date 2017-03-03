@@ -17,7 +17,10 @@ module.exports = {
   },
   devtool: '#source-map',
   resolve: {
-    modules: [cwd, path.join(cwd, 'node_modules'), path.join(__dirname, 'node_modules')]
+    modules: [cwd, path.join(cwd, 'node_modules'), path.join(__dirname, 'node_modules')],
+    alias: {
+      jquery: '@qubit/jquery'
+    }
   },
   resolveLoader: {
     modules: [path.join(__dirname, 'node_modules')]
@@ -25,7 +28,7 @@ module.exports = {
   module: {
     loaders: [
       { test: /global\.js$/, loader: 'raw-loader' },
-      { test: /(triggers)\.js$/, loader: '@qubit/xp-loader' },
+      { test: /\.js$/, include: [cwd], exclude: [/global\.js/], loader: '@qubit/xp-loader' },
       { test: /\.css$/, loader: 'style-loader/useable!raw-loader!less-loader' },
       { test: /\.json$/, loader: 'json-loader' }
     ]
