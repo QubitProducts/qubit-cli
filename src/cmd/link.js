@@ -14,19 +14,20 @@ module.exports = async function previewLink (options) {
     return log(`it uses the package.json metadata to construct the preview link for an existing experience`)
   }
 
-  if (options.preview) {
-    const links = await getPreviewLinks(pkg.meta)
-    ncp.copy(links.join('\n'), () => log(chalk.green('Link(s) copied to clipboard')))
-    links.map(link => log(link))
-  }
+  if (options.overview || options.settings || options.editor) {
+    let route = ''
 
-  if (options.app) {
-    const appURL = `https://app.qubit.com/p/${propertyId}/experiences/${experienceId}`
-    ncp.copy(appURL, () => log(chalk.green('Link copied to clipboard')))
+    if (options.editor) route = 'editor'
+    if (options.settings) route = 'settings'
+
+    const appURL = `https://app.qubit.com/p/${propertyId}/experiences/${experienceId}/${route}`
+
+    ncp.copy(appURL, () => log(chalk.green(`App ${route || 'overview'} link copied to clipboard`)))
     log(appURL)
-  }
+  } else {
+    const links = await getPreviewLinks(pkg.meta)
 
-  if (!options.preview && !options.app) {
-    log(chalk.yellow('Specify an option to get links'))
+    ncp.copy(links.join('\n'), () => log(chalk.green('Preview link(s) copied to clipboard')))
+    links.map(link => log(link))
   }
 }

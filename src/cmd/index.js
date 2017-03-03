@@ -5,7 +5,6 @@ const create = require('./create')
 const extension = require('./extension')
 const open = require('./open')
 const link = require('./link')
-const qa = require('./qa')
 const clone = require('./clone')
 const pull = require('./pull')
 const push = require('./push')
@@ -47,7 +46,7 @@ module.exports = function run (pkg) {
 
   program
     .command('open')
-    .option('--preview', 'push first. open the preview link for your local experience')
+    .option('--overview', 'open the overview page on app.qubit.com for your local experience')
     .option('--settings', 'open the settings page on app.qubit.com for your local experience')
     .option('--editor', 'open the editor page on app.qubit.com for your local experience')
     .description('open the overview page on app.qubit.com for your local experience')
@@ -55,15 +54,12 @@ module.exports = function run (pkg) {
 
   program
     .command('link')
-    .option('--app', 'logs and copies the app.qubit.com link')
+    .option('--overview', 'logs and copies the overview link for app.qubit.com')
+    .option('--settings', 'logs and copies the settings link for app.qubit.com')
+    .option('--editor', 'logs and copies the editor link for app.qubit.com')
     .option('--preview', 'logs and copies the preview link(s)')
     .description('log and copy shareable links for your experience')
     .action(link, log.error)
-
-  program
-    .command('qa')
-    .description('generate and copy a PR ready QA comment')
-    .action(qa)
 
   program
     .command('extension')

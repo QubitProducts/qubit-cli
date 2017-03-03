@@ -85,22 +85,17 @@ xp pull
 xp diff
 ```
 
-## To open experience overview on app.qubit.com:
+## To open the experience overview page on app.qubit.com:
 ```
 xp open
 ```
-`--preview`, `--settings`, `--editor` being options
+`--overview`, `--settings`, `--editor` being options
 
-## To get and copy to clipboard relevant links (option required): 
+## To get and copy to clipboard relevant links (preview is default): 
 ```
 xp link
 ```
-`--app` and `--preview` being options
-
-## To generate, prefill, and copy to clipboard the QA template:
-```
-xp qa
-```
+`--overview`, `--settings`, `--editor` and `--preview` being options
 
 ## To generate a template from your local experience files:
 

@@ -1,6 +1,5 @@
 const log = require('../lib/log')
 const getPkg = require('../lib/get-pkg')
-const getPreviewLinks = require('../lib/preview-links')
 let opn = require('opn')
 
 module.exports = async function open (options) {
@@ -18,16 +17,7 @@ module.exports = async function open (options) {
   if (options.editor) route = 'editor'
   if (options.settings) route = 'settings'
 
-  if (options.preview) {
-    const links = await getPreviewLinks(pkg.meta)
-    links.map((url) => open(url))
-  } else {
-    const url = `https://app.qubit.com/p/${propertyId}/experiences/${experienceId}/${route}`
-    open(url)
-  }
-
-  function open (url) {
-    log(`Opening page: ${url}`)
-    opn(url, { wait: false })
-  }
+  const appUrl = `https://app.qubit.com/p/${propertyId}/experiences/${experienceId}/${route}`
+  log(`Opening app ${route || 'overview'} page: ${appUrl}`)
+  opn(appUrl, { wait: false })
 }
