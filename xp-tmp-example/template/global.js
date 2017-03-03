@@ -1,1 +1,1 @@
-console.log('executing global')
+console.log('Hello from global')
