@@ -31,4 +31,14 @@ describe('isType', function () {
       expect(isId('is-not-id')).to.eql(false)
     })
   })
+
+  describe('isPath', function () {
+    it('should return true if string starts with "/"', function () {
+      expect(isPath('/path')).to.eql(true)
+    })
+
+    it('should return false if strings does not start with "/"', function () {
+      expect(isPath('path')).to.eql(false)
+    })
+  })
 })
