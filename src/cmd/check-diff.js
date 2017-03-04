@@ -25,6 +25,7 @@ module.exports = async function checkDiff (propertyId, experienceId) {
       const { fileName, diff, missingFile } = diffObj
       const msg = `${chalk.red.bold(`- This file does not exist ${missingFile}ly.`)}`
       console.log(`${chalk.blue.bold(fileName)} ${missingFile ? msg : ''}\n`)
+
       diff.forEach(parts => {
         let color = parts.added ? 'green' : parts.removed ? 'red' : 'grey'
         if (missingFile) {
