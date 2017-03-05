@@ -1,5 +1,5 @@
 const { expect } = require('chai')
-const {isName, isUrl, isId, isPath, isSubmodule} = require('../../src/lib/is-type')
+const { isName, isUrl, isId, isPath } = require('../../src/lib/is-type')
 
 describe('isType', function () {
   describe('isName', function () {
