@@ -4,7 +4,6 @@ const _ = require('lodash')
 const amd = require('./amd')
 const engine = require('./engine')
 const options = require('./options')
-const opts = options(require('package.json'), __VARIATION__)
 const modules = { variation: {}, triggers: {} }
 
 _.set(window, '__qubit.amd', amd())
@@ -12,14 +11,14 @@ _.set(window, '__qubit.amd', amd())
 init()
 
 function init () {
-  engine(opts, globalFn, triggerFn, variationFn)
+  engine(getOptions(), globalFn, triggerFn, variationFn)
   onSecondPageView(restart)
   registerHotReloads()
 }
 
 function restart (api) {
   destroy()
-  engine(opts, _.noop, triggerFn, variationFn)
+  engine(getOptions(), _.noop, triggerFn, variationFn)
 }
 
 function destroy () {
@@ -28,6 +27,10 @@ function destroy () {
   if (remove) remove()
   ;({ remove } = modules.triggers)
   if (remove) remove()
+}
+
+function getOptions () {
+  return options(require('package.json'), __VARIATION__)
 }
 
 function globalFn () {
