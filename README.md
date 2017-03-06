@@ -31,7 +31,11 @@ templates
 ## Installation
 
 ```
+using npm:
 npm install -gp @qubit/xp-cli
+
+using yarn:
+yarn global add @qubit/xp-cli
 ```
 
 ## Setup
@@ -91,7 +95,7 @@ xp open
 ```
 `--overview`, `--settings`, `--editor` being options
 
-## To get and copy to clipboard relevant links (preview is default): 
+## To get and copy to clipboard relevant links (preview is default):
 ```
 xp link
 ```
@@ -114,9 +118,15 @@ xp pull <templateName>
 publish to npm or git. Consumers can then simply install like so:
 
 ```
+using npm:
 npm install -g xp-tmp-example
 npm install -g github:user/xp-tmp-example
 npm install -g github:user/xp-multi-template-repo/example
+
+using yarn:
+yarn global add xp-tmp-example
+yarn global add github:user/xp-tmp-example
+yarn global add github:user/xp-multi-template-repo/example
 ```
 
 ## :fire: Hot reloading!
