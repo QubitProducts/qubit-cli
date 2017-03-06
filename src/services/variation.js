@@ -15,6 +15,10 @@ function set (propertyId, experienceId, variationId, val) {
   return fetch.put(getPath(propertyId, experienceId, variationId), { variation: val })
 }
 
+function duplicate (propertyId, experienceId, data) {
+  return fetch.get(getPath(propertyId, experienceId), { variation: data })
+}
+
 function getCode (variation) {
   const code = {}
   const filename = getFilename(variation)
@@ -42,4 +46,4 @@ function getFilename (variation) {
   return `variation-${variation.master_id}`
 }
 
-module.exports = { getAll, get, set, getCode, setCode, getFilename, DEFAULTS }
+module.exports = { getAll, get, set, duplicate, getCode, setCode, getFilename, DEFAULTS }
