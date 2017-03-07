@@ -2,6 +2,7 @@ const log = require('../lib/log')
 const getPkg = require('../lib/get-pkg')
 const variationService = require('../services/variation')
 const readFiles = require('../lib/read-files')
+const chalk = require('chalk')
 const fs = require('fs-promise')
 const path = require('path')
 let CWD = process.cwd()
@@ -23,7 +24,11 @@ module.exports = async function duplicate (variation) {
     const executionCode = localFiles[`variation-${variationId}.js`]
     const cssCode = localFiles[`variation-${variationId}.css`]
 
-    const data = {
+    if (executionCode === undefined || cssCode === undefined) {
+    	return log(`${chalk.red.bold(`Duplication Failed: Variation ${variationId} does not exist.`)}`)
+    }
+
+    const variationData = {
       advanced_mode: true,
       custom_styles: cssCode || CSS,
       execution_code: executionCode || EXECUTION,
