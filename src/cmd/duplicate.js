@@ -1,15 +1,13 @@
+const _ = require('lodash')
 const log = require('../lib/log')
 const getPkg = require('../lib/get-pkg')
+const mergePkg = require('../lib/merge-pkg')
 const variationService = require('../services/variation')
+const codeService = require('../services/code')
 const readFiles = require('../lib/read-files')
 const fs = require('fs-promise')
 const path = require('path')
 let CWD = process.cwd()
-const _ = require('lodash')
-const connect = require('../server/lib/connect')
-const template = require('./template')
-const down = require('../services/down')
-const mergePkg = require('../lib/merge-pkg')
 
 module.exports = async function duplicate (variation) {
   try {
@@ -23,7 +21,7 @@ module.exports = async function duplicate (variation) {
     const executionCode = localFiles[`variation-${variationId}.js`]
     const cssCode = localFiles[`variation-${variationId}.css`]
 
-    const data = {
+    const variationData = {
       advanced_mode: true,
       custom_styles: cssCode || CSS,
       execution_code: executionCode || EXECUTION,
@@ -33,24 +31,28 @@ module.exports = async function duplicate (variation) {
       options: null
     }
 
-    // const variationResponse = await variationService.duplicate(propertyId, experienceId, data)
-    // if (variationResponse) writeVariation(variationResponse)
+    const variationResponse = await variationService.duplicate(propertyId, experienceId, variationData)
+    if (variationResponse) writeVariation(variationResponse)
 
-    // function writeVariation (variation) {
-    //   const variationJS = `variation-${variation.id}.js`
-    //   const variationCSS = `variation-${variation.id}.css`
-    //   if (variation.execution_code && variation.custom_styles) {
-    //     fs.outputFile(path.join(CWD, variationJS), variation.execution_code)
-    //     fs.outputFile(path.join(CWD, variationCSS), variation.custom_styles)
-    //   }
-    // }
+    function writeVariation (variation) {
+      const variationJS = `variation-${variation.id}.js`
+      const variationCSS = `variation-${variation.id}.css`
+      if (variation.execution_code && variation.custom_styles) {
+        fs.outputFile(path.join(CWD, variationJS), variation.execution_code)
+        fs.outputFile(path.join(CWD, variationCSS), variation.custom_styles)
+        mergePackages()
+      }
+    }
 
-    const files = await down(propertyId, experienceId)
-    const val = files['package.json']
-    console.log(val)
-    if (_.get(pkg, 'meta')) mergePkg(pkg, files['package.json'])
+    function mergePackages () {
+	    const remoteFiles = await codeService.get(propertyId, experienceId)
+	    const remotePkg = remoteFiles['package.json']
+	    const mergedPkg = JSON.stringify(mergePkg(pkg, remotePkg), null, 2)
 
-    // if (_.get(pkg, 'meta')) files['package.json'] = JSON.stringify(mergePkg(pkg, files['package.json']), null, 2)
+	    fs.outputFile(path.join(CWD, 'package.json'), mergePkg)
+	    log(`Duplicated variation - ${variationId}`)
+    }
+
   } catch (err) {
     log.error(err)
   }
