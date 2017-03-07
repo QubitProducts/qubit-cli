@@ -40,19 +40,29 @@ module.exports = async function duplicate (variation) {
       if (variation.execution_code && variation.custom_styles) {
         fs.outputFile(path.join(CWD, variationJS), variation.execution_code)
         fs.outputFile(path.join(CWD, variationCSS), variation.custom_styles)
-        mergePackages()
+        mergePackages(`variation-${variation.id}`)
       }
     }
 
-    function mergePackages () {
+    async function mergePackages (newVariation) {
 	    const remoteFiles = await codeService.get(propertyId, experienceId)
 	    const remotePkg = remoteFiles['package.json']
-	    const mergedPkg = JSON.stringify(mergePkg(pkg, remotePkg), null, 2)
+	    const mergedPkg = mergePkg(pkg, remotePkg)
+	    const pkgVariations = _.get(mergedPkg, 'meta.variations')
 
-	    fs.outputFile(path.join(CWD, 'package.json'), mergePkg)
+	    // Merge the new remote package.json witht he local version and clean up the local version.
+	    for (let variation in pkgVariations) {
+	    	const control = pkgVariations[variation]['variationIsControl']
+
+	    	if (!localFiles[`${variation}.js`] && !control && variation !== newVariation) {
+	    		delete pkgVariations[variation]
+	    	}
+	    }
+
+	    const cleanedPkg = JSON.stringify(mergedPkg, null, 2)
+	    fs.outputFile(path.join(CWD, 'package.json'), cleanedPkg)
 	    log(`Duplicated variation - ${variationId}`)
     }
-
   } catch (err) {
     log.error(err)
   }
