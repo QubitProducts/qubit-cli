@@ -16,7 +16,7 @@ function set (propertyId, experienceId, variationId, val) {
 }
 
 function duplicate (propertyId, experienceId, data) {
-  return fetch.get(getPath(propertyId, experienceId), { variation: data })
+  return fetch.post(getPath(propertyId, experienceId), { variation: data })
 }
 
 function getCode (variation) {
