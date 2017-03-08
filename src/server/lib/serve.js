@@ -2,6 +2,7 @@ const createEmitter = require('event-kitten')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
 const webpack = require('webpack')
+const {readdir} = require('fs-promise')
 const webpackConf = require('../../../webpack.conf')
 const push = require('../../cmd/push')
 const pickVariation = require('../../lib/pick-variation')
@@ -18,7 +19,7 @@ module.exports = async function serve (options) {
   }
 
   if (!options.variation) {
-    options.variation = await pickVariation(CWD)
+    options.variation = await pickVariation(await readdir(CWD))
     log(`using ${options.variation}`)
   }
 
