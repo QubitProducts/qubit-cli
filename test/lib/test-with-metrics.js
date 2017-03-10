@@ -1,10 +1,10 @@
 const { expect } = require('chai')
-const withMetrics = require('../../src/lib/withMetrics')
+const withMetrics = require('../../src/lib/with-metrics')
 const experienceFixture = require('../fixtures//experience.json')
 
 describe('withMetrics', function () {
   it('should add metrics to experience.meta', function () {
-    
+
   })
 })
 
