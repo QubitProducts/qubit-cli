@@ -1,5 +1,4 @@
 const _ = require('lodash')
-const sillyname = require('sillyname')
 const log = require('../lib/log')
 const getPkg = require('../lib/get-pkg')
 const variationService = require('../services/variation')
@@ -15,11 +14,12 @@ module.exports = async function duplicate () {
     const pkg = await getPkg()
     const {propertyId, experienceId} = pkg.meta
     const variations = pkg.meta.variations
-    const variationKey = pickVariation(Object.keys(variations).map(v => `${v}.js`)).replace('.js', '')
+    const variationKeys = Object.keys(variations)
+    const variationKey = pickVariation(variationKeys.map(v => `${v}.js`)).replace('.js', '')
     const variation = await variationService.get(propertyId, experienceId, variations[variationKey].variationId)
     delete variation.id
     delete variation.master_id
-    variation.name = `${sillyname().toLowerCase().replace(/[^\w]/gi, '-')}`
+    variation.name = `Variation ${variationKeys.length}`
     variation.execution_code = String(await fs.readFile(`${CWD}/${variationKey}.js`))
     variation.custom_styles = String(await fs.readFile(`${CWD}/${variationKey}.css`))
     const newVariation = await variationService.create(propertyId, experienceId, variation)
