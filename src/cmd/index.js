@@ -21,7 +21,7 @@ module.exports = function run (pkg) {
     .action(create)
 
   program
-    .command('duplicate <variation>')
+    .command('duplicate')
     .description('duplicate a variation')
     .action(duplicate)
 
