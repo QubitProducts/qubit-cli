@@ -12,12 +12,18 @@ const serve = require('./serve')
 const login = require('./login')
 const templatize = require('./templatize')
 const diff = require('./diff')
+const duplicate = require('./duplicate')
 
 module.exports = function run (pkg) {
   program
     .command('create <propertyId>')
     .description('create an experience')
     .action(create)
+
+  program
+    .command('duplicate')
+    .description('duplicate a variation')
+    .action(duplicate)
 
   program
     .command('clone')
