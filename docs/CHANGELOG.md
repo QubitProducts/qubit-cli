@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.15.0] Unreleased
+- added change log
+- added FYI.md
+- added ability to control what other experiences execute with the 'also' package.json param (see FYI.md)
+- by default no other experiences will execute
+
 ## [1.14.0] 2017-03-15
 - added ability to create new variations (xp duplicate)
 - xp no longer wants to remove .git folder on pull
@@ -13,7 +19,7 @@
 - `xp push` now tells you if there are changes in the platform, use xp push --force to force push
 - fixed remember-preview behaviour
 - moved to webpack 2.0, for faster compile times, better performance
-- improved hot reloading behaviour, styles get removed if experience does not activation
+- improved hot reloading behaviour, styles get removed if experience does not activate
 
 ## [1.12.0] 2017-03-02
 - achieved api parity with platform by adding getVisitorState, getBrowserState, drifwood logger and other api things to options
