@@ -84,7 +84,7 @@ xp push
 xp pull
 ```
 
-## To duplicate the most recently updated variation:
+## To duplicate the most recently created variation:
 ```
 xp duplicate
 ```
