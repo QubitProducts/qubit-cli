@@ -143,6 +143,14 @@ function execution (options) {
 }
 ```
 
+## More info
+
+- [fyi](./docs/FYI.md)
+
+## Changelog
+
+- [changelog](./docs/CHANGELOG.md)
+
 notes:
 - if it isn't working after an update, you may need to reload the extension
 

@@ -28,26 +28,29 @@ module.exports = function transform (pkg, key) {
   meta.visitorId = visitor.visitorId
 
   return {
-    state: {
-      get: get,
-      set: set
-    },
-    emitCustomGoal: (id, options) => log.info('Custom goal emitted', { id, options }),
-    getBrowserState: () => resolve(getBrowserState()),
-    getVisitorState: () => resolve(_.cloneDeep(visitor)),
-    log,
-    meta: _.pick(meta, [
-      'cookieDomain',
-      'trackingId',
-      'experienceId',
-      'experimentId',
-      'isPreview',
-      'vertical',
-      'iterationId',
-      'variationId',
-      'variationMasterId',
-      'variationIsControl',
-      'visitorId'
-    ])
+    also: _.get(pkg, `meta.also`) || [],
+    api: {
+      state: {
+        get: get,
+        set: set
+      },
+      emitCustomGoal: (id, options) => log.info('Custom goal emitted', { id, options }),
+      getBrowserState: () => resolve(getBrowserState()),
+      getVisitorState: () => resolve(_.cloneDeep(visitor)),
+      log,
+      meta: _.pick(meta, [
+        'cookieDomain',
+        'trackingId',
+        'experienceId',
+        'experimentId',
+        'isPreview',
+        'vertical',
+        'iterationId',
+        'variationId',
+        'variationMasterId',
+        'variationIsControl',
+        'visitorId'
+      ])
+    }
   }
 }

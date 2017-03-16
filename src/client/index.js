@@ -3,22 +3,26 @@ const context = require.context(__CWD__)
 const _ = require('lodash')
 const amd = require('./amd')
 const engine = require('./engine')
+const also = require('./also')
 const options = require('./options')
 const modules = { variation: {}, triggers: {} }
-
-_.set(window, '__qubit.amd', amd())
+_.set(window, '__qubit.xp.amd', amd())
 
 init()
 
 function init () {
-  engine(getOptions(), globalFn, triggerFn, variationFn)
+  const opts = getOptions()
+  also(opts.also, opts.api.meta.cookieDomain)
+  engine(opts.api, globalFn, triggerFn, variationFn)
   onSecondPageView(restart)
   registerHotReloads()
 }
 
-function restart (api) {
+function restart () {
   destroy()
-  engine(getOptions(), _.noop, triggerFn, variationFn)
+  const opts = getOptions()
+  also(opts.also, opts.api.meta.cookieDomain)
+  engine(opts.api, _.noop, triggerFn, variationFn)
 }
 
 function destroy () {

@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const microAmd = require('micro-amd')
 const map = {
   '@qubit/biscotti': require('@qubit/biscotti'),
@@ -6,11 +7,11 @@ const map = {
   '@qubit/jquery': require('@qubit/jquery'),
   '@qubit/mvt': require('@qubit/mvt'),
   '@qubit/poller': require('@qubit/poller'),
-  '@qubit/remember-preview': require('./remember-preview'),
   '@qubit/send-uv-event': require('@qubit/send-uv-event'),
   '@qubit/social-proof': require('@qubit/social-proof'),
   '@qubit/stash-count': require('@qubit/stash-count'),
   '@qubit/uv-api': require('@qubit/uv-api'),
+  '@qubit/remember-preview': _.noop,
   'cookieman': require('cookieman'),
   'jquery': require('@qubit/jquery')
 }

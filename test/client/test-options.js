@@ -26,11 +26,11 @@ describe('transform', function () {
   })
 
   it('exports an object with a state attribute', function () {
-    expect(transform(pkg, variationName)).to.have.property('state')
+    expect(transform(pkg, variationName).api).to.have.property('state')
   })
 
   it('exports an object with a meta attribute', function () {
-    expect(transform(pkg, variationName)).to.have.property('meta')
+    expect(transform(pkg, variationName).api).to.have.property('meta')
   })
 
   describe('state object', function () {
@@ -38,7 +38,7 @@ describe('transform', function () {
 
     beforeEach(function () {
       transform.__set__('experienceState', {})
-      state = transform(pkg, variationName).state
+      state = transform(pkg, variationName).api.state
     })
 
     it('has a set function that stores data against a key', function () {
@@ -59,7 +59,7 @@ describe('transform', function () {
   describe('meta object', function () {
     var meta
     beforeEach(function () {
-      meta = transform(pkg, variationName).meta
+      meta = transform(pkg, variationName).api.meta
     })
 
     it('gets enriched with a cookieDomain attribute', function () {

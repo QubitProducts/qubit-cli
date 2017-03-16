@@ -1,5 +1,6 @@
 const _ = require('lodash')
 const log = require('./log')
+
 module.exports = function experienceEngine (options, globalFn, triggerFn, variationFn) {
   log.info('running global')
   globalFn()
