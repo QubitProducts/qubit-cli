@@ -84,6 +84,11 @@ xp push
 xp pull
 ```
 
+## To duplicate the most recently updated variation:
+```
+xp duplicate
+```
+
 ## To see a diff between the local file and the platform:
 ```
 xp diff
