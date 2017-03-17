@@ -1,4 +1,6 @@
+const path = require('path')
 const _ = require('lodash')
+const fs = require('fs-promise')
 const log = require('../lib/log')
 const codeService = require('../services/code')
 const readFiles = require('../lib/read-files')
@@ -39,6 +41,7 @@ module.exports = async function push (options) {
   let { experience, variations } = await codeService.set(propertyId, experienceId, await readFiles(CWD))
   let files = pkgService.getCode(experience, variations)
   files['package.json'] = JSON.stringify(mergePkg(pkg, files['package.json']), null, 2)
+  await fs.writeFile(path.join(CWD, 'package.json'), files['package.json'])
   await scaffold(CWD, files, false, false)
   log('pushed!')
 }
