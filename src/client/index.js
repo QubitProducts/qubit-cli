@@ -1,12 +1,15 @@
 /* globals __VARIATION__ __CWD__ */
 const context = require.context(__CWD__)
 const _ = require('lodash')
-const amd = require('./amd')
 const engine = require('./engine')
 const also = require('./also')
 const options = require('./options')
 const modules = { variation: {}, triggers: {} }
-_.set(window, '__qubit.xp.amd', amd())
+const amd = require('./amd')()
+_.set(window, '__qubit.xp.amd', amd)
+Object.defineProperty(window.__qubit, 'amd', {
+  get: () => amd
+})
 
 init()
 
