@@ -1,10 +1,11 @@
 # Change Log
 
-## [1.15.0] Unreleased
+## [1.15.0] 2017-03-20
 - added change log
 - added FYI.md
 - added ability to control what other experiences execute with the 'also' package.json param (see FYI.md)
 - by default no other experiences will execute
+- on push package.json gets updated without asking (necessary for git hook workflow)
 
 ## [1.14.0] 2017-03-15
 - added ability to create new variations (xp duplicate)
