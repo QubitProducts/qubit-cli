@@ -14,10 +14,11 @@ module.exports = async function create (propertyId) {
     if (!propertyId) return log(`Please specify a propertyId!`)
 
     let name = clean(await input.text('What would you like to call your experience?', { default: 'Created by xp' }))
-    let controlDecimal = Number(clean(await input.text('Set control size (0, 0.05, 0.5, 0.8)', { default: '0.5' })))
+    let validControlSizes = controlSize.validControlSizes.join(', ')
+    let controlDecimal = Number(clean(await input.text(`Set control size (${validControlSizes})`, { default: '0.5' })))
 
     if (controlSize.isInvalid(controlDecimal)) {
-      return log(`Invalid control size ${controlDecimal}, must be one of ${controlSize.validControlSizes.join(', ')}`)
+      return log(`Invalid control size ${controlDecimal}, must be one of ${validControlSizes}`)
     }
 
     let experience = await experienceService.create(propertyId, name, controlDecimal)
