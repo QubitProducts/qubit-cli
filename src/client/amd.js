@@ -19,5 +19,7 @@ const map = {
 module.exports = function createAMD () {
   const amd = microAmd({ base: '//d22rutvoghj3db.cloudfront.net/' })
   for (let id in map) if (map.hasOwnProperty(id)) amd.define(id, () => map[id])
+  _.set(window, '__qubit.xp.amd', amd)
+  Object.defineProperty(window.__qubit, 'amd', { get: () => amd })
   return amd
 }
