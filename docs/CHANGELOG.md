@@ -1,5 +1,14 @@
 # Change Log
 
+## [1.17.0] 2017-03-23
+- ability to specify traffic split when creating an experience
+
+## [1.16.0] 2017-03-22
+- better logging if user tries to --watch in a folder with no variation
+
+## [1.15.2] 2017-03-21
+- use dark magic to ensure module loading works even if smartserve overwrites `window.__qubit.amd` during execution
+
 ## [1.15.0] 2017-03-20
 - added change log
 - added FYI.md
