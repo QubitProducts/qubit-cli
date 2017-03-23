@@ -14,15 +14,9 @@ function set (propertyId, experienceId, val) {
   return fetch.put(getPath(propertyId, experienceId), { experiment: val })
 }
 
-function create (propertyId, name, controlSize) {
-  const recent = {
-    'recent_iterations': {
-      'draft': { 'control_size': controlSize }
-    }
-  }
-
-  const experiment = _.merge({}, withMetrics(EXPERIENCE, { created: true }), { propertyId, name }, recent)
-  return fetch.post(getPath(propertyId), { experiment })
+function create (experience) {
+  const experiment = _.merge({}, withMetrics(EXPERIENCE, { created: true }), experience)
+  return fetch.post(getPath(experience.propertyId), { experiment })
 }
 
 function getCode (experience) {
