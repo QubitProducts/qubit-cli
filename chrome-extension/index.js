@@ -29,7 +29,7 @@ function connect () {
 function xp (state) {
   if (state.enabled) {
     if (!enabled) enabled = true
-    appendScript()
+    window.onload = appendScript
   }
 }
 
