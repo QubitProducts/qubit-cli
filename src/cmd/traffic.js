@@ -18,12 +18,14 @@ module.exports = async function traffic (options) {
     if (options.view) return log(`Current control size is ${currentControlPercentage}`)
 
     const newControlDecimal = await input.select(`Select control size (current ${currentControlPercentage}):`, validControlSizes, { 'default': currentControlDecimal })
-
     experience.recent_iterations.draft.control_size = newControlDecimal
-    const updateExperience = await experienceService.set(propertyId, experienceId, experience)
+    const updatedExperience = await experienceService.set(propertyId, experienceId, experience)
 
-    if (trafficIsUpdated(updateExperience, newControlDecimal)) log(chalk.green('Traffic split updated'))
-    else log(chalk.red('Failed to update traffic split'))
+    if (updatedExperience) {
+      log(chalk.green('Traffic split updated'))
+    } else {
+      log(chalk.red('Failed to update traffic split'))
+    }
   } catch (err) {
     log.error(err)
   }
@@ -31,8 +33,4 @@ module.exports = async function traffic (options) {
 
 function getControlPercentage (controlValue) {
   return validControlSizes.find((iteree) => iteree.value === controlValue).name
-}
-
-function trafficIsUpdated (experience, newControlDecimal) {
-  return experience.recent_iterations.draft.control_size === newControlDecimal
 }
