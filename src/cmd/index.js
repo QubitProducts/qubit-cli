@@ -11,6 +11,7 @@ const push = require('./push')
 const serve = require('./serve')
 const login = require('./login')
 const templatize = require('./templatize')
+const traffic = require('./traffic')
 const diff = require('./diff')
 const duplicate = require('./duplicate')
 
@@ -50,6 +51,12 @@ module.exports = function run (pkg) {
     .command('diff')
     .description('compare local and remote versions of an experience')
     .action(diff)
+
+  program
+    .command('traffic')
+    .option('--view', 'view the current control size')
+    .description('set the control size of an experience')
+    .action(traffic)
 
   program
     .command('open')

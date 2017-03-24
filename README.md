@@ -94,6 +94,12 @@ xp duplicate
 xp diff
 ```
 
+## To change the traffic allocation for an experience
+```
+xp traffic
+```
+must be run inside an experience directory, `--view` to see the current setting only
+
 ## To open the experience overview page on app.qubit.com:
 ```
 xp open
