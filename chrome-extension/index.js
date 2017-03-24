@@ -29,7 +29,11 @@ function connect () {
 function xp (state) {
   if (state.enabled) {
     if (!enabled) enabled = true
-    window.onload = appendScript
+    if (document.body) {
+      appendScript()
+    } else {
+      document.onload = appendScript
+    }
   }
 }
 

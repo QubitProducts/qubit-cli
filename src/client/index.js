@@ -9,7 +9,7 @@ const applyStyles = require('./styles')
 const globalFn = _.once(() => eval.call(window, require('global'))) // eslint-disable-line
 const STYLE_ID = 'qubit-xp-styles'
 require('./amd')()
-let { modules, destroy, varationIsSpent, triggersIsSpent } = init()
+let {destroy, modules, varationIsSpent, triggersIsSpent, hasActivated} = init()
 
 onSecondPageView(restart)
 registerHotReloads(restart)
@@ -25,7 +25,7 @@ function loadModules () {
 }
 
 function init (bypassTriggers) {
-  let variationSpent, triggersSpent
+  let variationSpent, triggersSpent, isActive
   let modules = loadModules()
   const cleanup = []
   const opts = options(modules.pkg, __VARIATION__)
@@ -34,7 +34,7 @@ function init (bypassTriggers) {
   engine(opts.api, globalFn, triggerFn, variationFn, bypassTriggers)
 
   function triggerFn (opts, cb) {
-    let api = modules.triggers(withLog(opts, 'triggers'), cb)
+    const api = modules.triggers(withLog(opts, 'triggers'), cb)
     if (api.remove) {
       cleanup.push(api.remove)
     } else {
@@ -43,7 +43,9 @@ function init (bypassTriggers) {
   }
 
   function variationFn (opts) {
-    let api = modules.variation(withLog(opts, 'variation'))
+    modules = loadModules()
+    isActive = true
+    const api = modules.variation(withLog(opts, 'variation'))
     cleanup.push(applyStyles(STYLE_ID, modules.styles))
     if (api.remove) {
       cleanup.push(api.remove)
@@ -61,31 +63,36 @@ function init (bypassTriggers) {
   }
 
   return {
-    modules,
     destroy,
+    modules,
     varationIsSpent: () => variationSpent,
-    triggersIsSpent: () => triggersSpent
+    triggersIsSpent: () => triggersSpent,
+    hasActivated: () => isActive
   }
 }
 
 function restart (bypassTriggers) {
   destroy()
-  ;({ modules, destroy, varationIsSpent, triggersIsSpent } = init(bypassTriggers))
+  ;({destroy, modules, varationIsSpent, triggersIsSpent, hasActivated} = init(bypassTriggers))
 }
 
 function registerHotReloads (restart) {
   if (!module.hot) return
   module.hot.accept(allModules(), () => {
-    let newModules = loadModules()
-    let edited = Object.keys(newModules).find(m => newModules[m] !== modules[m])
+    const newModules = loadModules()
+    const edited = Object.keys(newModules).find(m => newModules[m] !== modules[m])
+    modules = newModules
 
-    let styleEl = document.getElementById(STYLE_ID)
+    const styleEl = document.getElementById(STYLE_ID)
     if (styleEl && styleEl.innerHTML !== newModules.styles) return applyStyles(STYLE_ID, newModules.styles)
     if (varationIsSpent()) return window.location.reload() // variation is a cold executed variation
     if (triggersIsSpent() && edited === 'triggers') return window.location.reload()
-    // ignore triggers if they aren't being edited
-    let bypassTriggers = edited !== 'triggers'
-    restart(bypassTriggers)
+    if (edited === 'triggers') restart()
+    // if not editing triggers, bypass activation
+    if (hasActivated()) {
+      restart(true)
+    }
+    // if hasn't activated yet no need to restart, as variation is loaded dynamically
   })
 
   function allModules () {
