@@ -29,7 +29,7 @@ module.exports = {
     loaders: [
       { test: /global\.js$/, loader: 'raw-loader' },
       { test: /\.js$/, include: [cwd], exclude: [/global\.js/], loader: '@qubit/xp-loader' },
-      { test: /\.css$/, loader: 'style-loader/useable!raw-loader!less-loader' },
+      { test: /\.css$/, loader: 'raw-loader!less-loader' },
       { test: /\.json$/, loader: 'json-loader' }
     ]
   },
