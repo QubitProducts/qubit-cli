@@ -98,7 +98,7 @@ xp diff
 ```
 xp traffic
 ```
-must be run inside an experience directory
+must be run inside an experience directory, `--view` to see the current setting only
 
 ## To open the experience overview page on app.qubit.com:
 ```

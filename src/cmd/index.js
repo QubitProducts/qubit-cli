@@ -54,6 +54,7 @@ module.exports = function run (pkg) {
 
   program
     .command('traffic')
+    .option('--view', 'view the current control size')
     .description('set the control size of an experience')
     .action(traffic)
 

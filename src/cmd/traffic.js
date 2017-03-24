@@ -5,7 +5,7 @@ const experienceService = require('../services/experience')
 const validControlSizes = require('../lib/valid-control-sizes')
 const log = require('../lib/log')
 
-module.exports = async function traffic () {
+module.exports = async function traffic (options) {
   try {
     const pkg = await getPkg()
     if (!pkg.meta) return log(chalk.red('Navigate to an experience directory and try again'))
@@ -13,7 +13,11 @@ module.exports = async function traffic () {
     const {propertyId, experienceId} = pkg.meta
     let experience = await experienceService.get(propertyId, experienceId)
     const currentControlDecimal = experience.recent_iterations.draft.control_size
-    const newControlDecimal = await input.select(`Select control size (current preselected):`, validControlSizes, { default: currentControlDecimal })
+    const currentControlPercentage = validControlSizes.find((iteree) => iteree.value === currentControlDecimal).name
+
+    if (options.view) return log(`Current control size is ${currentControlPercentage}`)
+
+    const newControlDecimal = await input.select(`Select control size (current ${currentControlPercentage}):`, validControlSizes, { 'default': currentControlDecimal })
 
     experience.recent_iterations.draft.control_size = newControlDecimal
     experienceService.set(propertyId, experienceId, experience).then(() => {
