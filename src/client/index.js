@@ -1,6 +1,7 @@
 /* globals __VARIATION__ __CWD__ */
 const context = require.context(__CWD__)
 const _ = require('lodash')
+const Promise = require('sync-p/extra')
 const engine = require('./engine')
 const also = require('./also')
 const options = require('./options')
@@ -34,7 +35,12 @@ function init (bypassTriggers) {
   engine(opts.api, globalFn, triggerFn, variationFn, bypassTriggers)
 
   function triggerFn (opts, cb) {
-    const api = modules.triggers(withLog(opts, 'triggers'), cb)
+    let deferred = Promise.defer()
+    let api = modules.triggers(withLog(opts, 'triggers'), deferred.resolve)
+    deferred.promise.then(() => {
+      if (api && api.onActivation) api.onActivation()
+      cb()
+    })
     if (api && api.remove) {
       cleanup.push(api.remove)
     } else {
@@ -89,9 +95,7 @@ function registerHotReloads (restart) {
     if (triggersIsSpent() && edited === 'triggers') return window.location.reload()
     if (edited === 'triggers') restart()
     // if not editing triggers, bypass activation
-    if (hasActivated()) {
-      restart(true)
-    }
+    if (hasActivated()) restart(true)
     // if hasn't activated yet no need to restart, as variation is loaded dynamically
   })
 
