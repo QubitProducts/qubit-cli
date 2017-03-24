@@ -35,7 +35,7 @@ function init (bypassTriggers) {
 
   function triggerFn (opts, cb) {
     const api = modules.triggers(withLog(opts, 'triggers'), cb)
-    if (api.remove) {
+    if (api && api.remove) {
       cleanup.push(api.remove)
     } else {
       triggersSpent = true
@@ -47,7 +47,7 @@ function init (bypassTriggers) {
     isActive = true
     const api = modules.variation(withLog(opts, 'variation'))
     cleanup.push(applyStyles(STYLE_ID, modules.styles))
-    if (api.remove) {
+    if (api && api.remove) {
       cleanup.push(api.remove)
     } else {
       variationSpent = true
