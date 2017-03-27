@@ -4,6 +4,7 @@ const _ = require('lodash')
 const Promise = require('sync-p/extra')
 const engine = require('./engine')
 const also = require('./also')
+const log = require('./log')
 const options = require('./options')
 const onSecondPageView = require('./pageview')
 const applyStyles = require('./styles')
@@ -35,8 +36,14 @@ function init (bypassTriggers) {
   engine(opts.api, globalFn, triggerFn, variationFn, bypassTriggers)
 
   function triggerFn (opts, cb) {
+    let options = withLog(opts, 'triggers')
     let deferred = Promise.defer()
-    let api = modules.triggers(withLog(opts, 'triggers'), deferred.resolve)
+    let api
+    try {
+      api = modules.triggers(options, deferred.resolve)
+    } catch (err) {
+      options.log.error(err)
+    }
     deferred.promise.then(() => {
       if (api && api.onActivation) api.onActivation()
       cb()
@@ -49,10 +56,19 @@ function init (bypassTriggers) {
   }
 
   function variationFn (opts) {
-    modules = loadModules()
+    let api, removeStyles
     isActive = true
-    const api = modules.variation(withLog(opts, 'variation'))
-    cleanup.push(applyStyles(STYLE_ID, modules.styles))
+    let options = withLog(opts, 'variation')
+    modules = loadModules()
+    log.info('running variation')
+    try {
+      removeStyles = applyStyles(STYLE_ID, modules.styles)
+      cleanup.push(removeStyles)
+      api = modules.variation(options)
+    } catch (err) {
+      removeStyles()
+      options.log.error(err)
+    }
     if (api && api.remove) {
       cleanup.push(api.remove)
     } else {
