@@ -28,12 +28,7 @@ module.exports = {
   module: {
     loaders: [
       { test: /global\.js$/, loader: 'raw-loader' },
-      {
-        test: /\.js$/,
-        include: [cwd],
-        exclude: [/global\.js/],
-        loader: '@qubit/xp-loader!buble-loader?objectAssign=__assign__&transforms={"dangerousForOf":true,"dangerousTaggedTemplateString":true}}'
-      },
+      { test: /\.js$/, include: [cwd], exclude: [/global\.js/], loader: '@qubit/xp-loader!buble-loader?objectAssign=Object.assign' },
       { test: /\.css$/, loader: 'raw-loader!less-loader' },
       { test: /\.json$/, loader: 'json-loader' }
     ]
