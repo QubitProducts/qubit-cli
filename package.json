@@ -45,7 +45,6 @@
     "@qubit/stash-count": "^1.3.8",
     "@qubit/uv-api": "^4.1.0",
     "@qubit/xp-loader": "^2.0.0",
-    "async-to-gen": "github:alanclarke/async-to-gen",
     "axios": "^0.12.0",
     "body-parser": "^1.15.1",
     "buble": "^0.15.2",
