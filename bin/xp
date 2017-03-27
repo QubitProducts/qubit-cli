@@ -2,7 +2,6 @@
 const path = require('path')
 process.env.NODE_CONFIG_DIR = path.resolve(__dirname, '../config')
 const config = require('config')
-require('async-to-gen/register')
 const updateNotifier = require('update-notifier')
 const run = require('../src/cmd')
 const pkg = require('../package.json')
