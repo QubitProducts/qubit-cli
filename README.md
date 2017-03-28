@@ -100,6 +100,12 @@ xp traffic
 ```
 must be run inside an experience directory, `--view` to see the current setting only
 
+## To change the goals for an experience
+```
+xp goals
+```
+with `list`, `add`, `remove` and `set-primary` being arguments
+
 ## To open the experience overview page on app.qubit.com:
 ```
 xp open
