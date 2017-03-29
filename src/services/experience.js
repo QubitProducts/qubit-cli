@@ -10,8 +10,9 @@ function get (propertyId, experienceId) {
   return fetch.get(getPath(propertyId, experienceId))
 }
 
-function set (propertyId, experienceId, val) {
-  return fetch.put(getPath(propertyId, experienceId), { experiment: val })
+function set (propertyId, experienceId, experience) {
+  delete experience.update_sequence_id
+  return fetch.put(getPath(propertyId, experienceId), { experiment: experience })
 }
 
 function create (experience) {
