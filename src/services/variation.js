@@ -11,8 +11,9 @@ function get (propertyId, experienceId, variationId) {
   return fetch.get(getPath(propertyId, experienceId, variationId))
 }
 
-function set (propertyId, experienceId, variationId, val) {
-  return fetch.put(getPath(propertyId, experienceId, variationId), { variation: val })
+function set (propertyId, experienceId, variationId, variation) {
+  delete variation.update_sequence_id
+  return fetch.put(getPath(propertyId, experienceId, variationId), { variation: variation })
 }
 
 function create (propertyId, experienceId, data) {
