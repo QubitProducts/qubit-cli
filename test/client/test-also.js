@@ -20,8 +20,8 @@ describe('also', function () {
 
   describe('when called without any variations', function () {
     beforeEach(() => also(null, 'domain'))
-    it('should enable preview mode', function () {
-      expect(cm.set.calledWith('smartserve_preview', 'true')).to.eql(true)
+    it('should clear any preview cookies', function () {
+      expect(cm.clearAll.calledWith('smartserve_preview')).to.eql(true)
     })
     it('should clear any preexisting forceCreatives', function () {
       expect(cm.clearAll.calledWith('etcForceCreative')).to.eql(true)
@@ -30,10 +30,7 @@ describe('also', function () {
       expect(cm.set.calledWith('etcForceCreative', encodeURIComponent('[-1]'))).to.eql(true)
     })
     it('should force a creative that does not exist', function () {
-      expect(db).to.eql({
-        etcForceCreative: '[-1]',
-        smartserve_preview: 'true'
-      })
+      expect(db).to.eql({ etcForceCreative: '[-1]' })
     })
   })
 
