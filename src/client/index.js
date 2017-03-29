@@ -1,6 +1,6 @@
 /* globals __VARIATION__ __CWD__ */
 const context = require.context(__CWD__)
-const _ = require('lodash')
+const _ = require('lodash').noConflict()
 const Promise = require('sync-p/extra')
 const engine = require('./engine')
 const also = require('./also')
