@@ -104,7 +104,7 @@ must be run inside an experience directory, `--view` to see the current setting 
 ```
 xp goals
 ```
-with `list`, `add`, `remove` and `set-primary` being arguments
+with `list`, `add`, `remove` and `set-primary` being subcommands
 
 ## To open the experience overview page on app.qubit.com:
 ```
