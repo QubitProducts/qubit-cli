@@ -1,9 +1,9 @@
 const goalNames = [
-  { value: 'metrics.conversions_per_visitor', name: 'Conversions per visitor' },
-  { value: 'metrics.revenue_per_visitor', name: 'Revenue per visitor' },
-  { value: 'metrics.revenue_per_converter', name: 'Revenue per converter' },
-  { value: 'pageviews.url', name: 'Page URL' },
-  { value: 'pageviews.customvalues.uv.events.action', name: 'Event action (UV)' }
+  { value: 'metrics.conversions_per_visitor', name: 'Conversions per visitor', exclusive: true },
+  { value: 'metrics.revenue_per_visitor', name: 'Revenue per visitor', exclusive: true },
+  { value: 'metrics.revenue_per_converter', name: 'Revenue per converter', exclusive: true },
+  { value: 'pageviews.url', name: 'Page URL', exclusive: false },
+  { value: 'pageviews.customvalues.uv.events.action', name: 'Event action (UV)', exclusive: false }
 ]
 
 const operators = [
@@ -27,8 +27,10 @@ function read (goals) {
 }
 
 function add (goals, goalToAdd) {
-  goals.push(goalToAdd)
-  return goals
+  const newGoals = goals
+  newGoals.push(goalToAdd)
+
+  return newGoals
 }
 
 function remove (goals, goalToRemove) {
@@ -36,12 +38,14 @@ function remove (goals, goalToRemove) {
 }
 
 function setPrimary (goals, goalToMakePrimary) {
-  goals.forEach((goal) => {
+  const newGoals = goals
+
+  newGoals.forEach((goal) => {
     if (goal.primary) goal.primary = false
     if (goal.id === goalToMakePrimary) goal.primary = true
   })
 
-  return goals
+  return newGoals
 }
 
 function getGoalName (goal) {

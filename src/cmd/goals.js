@@ -6,7 +6,7 @@ const goalService = require('../services/goal')
 const goalsHelper = require('../lib/goals')
 const log = require('../lib/log')
 
-module.exports = async function goals (arg) {
+module.exports = async function goals (cmd) {
   try {
     const pkg = await getPkg()
     if (!pkg.meta) return log(chalk.red('Navigate to an experience directory and try again'))
@@ -17,9 +17,9 @@ module.exports = async function goals (arg) {
     const meta = { propertyId, experienceId, iterationId }
     const goals = await goalService.get(meta)
 
-    if (arg === 'add') addGoal(meta, goals)
-    else if (arg === 'remove') removeGoal(meta, goals)
-    else if (arg === 'set-primary') setPrimaryGoal(meta, goals)
+    if (cmd === 'add') addGoal(meta, goals)
+    else if (cmd === 'remove') removeGoal(meta, goals)
+    else if (cmd === 'set-primary') setPrimaryGoal(meta, goals)
     else listGoals(meta, goals)
   } catch (err) {
     log.error(err)
@@ -29,7 +29,16 @@ module.exports = async function goals (arg) {
 async function addGoal (meta, goals) {
   if (goals.length >= 5) return log(chalk.red('Max goals reached, remove a goal first'))
 
-  const key = await input.select('Add new goal:', goalsHelper.goalNames)
+  // see if goal exists in chosen goals
+  // if it does, filter out that goal if it's an exclusive goal type (cvr, rpv, rpc)
+  const goalsAvailableToAdd = goalsHelper.goalNames.filter((goal, i) => {
+    const existingGoal = goals.find((existingGoal) => existingGoal.key === goal.value)
+    const uniqueGoal = goal.value !== (existingGoal && existingGoal.key) || !goal.exclusive
+
+    return uniqueGoal
+  })
+
+  const key = await input.select('Add new goal:', goalsAvailableToAdd)
   const isUrlGoal = key === 'pageviews.url'
   const isEventGoal = key === 'pageviews.customvalues.uv.events.action'
   const primary = false
@@ -75,9 +84,6 @@ async function setPrimaryGoal (meta, goals) {
 }
 
 function listGoals (meta, goals) {
-  const newLine = '\n\r'
   const inputOptions = goalsHelper.read(goals)
-  const readableGoals = inputOptions.map((iteree) => iteree.name)
-
-  log(newLine + readableGoals.join(newLine))
+  inputOptions.forEach((goal) => log(goal.name))
 }

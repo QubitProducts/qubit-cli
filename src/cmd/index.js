@@ -60,8 +60,8 @@ module.exports = function run (pkg) {
     .action(traffic)
 
   program
-    .command('goals <cmd>')
-    .description('`list`, `add`, `remove` and `set-primary` being arguments')
+    .command('goals [cmd]')
+    .description('`list`, `add`, `remove` and `set-primary` being subcommands')
     .action(goals)
 
   program
