@@ -27,14 +27,17 @@ function connect () {
 }
 
 function xp (state) {
-  if (state.enabled) {
-    if (!enabled) enabled = true
-    if (document.body) {
+  return new Promise((resolve) => {
+    if (document.body) resolve()
+    document.addEventListener('DOMContentLoaded', resolve)
+    window.addEventListener('load', resolve)
+  })
+  .then(() => {
+    if (state.enabled) {
+      if (!enabled) enabled = true
       appendScript()
-    } else {
-      document.onload = appendScript
     }
-  }
+  })
 }
 
 function appendScript () {
