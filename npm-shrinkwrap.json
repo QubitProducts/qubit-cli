@@ -1,6 +1,6 @@
 {
   "name": "@qubit/xp-cli",
-  "version": "1.20.3",
+  "version": "1.20.4",
   "dependencies": {
     "@qubit/biscotti": {
       "version": "5.7.0",
