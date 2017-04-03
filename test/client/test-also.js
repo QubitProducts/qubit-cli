@@ -27,11 +27,11 @@ describe('also', function () {
       expect(cm.clearAll.calledWith('etcForceCreative')).to.eql(true)
     })
     it('should force a creative that does not exist', function () {
-      expect(cm.set.calledWith('etcForceCreative', encodeURIComponent('[-1]'))).to.eql(true)
+      expect(cm.set.calledWith('etcForceCreative', encodeURIComponent('[]'))).to.eql(true)
     })
     it('should force a creative that does not exist', function () {
       expect(db).to.eql({
-        etcForceCreative: '[-1]',
+        etcForceCreative: '[]',
         smartserve_preview: 'true'
       })
     })
