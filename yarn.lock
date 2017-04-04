@@ -14,9 +14,9 @@
     sync-p "^1.1.1"
     urlite "^1.2.7"
 
-"@qubit/email-scheduler@^1.6.3":
-  version "1.7.0"
-  resolved "https://registry.qubit.com/@qubit/email-scheduler/download/@qubit/email-scheduler-1.7.0.tgz#876bcb3920af2d9fa6a91400e7758d7b122afd71"
+"@qubit/email-scheduler@^1.7.1":
+  version "1.7.1"
+  resolved "https://registry.qubit.com/@qubit/email-scheduler/download/@qubit/email-scheduler-1.7.1.tgz#bd5c8c79ef46d0eb1191c58b022946e077389138"
   dependencies:
     "@qubit/http-api-stash" "^1.0.0"
     cookieman "^1.0.0"
@@ -132,7 +132,7 @@
   dependencies:
     slapdash "^1.3.0"
 
-"@qubit/social-proof@^1.1.5":
+"@qubit/social-proof@^1.1.6":
   version "1.1.6"
   resolved "https://registry.qubit.com/@qubit/social-proof/download/@qubit/social-proof-1.1.6.tgz#ae0e21cd1623a486048fa7fcae7d1d49be576089"
   dependencies:
@@ -348,13 +348,6 @@ async-each@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/async-each/-/async-each-1.0.1.tgz#19d386a1d9edc6e7c1c85d388aedbcc56d33602d"
 
-"async-to-gen@github:alanclarke/async-to-gen":
-  version "1.2.0"
-  resolved "https://codeload.github.com/alanclarke/async-to-gen/tar.gz/9d937f25b6a41891e5db367f6778c4f5a7a8ef07"
-  dependencies:
-    babylon "^6.14.0"
-    magic-string "^0.16.0"
-
 async@^2.1.2:
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/async/-/async-2.1.5.tgz#e587c68580994ac67fc56ff86d3ac56bdbe810bc"
@@ -399,10 +392,6 @@ babel-runtime@^6.6.1:
   dependencies:
     core-js "^2.4.0"
     regenerator-runtime "^0.10.0"
-
-babylon@^6.14.0:
-  version "6.16.1"
-  resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.16.1.tgz#30c5a22f481978a9e7f8cdfdf496b11d94b404d3"
 
 balanced-match@^0.4.1:
   version "0.4.2"
@@ -2257,12 +2246,6 @@ lru-cache@^4.0.0, lru-cache@^4.0.1:
 magic-string@^0.14.0:
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.14.0.tgz#57224aef1701caeed273b17a39a956e72b172462"
-  dependencies:
-    vlq "^0.2.1"
-
-magic-string@^0.16.0:
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.16.0.tgz#970ebb0da7193301285fb1aa650f39bdd81eb45a"
   dependencies:
     vlq "^0.2.1"
 
