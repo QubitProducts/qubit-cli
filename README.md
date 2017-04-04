@@ -79,6 +79,27 @@ note: propertyId is the number after /p/ in our urls
 xp push
 ```
 
+Before pushing changes, XP checks if there has been any change in the experience code in the Qubit platform since the last XP interaction.
+This prevents you from overriding changes that would have been made by someone else directly on the platform.
+
+In the case where changes have been made on the platform since the last use of XP, XP will show you the diff between your changes and the changes on the platform.
+You can then choose, to :
+
+- to override your local changes with the ones made on the platform. In this case type:
+```
+xp pull
+```
+
+- to override the platform code with your local changes. In this case type:
+```
+xp push --force
+```
+
+- to incorporate the changes manually (from the diff), and then force the update though the same command (case type:
+```
+xp push --force
+```)
+
 ## To pull remote changes from the platform:
 ```
 xp pull
