@@ -83,22 +83,22 @@ Before pushing changes, XP checks if there has been any change in the experience
 This prevents you from overriding changes that would have been made by someone else directly on the platform.
 
 In the case where changes have been made on the platform since the last use of XP, XP will show you the diff between your changes and the changes on the platform.
-You can then choose, to :
+You can then choose to :
 
-- to override your local changes with the ones made on the platform. In this case type:
+- override your local changes with the ones made on the platform. In this case type:
 ```
 xp pull
 ```
 
-- to override the platform code with your local changes. In this case type:
+- override the platform code with your local changes. In this case type:
 ```
 xp push --force
 ```
 
-- to incorporate the changes manually (from the diff), and then force the update though the same command (case type:
+- incorporate the changes manually (from the diff), and then force the update though the same command type:
 ```
 xp push --force
-```)
+```
 
 ## To pull remote changes from the platform:
 ```
