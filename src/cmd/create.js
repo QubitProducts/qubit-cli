@@ -16,7 +16,7 @@ module.exports = async function create () {
     const propertySuggestions = await suggest.getProperties()
 
     autocomplete('Select a property', (input) => {
-      return Promise.resolve(suggest.property(input, propertySuggestions))
+      return Promise.resolve(suggest.filter(input, propertySuggestions))
     }).on('submit', createExperience)
   } catch (err) {
     log.error(err)

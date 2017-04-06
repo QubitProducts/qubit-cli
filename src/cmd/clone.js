@@ -13,7 +13,7 @@ module.exports = async function clone () {
     const propertySuggestions = await suggest.getProperties()
 
     autocomplete('Select a property', (input) => {
-      return Promise.resolve(suggest.property(input, propertySuggestions))
+      return Promise.resolve(suggest.filter(input, propertySuggestions))
     }).on('submit', selectExperience)
   } catch (err) {
     log.error(err)
@@ -24,7 +24,7 @@ async function selectExperience (propertyId) {
   const experienceSuggestions = await suggest.getExperiences(propertyId)
 
   autocomplete('Select an experience', (input) => {
-    return Promise.resolve(suggest.experience(input, experienceSuggestions))
+    return Promise.resolve(suggest.filter(input, experienceSuggestions))
   }).on('submit', (experienceId) => {
     clone(propertyId, experienceId)
   })
