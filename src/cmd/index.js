@@ -18,7 +18,7 @@ const duplicate = require('./duplicate')
 
 module.exports = function run (pkg) {
   program
-    .command('create <propertyId>')
+    .command('create')
     .description('create an experience')
     .action(create)
 

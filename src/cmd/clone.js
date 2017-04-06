@@ -1,37 +1,41 @@
-const _ = require('lodash')
 const path = require('path')
-const connect = require('../server/lib/connect')
+const chalk = require('chalk')
+const autocomplete = require('cli-autocomplete')
 const down = require('../services/down')
 const scaffold = require('../lib/scaffold')
-const parseUrl = require('../lib/parse-url')
 const log = require('../lib/log')
+const suggest = require('../lib/suggest')
 const experienceFilename = require('../lib/experience-filename')
-const {isUrl, isId} = require('../lib/is-type')
 const CWD = process.cwd()
 
-module.exports = async function pull (id) {
+module.exports = async function clone () {
   try {
-    let propertyId, experienceId
-    let opts = arguments[arguments.length - 1].parent.args.slice(0, -1)
+    const propertySuggestions = await suggest.getProperties()
 
-    if (opts.length && _.every(opts, isId)) {
-      [propertyId, experienceId] = opts.map(Number)
-    } else if (opts.length && isUrl(id)) {
-      ({propertyId, experienceId} = parseUrl(id))
-    }
-    let experience, files
-    if (propertyId && experienceId) {
-      ({experience, files} = await down(propertyId, experienceId))
-    } else {
-      ({experience, files} = await connect())
-    }
-
-    log(`cloning experience`)
-    let filename = experienceFilename(experience)
-    let dest = path.join(CWD, filename)
-    await scaffold(dest, files, false, true)
-    log(`cloned into ${filename}`)
+    autocomplete('Select a property', (input) => {
+      return Promise.resolve(suggest.property(input, propertySuggestions))
+    }).on('submit', selectExperience)
   } catch (err) {
     log.error(err)
   }
+}
+
+async function selectExperience (propertyId) {
+  const experienceSuggestions = await suggest.getExperiences(propertyId)
+
+  autocomplete('Select an experience', (input) => {
+    return Promise.resolve(suggest.experience(input, experienceSuggestions))
+  }).on('submit', (experienceId) => {
+    clone(propertyId, experienceId)
+  })
+}
+
+async function clone (propertyId, experienceId) {
+  const { experience, files } = await down(propertyId, experienceId)
+  const filename = experienceFilename(experience)
+  const dest = path.join(CWD, filename)
+
+  log(chalk.yellow('Cloning experience'))
+  await scaffold(dest, files, false, true)
+  log(chalk.green(`Cloned into ${filename}`))
 }

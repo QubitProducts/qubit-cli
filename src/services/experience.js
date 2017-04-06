@@ -10,6 +10,10 @@ function get (propertyId, experienceId) {
   return fetch.get(getPath(propertyId, experienceId))
 }
 
+function getAll (propertyId) {
+  return fetch.get(`/api/p/${propertyId}/experiments/summary`)
+}
+
 function set (propertyId, experienceId, experience) {
   delete experience.update_sequence_id
   return fetch.put(getPath(propertyId, experienceId), { experiment: experience })
@@ -57,4 +61,4 @@ function getPath (propertyId, experienceId) {
   return url
 }
 
-module.exports = { get, set, create, getCode, setCode, DEFAULTS }
+module.exports = { get, getAll, set, create, getCode, setCode, DEFAULTS }
