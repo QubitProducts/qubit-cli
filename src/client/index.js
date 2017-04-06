@@ -7,6 +7,7 @@ const also = require('./also')
 const log = require('./log')
 const options = require('./options')
 const onSecondPageView = require('./pageview')
+const redirectTo = require('./redirect-to')
 const applyStyles = require('./styles')
 const globalFn = _.once(() => eval.call(window, require('global'))) // eslint-disable-line
 const STYLE_ID = 'qubit-xp-styles'
@@ -59,6 +60,7 @@ function init (bypassTriggers) {
     let api, removeStyles
     isActive = true
     let options = withLog(opts, 'variation')
+    options.redirectTo = redirectTo
     modules = loadModules()
     log.info('running variation')
     try {
