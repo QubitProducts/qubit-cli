@@ -12,6 +12,10 @@ module.exports = async function clone () {
   try {
     const propertySuggestions = await suggest.getProperties()
 
+    if (propertySuggestions.length === 1) {
+      selectExperience(propertySuggestions[0].id)
+    }
+
     autocomplete('Select a property', (input) => {
       return Promise.resolve(suggest.filter(input, propertySuggestions))
     }).on('submit', selectExperience)
