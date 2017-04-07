@@ -17,11 +17,11 @@ module.exports = async function create () {
 
     if (propertySuggestions.length === 1) {
       createExperience(propertySuggestions[0].id)
+    } else {
+      autocomplete('Select a property', (input) => {
+        return Promise.resolve(suggest.filter(input, propertySuggestions))
+      }).on('submit', createExperience)
     }
-
-    autocomplete('Select a property', (input) => {
-      return Promise.resolve(suggest.filter(input, propertySuggestions))
-    }).on('submit', createExperience)
   } catch (err) {
     log.error(err)
   }

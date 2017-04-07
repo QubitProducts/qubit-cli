@@ -14,11 +14,11 @@ module.exports = async function clone () {
 
     if (propertySuggestions.length === 1) {
       selectExperience(propertySuggestions[0].id)
+    } else {
+      autocomplete('Select a property', (input) => {
+        return Promise.resolve(suggest.filter(input, propertySuggestions))
+      }).on('submit', selectExperience)
     }
-
-    autocomplete('Select a property', (input) => {
-      return Promise.resolve(suggest.filter(input, propertySuggestions))
-    }).on('submit', selectExperience)
   } catch (err) {
     log.error(err)
   }
