@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const chalk = require('chalk')
 const codeService = require('../services/code')
 const log = require('../lib/log')
@@ -7,19 +8,29 @@ let CWD = process.cwd()
 
 module.exports = async function checkDiff (propertyId, experienceId) {
   log('Comparing files...')
-  const files = await codeService.get(propertyId, experienceId)
+  let diffs = []
+  const remoteFiles = await codeService.get(propertyId, experienceId)
   const localFiles = await readFiles(CWD)
-  delete files['package.json']
-  delete localFiles['package.json']
-  const fileDiffs = checkDiff(localFiles, files)
 
-  if (fileDiffs.length) {
+  delete remoteFiles['package.json']
+  delete localFiles['package.json']
+
+  checkDiffs(localFiles, remoteFiles, 'local')
+  checkDiffs(remoteFiles, localFiles, 'remote')
+  diffs = _.uniqBy(diffs, 'fileName')
+
+  if (diffs.length) {
     log('Showing diff between local and remote files...')
-    for (let diffObj of fileDiffs) {
-      const { fileName, diff } = diffObj
-      console.log(`${chalk.blue.bold(fileName)} \n`)
+    for (let diffObj of diffs) {
+      const { fileName, diff, missingFile } = diffObj
+      const msg = `${chalk.red.bold(`- This file does not exist ${missingFile}ly.`)}`
+      console.log(`${chalk.blue.bold(fileName)} ${missingFile ? msg : ''}\n`)
+
       diff.forEach(parts => {
-        const color = parts.added ? 'green' : parts.removed ? 'red' : 'grey'
+        let color = parts.added ? 'green' : parts.removed ? 'red' : 'grey'
+        if (missingFile) {
+          color = missingFile === 'local' ? 'red' : 'green'
+        }
         console.log(`${chalk[color](parts.value)}`)
       })
     }
@@ -27,16 +38,16 @@ module.exports = async function checkDiff (propertyId, experienceId) {
     log('Both versions are the same!')
   }
 
-  function checkDiff (localFiles, files) {
-    let diffs = []
+  function checkDiffs (comparisonFiles, files, source) {
     for (let name in files) {
-      const remoteVal = files[name]
-      const localVal = localFiles[name]
-      if (remoteVal !== localVal) {
-        const diff = jsdiff.diffLines(remoteVal, localVal, [{ignoreWhitespace: true}])
-        diffs.push({fileName: name.toUpperCase(), diff: diff})
+      const value = files[name] || ''
+      const compVal = comparisonFiles[name] || ''
+      const missingFile = comparisonFiles[name] === undefined && source
+
+      if (value !== compVal || missingFile) {
+        const diff = jsdiff.diffLines(value, compVal, [{ignoreWhitespace: true}])
+        diffs.push({fileName: name.toUpperCase(), diff, missingFile})
       }
     }
-    return diffs
   }
 }
