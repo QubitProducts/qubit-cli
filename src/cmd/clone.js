@@ -16,7 +16,7 @@ module.exports = async function clone () {
       selectExperience(propertySuggestions[0].id)
     } else {
       autocomplete('Select a property', (input) => {
-        return Promise.resolve(suggest.filter(input, propertySuggestions))
+        return suggest.filter(input, propertySuggestions)
       }).on('submit', selectExperience)
     }
   } catch (err) {
@@ -28,13 +28,13 @@ async function selectExperience (propertyId) {
   const experienceSuggestions = await suggest.getExperiences(propertyId)
 
   autocomplete('Select an experience', (input) => {
-    return Promise.resolve(suggest.filter(input, experienceSuggestions))
+    return suggest.filter(input, experienceSuggestions)
   }).on('submit', (experienceId) => {
-    clone(propertyId, experienceId)
+    cloneExperience(propertyId, experienceId)
   })
 }
 
-async function clone (propertyId, experienceId) {
+async function cloneExperience (propertyId, experienceId) {
   const { experience, files } = await down(propertyId, experienceId)
   const filename = experienceFilename(experience)
   const dest = path.join(CWD, filename)

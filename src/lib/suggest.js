@@ -31,9 +31,9 @@ function getAutocompleteMap (data) {
 }
 
 function filter (input, suggestions) {
-  return suggestions.filter((property) => {
-    return property.title.toLowerCase().slice(0, input.length) === input.toLowerCase()
-  })
+  return Promise.resolve(suggestions.filter((property) => {
+    return property.title.toLowerCase().includes(input.toLowerCase())
+  }))
 }
 
 module.exports = { getProperties, getExperiences, filter }
