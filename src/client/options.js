@@ -26,6 +26,7 @@ module.exports = function transform (pkg, key) {
   meta.trackingId = meta.trackingId || 'tracking_id'
   meta.vertical = meta.vertical || 'vertical'
   meta.visitorId = visitor.visitorId
+  meta.isPreview = true
 
   return {
     also: _.get(pkg, `meta.also`) || [],
