@@ -39,6 +39,7 @@ module.exports = function transform (pkg, key) {
       getBrowserState: () => resolve(getBrowserState()),
       getVisitorState: () => resolve(_.cloneDeep(visitor)),
       log,
+      solution: pkg.meta.solutionOptions,
       meta: _.pick(meta, [
         'cookieDomain',
         'trackingId',

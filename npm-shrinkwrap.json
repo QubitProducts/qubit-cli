@@ -2,10 +2,20 @@
   "name": "@qubit/xp-cli",
   "version": "1.21.1",
   "dependencies": {
+    "@qubit/advanced-modal": {
+      "version": "1.0.1",
+      "from": "@qubit/advanced-modal@>=1.0.1 <2.0.0",
+      "resolved": "https://registry.qubit.com/@qubit/advanced-modal/download/@qubit/advanced-modal-1.0.1.tgz"
+    },
     "@qubit/biscotti": {
       "version": "5.7.0",
       "from": "@qubit/biscotti@latest",
       "resolved": "https://registry.qubit.com/@qubit/biscotti/download/@qubit/biscotti-5.7.0.tgz"
+    },
+    "@qubit/css": {
+      "version": "0.1.6",
+      "from": "@qubit/css@>=0.1.6 <0.2.0",
+      "resolved": "https://registry.qubit.com/@qubit/css/download/@qubit/css-0.1.6.tgz"
     },
     "@qubit/email-scheduler": {
       "version": "1.7.1",
@@ -22,10 +32,20 @@
       "from": "@qubit/exit-checker@latest",
       "resolved": "https://registry.qubit.com/@qubit/exit-checker/download/@qubit/exit-checker-1.0.5.tgz"
     },
+    "@qubit/floating-panel": {
+      "version": "1.2.0",
+      "from": "@qubit/floating-panel@>=1.2.0 <2.0.0",
+      "resolved": "https://registry.qubit.com/@qubit/floating-panel/download/@qubit/floating-panel-1.2.0.tgz"
+    },
     "@qubit/funnelweb": {
       "version": "1.0.0",
       "from": "@qubit/funnelweb@>=1.0.0 <2.0.0",
       "resolved": "https://registry.qubit.com/@qubit/funnelweb/download/@qubit/funnelweb-1.0.0.tgz"
+    },
+    "@qubit/growl": {
+      "version": "1.1.0",
+      "from": "@qubit/growl@>=1.1.0 <2.0.0",
+      "resolved": "https://registry.qubit.com/@qubit/growl/download/@qubit/growl-1.1.0.tgz"
     },
     "@qubit/http-api": {
       "version": "1.3.0",
@@ -97,6 +117,11 @@
       "from": "@qubit/http-api-tally@>=1.0.0 <2.0.0",
       "resolved": "https://registry.qubit.com/@qubit/http-api-tally/download/@qubit/http-api-tally-1.0.0.tgz"
     },
+    "@qubit/image-carousel": {
+      "version": "1.2.0",
+      "from": "@qubit/image-carousel@>=1.2.0 <2.0.0",
+      "resolved": "https://registry.qubit.com/@qubit/image-carousel/download/@qubit/image-carousel-1.2.0.tgz"
+    },
     "@qubit/jolt": {
       "version": "7.25.0",
       "from": "@qubit/jolt@latest",
@@ -116,6 +141,11 @@
       "version": "1.5.15",
       "from": "@qubit/poller@latest",
       "resolved": "https://registry.qubit.com/@qubit/poller/download/@qubit/poller-1.5.15.tgz"
+    },
+    "@qubit/product-recommendations": {
+      "version": "1.2.2",
+      "from": "@qubit/product-recommendations@>=1.2.2 <2.0.0",
+      "resolved": "https://registry.qubit.com/@qubit/product-recommendations/download/@qubit/product-recommendations-1.2.2.tgz"
     },
     "@qubit/remember-preview": {
       "version": "1.1.0",
@@ -151,6 +181,11 @@
       "version": "4.1.0",
       "from": "@qubit/uv-api@latest",
       "resolved": "https://registry.qubit.com/@qubit/uv-api/download/@qubit/uv-api-4.1.0.tgz"
+    },
+    "@qubit/visitor-pulse": {
+      "version": "1.0.7",
+      "from": "@qubit/visitor-pulse@>=1.0.7 <2.0.0",
+      "resolved": "https://registry.qubit.com/@qubit/visitor-pulse/download/@qubit/visitor-pulse-1.0.7.tgz"
     },
     "@qubit/xp-loader": {
       "version": "2.0.0",
@@ -805,6 +840,11 @@
       "version": "1.0.0",
       "from": "crypto-random-string@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/crypto-random-string/-/crypto-random-string-1.0.0.tgz"
+    },
+    "currency-symbol-map": {
+      "version": "3.1.0",
+      "from": "currency-symbol-map@>=3.0.1 <4.0.0",
+      "resolved": "https://registry.npmjs.org/currency-symbol-map/-/currency-symbol-map-3.1.0.tgz"
     },
     "d": {
       "version": "1.0.0",
@@ -3621,6 +3661,11 @@
       "from": "slide@>=1.1.5 <2.0.0",
       "resolved": "https://registry.npmjs.org/slide/-/slide-1.1.6.tgz"
     },
+    "snabbdom": {
+      "version": "0.5.4",
+      "from": "snabbdom@>=0.5.2 <0.6.0",
+      "resolved": "https://registry.npmjs.org/snabbdom/-/snabbdom-0.5.4.tgz"
+    },
     "sntp": {
       "version": "1.0.9",
       "from": "sntp@>=1.0.0 <2.0.0",
@@ -3746,6 +3791,18 @@
       "version": "2.0.1",
       "from": "strip-json-comments@>=2.0.1 <2.1.0",
       "resolved": "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-2.0.1.tgz"
+    },
+    "style-loader": {
+      "version": "0.16.1",
+      "from": "style-loader@>=0.16.1 <0.17.0",
+      "resolved": "https://registry.npmjs.org/style-loader/-/style-loader-0.16.1.tgz",
+      "dependencies": {
+        "loader-utils": {
+          "version": "1.1.0",
+          "from": "loader-utils@>=1.0.2 <2.0.0",
+          "resolved": "https://registry.npmjs.org/loader-utils/-/loader-utils-1.1.0.tgz"
+        }
+      }
     },
     "supports-color": {
       "version": "2.0.0",

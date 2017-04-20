@@ -23,13 +23,15 @@ module.exports = {
     }
   },
   resolveLoader: {
-    modules: [path.join(__dirname, 'node_modules')]
+    modules: [path.join(__dirname, 'node_modules'), path.join(__dirname, 'loaders')]
   },
   module: {
     loaders: [
+      { test: /\.js$/, include: [path.join(__dirname, 'node_modules', '@qubit')], loader: 'legacy-css' },
+      { test: /\.css$/, include: [path.join(__dirname, 'node_modules', '@qubit')], loader: 'style-loader!raw-loader!less-loader' },
       { test: /global\.js$/, loader: 'raw-loader' },
       { test: /\.js$/, include: [cwd], exclude: [/global\.js/], loader: '@qubit/xp-loader!buble-loader?objectAssign=Object.assign' },
-      { test: /\.css$/, loader: 'raw-loader!less-loader' },
+      { test: /\.css$/, loader: 'raw-loader!less-loader', exclude: [path.join(__dirname, 'node_modules')] },
       { test: /\.json$/, loader: 'json-loader' }
     ]
   },
