@@ -25,6 +25,7 @@ module.exports = function transform (pkg, key) {
   meta.cookieDomain = meta.cookieDomain || window.location.host
   meta.trackingId = meta.trackingId || 'tracking_id'
   meta.vertical = meta.vertical || 'vertical'
+  meta.namespace = meta.namespace || undefined
   meta.visitorId = visitor.visitorId
   meta.isPreview = true
 
@@ -47,6 +48,7 @@ module.exports = function transform (pkg, key) {
         'experimentId',
         'isPreview',
         'vertical',
+        'namespace',
         'iterationId',
         'variationId',
         'variationMasterId',
