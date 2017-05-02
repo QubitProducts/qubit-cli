@@ -1,6 +1,6 @@
 {
   "name": "@qubit/xp-cli",
-  "version": "1.22.0",
+  "version": "1.23.0",
   "dependencies": {
     "@qubit/advanced-modal": {
       "version": "1.0.1",
