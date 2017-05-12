@@ -1,7 +1,6 @@
 const path = require('path')
 const input = require('input')
 const chalk = require('chalk')
-const autocomplete = require('cli-autocomplete')
 const experienceService = require('../services/experience')
 const codeService = require('../services/code')
 const suggest = require('../lib/suggest')
@@ -13,15 +12,7 @@ const CWD = process.cwd()
 
 module.exports = async function create () {
   try {
-    const propertySuggestions = await suggest.getProperties()
-
-    if (propertySuggestions.length === 1) {
-      createExperience(propertySuggestions[0].id)
-    } else {
-      autocomplete('Select a property', (input) => {
-        return suggest.filter(input, propertySuggestions)
-      }).on('submit', createExperience)
-    }
+    suggest.property(createExperience)
   } catch (err) {
     log.error(err)
   }

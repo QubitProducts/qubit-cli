@@ -1,27 +1,38 @@
+const autocomplete = require('cli-autocomplete')
 const propertyService = require('../services/property')
 const experienceService = require('../services/experience')
 
-async function getProperties () {
-  const properties = await propertyService.get()
-
-  return getAutocompleteMap({
-    arr: properties,
+async function property (cb) {
+  const suggestions = await getAutocompleteMap({
+    arr: await propertyService.get(),
     title: 'name',
     value: 'id'
   })
+
+  if (suggestions.length === 1) {
+    cb(suggestions[0].id)
+  } else {
+    autocomplete('Select a property', (input) => {
+      return filter(input, suggestions)
+    }).on('submit', cb)
+  }
 }
 
-async function getExperiences (propertyId) {
-  const experiences = await experienceService.getAll(propertyId)
-
-  return getAutocompleteMap({
-    arr: experiences,
+async function experience (propertyId, cb) {
+  const suggestions = await getAutocompleteMap({
+    arr: await experienceService.getAll(propertyId),
     title: 'name',
     value: 'id'
   })
+
+  autocomplete('Select an experience', (input) => {
+    return filter(input, suggestions)
+  }).on('submit', (experienceId) => {
+    cb(propertyId, experienceId)
+  })
 }
 
-function getAutocompleteMap (data) {
+async function getAutocompleteMap (data) {
   return data.arr.map((iteree) => {
     return {
       title: iteree[data.title],
@@ -31,9 +42,9 @@ function getAutocompleteMap (data) {
 }
 
 function filter (input, suggestions) {
-  return Promise.resolve(suggestions.filter((property) => {
-    return property.title.toLowerCase().includes(input.toLowerCase())
+  return Promise.resolve(suggestions.filter((suggestion) => {
+    return suggestion.title.toLowerCase().includes(input.toLowerCase())
   }))
 }
 
-module.exports = { getProperties, getExperiences, filter }
+module.exports = { property, experience }
