@@ -54,27 +54,17 @@ xp --watch
 Now open chrome and turn on xp by clicking on the extension icon ![extension icon](./chrome-extension/icons/off16.png). You should see the background of the page turn yellow! Change the css in varaition.css, and the preview should update on the fly!
 
 
-## To clone an existing experience
-- If you know the propertyId and experienceId:
+## To clone an existing experience:
 ```
-xp clone <propertyId> <experienceId>
+xp clone
 ```
-- If you know the url:
-```
-xp clone https://app.qubit.com/p/{propertyId}/experiences/{experienceId}
-```
-- Otherwise, type ``` xp clone ``` and navigate to your experience, xp will guide you from there
 
 ## To create a new experience:
-
 ```
-xp create <propertyId>
+xp create
 ```
-note: propertyId is the number after /p/ in our urls
-
 
 ## To push your changes up to the platform:
-
 ```
 xp push
 ```
