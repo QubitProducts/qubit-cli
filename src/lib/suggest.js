@@ -2,33 +2,35 @@ const autocomplete = require('cli-autocomplete')
 const propertyService = require('../services/property')
 const experienceService = require('../services/experience')
 
-async function property (cb) {
+async function property () {
   const suggestions = await getAutocompleteMap({
     arr: await propertyService.get(),
     title: 'name',
     value: 'id'
   })
 
-  if (suggestions.length === 1) {
-    cb(suggestions[0].id)
-  } else {
-    autocomplete('Select a property', (input) => {
-      return filter(input, suggestions)
-    }).on('submit', cb)
-  }
+  return new Promise(function (resolve, reject) {
+    if (suggestions.length === 1) {
+      resolve(suggestions[0].id)
+    } else {
+      autocomplete('Select a property', (input) => {
+        return filter(input, suggestions)
+      }).on('submit', resolve)
+    }
+  })
 }
 
-async function experience (propertyId, cb) {
+async function experience (propertyId) {
   const suggestions = await getAutocompleteMap({
     arr: await experienceService.getAll(propertyId),
     title: 'name',
     value: 'id'
   })
 
-  autocomplete('Select an experience', (input) => {
-    return filter(input, suggestions)
-  }).on('submit', (experienceId) => {
-    cb(propertyId, experienceId)
+  return new Promise(function (resolve, reject) {
+    autocomplete('Select an experience', (input) => {
+      return filter(input, suggestions)
+    }).on('submit', resolve)
   })
 }
 
