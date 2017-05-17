@@ -13,6 +13,7 @@ const login = require('./login')
 const templatize = require('./templatize')
 const traffic = require('./traffic')
 const goals = require('./goals')
+const action = require('./action')
 const diff = require('./diff')
 const duplicate = require('./duplicate')
 
@@ -63,6 +64,26 @@ module.exports = function run (pkg) {
     .command('goals [cmd]')
     .description('`list`, `add`, `remove` and `set-primary` being subcommands')
     .action(goals)
+
+  program
+    .command('publish')
+    .description('publish an experience')
+    .action(action)
+
+  program
+    .command('pause')
+    .description('pause an experience')
+    .action(action)
+
+  program
+    .command('resume')
+    .description('resume an experience')
+    .action(action)
+
+  program
+    .command('status')
+    .description('check the publish status of an experience')
+    .action(action)
 
   program
     .command('open')
