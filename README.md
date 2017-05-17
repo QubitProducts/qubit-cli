@@ -95,6 +95,26 @@ xp push --force
 xp pull
 ```
 
+## To publish an experience:
+```
+xp publish
+```
+
+## To pause an experience:
+```
+xp pause
+```
+
+## To resume an experience:
+```
+xp resume
+```
+
+## To get the publish/pause status of an experience:
+```
+xp status
+```
+
 ## To duplicate the most recently created variation:
 ```
 xp duplicate
