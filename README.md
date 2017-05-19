@@ -31,6 +31,10 @@ templates
 ## Installation
 
 ```
+npm install -g qubitdigital/qubit-cli
+
+qubit login
+
 using npm:
 npm install -gp @qubit/xp-cli
 
