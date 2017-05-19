@@ -1,4 +1,4 @@
-const config = require('config')
+const config = require('../../config')
 const https = require('https')
 const enableDestroy = require('server-destroy')
 const express = require('express')

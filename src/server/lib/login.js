@@ -1,4 +1,4 @@
-const config = require('config')
+const config = require('../../../config')
 const axios = require('axios')
 const crypto = require('crypto')
 const opn = require('opn')
