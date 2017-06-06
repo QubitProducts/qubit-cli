@@ -20,38 +20,30 @@ describe('also', function () {
 
   describe('when called without any variations', function () {
     beforeEach(() => also(null, 'domain'))
-    it('should enable preview mode', function () {
-      expect(cm.set.calledWith('smartserve_preview', 'true')).to.eql(true)
-    })
     it('should clear any preexisting forceCreatives', function () {
-      expect(cm.clearAll.calledWith('etcForceCreative')).to.eql(true)
+      expect(cm.clearAll.calledWith('qb_opts')).to.eql(true)
     })
     it('should force a creative that does not exist', function () {
-      expect(cm.set.calledWith('etcForceCreative', encodeURIComponent('[]'))).to.eql(true)
+      expect(cm.set.calledWith('qb_opts', encodeURIComponent('{"experiences":[],"preview":true}'))).to.eql(true)
     })
     it('should force a creative that does not exist', function () {
       expect(db).to.eql({
-        etcForceCreative: '[]',
-        smartserve_preview: 'true'
+        qb_opts: '{"experiences":[],"preview":true}'
       })
     })
   })
 
   describe('when called with some variations', function () {
     beforeEach(() => also([1], 'domain'))
-    it('should enable preview mode', function () {
-      expect(cm.set.calledWith('smartserve_preview', 'true')).to.eql(true)
-    })
     it('should clear any preexisting forceCreatives', function () {
-      expect(cm.clearAll.calledWith('etcForceCreative')).to.eql(true)
+      expect(cm.clearAll.calledWith('qb_opts')).to.eql(true)
     })
     it('should force the specified creative', function () {
-      expect(cm.set.calledWith('etcForceCreative', encodeURIComponent('[1]'))).to.eql(true)
+      expect(cm.set.calledWith('qb_opts', encodeURIComponent('{"experiences":[1],"preview":true}'))).to.eql(true)
     })
     it('should force a creative that does not exist', function () {
       expect(db).to.eql({
-        etcForceCreative: '[1]',
-        smartserve_preview: 'true'
+        qb_opts: '{"experiences":[1],"preview":true}'
       })
     })
   })
