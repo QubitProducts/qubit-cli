@@ -40,6 +40,10 @@ function status (propertyId, experienceId) {
   return fetch.get(`/api/p/${propertyId}/experiments/${experienceId}/status`)
 }
 
+function duplicate (propertyId, options) {
+  return fetch.post(`/api/p/${propertyId}/experiments/duplicate`, options)
+}
+
 function getCode (experience) {
   const rules = _.get(experience, 'recent_iterations.draft.activation_rules')
   const rule = rules && rules.find(rule => rule.key === 'custom_javascript')
@@ -77,4 +81,4 @@ function getPath (propertyId, experienceId) {
   return url
 }
 
-module.exports = { get, getAll, set, create, publish, pause, resume, status, getCode, setCode, DEFAULTS }
+module.exports = { get, getAll, set, create, publish, pause, resume, duplicate, status, getCode, setCode, DEFAULTS }
