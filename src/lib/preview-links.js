@@ -6,6 +6,6 @@ module.exports = async function getPreviewLinks ({ variations, previewUrl, prope
     .map(getLink)
 
   function getLink (v) {
-    return `${previewUrl}#smartserve_p=${propertyId}&smartserve_preview=1&bypass_segments=&etcForceCreative=${v.variationId}`
+    return `${previewUrl}#smartserve_p=${propertyId}&qb_experiences=${v.variationId}&qb_opts=preview,bypass_segments`
   }
 }
