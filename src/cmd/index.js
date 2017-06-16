@@ -7,6 +7,7 @@ const link = require('./link')
 const clone = require('./clone')
 const pull = require('./pull')
 const push = require('./push')
+const del = require('./del')
 const serve = require('./serve')
 const login = require('./login')
 const logout = require('./logout')
@@ -141,6 +142,11 @@ module.exports = function run (pkg) {
     .command('diff')
     .description('compare local and remote versions of an experience')
     .action(diff)
+
+  program
+    .command('delete')
+    .description('delete and experience or variation')
+    .action(del)
 
   program
     .command('status')

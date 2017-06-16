@@ -9,7 +9,8 @@ const { ID_TOKEN } = require('./constants')
 module.exports = {
   get: fetchWithAuth('GET'),
   put: fetchWithAuth('PUT'),
-  post: fetchWithAuth('POST')
+  post: fetchWithAuth('POST'),
+  delete: fetchWithAuth('DELETE')
 }
 
 function fetchWithAuth (method) {

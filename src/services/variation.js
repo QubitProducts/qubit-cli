@@ -21,6 +21,10 @@ function create (iterationId, data) {
   return fetch.post(iterationVariationsUrl(iterationId), { variation: data })
 }
 
+function remove (propertyId, experienceId, variationId) {
+  return fetch.delete(variationsUrl(propertyId, experienceId, variationId))
+}
+
 function getCode (variation) {
   const code = {}
   const filename = getFilename(variation)
@@ -43,4 +47,4 @@ function getFilename (variation) {
   return `variation-${variation.master_id}`
 }
 
-module.exports = { getAll, get, set, create, getCode, setCode, getFilename }
+module.exports = { getAll, get, set, create, remove, getCode, setCode, getFilename }

@@ -41,4 +41,8 @@ function duplicate (experienceId, options) {
   return fetch.post(`/api/experiences/${experienceId}/duplicate`, options)
 }
 
-module.exports = { get, getAll, set, create, publish, pause, resume, duplicate, status }
+function remove (propertyId, experienceId) {
+  return fetch.post(`/api/p/${propertyId}/experiments/${experienceId}/delete`)
+}
+
+module.exports = { get, getAll, set, create, publish, pause, resume, duplicate, status, remove }
