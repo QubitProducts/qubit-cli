@@ -15,24 +15,29 @@ const cwd = process.cwd()
 module.exports = async function duplicate () {
   try {
     const pkg = await getPkg()
-    const propertyId = _.get(pkg, 'meta.propertyId') || await suggest.property('Select a property to duplicate from')
-    const experienceId = _.get(pkg, 'meta.experienceId') || await suggest.experience(propertyId)
-    const variations = await variationService.getAll(propertyId, experienceId)
-    const nextVariationNumber = Object.keys(variations).length
-    const variationChoices = getVariationChoices(variations)
-    const experienceChoice = { name: 'Entire experience', value: experienceId }
-    const choices = [experienceChoice]
+    let propertyId = _.get(pkg, 'meta.propertyId')
+    let experienceId = _.get(pkg, 'meta.experienceId')
 
-    if (pkg.meta) {
-      choices.push(...variationChoices)
-      const chosenId = await input.select('What would you like to duplicate?', choices)
+    if (propertyId && experienceId) {
+      // if the user is in an xp experience folder, allow them to duplicate a variation
+      const variations = await variationService.getAll(propertyId, experienceId)
+      const nextVariationNumber = Object.keys(variations).length
+      const variationChoices = getVariationChoices(variations)
 
-      if (chosenId === experienceId) {
-        await duplicateExperience(propertyId, experienceId)
+      if (variationChoices.length > 1) {
+        const variationId = await input.select('Which variation would you like to duplicate?', variationChoices)
+        await duplicateVariation(propertyId, experienceId, variationId, nextVariationNumber, pkg)
       } else {
-        await duplicateVariation(propertyId, experienceId, chosenId, nextVariationNumber, pkg)
+        const { name, value: variationId } = variationChoices[0]
+        const shouldDuplicateVariation = await input.confirm(`Do you want to duplicate ${name}?`)
+
+        if (shouldDuplicateVariation) await duplicateVariation(propertyId, experienceId, variationId, nextVariationNumber, pkg)
       }
     } else {
+      // if the user is not in an xp experience folder, allow them to duplicate an experience
+      propertyId = await suggest.property('Select a property to duplicate from')
+      experienceId = await suggest.experience(propertyId)
+
       await duplicateExperience(propertyId, experienceId)
     }
   } catch (err) {
@@ -56,7 +61,8 @@ async function duplicateVariation (propertyId, experienceId, variationId, nextVa
   const fileName = variationService.getFilename(newVariation)
   let files = _.pick(await codeService.get(propertyId, experienceId), ['package.json', `${fileName}.js`, `${fileName}.css`])
 
-  delete pkg.meta.variations[fileName]
+  // delete pkg.meta.variations[fileName]
+  delete _.get(pkg, `meta.variations.${fileName}`)
 
   if (_.get(pkg, 'meta')) files['package.json'] = JSON.stringify(mergePkg(pkg, files['package.json']), null, 2)
   await scaffold(cwd, files, false, false)
