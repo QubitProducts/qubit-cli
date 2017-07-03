@@ -2,7 +2,7 @@ const autocomplete = require('cli-autocomplete')
 const propertyService = require('../services/property')
 const experienceService = require('../services/experience')
 
-async function property () {
+async function property (message) {
   const suggestions = await getAutocompleteMap({
     arr: await propertyService.get(),
     title: 'name',
@@ -13,7 +13,7 @@ async function property () {
     if (suggestions.length === 1) {
       resolve(suggestions[0].id)
     } else {
-      autocomplete('Select a property', (input) => {
+      autocomplete(message, (input) => {
         return filter(input, suggestions)
       }).on('submit', resolve)
     }

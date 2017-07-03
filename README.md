@@ -119,7 +119,7 @@ xp resume
 xp status
 ```
 
-## To duplicate the most recently created variation:
+## To duplicate an experience or a variation:
 ```
 xp duplicate
 ```
