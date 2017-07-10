@@ -1,5 +1,6 @@
 module.exports = function polyfillUV () {
   let uv
+  window.__qubit = window.__qubit || {}
   if (window.uv && window.uv.emit) uv = window.uv
   // if window.__qubit.uv is there then use that
   if (window.__qubit.uv) uv = window.__qubit.uv
