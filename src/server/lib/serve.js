@@ -9,10 +9,12 @@ const push = require('../../cmd/push')
 const pickVariation = require('../../lib/pick-variation')
 const log = require('../../lib/log')
 const createApp = require('../app')
+const cors = require('cors')
 let CWD = process.cwd()
 
 module.exports = async function serve (options) {
   const app = await createApp()
+  app.use(cors())
   options.verbose = options.verbose || false
 
   if (/(triggers|global|.css$)/.test(options.variation)) {

@@ -19,6 +19,7 @@ const map = {
   '@qubit/uv-api': require('@qubit/uv-api'),
   '@qubit/visitor-pulse': require('@qubit/visitor-pulse'),
   'cookieman': require('cookieman'),
+  'preact': require('preact'),
   'jquery': require('@qubit/jquery'),
   'sync-p': require('sync-p/extra'),
   'slapdash': require('slapdash')
