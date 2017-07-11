@@ -4,6 +4,7 @@ const getBrowserState = require('@qubit/jolt/lib/getBrowserState')
 const defaultVisitor = require('./visitor')
 const log = require('./log')
 const resolve = require('sync-p/resolve')
+const uv = require('./uv')()
 
 module.exports = function transform (pkg, key) {
   const variationOpts = _.get(pkg, `meta.variations.${key}`) || {}
@@ -36,6 +37,7 @@ module.exports = function transform (pkg, key) {
         get: get,
         set: set
       },
+      uv,
       emitCustomGoal: (id, options) => log.info('Custom goal emitted', { id, options }),
       getBrowserState: () => resolve(getBrowserState()),
       getVisitorState: () => resolve(_.cloneDeep(visitor)),
