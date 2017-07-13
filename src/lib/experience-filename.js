@@ -1,3 +1,8 @@
 module.exports = function (experience) {
-  return experience.id + '-' + experience.name.toLowerCase().replace(/[^\w]/g, '-')
+  var name = experience.name
+    .toLowerCase()
+    .replace(/[^\w]/g, '-')
+    .replace(/-+/g, '-')
+
+  return name + '-' + experience.id
 }
