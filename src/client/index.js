@@ -12,9 +12,9 @@ const applyStyles = require('./styles')
 const globalFn = _.once(() => eval.call(window, require('global'))) // eslint-disable-line
 const STYLE_ID = 'qubit-xp-styles'
 require('./amd')()
-let {destroy, modules, varationIsSpent, triggersIsSpent, hasActivated} = init()
+let {destroy, modules, varationIsSpent, triggersIsSpent, hasActivated, runAcrossViews} = init()
 
-onSecondPageView(restart)
+onSecondPageView(restart, () => runAcrossViews)
 registerHotReloads(restart)
 
 function loadModules () {
@@ -28,7 +28,7 @@ function loadModules () {
 }
 
 function init (bypassTriggers) {
-  let variationSpent, triggersSpent, isActive
+  let variationSpent, triggersSpent, isActive, runAcrossViews
   let modules = loadModules()
   const cleanup = []
   const opts = options(modules.pkg, __VARIATION__)
@@ -47,6 +47,7 @@ function init (bypassTriggers) {
     }
     deferred.promise.then(() => {
       if (api && api.onActivation) api.onActivation()
+      runAcrossViews = api && api.runAcrossViews === true
       cb()
     })
     if (api && api.remove) {
@@ -91,13 +92,18 @@ function init (bypassTriggers) {
     modules,
     varationIsSpent: () => variationSpent,
     triggersIsSpent: () => triggersSpent,
-    hasActivated: () => isActive
+    hasActivated: () => isActive,
+    runAcrossViews
   }
 }
 
 function restart (bypassTriggers) {
+  let originalRunAcrossViews = runAcrossViews
   destroy()
-  ;({destroy, modules, varationIsSpent, triggersIsSpent, hasActivated} = init(bypassTriggers))
+  ;({destroy, modules, varationIsSpent, triggersIsSpent, hasActivated, runAcrossViews} = init(bypassTriggers))
+  // if bypassTriggers is true runAcrossViews will be set to undefined in the above line
+  // we need to retain its original value to keep the correct behaviour
+  if (bypassTriggers) runAcrossViews = originalRunAcrossViews
 }
 
 function registerHotReloads (restart) {
