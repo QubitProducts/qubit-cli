@@ -1,11 +1,13 @@
+const _ = require('lodash')
+
 module.exports = { isName, isUrl, isId, isPath, isSubmodule }
 
 function isName (str) {
-  return /^[\w-/.]+$/.test(String(str))
+  return _.isString(str) && /^[\w-/.]+$/.test(str)
 }
 
 function isUrl (str) {
-  return /^http/.test(String(str))
+  return _.isString(str) && /^http/.test(str)
 }
 
 function isId (str) {
@@ -13,9 +15,9 @@ function isId (str) {
 }
 
 function isPath (str) {
-  return /^[./]/.test(str)
+  return _.isString(str) && /^[./]/.test(str)
 }
 
 function isSubmodule (str) {
-  return /[/]/.test(str.replace(/^@[^/]+\//, '')) && !isPath(str)
+  return _.isString(str) && /[/]/.test(str.replace(/^@[^/]+\//, '')) && !isPath(str)
 }

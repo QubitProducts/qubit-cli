@@ -88,6 +88,7 @@
     "slapdash": "^1.3.0",
     "style-loader": "^0.16.1",
     "sync-p": "^1.1.3",
+    "terminal-kit": "^1.13.2",
     "update-notifier": "^2.1.0",
     "urlite": "^1.2.8",
     "webpack": "^2.3.3",

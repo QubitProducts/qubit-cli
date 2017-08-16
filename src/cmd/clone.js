@@ -1,13 +1,23 @@
-const log = require('../lib/log')
-const suggest = require('../lib/suggest')
+const getPropertyAndExperienceIds = require('../lib/getPropertyAndExperienceIds')
 const cloneExperience = require('../lib/clone-experience')
 const CWD = process.cwd()
+const log = require('../lib/log')
 
-module.exports = async function clone () {
+module.exports = async function clone (urlOrPid, pidOrEid) {
   try {
-    const propertyId = await suggest.property('Select a property')
-    const experienceId = await suggest.experience(propertyId)
+    // Get ids from the user?
+    const {propertyId, experienceId} = await getPropertyAndExperienceIds(urlOrPid, pidOrEid) || {}
+
+    if (!propertyId || !experienceId) {
+      log(`aborted`)
+      return
+    }
+
+    log(`cloning experience`)
+
     await cloneExperience(CWD, propertyId, experienceId)
+
+    log(`experience cloned`)
   } catch (err) {
     log.error(err)
   }

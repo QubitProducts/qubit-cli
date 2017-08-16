@@ -29,12 +29,12 @@ module.exports = function run (pkg) {
     .action(duplicate)
 
   program
-    .command('clone')
+    .command('clone [url] [pid] [eid]')
     .description(`clone a remote experience from platform`)
     .action(clone)
 
   program
-    .command('pull')
+    .command('pull [tmpl] [url] [pid] [eid]')
     .description(`pull remote changes or template into local experience`)
     .action(pull)
 
@@ -133,7 +133,7 @@ module.exports = function run (pkg) {
     $ ${chalk.green.bold('xp --watch')}
     Now open chrome and turn on xp by clicking on the extension icon
     you should see the background of the page turn ${chalk.yellow.bold('yellow')}!
-    Change the css in varaition.css, and the preview should update on the fly!
+    Change the css in variation.css, and the preview should update on the fly!
 
     To clone an existing experience:
     - ${chalk.green.bold('xp clone <propertyId> <experienceId>')} if you know the propertyId and experienceId
