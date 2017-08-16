@@ -1,3 +1,5 @@
+// NOTE: This file is used to compile experiences, not to compile the xp-cli tool itself.
+
 var path = require('path')
 var webpack = require('webpack')
 var cwd = process.cwd()
