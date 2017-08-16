@@ -3812,7 +3812,6 @@
         "asap": "2.0.5"
       }
     },
-    "promise.any": {},
     "prompt-skeleton": {
       "version": "0.1.3",
       "requires": {
