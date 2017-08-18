@@ -29,13 +29,13 @@ module.exports = function run (pkg) {
     .action(duplicate)
 
   program
-    .command('clone [url] [pid] [eid]')
-    .description(`clone a remote experience from platform`)
+    .command('clone [url] [propertyId] [experienceId]')
+    .description(`clone a remote experience from platform (arguments are optional)`)
     .action(clone)
 
   program
-    .command('pull [tmpl] [url] [pid] [eid]')
-    .description(`pull remote changes or template into local experience`)
+    .command('pull [templateName] [url] [propertyId] [experienceId]')
+    .description(`pull remote changes or template into local experience (arguments are optional)`)
     .action(pull)
 
   program
