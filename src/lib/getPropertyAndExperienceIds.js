@@ -7,7 +7,7 @@ const {isUrl, isId} = require('./is-type')
  * @param {[*, *]} args - possible existing inputs for the two ids
  * @returns {Promise.<?{propertyId: Number, experienceId: Number}>}
  */
-module.exports = async function getPropertyAndExperienceIds (...args) {
+async function getPropertyAndExperienceIds (...args) {
   if (isUrl(args[0])) { return parseUrl(args[0]) }
 
   let propertyId, experienceId
@@ -26,4 +26,28 @@ module.exports = async function getPropertyAndExperienceIds (...args) {
   if (!propertyId || !experienceId) return null
 
   return {propertyId, experienceId}
+}
+
+/**
+ * Get a property-id from the user.
+ * @param {[*]} args - possible existing input for the id
+ * @returns {number}
+ */
+async function getPropertyId (...args) {
+  let propertyId
+
+  if (isId(args[0])) {
+    propertyId = Number(args[0])
+  } else {
+    propertyId = await suggest.property()
+  }
+
+  if (!propertyId) return null
+
+  return propertyId
+}
+
+module.exports = {
+  getPropertyAndExperienceIds,
+  getPropertyId
 }

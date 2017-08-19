@@ -19,8 +19,8 @@ const duplicate = require('./duplicate')
 
 module.exports = function run (pkg) {
   program
-    .command('create')
-    .description('create an experience')
+    .command('create [property-id]')
+    .description('create an experience (argument is optional)')
     .action(create)
 
   program
@@ -29,12 +29,12 @@ module.exports = function run (pkg) {
     .action(duplicate)
 
   program
-    .command('clone [url] [propertyId] [experienceId]')
+    .command('clone [url] [property-id] [experience-id]')
     .description(`clone a remote experience from platform (arguments are optional)`)
     .action(clone)
 
   program
-    .command('pull [templateName] [url] [propertyId] [experienceId]')
+    .command('pull [templateName] [url] [property-id] [experience-id]')
     .description(`pull remote changes or template into local experience (arguments are optional)`)
     .action(pull)
 
