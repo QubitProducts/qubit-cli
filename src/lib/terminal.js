@@ -33,9 +33,9 @@ const yesOrNo = (prompt) => new Promise((resolve, reject) => {
     if (err) {
       reject(err)
     } else {
-      term.column(0)
+      term.up(1).column(0)
       term.eraseDisplayBelow()
-      term(`${prompt} ^b^+(y/n)^: ^b^+${answer ? 'yes' : 'no'}^:`)
+      term(`${prompt} ^b^+(y/n)^: ^b^+${answer ? 'yes' : 'no'}^:\n`)
       resolve(answer)
     }
   })

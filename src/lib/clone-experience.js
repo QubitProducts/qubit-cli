@@ -6,11 +6,10 @@ const log = require('./log')
 const experienceFilename = require('./experience-filename')
 
 module.exports = async function cloneExperience (CWD, propertyId, experienceId) {
+  log(chalk.yellow('Cloning experience'))
   const { experience, files } = await down(propertyId, experienceId)
   const filename = experienceFilename(experience)
   const dest = path.join(CWD, filename)
-
-  log(chalk.yellow('Cloning experience'))
   await scaffold(dest, files, false, true)
-  log(chalk.green(`Cloned into ${filename}`))
+  log(chalk.green(`Experience cloned into ${filename}`))
 }

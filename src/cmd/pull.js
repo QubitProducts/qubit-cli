@@ -1,12 +1,10 @@
 const _ = require('lodash')
 const {getPropertyAndExperienceIds} = require('../lib/getPropertyAndExperienceIds')
 const template = require('./template')
-const down = require('../services/down')
 const getPkg = require('../lib/get-pkg')
-const scaffold = require('../lib/scaffold')
-const mergePkg = require('../lib/merge-pkg')
 const log = require('../lib/log')
 const {isName} = require('../lib/is-type')
+const pullExperience = require('../lib/pull-experience')
 const CWD = process.cwd()
 
 module.exports = async function pull (urlOrPidOrName, pidOrEid) {
@@ -14,7 +12,7 @@ module.exports = async function pull (urlOrPidOrName, pidOrEid) {
     // Scaffold from template?
     if (isName(urlOrPidOrName)) { return template(urlOrPidOrName) }
 
-    // We're pulling from a given id-pair.
+    // Pulling from an id-pair?
     let propertyId, experienceId
     const pkg = await getPkg()
     if (pkg.meta) {
@@ -26,18 +24,12 @@ module.exports = async function pull (urlOrPidOrName, pidOrEid) {
       ;({propertyId, experienceId} = await getPropertyAndExperienceIds(urlOrPidOrName, pidOrEid) || {})
     }
 
-    if (!propertyId || !experienceId) {
+    // Do or abort
+    if (propertyId && experienceId) {
+      await pullExperience(CWD, propertyId, experienceId)
+    } else {
       log(`aborted`)
-      return
     }
-
-    log(`pulling experience`)
-
-    let {files} = await down(propertyId, experienceId)
-    if (pkg.meta) files['package.json'] = JSON.stringify(mergePkg(pkg, files['package.json']), null, 2)
-    await scaffold(CWD, files, false, true)
-
-    log(`experience pulled`)
   } catch (err) {
     log.error(err)
   }

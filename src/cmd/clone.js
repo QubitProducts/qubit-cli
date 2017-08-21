@@ -10,9 +10,7 @@ module.exports = async function clone (urlOrPid, pidOrEid) {
       log(`aborted`)
       return
     }
-    log(`cloning experience`)
     await cloneExperience(CWD, propertyId, experienceId)
-    log(`experience cloned`)
   } catch (err) {
     log.error(err)
   }

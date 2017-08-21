@@ -61,7 +61,7 @@ async function both () {
       // offer choice to use navigated url
       const [, url] = req.body.url.match(/^https?:\/\/(.+?)\/?$/)
       term(prompt + '\n')
-      term.up(1).column(prompt.length + 10)
+      term.up(1).column(prompt.length + 999)
       term.eraseDisplayBelow()
       term('\n')
       const yesNoPrompt = `  ^g^+›^: You just navigated to: ^_${url}^ \n    Do you want to select that experience?`
@@ -78,8 +78,8 @@ async function both () {
   })
 
   // clean up
-  await cleanTerminal()
   await app.stop()
+  cleanTerminal()
 
   // do we still need to get the experience?
   if (_.isNumber(result)) {
