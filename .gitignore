@@ -2,3 +2,8 @@ node_modules
 .DS_Store
 coverage
 _docpress
+
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/dictionaries
+.idea/markdown-navigator/*

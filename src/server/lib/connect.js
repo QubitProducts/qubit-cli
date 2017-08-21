@@ -2,14 +2,13 @@ const confirm = require('confirmer')
 const highlight = require('../../lib/highlight')
 const log = require('../../lib/log')
 const parseUrl = require('../../lib/parse-url')
-const down = require('../../services/down')
 const createApp = require('../app')
 
 module.exports = async function connect () {
   let app = await createApp()
   await app.start()
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     log('navigate to an `experience` page to scaffold your experience from it')
     app.post('/connect', async (req, res) => {
       res.end()
@@ -20,7 +19,7 @@ module.exports = async function connect () {
       const yes = await confirm(msg)
       if (!yes) return
       await app.stop()
-      resolve(await down(propertyId, experienceId))
+      resolve({propertyId, experienceId})
     })
   })
 }
