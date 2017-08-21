@@ -69,6 +69,7 @@ const createAutoComplete = (prompt, suggestions) => {
         term(str.replace(new RegExp(`(${subStr})`, 'i'), `^_$1^:`))
       }
     }
+    term.grabInput({mouse: 'motion'})
     return new Promise((resolve, reject) => {
       const menu = term.singleColumnMenu(titles, {
         style: itemStyle,
@@ -138,16 +139,11 @@ const createAutoComplete = (prompt, suggestions) => {
           .slice(0, menuHeight)
 
         // don't allow an empty candidate list
-        if (candidates.length === 0) {
+        if (candidates.length > 0) {
+          answer = await renderSingleMenu(candidates)
+        } else {
           subStr = subStr.slice(0, -1)
-          continue
         }
-
-        // prepare for the auto-complete menu
-        term.grabInput({ mouse: 'motion' })
-
-        // start the auto-complete menu
-        answer = await renderSingleMenu(candidates)
       } while (_.isUndefined(answer))
 
       // The loop terminated, so we got an answer or an abort from the user.
