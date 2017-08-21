@@ -81,6 +81,7 @@
     "opn": "^4.0.2",
     "pem": "^1.9.4",
     "preact": "^8.1.0",
+    "promise-defer": "^1.0.0",
     "qs": "^6.4.0",
     "raw-loader": "^0.5.1",
     "server-destroy": "^1.0.1",

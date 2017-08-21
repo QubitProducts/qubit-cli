@@ -19,7 +19,7 @@ async function property () {
   if (suggestions.length === 1) {
     return suggestions[0].id
   }
-  return await createAutoComplete('^g^+»^: Select a property (start typing to filter the list)', suggestions).promise
+  return await createAutoComplete('^g^+»^: Select a property (start typing to filter the list)', suggestions).response()
 }
 
 async function experience (propertyId) {
@@ -28,7 +28,7 @@ async function experience (propertyId) {
     title: 'name',
     value: 'id'
   })
-  return createAutoComplete('^g^+»^: Select an experience (start typing to filter the list)', suggestions).promise
+  return createAutoComplete('^g^+»^: Select an experience (start typing to filter the list)', suggestions).response()
 }
 
 async function both () {
@@ -48,8 +48,8 @@ async function both () {
   // get ids from either the auto-complete picker or from browser navigation
   let result = await new Promise(async (resolve, reject) => {
     // start auto-complete picker
-    let ac = createAutoComplete(prompt, propertySuggestions)
-    ac.promise.then(resolve)
+    const ac = createAutoComplete(prompt, propertySuggestions)
+    ac.response().then(resolve)
 
     // monitor browser navigation
     app.post('/connect', async (req, res) => {
@@ -61,18 +61,18 @@ async function both () {
       // offer choice to use navigated url
       const [, url] = req.body.url.match(/^https?:\/\/(.+?)\/?$/)
       term(prompt + '\n')
-      term.up(1).column(prompt.length + 5 + ac.getCurrentSubString().length)
+      term.up(1).column(prompt.length + 10)
       term.eraseDisplayBelow()
-      term(`\n  ^g^+›^: You just navigated to: ^_${url}^ \n    Do you want to select that experience?`)
-      if (await yesOrNo()) {
+      term('\n')
+      const yesNoPrompt = `  ^g^+›^: You just navigated to: ^_${url}^ \n    Do you want to select that experience?`
+      if (await yesOrNo(yesNoPrompt)) {
         // use navigated url
         resolve(parseUrl(req.body.url))
       } else {
         // restart auto-complete picker
         term.up(3).column(1)
         term.eraseDisplayBelow()
-        ac = createAutoComplete(prompt, propertySuggestions, ac.getCurrentSubString())
-        ac.promise.then(resolve)
+        ac.resume()
       }
     })
   })
