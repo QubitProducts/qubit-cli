@@ -107,6 +107,8 @@ const createAutoComplete = (prompt, suggestions, initialSubstring = '') => {
           abortFn = () => {
             term.off('key', onKey)
             menu.abort()
+            term.restoreCursor()
+            term.eraseDisplayBelow()
           }
         })
       }

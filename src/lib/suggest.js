@@ -60,6 +60,7 @@ async function both () {
 
       // offer choice to use navigated url
       const [, url] = req.body.url.match(/^https?:\/\/(.+?)\/?$/)
+      term(prompt + '\n')
       term.up(1).column(prompt.length + 5 + ac.getCurrentSubString().length)
       term.eraseDisplayBelow()
       term(`\n  ^g^+›^: You just navigated to: ^_${url}^ \n    Do you want to select that experience?`)
