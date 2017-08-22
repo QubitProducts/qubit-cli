@@ -7,7 +7,7 @@ const {
   term,
   cleanTerminal,
   yesOrNo,
-  createAutoComplete
+  MultipleChoiceMenu
 } = require('./terminal')
 
 async function property () {
@@ -19,7 +19,8 @@ async function property () {
   if (suggestions.length === 1) {
     return suggestions[0].id
   }
-  return await createAutoComplete('^g^+»^: Select a property (start typing to filter the list)', suggestions).response()
+  const prompt = '^g^+»^: Select a property (start typing to filter the list)'
+  return new MultipleChoiceMenu(prompt, suggestions).start().response()
 }
 
 async function experience (propertyId) {
@@ -28,7 +29,8 @@ async function experience (propertyId) {
     title: 'name',
     value: 'id'
   })
-  return createAutoComplete('^g^+»^: Select an experience (start typing to filter the list)', suggestions).response()
+  const prompt = '^g^+»^: Select an experience (start typing to filter the list)'
+  return new MultipleChoiceMenu(prompt, suggestions).start().response()
 }
 
 async function both () {
@@ -45,18 +47,25 @@ async function both () {
   const app = await createApp()
   await app.start()
 
+  // start find-as-you-type menu
+  const mcMenu = new MultipleChoiceMenu(prompt, propertySuggestions)
+
   // get ids from either the auto-complete picker or from browser navigation
   let result = await new Promise(async (resolve, reject) => {
     // start auto-complete picker
-    const ac = createAutoComplete(prompt, propertySuggestions)
-    ac.response().then(resolve)
+    // const ac = createAutoComplete(prompt, propertySuggestions)
+    // ac.response().then(resolve)
+
+    mcMenu.start().response().then(resolve)
 
     // monitor browser navigation
     app.post('/connect', async (req, res) => {
       // wrap up and abort auto-complete
       res.end()
       if (!req.body.url) reject(new Error('Request to /connect endpoint received with no params'))
-      ac.abort()
+      // ac.abort()
+
+      mcMenu.stop()
 
       // offer choice to use navigated url
       const [, url] = req.body.url.match(/^https?:\/\/(.+?)\/?$/)
@@ -72,7 +81,9 @@ async function both () {
         // restart auto-complete picker
         term.up(3).column(1)
         term.eraseDisplayBelow()
-        ac.resume()
+        // ac.resume()
+
+        mcMenu.start()
       }
     })
   })

@@ -42,31 +42,96 @@ const yesOrNo = (prompt) => new Promise((resolve, reject) => {
 })
 
 /**
- * Start a new auto-complete picker that can be aborted and resumed.
- * @param {string} prompt
- * @param {Array.<{name: string, value: *}>} suggestions
- * @returns {{
- *     abort:    function(),
- *     resume:   function(),
- *     response: function(): Promise.<*>
- * }}
+ * An interactive menu on the terminal for users
+ * to choose one ofc a set of given options.
  */
-const createAutoComplete = (prompt, suggestions) => {
-  let abortFn = _.noop
-  let subStr = ''
+class MultipleChoiceMenu {
+  /**
+   * @param {String} prompt - the opening message presented to the user
+   * @param {Array.<{title:String,value:*}>} candidates - the available options
+   */
+  constructor (prompt, candidates) {
+    this.prompt = prompt
+    this.candidates = candidates
+    this._abort = _.noop
+    this.subStr = ''
+    this._deferred = defer()
+  }
 
-  // Render a single-column menu for a given set of candidates.
-  // When the user cancels or makes a definite choice, this function
-  // resolves with `null` or the response object respectively.
-  // This function also responds to text-keystrokes by updating the
-  // `subStr` variable and resolving with `undefined`.
-  // (We can then call this function again with the new candidates.)
-  // It also resets the `abortFn` function.
-  function renderSingleMenu (candidates) {
+  /**
+   * Start the menu and wait for user input. The menu
+   * can still be interrupted by calling `.stop()`.
+   * @returns {MultipleChoiceMenu} this menu object
+   */
+  start () {
+    (async () => {
+      try {
+        term.saveCursor()
+        term.hideCursor(true)
+
+        // terminal-kit's `singleColumnMenu` doesn't support find-as-you-type,
+        // so we're implementing that here, by re-rendering the menu
+        // when the typed substring changes. That causes the `renderSingleMenu`
+        // promise to resolve, and the loop to enter its next iteration.
+        let answer
+        do {
+          // figure out terminal spacing for the menu
+          const cursorPos = await getCursorLocation()
+          const spaceAvailable = term.height - cursorPos.y
+          const menuHeight = min(10, max(2, spaceAvailable))
+
+          // filter and limit the candidates
+          const visibleCandidates = this.candidates
+            .filter(({title}) => new RegExp(this.subStr, 'i').test(title))
+            .slice(0, menuHeight)
+
+          // don't allow an empty candidate list
+          if (visibleCandidates.length > 0) {
+            // print the prompt to the terminal
+            term.eraseDisplayBelow()
+            term(`${this.prompt}: ^_${this.subStr}^`)
+            answer = await this._renderSingle(visibleCandidates)
+          } else {
+            this.subStr = this.subStr.slice(0, -1)
+          }
+        } while (_.isUndefined(answer))
+
+        // The loop terminated, so we got an answer or an abort from the user.
+        term.restoreCursor()
+        term.eraseDisplayBelow()
+        term(`${this.prompt}: ^b^+${answer ? answer.title : ''}^\n`)
+        cleanTerminal()
+        this._deferred.resolve(answer && answer.value)
+      } catch (err) {
+        this._deferred.reject(err)
+      }
+    })()
+    return this
+  }
+
+  /**
+   * Interrupt a running menu and take back control of the terminal.
+   * The menu can be (re)started by calling `.start()`.
+   * @returns {MultipleChoiceMenu} this menu object
+   */
+  stop () {
+    this._abort()
+    this._abort = _.noop
+    return this
+  }
+
+  /**
+   * @returns {Promise.<*>} a promise of the user's response
+   */
+  async response () {
+    return this._deferred.promise
+  }
+
+  async _renderSingle (candidates) {
     const titles = candidates.map(c => c.title)
     const itemStyle = {
       noFormat: (str) => {
-        term(str.replace(new RegExp(`(${subStr})`, 'i'), `^_$1^:`))
+        term(str.replace(new RegExp(`(${this.subStr})`, 'i'), `^_$1^:`))
       }
     }
     term.grabInput({mouse: 'motion'})
@@ -86,20 +151,20 @@ const createAutoComplete = (prompt, suggestions) => {
       })
       const onKey = (name, matches, data) => {
         if (data.isCharacter) {
-          subStr += name
-          abortFn()
+          this.subStr += name
+          this._abort()
           resolve()
         } else if (name === 'BACKSPACE') {
-          subStr = subStr.slice(0, -1)
-          abortFn()
+          this.subStr = this.subStr.slice(0, -1)
+          this._abort()
           resolve()
         } else if (name === 'ESCAPE') {
-          abortFn()
+          this._abort()
           resolve(null)
         }
       }
       term.on('key', onKey)
-      abortFn = () => {
+      this._abort = () => {
         term.off('key', onKey)
         menu.abort()
         term.restoreCursor()
@@ -107,78 +172,12 @@ const createAutoComplete = (prompt, suggestions) => {
       }
     })
   }
-
-  // This deferred contains the promise of the user's eventual answer.
-  // We're using a deferred so that the promise will be valid across
-  // multiple invocations of `startMenu`.
-  const deferred = defer()
-  async function startMenu () {
-    try {
-      term.saveCursor()
-      term.hideCursor(true)
-
-      // terminal-kit's `singleColumnMenu` doesn't support find-as-you-type,
-      // so we're implementing that here, by re-rendering the menu
-      // when the typed substring changes. That causes the `renderSingleMenu`
-      // promise to resolve, and the loop to enter its next iteration.
-      let answer
-      do {
-        // print the prompt to the terminal
-        term.restoreCursor()
-        term.eraseDisplayBelow()
-        term(`${prompt}: ^_${subStr}^`)
-
-        // figure out terminal spacing for the menu
-        const cursorPos = await getCursorLocation()
-        const spaceAvailable = term.height - cursorPos.y - 1
-        const menuHeight = min(10, max(2, spaceAvailable))
-
-        // filter and limit the candidates
-        const candidates = suggestions
-          .filter(({title}) => new RegExp(subStr, 'i').test(title))
-          .slice(0, menuHeight)
-
-        // don't allow an empty candidate list
-        if (candidates.length > 0) {
-          answer = await renderSingleMenu(candidates)
-        } else {
-          subStr = subStr.slice(0, -1)
-        }
-      } while (_.isUndefined(answer))
-
-      // The loop terminated, so we got an answer or an abort from the user.
-      term.restoreCursor()
-      term.eraseDisplayBelow()
-      term(`${prompt}: ^b^+${answer ? answer.title : ''}^\n`)
-      cleanTerminal()
-      deferred.resolve(answer && answer.value)
-    } catch (err) {
-      deferred.reject(err)
-    }
-  }
-
-  // Start the menu for the first time.
-  startMenu()
-
-  // Return the functions to interact with the menu.
-  return {
-    abort: () => {
-      abortFn()
-      abortFn = _.noop
-    },
-    resume: () => {
-      if (abortFn === _.noop) {
-        startMenu()
-      }
-    },
-    response: () => deferred.promise
-  }
 }
 
 module.exports = {
+  MultipleChoiceMenu,
   cleanTerminal,
   getCursorLocation,
   yesOrNo,
-  createAutoComplete,
   term
 }
