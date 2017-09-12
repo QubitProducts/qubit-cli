@@ -5,6 +5,6 @@ const experienceFixture = rewire('../fixtures//experience.json')
 
 describe('experienceFilename', function () {
   it('should return an experience filename', function () {
-    expect(experienceFilename(experienceFixture)).to.eql('456-new-styles')
+    expect(experienceFilename(experienceFixture)).to.eql('new-styles-456')
   })
 })

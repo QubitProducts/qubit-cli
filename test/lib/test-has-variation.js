@@ -5,6 +5,6 @@ const pkgFixture = rewire('../fixtures//pkg.json')
 
 describe('hasVariations', function () {
   it('should return true if package has variations', function () {
-    expect(hasVariations(pkgFixture)).to.be.ok
+    expect(hasVariations(pkgFixture)).to.eql(true)
   })
 })
