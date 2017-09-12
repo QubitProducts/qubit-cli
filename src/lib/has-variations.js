@@ -1,5 +1,6 @@
 const _ = require('lodash')
 
 module.exports = function hasVariations (pkg) {
-  return _.get(pkg, 'meta.variations') && Object.keys(_.get(pkg, 'meta.variations')).length
+  if (!_.get(pkg, 'meta.variations')) return false
+  return Object.keys(_.get(pkg, 'meta.variations')).length > 0
 }
