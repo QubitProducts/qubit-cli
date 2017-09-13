@@ -1,4 +1,4 @@
-const parseUrl = require('../src/lib/parse-url')
+const parseUrl = require('../../src/lib/parse-url')
 const {expect} = require('chai')
 
 describe('parse url', function () {

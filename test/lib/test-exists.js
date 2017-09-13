@@ -3,7 +3,7 @@ const {expect} = require('chai')
 const fs = require('fs-promise')
 const fixtures = path.join(__dirname, 'fixtures/tmp/exists')
 const FileA = path.join(fixtures, 'a')
-const exists = require('../src/lib/exists')
+const exists = require('../../src/lib/exists')
 
 describe('exists', function () {
   beforeEach(() => fs.createFile(FileA))

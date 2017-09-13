@@ -3,7 +3,7 @@ const {expect} = require('chai')
 const sinon = require('sinon')
 const fs = require('fs-promise')
 const rewire = require('rewire')
-const shouldWrite = rewire('../src/lib/should-write')
+const shouldWrite = rewire('../../src/lib/should-write')
 const fixtures = path.join(__dirname, 'fixtures/tmp/should-write')
 
 describe('shouldWrite', function () {

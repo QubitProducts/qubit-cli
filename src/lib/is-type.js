@@ -1,6 +1,6 @@
 const _ = require('lodash')
 
-module.exports = { isName, isUrl, isId, isPath, isSubmodule }
+module.exports = { isName, isUrl, isId, isPath }
 
 function isName (str) {
   return _.isString(str) && /^[\w-/.]+$/.test(str)
@@ -16,8 +16,4 @@ function isId (str) {
 
 function isPath (str) {
   return _.isString(str) && /^[./]/.test(str)
-}
-
-function isSubmodule (str) {
-  return _.isString(str) && /[/]/.test(str.replace(/^@[^/]+\//, '')) && !isPath(str)
 }
