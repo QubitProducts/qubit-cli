@@ -6,10 +6,9 @@ const variationService = require('../../src/services/variation')
 const variationsFixture = require('../fixtures//variations.json')
 
 describe('variationService', function () {
-  let sandbox, propertyId, experienceId, variationId, variations
+  let sandbox, experienceId, variationId, variations
 
   beforeEach(() => {
-    propertyId = 123
     experienceId = 456
     variationId = 789
     variations = _.cloneDeep(variationsFixture)
@@ -22,30 +21,30 @@ describe('variationService', function () {
 
   describe('getAll', function () {
     it('should correctly call fetch', function () {
-      variationService.get(propertyId, experienceId)
+      variationService.getAll(experienceId)
       expect(fetch.get.calledOnce).to.eql(true)
       expect(fetch.get.getCall(0).args).to.eql([
-        '/p/123/smart_serve/experiments/456/recent_iterations/draft/variations'
+        `/api/experiences/${experienceId}/all-variations`
       ])
     })
   })
 
   describe('get', function () {
     it('should correctly call fetch', function () {
-      variationService.get(propertyId, experienceId, variationId)
+      variationService.get(variationId)
       expect(fetch.get.calledOnce).to.eql(true)
       expect(fetch.get.getCall(0).args).to.eql([
-        '/p/123/smart_serve/experiments/456/recent_iterations/draft/variations/789'
+        `/api/variations/${variationId}`
       ])
     })
   })
 
   describe('set', function () {
     it('should correctly call fetch', function () {
-      variationService.set(propertyId, experienceId, variationId, variations[0])
+      variationService.set(variationId, variations[0])
       expect(fetch.put.calledOnce).to.eql(true)
       expect(fetch.put.getCall(0).args).to.eql([
-        '/p/123/smart_serve/experiments/456/recent_iterations/draft/variations/789',
+        `/api/variations/${variationId}`,
         {variation: variations[0]}
       ])
     })

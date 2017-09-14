@@ -17,16 +17,17 @@ module.exports = async function duplicate () {
     const pkg = await getPkg()
     let propertyId = _.get(pkg, 'meta.propertyId')
     let experienceId = _.get(pkg, 'meta.experienceId')
+    let iterationId = _.get(pkg, 'meta.iterationId')
 
     if (propertyId && experienceId) {
       // if the user is in an xp experience folder, allow them to duplicate a variation
-      const variations = await variationService.getAll(propertyId, experienceId)
+      const variations = await variationService.getAll(experienceId)
       const nextVariationNumber = Object.keys(variations).length
       const variationChoices = getVariationChoices(variations)
 
       if (variationChoices.length > 1) {
         const variationId = await input.select('Which variation would you like to duplicate?', variationChoices)
-        await duplicateVariation(propertyId, experienceId, variationId, nextVariationNumber, pkg)
+        await duplicateVariation(propertyId, experienceId, iterationId, variationId, nextVariationNumber, pkg)
       } else {
         const { name, value: variationId } = variationChoices[0]
         const shouldDuplicateVariation = await input.confirm(`Do you want to duplicate ${name}?`)
@@ -45,8 +46,8 @@ module.exports = async function duplicate () {
   }
 }
 
-async function duplicateVariation (propertyId, experienceId, variationId, nextVariationNumber, pkg) {
-  const variation = await variationService.get(propertyId, experienceId, variationId)
+async function duplicateVariation (propertyId, experienceId, iterationId, variationId, nextVariationNumber, pkg) {
+  const variation = await variationService.get(variationId)
   const defaultName = `Variation ${nextVariationNumber}`
   const code = await variationService.getCode(variation)
 
@@ -57,7 +58,7 @@ async function duplicateVariation (propertyId, experienceId, variationId, nextVa
   variation.execution_code = code[`variation-${variationId}.js`]
   variation.custom_styles = code[`variation-${variationId}.css`]
 
-  const newVariation = await variationService.create(propertyId, experienceId, variation)
+  const newVariation = await variationService.create(iterationId)
   const fileName = variationService.getFilename(newVariation)
   let files = _.pick(await codeService.get(propertyId, experienceId), ['package.json', `${fileName}.js`, `${fileName}.css`])
 

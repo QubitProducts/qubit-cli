@@ -3,21 +3,25 @@ const EXECUTION = 'function execution (options) { // eslint-disable-line no-unus
 const CSS = ''
 const DEFAULTS = { EXECUTION, CSS }
 
-function getAll (propertyId, experienceId) {
-  return fetch.get(getPath(propertyId, experienceId))
+const experienceVariationsUrl = experienceId => `/api/experiences/${experienceId}/all-variations`
+const iterationVariationsUrl = iterationId => `/api/iterations/${iterationId}/variations`
+const variationsUrl = variationId => `/api/variations/${variationId}`
+
+function getAll (experienceId) {
+  return fetch.get(experienceVariationsUrl(experienceId))
 }
 
-function get (propertyId, experienceId, variationId) {
-  return fetch.get(getPath(propertyId, experienceId, variationId))
+function get (variationId) {
+  return fetch.get(variationsUrl(variationId))
 }
 
-function set (propertyId, experienceId, variationId, variation) {
+function set (variationId, variation) {
   delete variation.update_sequence_id
-  return fetch.put(getPath(propertyId, experienceId, variationId), { variation: variation })
+  return fetch.put(variationsUrl(variationId), { variation: variation })
 }
 
-function create (propertyId, experienceId, data) {
-  return fetch.post(getPath(propertyId, experienceId), { variation: data })
+function create (iterationId, data) {
+  return fetch.post(iterationVariationsUrl(iterationId), { variation: data })
 }
 
 function getCode (variation) {
@@ -35,12 +39,6 @@ function setCode (variation, files) {
     execution_code: files[`${filename}.js`] || EXECUTION,
     custom_styles: files[`${filename}.css`] || CSS
   })
-}
-
-function getPath (propertyId, experienceId, variationId) {
-  let path = `/p/${propertyId}/smart_serve/experiments/${experienceId}/recent_iterations/draft/variations`
-  if (variationId) path += `/${variationId}`
-  return path
 }
 
 function getFilename (variation) {
