@@ -40,59 +40,46 @@ async function both () {
     value: 'id'
   })
 
-  // main prompt
+  /* start app to monitor browser navigation */
+  const browserMonitor = await createApp()
+  await browserMonitor.start()
+
+  /* start multiple-choice menu */
   const prompt = '^g^+»^: Select a property or navigate to an experience in your browser (start typing to filter the list)'
-
-  // start app to monitor browser navigation
-  const app = await createApp()
-  await app.start()
-
-  // start find-as-you-type menu
   const mcMenu = new MultipleChoiceMenu(prompt, propertySuggestions)
 
-  // get ids from either the auto-complete picker or from browser navigation
+  /* get ids from either the multiple-choice menu or from browser navigation */
   let result = await new Promise(async (resolve, reject) => {
-    // start auto-complete picker
-    // const ac = createAutoComplete(prompt, propertySuggestions)
-    // ac.response().then(resolve)
-
     mcMenu.start().response().then(resolve)
-
-    // monitor browser navigation
-    app.post('/connect', async (req, res) => {
-      // wrap up and abort auto-complete
+    browserMonitor.post('/connect', async (req, res) => {
+      /* wrap up and abort multiple-choice menu */
       res.end()
-      if (!req.body.url) reject(new Error('Request to /connect endpoint received with no params'))
-      // ac.abort()
-
       mcMenu.stop()
+      if (!req.body.url) reject(new Error('Request to /connect endpoint received with no params'))
 
-      // offer choice to use navigated url
+      /* offer choice to use navigated url */
       const [, url] = req.body.url.match(/^https?:\/\/(.+?)\/?$/)
       term(prompt + '\n')
       term.up(1).column(prompt.length + 999)
       term.eraseDisplayBelow()
       term('\n')
       const yesNoPrompt = `  ^g^+›^: You just navigated to: ^_${url}^ \n    Do you want to select that experience?`
-      if (await yesOrNo(yesNoPrompt)) {
-        // use navigated url
+      const wantsToUseUrl = await yesOrNo(yesNoPrompt)
+      if (wantsToUseUrl) {
         resolve(parseUrl(req.body.url))
       } else {
-        // restart auto-complete picker
         term.up(3).column(1)
         term.eraseDisplayBelow()
-        // ac.resume()
-
         mcMenu.start()
       }
     })
   })
 
-  // clean up
-  await app.stop()
+  /* clean up */
+  await browserMonitor.stop()
   cleanTerminal()
 
-  // do we still need to get the experience?
+  /* do we still need to get the experience? */
   if (_.isNumber(result)) {
     result = {
       propertyId: result,
@@ -100,6 +87,7 @@ async function both () {
     }
   }
 
+  /***/
   return result
 }
 
