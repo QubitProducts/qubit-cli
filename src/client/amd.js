@@ -1,6 +1,7 @@
 const _ = require('lodash')
 const microAmd = require('micro-amd')
 const map = {
+  '@qubit/http-api-tally': require('@qubit/http-api-tally'),
   '@qubit/advanced-modal': require('@qubit/advanced-modal'),
   '@qubit/biscotti': require('@qubit/biscotti'),
   '@qubit/email-scheduler': require('@qubit/email-scheduler'),
