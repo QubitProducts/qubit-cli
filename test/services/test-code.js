@@ -63,8 +63,6 @@ describe('codeService', function () {
       _.each(variations, (variation, i) => {
         if (variation.is_control) return
         expect(variationService.set.getCall(i - 1).args).to.eql([
-          propertyId,
-          experienceId,
           variation.id,
           Object.assign(variation, {
             execution_code: variation.execution_code + 1,

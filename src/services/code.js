@@ -6,19 +6,19 @@ const pkgService = require('./pkg')
 async function get (propertyId, experienceId) {
   const [experience, variations] = [
     await experienceService.get(propertyId, experienceId),
-    await variationService.getAll(propertyId, experienceId)
+    await variationService.getAll(experienceId)
   ]
   return getCode(experience, variations)
 }
 
 async function set (propertyId, experienceId, files) {
-  const oldVariations = await variationService.getAll(propertyId, experienceId)
+  const oldVariations = await variationService.getAll(experienceId)
   const variations = await Promise.all(oldVariations.map(async oldVariation => {
     if (oldVariation.is_control) return oldVariation
     const newVariation = variationService.setCode(oldVariation, files)
     return eql(oldVariation, newVariation)
       ? oldVariation
-      : await variationService.set(propertyId, experienceId, oldVariation.id, newVariation)
+      : await variationService.set(oldVariation.id, newVariation)
   }))
 
   const oldExperience = await experienceService.get(propertyId, experienceId)
