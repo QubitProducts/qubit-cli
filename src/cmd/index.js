@@ -116,8 +116,6 @@ module.exports = function run (pkg) {
     .usage(`[options] <cmd>`)
     .version(pkg.version)
     .arguments('[variation]')
-    .option('-w, --watch', 'watch for changes and live reload')
-    .option('-s, --sync', 'watch for changes, live reload and also sync with remote on every change')
     .option('-v, --verbose', 'log verbose output', false)
     .action(serve)
 
