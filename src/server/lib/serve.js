@@ -5,7 +5,6 @@ const webpack = require('webpack')
 const {readdir} = require('fs-promise')
 const chalk = require('chalk')
 const webpackConf = require('../../../webpack.conf')
-const push = require('../../cmd/push')
 const pickVariation = require('../../lib/pick-variation')
 const log = require('../../lib/log')
 const createApp = require('../app')
@@ -43,10 +42,6 @@ module.exports = async function serve (options) {
     warn: options.verbose
   }
   const emitter = createEmitter()
-  if (options.sync) {
-    log('watching for changes')
-    emitter.on('rebuild', push)
-  }
   const compiler = webpack(Object.assign(createWebpackConfig(options)))
   compiler.plugin('done', (data) => emitter.emit('rebuild', data))
   app.use(webpackDevMiddleware(compiler, Object.assign({
@@ -70,7 +65,6 @@ function createWebpackConfig (options) {
     __VARIATION__: `'${options.variation}'`
   }))
   const entry = webpackConf.entry.slice(0)
-  if (!options.sync && !options.watch) entry.pop()
   return Object.assign({}, webpackConf, {
     entry: entry,
     plugins: plugins
