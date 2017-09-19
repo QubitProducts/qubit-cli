@@ -14,6 +14,7 @@ module.exports = {
     publicPath: 'https://localhost:41337/',
     filename: 'bundle.js'
   },
+  bail: false,
   amd: {
     jQuery: true
   },
@@ -29,10 +30,10 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.js$/, include: [path.join(__dirname, 'node_modules', '@qubit')], loader: 'legacy-css' },
+      { test: /\.js$/, include: [path.join(__dirname, 'node_modules', '@qubit')], loader: 'experience-css' },
       { test: /\.css$/, include: [path.join(__dirname, 'node_modules', '@qubit')], loader: 'style-loader!raw-loader!less-loader' },
       { test: /global\.js$/, loader: 'raw-loader' },
-      { test: /\.js$/, include: [cwd], exclude: [/global\.js/], loader: '@qubit/xp-loader!buble-loader?{"objectAssign": "Object.assign", "transforms": { "dangerousForOf": true, "dangerousTaggedTemplateString": true } }' },
+      { test: /\.js$/, include: [cwd], exclude: [/global\.js/, /node_modules/], loader: 'experience-js!buble-loader?{"objectAssign": "Object.assign", "transforms": { "dangerousForOf": true, "dangerousTaggedTemplateString": true } }' },
       { test: /\.css$/, loader: 'raw-loader!less-loader', exclude: [path.join(__dirname, 'node_modules')] },
       { test: /\.json$/, loader: 'json-loader' }
     ]
