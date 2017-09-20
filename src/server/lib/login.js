@@ -39,7 +39,7 @@ module.exports = async function login () {
 }
 
 function getLoginUrl (verifierChallenge) {
-  return config.auth.url + '/authorize?' + qs.stringify({
+  return config.services.auth + '/authorize?' + qs.stringify({
     'response_type': 'code',
     'scope': 'openid profile',
     'client_id': config.auth.xpClientId,
@@ -50,7 +50,7 @@ function getLoginUrl (verifierChallenge) {
 }
 
 async function getIdToken (code, verifier) {
-  const response = await axios.post(config.auth.url + '/oauth/token', {
+  const response = await axios.post(config.services.auth + '/oauth/token', {
     code: code,
     code_verifier: verifier,
     client_id: config.auth.xpClientId,

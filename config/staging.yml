@@ -1,1 +1,4 @@
-endpoint: https://staging-dashboard.qubitproducts.com
+services:
+  app: https://staging-dashboard.qubitproducts.com
+  enporium: https://staging-registry.qubit.com
+  auth: https://qubit.auth0.com

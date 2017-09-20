@@ -3,23 +3,22 @@ const axios = require('axios')
 const jwt = require('jsonwebtoken')
 const auth = require('./auth')
 
-module.exports = async function getToken (idToken, options = {}) {
+module.exports = async function getToken (idToken, targetClientId, options = {}) {
   if (!idToken) return false
   let currentToken = (await auth.get()).BEARER_TOKEN
   if (!currentToken || isExpired(currentToken) || options.force) {
-    currentToken = await fetchToken(idToken)
-    await auth.set('BEARER_TOKEN', currentToken)
+    currentToken = await fetchToken(idToken, targetClientId)
   }
   return currentToken
 }
 
-async function fetchToken (idToken) {
-  const response = await axios.post(config.auth.url + '/delegation', {
+async function fetchToken (idToken, targetClientId) {
+  const response = await axios.post(config.services.auth + '/delegation', {
     client_id: config.auth.xpClientId,
     grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
     id_token: idToken,
     api_type: 'auth0',
-    target: config.auth.apertureClientId,
+    target: targetClientId,
     scope: 'openid'
   })
   return response.data.id_token
