@@ -90,7 +90,7 @@ class MultipleChoiceMenu {
             // print the prompt to the terminal
             term.eraseDisplayBelow()
             term(`${this.prompt}: ^_${this.subStr}^`)
-            answer = await this._renderSingle(visibleCandidates)
+            answer = await this.renderSingle(visibleCandidates)
           } else {
             this.subStr = this.subStr.slice(0, -1)
           }
@@ -127,7 +127,10 @@ class MultipleChoiceMenu {
     return this._deferred.promise
   }
 
-  async _renderSingle (candidates) {
+  /**
+   * @private
+   */
+  async renderSingle (candidates) {
     const titles = candidates.map(c => c.title)
     const itemStyle = {
       noFormat: (str) => {
