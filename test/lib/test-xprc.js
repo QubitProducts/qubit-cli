@@ -1,12 +1,12 @@
 const path = require('path')
 const fs = require('fs-promise')
 const rewire = require('rewire')
-const auth = rewire('../../src/lib/auth')
+const auth = rewire('../../src/lib/xprc')
 const {expect} = require('chai')
 const exists = require('../../src/lib/exists')
 const xprcPath = path.join(__dirname, '.xprc')
 
-describe('auth', function () {
+describe('xprc', function () {
   let restore
   beforeEach(function () {
     restore = auth.__set__({ xprcPath: xprcPath })

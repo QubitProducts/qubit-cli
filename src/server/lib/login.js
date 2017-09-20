@@ -4,7 +4,7 @@ const crypto = require('crypto')
 const opn = require('opn')
 const qs = require('qs')
 const config = require('../../../config')
-const auth = require('../../lib/auth')
+const xprc = require('../../lib/xprc')
 const log = require('../../lib/log')
 const createApp = require('../app')
 const getToken = require('../../lib/get-token')
@@ -27,26 +27,35 @@ module.exports = async function login () {
     app.get('/callback', async (req, res, next) => {
       try {
         const idToken = await getIdToken(req.query.code, verifier)
-        await auth.rm('BEARER_TOKEN', idToken)
-        await auth.set('ID_TOKEN', idToken)
-        let auth0Token = await getToken(idToken, config.auth.registryClientId)
-        let resp = await axios.post(config.services.registry + '/-/cli-token', {}, {
-          headers: { 'Authorization': `Bearer ${auth0Token}` }
-        })
-        let {accessToken, scopes} = resp.data
-        const authKey = config.services.registry.replace(/^https?:/, '')
-        for (let scope of scopes) await execa(`npm config set ${scope}:registry ${config.services.registry}/`)
-        await execa(`npm config set ${authKey}/:_authToken ${accessToken}`)
+        await xprc.rm('BEARER_TOKEN', idToken)
+        await xprc.set('ID_TOKEN', idToken)
+
+        let {accessToken, scopes} = await getRegistryToken(idToken)
+        await saveRegistryToken(accessToken, scopes)
+
         res.send('You are now logged in!. You can now close this tab.')
         await app.stop()
         log('login successful!')
         resolve()
       } catch (err) {
-        console.warn(String(err))
+        log.error(String(err))
         res.end()
       }
     })
   })
+}
+
+async function getRegistryToken (idToken) {
+  let auth0Token = await getToken(idToken, config.auth.registryClientId)
+  return (await axios.post(config.services.registry + '/-/token', {}, {
+    headers: { 'Authorization': `Bearer ${auth0Token}` }
+  })).data
+}
+
+async function saveRegistryToken (accessToken, scopes) {
+  const authKey = config.services.registry.replace(/^https?:/, '')
+  for (let scope of scopes) await execa(`npm config set ${scope}:registry ${config.services.registry}/`)
+  await execa(`npm config set ${authKey}/:_authToken ${accessToken}`)
 }
 
 function getLoginUrl (verifierChallenge) {

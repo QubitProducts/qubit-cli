@@ -1,11 +1,11 @@
 const config = require('../../config')
 const axios = require('axios')
 const jwt = require('jsonwebtoken')
-const auth = require('./auth')
+const xprc = require('./xprc')
 
 module.exports = async function getToken (idToken, targetClientId, options = {}) {
   if (!idToken) return false
-  let currentToken = (await auth.get()).BEARER_TOKEN
+  let currentToken = (await xprc.get()).BEARER_TOKEN
   if (!currentToken || isExpired(currentToken) || options.force) {
     currentToken = await fetchToken(idToken, targetClientId)
   }
