@@ -2,14 +2,13 @@ const path = require('path')
 
 module.exports = function loader (content) {
   let deps = getDeps()
+  let code = content || 'function () {\n\n}'
 
-  let code = addModuleExports(content)
+  code = addModuleExports(code)
 
   code = addAMD(code)
 
-  deps.forEach(dep => {
-    code = allowRealRequires(code, dep)
-  })
+  for (let dep of deps) code = allowRealRequires(code, dep)
 
   return code
 }
@@ -17,7 +16,7 @@ module.exports = function loader (content) {
 function addModuleExports (code) {
   return code.includes('module.exports')
     ? code
-    : 'module.exports = ' + (code || 'function () {\n\n}')
+    : 'module.exports = ' + code
 }
 
 function addAMD (code) {
