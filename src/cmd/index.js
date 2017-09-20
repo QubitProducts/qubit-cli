@@ -10,6 +10,7 @@ const pull = require('./pull')
 const push = require('./push')
 const serve = require('./serve')
 const login = require('./login')
+const logout = require('./logout')
 const templatize = require('./templatize')
 const traffic = require('./traffic')
 const goals = require('./goals')
@@ -111,6 +112,11 @@ module.exports = function run (pkg) {
     .command('login')
     .description('login to the qubit platform')
     .action(login)
+
+  program
+    .command('logout')
+    .description('logout of the qubit platform')
+    .action(logout)
 
   program
     .usage(`[options] <cmd>`)
