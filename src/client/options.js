@@ -5,6 +5,7 @@ const defaultVisitor = require('./visitor')
 const log = require('./log')
 const resolve = require('sync-p/resolve')
 const uv = require('./uv')()
+const jolt = require('./jolt')()
 
 module.exports = function transform (pkg, key) {
   const variationOpts = _.get(pkg, `meta.variations.${key}`) || {}
@@ -19,44 +20,43 @@ module.exports = function transform (pkg, key) {
     return experienceState[key]
   }
 
-  delete meta.variations
-
-  meta.experimentId = meta.experimentId || meta.experienceId
-  meta.experienceId = meta.experimentId
-  meta.cookieDomain = meta.cookieDomain || window.location.host
-  meta.trackingId = meta.trackingId || 'tracking_id'
-  meta.vertical = meta.vertical || 'vertical'
-  meta.namespace = meta.namespace || undefined
-  meta.visitorId = visitor.visitorId
-  meta.isPreview = true
-
   return {
     also: _.get(pkg, `meta.also`) || [],
     api: {
+      data: meta.templateData,
+      emitCustomGoal: (id, options) => log.info('Custom goal emitted', { id, options }),
+      solution: meta.solutionOptions,
       state: {
         get: get,
         set: set
       },
-      uv,
-      emitCustomGoal: (id, options) => log.info('Custom goal emitted', { id, options }),
-      getBrowserState: () => resolve(getBrowserState()),
-      getVisitorState: () => resolve(_.cloneDeep(visitor)),
       log,
-      solution: pkg.meta.solutionOptions,
-      meta: _.pick(meta, [
-        'cookieDomain',
-        'trackingId',
-        'experienceId',
-        'experimentId',
-        'isPreview',
-        'vertical',
-        'namespace',
-        'iterationId',
-        'variationId',
-        'variationMasterId',
-        'variationIsControl',
-        'visitorId'
-      ])
+      getVisitorState: () => resolve(_.cloneDeep(visitor)),
+      getBrowserState: () => resolve(getBrowserState()),
+      uv: {
+        emit: uv.emit,
+        events: jolt.events,
+        on: jolt.onEnrichment,
+        once: jolt.onceEnrichment,
+        onEventSent: jolt.onSuccess,
+        onceEventSent: jolt.onceSuccess
+      },
+      meta: {
+        cookieDomain: meta.cookieDomain || window.location.host,
+        trackingId: meta.trackingId || 'tracking_id',
+        // preferred
+        experienceId: meta.experimentId || meta.experienceId,
+        // deprecated
+        experimentId: meta.experimentId || meta.experienceId,
+        isPreview: meta.isPreview !== false,
+        vertical: meta.vertical || 'vertical',
+        namespace: meta.namespace || null,
+        iterationId: meta.iterationId,
+        variationId: meta.variationId,
+        variationMasterId: meta.variationMasterId,
+        variationIsControl: meta.variationIsControl,
+        visitorId: visitor.visitorId
+      }
     }
   }
 }
