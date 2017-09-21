@@ -1,5 +1,5 @@
 /* globals __VARIATION__ __CWD__ */
-const context = require.context(__CWD__)
+const context = require.context(__CWD__, false)
 const _ = require('lodash').noConflict()
 const Promise = require('sync-p/extra')
 const engine = require('./engine')
@@ -11,8 +11,9 @@ const redirectTo = require('./redirect-to')
 const applyStyles = require('./styles')
 const globalFn = _.once(() => eval.call(window, require('global'))) // eslint-disable-line
 const STYLE_ID = 'qubit-xp-styles'
+
 require('./amd')()
-let {destroy, modules, varationIsSpent, triggersIsSpent, hasActivated, runAcrossViews} = init()
+let {destroy, modules, variationIsSpent, triggersIsSpent, hasActivated, runAcrossViews} = init()
 
 onSecondPageView(restart, () => runAcrossViews)
 registerHotReloads(restart)
@@ -90,7 +91,7 @@ function init (bypassTriggers) {
   return {
     destroy,
     modules,
-    varationIsSpent: () => variationSpent,
+    variationIsSpent: () => variationSpent,
     triggersIsSpent: () => triggersSpent,
     hasActivated: () => isActive,
     runAcrossViews
@@ -100,7 +101,7 @@ function init (bypassTriggers) {
 function restart (bypassTriggers) {
   let originalRunAcrossViews = runAcrossViews
   destroy()
-  ;({destroy, modules, varationIsSpent, triggersIsSpent, hasActivated, runAcrossViews} = init(bypassTriggers))
+  ;({destroy, modules, variationIsSpent, triggersIsSpent, hasActivated, runAcrossViews} = init(bypassTriggers))
   // if bypassTriggers is true runAcrossViews will be set to undefined in the above line
   // we need to retain its original value to keep the correct behaviour
   if (bypassTriggers) runAcrossViews = originalRunAcrossViews
@@ -115,7 +116,7 @@ function registerHotReloads (restart) {
 
     const styleEl = document.getElementById(STYLE_ID)
     if (styleEl && styleEl.innerHTML !== newModules.styles) return applyStyles(STYLE_ID, newModules.styles)
-    if (varationIsSpent()) return window.location.reload() // variation is a cold executed variation
+    if (variationIsSpent()) return window.location.reload() // variation is a cold executed variation
     if (triggersIsSpent() && edited === 'triggers') return window.location.reload()
     if (edited === 'triggers') restart()
     // if not editing triggers, bypass activation

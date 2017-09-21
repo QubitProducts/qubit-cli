@@ -50,7 +50,6 @@
     "@qubit/stash-count": "^1.3.8",
     "@qubit/uv-api": "^4.1.0",
     "@qubit/visitor-pulse": "^1.0.7",
-    "@qubit/xp-loader": "^2.0.0",
     "axios": "^0.16.0",
     "body-parser": "^1.17.1",
     "buble": "^0.15.2",
