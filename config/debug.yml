@@ -1,0 +1,4 @@
+updateCheckInterval: 0
+services:
+  app: http://localhost:3000
+  registry: http://localhost:4800

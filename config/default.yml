@@ -1,8 +1,11 @@
 port: 41337
-endpoint: https://app.qubit.com
 updateCheckInterval: 3600000
 auth:
   port: 41338
-  url: https://qubit.auth0.com
   xpClientId: BlkYEHauoKWvGcN2my1TGlqh5dHHuW30
   apertureClientId: dbiUqhi4U6m7oYpEPKzJbJu3ZHVFImf0
+  registryClientId: 7Iav52mxENMvUGAj55zBJLaS3CRjj2jp
+services:
+  app: https://app.qubit.com
+  registry: http://registry.qubit.com
+  auth: https://qubit.auth0.com

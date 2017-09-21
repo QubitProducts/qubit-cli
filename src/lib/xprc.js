@@ -5,7 +5,7 @@ let xprcPath = `${os.homedir()}/.xprc`
 
 async function get () {
   const data = await getAll()
-  return data[config.endpoint] || {}
+  return data[config.services.app] || {}
 }
 
 async function getAll () {
@@ -14,15 +14,15 @@ async function getAll () {
 
 async function set (authType, token) {
   const data = await getAll()
-  data[config.endpoint] = data[config.endpoint] || {}
-  data[config.endpoint][authType] = token
+  data[config.services.app] = data[config.services.app] || {}
+  data[config.services.app][authType] = token
   return fs.writeFile(xprcPath, JSON.stringify(data))
 }
 
 async function rm (authType) {
   const data = await getAll()
-  data[config.endpoint] = data[config.endpoint] || {}
-  delete data[config.endpoint][authType]
+  data[config.services.app] = data[config.services.app] || {}
+  delete data[config.services.app][authType]
   return fs.writeFile(xprcPath, JSON.stringify(data))
 }
 
