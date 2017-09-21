@@ -27,11 +27,9 @@ module.exports = async function login () {
     app.get('/callback', async (req, res, next) => {
       try {
         const idToken = await getIdToken(req.query.code, verifier)
-        await xprc.rm('BEARER_TOKEN', idToken)
-        await xprc.set('ID_TOKEN', idToken)
 
-        let {accessToken, scopes} = await getRegistryToken(idToken)
-        await saveRegistryToken(accessToken, scopes)
+        await updateXPRC(idToken)
+        await updateNPMRC(idToken)
 
         res.send('You are now logged in!. You can now close this tab.')
         await app.stop()
@@ -43,6 +41,16 @@ module.exports = async function login () {
       }
     })
   })
+}
+
+async function updateXPRC (idToken) {
+  await xprc.set('ID_TOKEN', idToken)
+  await xprc.rm('BEARER_TOKEN', idToken)
+}
+
+async function updateNPMRC (idToken) {
+  let {accessToken, scopes} = await getRegistryToken(idToken)
+  await saveRegistryToken(accessToken, scopes)
 }
 
 async function getRegistryToken (idToken) {
