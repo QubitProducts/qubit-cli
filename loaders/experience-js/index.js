@@ -2,6 +2,7 @@ const path = require('path')
 
 module.exports = function loader (content) {
   let deps = getDeps()
+
   if (!content) return content
 
   let code = addModuleExports(content)
@@ -22,10 +23,11 @@ function addModuleExports (code) {
 function addAMD (code) {
   return code
     .replace(/(^|\s+)require\s*\(/g, '$1window.__qubit.xp.amd.require(')
+    .replace(/=\s*require\s*(\n|,|;|$)/g, '= window.__qubit.xp.amd.require$1')
 }
 
 function allowRealRequires (code, dep) {
-  return code.replace(new RegExp(`window\\.__qubit\\.xp\\.amd\\.require\\(${dep}`, 'gi'), `require(${dep}`)
+  return code.replace(new RegExp(`window\\.__qubit\\.xp\\.amd\\.require\\((['"])${dep}`, 'gi'), `require($1${dep}`)
 }
 
 function getDeps () {
