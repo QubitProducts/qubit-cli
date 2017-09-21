@@ -1,11 +1,23 @@
 const path = require('path')
+const hasNoCode = require('../../src/lib/hasNoCode')
+const { TRIGGERS, EXECUTION } = require('../../src/lib/constants')
 
-module.exports = function loader (content) {
+module.exports = function loader (content, { file }) {
+  let filename = path.basename(file)
+
   let deps = getDeps()
 
-  if (!content) return content
+  // Assume a blank file means default empty function
+  // This is a better experience than showing errors
+  // and when pushing we revert to default function in that case anyway
+  let code = content
 
-  let code = addModuleExports(content)
+  if (hasNoCode(code)) {
+    if (filename.includes('triggers')) code = TRIGGERS
+    if (filename.includes('variation')) code = EXECUTION
+  }
+
+  code = addModuleExports(code)
 
   code = addAMD(code)
 

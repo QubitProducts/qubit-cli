@@ -1,7 +1,6 @@
 const fetch = require('../lib/fetch')
-const EXECUTION = 'function execution (options) { // eslint-disable-line no-unused-vars\n\n}\n'
-const CSS = ''
-const DEFAULTS = { EXECUTION, CSS }
+const hasNoCode = require('../lib/hasNoCode')
+const { EXECUTION, CSS } = require('../lib/constants')
 
 const experienceVariationsUrl = experienceId => `/api/experiences/${experienceId}/all-variations`
 const iterationVariationsUrl = iterationId => `/api/iterations/${iterationId}/variations`
@@ -27,17 +26,18 @@ function create (iterationId, data) {
 function getCode (variation) {
   const code = {}
   const filename = getFilename(variation)
+  // Automatically update old default js to new default js
   if (variation.execution_code === 'function (options) {}') delete variation.execution_code
-  code[`${filename}.js`] = variation.execution_code || EXECUTION
-  code[`${filename}.css`] = variation.custom_styles || CSS
+  code[`${filename}.js`] = hasNoCode(variation.execution_code) ? EXECUTION : variation.execution_code
+  code[`${filename}.css`] = hasNoCode(variation.custom_styles) ? CSS : variation.custom_styles
   return code
 }
 
 function setCode (variation, files) {
   const filename = getFilename(variation)
   return Object.assign({}, variation, {
-    execution_code: files[`${filename}.js`] || EXECUTION,
-    custom_styles: files[`${filename}.css`] || CSS
+    execution_code: hasNoCode(files[`${filename}.js`]) ? EXECUTION : files[`${filename}.js`],
+    custom_styles: hasNoCode(files[`${filename}.css`]) ? CSS : files[`${filename}.css`]
   })
 }
 
@@ -45,4 +45,4 @@ function getFilename (variation) {
   return `variation-${variation.master_id}`
 }
 
-module.exports = { getAll, get, set, create, getCode, setCode, getFilename, DEFAULTS }
+module.exports = { getAll, get, set, create, getCode, setCode, getFilename }

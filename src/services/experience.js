@@ -1,10 +1,9 @@
 const _ = require('lodash')
 const fetch = require('../lib/fetch')
 const withMetrics = require('../lib/with-metrics')
-const GLOBAL = ''
+const hasNoCode = require('../lib/hasNoCode')
 const EXPERIENCE = require('./experience.json')
-const TRIGGERS = 'function triggers (options, cb) { // eslint-disable-line no-unused-vars\n  cb()\n}\n'
-const DEFAULTS = { GLOBAL, TRIGGERS, EXPERIENCE }
+const { GLOBAL, TRIGGERS } = require('../lib/constants')
 
 function get (propertyId, experienceId) {
   return fetch.get(getPath(propertyId, experienceId))
@@ -47,9 +46,11 @@ function duplicate (propertyId, options) {
 function getCode (experience) {
   const rules = _.get(experience, 'recent_iterations.draft.activation_rules')
   const rule = rules && rules.find(rule => rule.key === 'custom_javascript')
+  const triggers = rule && rule.value
+  const globalCode = _.get(experience, 'recent_iterations.draft.global_code')
   return {
-    'global.js': _.get(experience, 'recent_iterations.draft.global_code') || GLOBAL,
-    'triggers.js': (rule && rule.value) || TRIGGERS
+    'global.js': hasNoCode(globalCode) ? GLOBAL : globalCode,
+    'triggers.js': hasNoCode(triggers) ? TRIGGERS : triggers
   }
 }
 
@@ -60,12 +61,12 @@ function setCode (experience, files) {
   const rules = draft.activation_rules || []
   const customJs = rules.find(rule => rule.key === 'custom_javascript')
   if (customJs) {
-    customJs.value = files['triggers.js']
+    customJs.value = hasNoCode(files['triggers.js']) ? TRIGGERS : files['triggers.js']
   } else {
     rules.push({
       key: 'custom_javascript',
       type: 'code',
-      value: files['triggers.js'] || TRIGGERS
+      value: hasNoCode(files['triggers.js']) ? TRIGGERS : files['triggers.js']
     })
   }
   Object.assign(draft, {
@@ -81,4 +82,4 @@ function getPath (propertyId, experienceId) {
   return url
 }
 
-module.exports = { get, getAll, set, create, publish, pause, resume, duplicate, status, getCode, setCode, DEFAULTS }
+module.exports = { get, getAll, set, create, publish, pause, resume, duplicate, status, getCode, setCode }
