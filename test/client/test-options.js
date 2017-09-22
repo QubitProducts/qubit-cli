@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const sinon = require('sinon')
 global.window = {}
 const transform = require('../../src/client/options')
 const expect = require('chai').expect
@@ -42,6 +43,57 @@ describe('transform', function () {
     it('will return undefined if data is not found', function () {
       expect(state.get('undefinedData')).to.be.an('undefined')
     })
+  })
+
+  describe('uv object', function () {
+    var clock, uv
+
+    beforeEach(function () {
+      clock = sinon.useFakeTimers()
+      uv = transform(pkg, variationName).api.uv
+    })
+
+    afterEach(() => {
+      global.window = {}
+      clock.restore()
+    })
+
+    it('proxies event methods to jolt', function () {
+      setupJolt()
+      for (let method of ['onEnrichment', 'onceEnrichment', 'onSuccess', 'onceSuccess']) {
+        expect(global.window.__qubit.jolt[method].calledWith(1, 2, 3)).to.eql(false)
+      }
+      for (let method of ['on', 'once', 'onEventSent', 'onceEventSent']) {
+        uv[method](1, 2, 3)
+      }
+      for (let method of ['onEnrichment', 'onceEnrichment', 'onSuccess', 'onceSuccess']) {
+        expect(global.window.__qubit.jolt[method].calledWith(1, 2, 3)).to.eql(true)
+      }
+    })
+
+    it('defers event methods and then proxies to jolt', function () {
+      for (let method of ['on', 'once', 'onEventSent', 'onceEventSent']) {
+        uv[method](1, 2, 3)
+      }
+      setupJolt()
+      clock.tick(100)
+      for (let method of ['onEnrichment', 'onceEnrichment', 'onSuccess', 'onceSuccess']) {
+        expect(global.window.__qubit.jolt[method].calledWith(1, 2, 3)).to.eql(true)
+      }
+    })
+
+    function setupJolt () {
+      global.window = {
+        __qubit: {
+          jolt: {
+            onEnrichment: sinon.stub(),
+            onceEnrichment: sinon.stub(),
+            onSuccess: sinon.stub(),
+            onceSuccess: sinon.stub()
+          }
+        }
+      }
+    }
   })
 
   describe('meta object', function () {
