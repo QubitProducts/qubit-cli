@@ -1,5 +1,5 @@
 const path = require('path')
-const fs = require('fs-promise')
+const fs = require('fs-extra')
 const {expect} = require('chai')
 const rewire = require('rewire')
 const sinon = require('sinon')

@@ -1,6 +1,6 @@
 const _ = require('lodash')
 const path = require('path')
-const fs = require('fs-promise')
+const fs = require('fs-extra')
 const input = require('input')
 const execa = require('execa')
 const getPkg = require('../lib/get-pkg')

@@ -1,5 +1,5 @@
 const path = require('path')
-const fs = require('fs-promise')
+const fs = require('fs-extra')
 let CWD = process.cwd()
 
 module.exports = async function getPkg () {

@@ -1,4 +1,4 @@
-const fs = require('fs-promise')
+const fs = require('fs-extra')
 const pem = require('pem')
 const childProcess = require('child_process')
 const log = require('./log')

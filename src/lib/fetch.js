@@ -1,6 +1,6 @@
 const config = require('../../config')
 const axios = require('axios')
-const xprc = require('./xprc')
+const qubitrc = require('./qubitrc')
 const log = require('./log')
 const ensureToken = require('./ensure-token')
 const login = require('../server/lib/login')
@@ -16,12 +16,12 @@ module.exports = {
 function fetchWithAuth (method) {
   return async function fetch (path, data) {
     let headers, token
-    const auths = await xprc.get()
+    const auths = await qubitrc.get()
 
     if (auths.ID_TOKEN) {
       try {
         token = await ensureToken(auths.ID_TOKEN, config.auth.apertureClientId)
-        await xprc.set('BEARER_TOKEN', token)
+        await qubitrc.set('BEARER_TOKEN', token)
         headers = { 'Authorization': `Bearer ${token}` }
       } catch (err) {
         log('Could not authenticate, reinitiating login flow')

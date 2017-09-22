@@ -1,3 +1,4 @@
+const os = require('os')
 const path = require('path')
 const HOME = process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME']
 const CERT_DIR = path.join(HOME, '.qubitcert')
@@ -14,5 +15,7 @@ const KEY_OPTIONS = {
   commonName: 'localhost',
   altNames: ['localhost']
 }
+const QUBITRC = `${os.homedir()}/.qubitrc`
+const NPMRC = `${os.homedir()}/.npmrc`
 
-module.exports = { HOME, CERT_DIR, CERT_PATH, KEY_PATH, KEY_OPTIONS, EXECUTION, CSS, GLOBAL, TRIGGERS }
+module.exports = { HOME, CERT_DIR, CERT_PATH, KEY_PATH, KEY_OPTIONS, EXECUTION, CSS, GLOBAL, TRIGGERS, QUBITRC, NPMRC }

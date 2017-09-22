@@ -4,7 +4,7 @@ const crypto = require('crypto')
 const opn = require('opn')
 const qs = require('qs')
 const config = require('../../../config')
-const xprc = require('../../lib/xprc')
+const qubtrc = require('../../lib/qubitrc')
 const log = require('../../lib/log')
 const createApp = require('../app')
 const getToken = require('../../lib/get-token')
@@ -28,7 +28,7 @@ module.exports = async function login () {
       try {
         const idToken = await getIdToken(req.query.code, verifier)
 
-        await updateXPRC(idToken)
+        await updateQUBITRC(idToken)
         await updateNPMRC(idToken)
 
         res.send('You are now logged in!. You can now close this tab.')
@@ -43,9 +43,9 @@ module.exports = async function login () {
   })
 }
 
-async function updateXPRC (idToken) {
-  await xprc.set('ID_TOKEN', idToken)
-  await xprc.rm('BEARER_TOKEN', idToken)
+async function updateQUBITRC (idToken) {
+  await qubtrc.set('ID_TOKEN', idToken)
+  await qubtrc.rm('BEARER_TOKEN', idToken)
 }
 
 async function updateNPMRC (idToken) {

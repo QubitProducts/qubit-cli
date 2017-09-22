@@ -1,6 +1,6 @@
 const path = require('path')
 const chalk = require('chalk')
-const fs = require('fs-promise')
+const fs = require('fs-extra')
 const log = require('./log')
 const exists = require('./exists')
 let shouldWrite = require('./should-write')

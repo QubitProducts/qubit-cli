@@ -1,4 +1,4 @@
-const fs = require('fs-promise')
+const fs = require('fs-extra')
 const installCerts = require('./install-certs')
 const {CERT_PATH, KEY_PATH, CERT_DIR} = require('./constants')
 

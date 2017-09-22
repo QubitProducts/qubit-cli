@@ -1,7 +1,6 @@
 const config = require('../../config')
-const os = require('os')
-const fs = require('fs-promise')
-let xprcPath = `${os.homedir()}/.xprc`
+const fs = require('fs-extra')
+let { QUBITRC } = require('./constants')
 
 async function get () {
   const data = await getAll()
@@ -9,21 +8,24 @@ async function get () {
 }
 
 async function getAll () {
-  return JSON.parse(String(await fs.readFile(xprcPath).catch(() => '{}')))
+  console.log(QUBITRC)
+  let all = String(await fs.readFile(QUBITRC).catch(() => '{}'))
+  console.log(all)
+  return JSON.parse(all)
 }
 
 async function set (authType, token) {
   const data = await getAll()
   data[config.services.app] = data[config.services.app] || {}
   data[config.services.app][authType] = token
-  return fs.writeFile(xprcPath, JSON.stringify(data))
+  return fs.writeFile(QUBITRC, JSON.stringify(data))
 }
 
 async function rm (authType) {
   const data = await getAll()
   data[config.services.app] = data[config.services.app] || {}
   delete data[config.services.app][authType]
-  return fs.writeFile(xprcPath, JSON.stringify(data))
+  return fs.writeFile(QUBITRC, JSON.stringify(data))
 }
 
 module.exports = { get, set, rm }

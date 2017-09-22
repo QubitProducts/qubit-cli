@@ -1,6 +1,6 @@
 const path = require('path')
 const _ = require('lodash')
-const fs = require('fs-promise')
+const fs = require('fs-extra')
 const log = require('../lib/log')
 const codeService = require('../services/code')
 const readFiles = require('../lib/read-files')

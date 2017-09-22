@@ -1,5 +1,5 @@
 const path = require('path')
-const fs = require('fs-promise')
+const fs = require('fs-extra')
 const {expect} = require('chai')
 const fixtures = path.join(__dirname, 'fixtures/tmp/read-files')
 const readFiles = require('../../src/lib/read-files')

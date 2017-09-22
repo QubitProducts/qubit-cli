@@ -1,10 +1,10 @@
 {
-  "name": "@qubit/xp-cli",
+  "name": "qubit-cli",
   "version": "1.32.1",
   "description": "a utility for previewing experiences built using the qubit experience platform",
   "main": "src/index.js",
   "bin": {
-    "xp": "bin/xp"
+    "qubit": "bin/qubit"
   },
   "directories": {
     "example": "example"
@@ -66,7 +66,7 @@
     "event-kitten": "^1.1.0",
     "execa": "^0.6.3",
     "express": "^4.15.2",
-    "fs-promise": "^2.0.2",
+    "fs-extra": "^4.0.2",
     "input": "^1.0.1",
     "joi": "^10.4.1",
     "js-yaml": "^3.8.2",

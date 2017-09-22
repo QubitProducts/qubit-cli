@@ -1,11 +1,11 @@
 const config = require('../../config')
 const axios = require('axios')
 const jwt = require('jsonwebtoken')
-const xprc = require('./xprc')
+const qubitrc = require('./qubitrc')
 
 module.exports = async function getToken (idToken, targetClientId, options = {}) {
   if (!idToken) return false
-  let currentToken = (await xprc.get()).BEARER_TOKEN
+  let currentToken = (await qubitrc.get()).BEARER_TOKEN
   if (!currentToken || isExpired(currentToken) || options.force) {
     currentToken = await fetchToken(idToken, targetClientId)
   }
