@@ -2,7 +2,7 @@ const createEmitter = require('event-kitten')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
 const webpack = require('webpack')
-const {readdir} = require('fs-extra')
+const fs = require('fs-extra')
 const chalk = require('chalk')
 const webpackConf = require('../../../webpack.conf')
 const pickVariation = require('../../lib/pick-variation')
@@ -16,23 +16,23 @@ module.exports = async function serve (options) {
   app.use(cors())
   options.verbose = options.verbose || false
 
-  if (/(triggers|global|.css$)/.test(options.variation)) {
+  if (/(triggers|global|.css$)/.test(options.variationFilename)) {
     log('hint: you should be watching the entry point for your experience, i.e. your variation file!')
   }
 
-  if (!options.variation) {
-    options.variation = await pickVariation(await readdir(CWD))
+  if (!options.variationFilename) {
+    options.variationFilename = await pickVariation(await fs.readdir(CWD))
 
-    if (!options.variation) {
+    if (!options.variationFilename) {
       log(chalk.red('ensure you are within an experience directory and try again'))
       return
     }
 
-    log(`using ${options.variation}`)
+    log(`using ${options.variationFilename}`)
   }
 
   // make .js optional
-  options.variation = options.variation.replace(/\.js$/, '')
+  options.variationFilename = options.variationFilename.replace(/\.js$/, '')
 
   const verboseOpts = {
     log: options.verbose ? log : false,
@@ -62,7 +62,7 @@ function createWebpackConfig (options) {
   const plugins = webpackConf.plugins.slice(0)
   plugins.push(new webpack.DefinePlugin({
     __CWD__: `'${CWD}'`,
-    __VARIATION__: `'${options.variation}'`
+    __VARIATION__: `'${options.variationFilename}'`
   }))
   const entry = webpackConf.entry.slice(0)
   return Object.assign({}, webpackConf, {

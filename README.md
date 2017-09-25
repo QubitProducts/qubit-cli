@@ -4,22 +4,21 @@ A client to facilitate local development of experiences for the qubit platform
 
 ## Features
 
-local offline development
-- build experiences locally in your editor/IDE of choice
+fast previewing
+- built in experience server for fastest possible previewing on any website
+- enable live hot reloading with a little bit of code
+
+local tools
+- use your local editor/IDE of choice to write experience code
 - use your own workflow and versioning tools
 - write and run local unit tests
 
-advanced previewing
-- instant local previewing on any site
-- live hot reloading of your variation and css
-- bypass qubit's remote build queue
-
-remote syncing
-- create new experiences with a single command
-- scaffold your local project from existing experiences in the platform
-- control when to push your changes up or pull down the latest remote changes
-- develop your experience locally and choose when to share it
-- use sync mode to watch for changes and sync with remote automatically
+interact with the platform from the command line
+- create new experiences or clone existing ones
+- push remote changes to the platform
+- pull remote changes from the platform
+- publish | pause | resume your experience
+-
 
 templates
 - create templates to speed up local development

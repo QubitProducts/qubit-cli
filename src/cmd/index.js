@@ -22,50 +22,29 @@ const release = require('./release')
 module.exports = function run (pkg) {
   program
     .command('create [propertyId]')
-    .description('create an experience (argument is optional)')
+    .usage(chalk.gray(`
+    Create using propertyId:
+    qubit create 1010
+
+    Create using autocomplete or by navigating to your experience in the browser:
+    qubit clone`))
+    .description('create an experience (arguments optional)')
     .action(create)
 
   program
-    .command('duplicate')
-    .description('duplicate a variation')
-    .action(duplicate)
-
-  program
     .command('clone [url] [propertyId] [experienceId]')
-    .description(`clone a remote experience from platform (arguments are optional)`)
+    .usage(chalk.gray(`
+
+    Clone from url:
+    qubit clone http://app.qubit.com/p/1010/experiences/10101/editor
+
+    Clone using propertyId and experienceId:
+    qubit clone 1010 10101
+
+    Clone using autocomplete or by navigating to your experience in the browser:
+    qubit clone`))
+    .description(`clone an experience (arguments optional)`)
     .action(clone)
-
-  program
-    .command('pull [templateName] [url] [propertyId] [experienceId]')
-    .description(`pull remote changes or template into local experience (arguments are optional)`)
-    .action(pull)
-
-  program
-    .command('push')
-    .option('--force', 'force push changes even though the remote is different')
-    .description('push experience up to remote')
-    .action(push)
-
-  program
-    .command('templatize')
-    .description('create a template from an experience')
-    .action(templatize)
-
-  program
-    .command('diff')
-    .description('compare local and remote versions of an experience')
-    .action(diff)
-
-  program
-    .command('traffic')
-    .option('--view', 'view the current control size')
-    .description('set the control size of an experience')
-    .action(traffic)
-
-  program
-    .command('goals [cmd]')
-    .description('`list`, `add`, `remove` and `set-primary` being subcommands')
-    .action(goals)
 
   program
     .command('publish')
@@ -81,6 +60,56 @@ module.exports = function run (pkg) {
     .command('resume')
     .description('resume an experience')
     .action(action)
+
+  program
+    .command('templatize')
+    .description('create a template from an experience')
+    .action(templatize)
+
+  program
+    .command('pull [templateName]')
+    .description(`pull remote changes or template into your local experience (arguments optional)`)
+    .action(pull)
+
+  program
+    .command('push')
+    .option('--force', 'force push local changes even though there have been remote changes')
+    .description('push local changes to the platform')
+    .action(push)
+
+  program
+    .command('duplicate')
+    .description('create a new variation within your experience')
+    .action(duplicate)
+
+  program
+    .command('traffic')
+    .option('--view', 'view the current control size')
+    .description('set the control size of an experience')
+    .action(traffic)
+
+  program
+    .command('goals [cmd]')
+    .usage(chalk.grey(`
+
+  List goals:
+  qubit goals list
+
+  Add a goal:
+  qubit goals add
+
+  Remove a goal:
+  qubit goals remove
+
+  Change the primary goal of your experience:
+  qubit goals set-primary`))
+    .description('list or edit experience goals')
+    .action(goals)
+
+  program
+    .command('diff')
+    .description('compare local and remote versions of an experience')
+    .action(diff)
 
   program
     .command('status')
@@ -106,7 +135,7 @@ module.exports = function run (pkg) {
 
   program
     .command('extension')
-    .description('open folder containing chrome extension, drag into chrome extensions pane to install')
+    .description('open folder containing the qubit-cli chrome extension, drag into chrome extensions pane to install')
     .action(extension)
 
   program
@@ -144,64 +173,13 @@ module.exports = function run (pkg) {
   program
     .usage(`[options] <cmd>`)
     .version(pkg.version)
-    .arguments('[variation]')
+    .arguments('[variationFilename]')
     .option('-v, --verbose', 'log verbose output', false)
     .action(serve)
 
   program.on('--help', function () {
-    console.log(`  Tutorial:
-
-    To install the extension:
-    $ ${chalk.green.bold('xp extension')}
-    then drag the chrome-extension folder into the chrome extensions pane
-
-    Previewing with local server:
-    $ ${chalk.green.bold('xp pull example')}
-    $ ${chalk.green.bold('xp --watch')}
-    Now open chrome and turn on xp by clicking on the extension icon
-    you should see the background of the page turn ${chalk.yellow.bold('yellow')}!
-    Change the css in variation.css, and the preview should update on the fly!
-
-    To clone an existing experience:
-    - ${chalk.green.bold('xp clone <propertyId> <experienceId>')} if you know the propertyId and experienceId
-    - ${chalk.green.bold('xp clone https://app.qubit.com/p/{propertyId}/experiences/{experienceId}')} if you know the url
-    - Otherwise, type ${chalk.green.bold('xp clone')} then navigate to your experience and xp will guide you from there
-
-    To create a new experience:
-    $ ${chalk.green.bold('xp create <propertyId>')}
-    note: propertyId is the number after /p/ in our urls
-
-    To push your changes up to the platform
-    $ ${chalk.green.bold('xp push')}
-
-    To pull remote changes from the platform:
-    $ ${chalk.green.bold('xp pull')}
-
-    To generate a template from your local experience files:
-    $ ${chalk.green.bold('xp templatize')}
-
-    To scaffold an experience from a template:
-    $ ${chalk.green.bold('xp pull <templateName>')}
-
-    To make an xp template available for sharing:
-    publish to npm or git
-    consumers can then simply install like so:
-
-    $ ${chalk.green.bold('npm install -g xp-tmp-example')}
-    $ ${chalk.green.bold('npm install -g github:user/xp-tmp-example')}
-    $ ${chalk.green.bold('npm install -g github:user/xp-multi-template-repo/example')}
-
-    To enable hot reloading:
-    Implement a remove function in your variation file like so:
-
-    function execution (options) {
-      console.log('executing variation')
-      return {
-        remove: function remove () {
-          // undo any changes e.g. $modal.remove()
-        }
-      }
-    }`)
+    console.log(`
+    For more info visit https://github.com/qubitdigital/xp-cli/blob/master/README.md`)
   })
 
   program.parse(process.argv)
