@@ -7,11 +7,10 @@ async function get () {
   return data[config.services.app] || {}
 }
 
-async function getAll () {
-  console.log(QUBITRC)
-  let all = String(await fs.readFile(QUBITRC).catch(() => '{}'))
-  console.log(all)
-  return JSON.parse(all)
+function getAll () {
+  return fs.readFile(QUBITRC)
+    .then(all => JSON.parse(String(all)))
+    .catch(e => ({}))
 }
 
 async function set (authType, token) {

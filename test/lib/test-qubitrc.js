@@ -13,15 +13,18 @@ describe('qubitrc', function () {
 
   afterEach(async () => {
     try {
+      await fs.unlink(QUBITRC)
       await fs.move(QUBITRC + '.bak', QUBITRC, { overwrite: true })
     } catch (e) {}
   })
 
   describe('get', function () {
-    it('should return {} if the file does not exist', function () {
-      return qubitrc.get().then(function (result) {
-        expect(result).to.eql({})
-      })
+    it('should return {} if the file does not exist', async () => {
+      expect(await qubitrc.get()).to.eql({})
+    })
+    it('should return {} if the file is corrupted', async () => {
+      await fs.writeFile(QUBITRC, 'a\n\t1: 2')
+      expect(await qubitrc.get()).to.eql({})
     })
   })
 
