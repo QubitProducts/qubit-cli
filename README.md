@@ -1,4 +1,4 @@
-# ![extension icon](./chrome-extension/icons/on48.png) ![xp-cli](https://cloud.githubusercontent.com/assets/640611/18666410/a11b3394-7f23-11e6-99b5-5cbbca6da27f.png)
+# ![extension icon](./chrome-extension/icons/on48.png) QUBIT-CLI
 
 A client to facilitate local development of experiences for the qubit platform
 
@@ -18,153 +18,140 @@ interact with the platform from the command line
 - push remote changes to the platform
 - pull remote changes from the platform
 - publish | pause | resume your experience
--
 
 templates
-- create templates to speed up local development
-- publish templates to share ideas and examples with teammates
-- save time and effort by automating boilerplate and common variation code
-- improve code consistency and design by leveraging template reuse
-
+- speed up local development
+- share ideas and examples
 
 ## Installation
 
 ```
-npm install -g qubitdigital/qubit-cli
-
-qubit login
-
 using npm:
-npm install -gp @qubit/xp-cli
+npm install -g qubit-cli
 
 using yarn:
-yarn global add @qubit/xp-cli
+yarn global add qubit-cli
+
+qubit login
 ```
 
 ## Setup
 
 ```
-xp extension
+qubit extension
 ```
 then drag the chrome-extension folder into the chrome extensions pane
 
 ## Previewing with local server:
 
 ```
-xp pull example
-xp --watch
+qubit pull example
+qubit --watch
 ```
-Now open chrome and turn on xp by clicking on the extension icon ![extension icon](./chrome-extension/icons/off16.png). You should see the background of the page turn yellow! Change the css in varaition.css, and the preview should update on the fly!
+Now open chrome and turn on qubit by clicking on the extension icon ![extension icon](./chrome-extension/icons/off16.png). You should see the background of the page turn yellow! Change the css in varaition.css, and the preview should update on the fly!
 
 
 ## To clone an existing experience:
 ```
-xp clone
+qubit clone
 ```
 
 ## To create a new experience:
 ```
-xp create
+qubit create
+```
+
+## To pull down remote changes:
+```
+qubit pull
 ```
 
 ## To push your changes up to the platform:
 ```
-xp push
+qubit push
 ```
 
-Before pushing changes, XP checks if there has been any change in the experience code in the Qubit platform since the last XP interaction.
-This prevents you from overriding changes that would have been made by someone else directly on the platform.
+qubit-cli warns you if there are remote changes before applying a push
 
-In the case where changes have been made on the platform since the last use of XP, XP will show you the diff between your changes and the changes on the platform.
-You can then choose to :
+If so, you have two options:
 
-- override your local changes with the ones made on the platform. In this case type:
+- overwrite local:
 ```
-xp pull
+qubit pull
 ```
 
-- override the platform code with your local changes. In this case type:
+- overwrite platform:
 ```
-xp push --force
-```
-
-- incorporate the changes manually (from the diff), and then force the update though the same command type:
-```
-xp push --force
-```
-
-## To pull remote changes from the platform:
-```
-xp pull
+qubit push --force
 ```
 
 ## To publish an experience:
 ```
-xp publish
+qubit publish
 ```
 
 ## To pause an experience:
 ```
-xp pause
+qubit pause
 ```
 
 ## To resume an experience:
 ```
-xp resume
+qubit resume
 ```
 
 ## To get the publish/pause status of an experience:
 ```
-xp status
+qubit status
 ```
 
 ## To duplicate an experience or a variation:
 ```
-xp duplicate
+qubit duplicate
 ```
 
 ## To see a diff between the local file and the platform:
 ```
-xp diff
+qubit diff
 ```
 
 ## To change the traffic allocation for an experience
 ```
-xp traffic
+qubit traffic
 ```
 must be run inside an experience directory, `--view` to see the current setting only
 
 ## To change the goals for an experience
 ```
-xp goals
+qubit goals
 ```
 with `list`, `add`, `remove` and `set-primary` being subcommands
 
 ## To open the experience overview page on app.qubit.com:
 ```
-xp open
+qubit open
 ```
 `--overview`, `--settings`, `--editor` being options
 
 ## To get and copy to clipboard relevant links (preview is default):
 ```
-xp link
+qubit link
 ```
 `--overview`, `--settings`, `--editor` and `--preview` being options
 
 ## To generate a template from your local experience files:
 
 ```
-xp templatize
+qubit templatize
 ```
 
 ## To scaffold an experience from a template:
 
 ```
-xp pull <templateName>
+qubit pull <templateName>
 ```
 
-## To make an xp template available for sharing:
+## To make an qubit template available for sharing:
 
 publish to npm or git. Consumers can then simply install like so:
 
