@@ -4,7 +4,7 @@ const qubitrc = require('../../src/lib/qubitrc')
 const exists = require('../../src/lib/exists')
 const { QUBITRC } = require('../../src/lib/constants')
 
-describe('qubitrc', function () {
+describe.only('qubitrc', function () {
   beforeEach(async () => {
     try {
       await fs.move(QUBITRC, QUBITRC + '.bak')
@@ -12,10 +12,8 @@ describe('qubitrc', function () {
   })
 
   afterEach(async () => {
-    try {
-      await fs.unlink(QUBITRC)
-      await fs.move(QUBITRC + '.bak', QUBITRC, { overwrite: true })
-    } catch (e) {}
+    await fs.remove(QUBITRC).catch(e => {})
+    await fs.move(QUBITRC + '.bak', QUBITRC, { overwrite: true }).catch(e => {})
   })
 
   describe('get', function () {
