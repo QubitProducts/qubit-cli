@@ -3,10 +3,12 @@ const goalNames = [
   { value: 'metrics.revenue_per_visitor', name: 'Revenue per visitor', exclusive: true },
   { value: 'metrics.revenue_per_converter', name: 'Revenue per converter', exclusive: true },
   { value: 'pageviews.url', name: 'Page URL', exclusive: false },
-  { value: 'pageviews.customvalues.uv.events.action', name: 'Event action (UV)', exclusive: false }
+  { value: 'pageviews.customvalues.uv.events.action', name: 'Event action (UV)', exclusive: false },
+  { value: 'pageviews.customvalues.uv.page.category', name: 'Category event (UV)', exclusive: false }
 ]
 
 const operators = [
+  { value: 'eq', name: 'equals' },
   { value: 'in', name: 'contains' },
   { value: 'regex', name: 'matches regex' }
 ]
