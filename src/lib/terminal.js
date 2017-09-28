@@ -66,7 +66,7 @@ const createAutoComplete = (prompt, suggestions) => {
     const titles = candidates.map(c => c.title)
     const itemStyle = {
       noFormat: (str) => {
-        term(str.replace(new RegExp(`(${subStr})`, 'i'), `^_$1^:`))
+        term(str.replace(new RegExp(`(${_.escapeRegExp(subStr)})`, 'i'), `^_$1^:`))
       }
     }
     term.grabInput({mouse: 'motion'})
@@ -135,7 +135,7 @@ const createAutoComplete = (prompt, suggestions) => {
 
         // filter and limit the candidates
         const candidates = suggestions
-          .filter(({title}) => new RegExp(subStr, 'i').test(title))
+          .filter(({title}) => new RegExp(_.escapeRegExp(subStr), 'i').test(title))
           .slice(0, menuHeight)
 
         // don't allow an empty candidate list
