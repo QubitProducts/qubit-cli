@@ -1,3 +1,4 @@
 module.exports = function hasNoCode (code) {
-  return /^\s*$/.test(code)
+  if (typeof code !== 'string') return true
+  return /^\s*$/.test(code.trim())
 }
