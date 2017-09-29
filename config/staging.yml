@@ -1,4 +1,4 @@
 services:
   app: https://staging-dashboard.qubitproducts.com
-  registry: https://staging-registry.qubit.com
+  registry: https://registry-staging.qubit.com
   auth: https://qubit.auth0.com

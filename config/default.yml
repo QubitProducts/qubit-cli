@@ -7,5 +7,5 @@ auth:
   registryClientId: 7Iav52mxENMvUGAj55zBJLaS3CRjj2jp
 services:
   app: https://app.qubit.com
-  registry: http://registry.qubit.com
+  registry: https://registry.qubit.com
   auth: https://qubit.auth0.com
