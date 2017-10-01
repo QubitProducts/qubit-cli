@@ -1,6 +1,7 @@
 {
   "name": "qubit-experience-456",
   "description": "An experience powered by qubit",
+  "version": "1.0.0",
   "meta": {
     "name": "New styles",
     "propertyId": 123,

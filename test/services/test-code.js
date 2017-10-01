@@ -47,6 +47,7 @@ describe('codeService', function () {
       experience.name += 1
       _.set(experience, 'recent_iterations.draft.global_code', files['global.js'])
       _.set(experience, 'recent_iterations.draft.activation_rules.0.value', files['triggers.js'])
+      _.set(experience, 'recent_iterations.draft.package_json', JSON.stringify(JSON.parse(files['package.json']), null, 2))
       let [actualPropertyId, actualExperienceId, actualExperience] = experienceService.set.getCall(0).args
       expect(actualPropertyId).to.eql(propertyId)
       expect(actualExperienceId).to.eql(experienceId)

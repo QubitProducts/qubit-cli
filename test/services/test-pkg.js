@@ -27,6 +27,7 @@ describe('pkgService', () => {
       let expected = _.cloneDeep(experience)
       expected.name = pkg.meta.name
       expected.recent_iterations.draft.url = pkg.meta.previewUrl
+      expected.recent_iterations.draft.package_json = JSON.stringify(pkg, null, 2)
       files['package.json'] = JSON.stringify(pkg)
       expect(pkgService.setCode(experience, files)).to.eql(expected)
     })
