@@ -46,6 +46,7 @@ function setCode (experience, files) {
   const pkg = JSON.parse(files['package.json'])
   experience.name = _.get(pkg, 'meta.name')
   _.set(experience, 'recent_iterations.draft.url', _.get(pkg, 'meta.previewUrl'))
+  delete pkg.meta
   _.set(experience, 'recent_iterations.draft.package_json', JSON.stringify(pkg, null, 2))
   return experience
 }
