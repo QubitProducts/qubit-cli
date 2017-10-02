@@ -30,7 +30,7 @@ function fetchWithAuth (method) {
 
     if (!headers) return login().then(() => fetch(path, data))
 
-    return axios(config.services.app + path, { method, data, headers }).then(handler, handler)
+    return axios(config.services.app + path, { method, data, headers }).then(handler, ({response}) => handler(response))
 
     function handler (resp) {
       if (resp.status === 422) throw OUT_OF_DATE

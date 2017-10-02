@@ -30,8 +30,8 @@ module.exports = async function checkDiff (propertyId, experienceId) {
   function checkDiff (localFiles, files) {
     let diffs = []
     for (let name in files) {
-      const remoteVal = files[name]
-      const localVal = localFiles[name]
+      const remoteVal = files[name] || ''
+      const localVal = localFiles[name] || ''
       if (remoteVal !== localVal) {
         const diff = jsdiff.diffLines(remoteVal, localVal, [{ignoreWhitespace: true}])
         diffs.push({fileName: name.toUpperCase(), diff: diff})
