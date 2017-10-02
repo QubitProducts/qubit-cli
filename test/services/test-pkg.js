@@ -28,6 +28,8 @@ describe('pkgService', () => {
       expected.name = pkg.meta.name
       expected.recent_iterations.draft.url = pkg.meta.previewUrl
       files['package.json'] = JSON.stringify(pkg)
+      delete pkg.meta
+      expected.recent_iterations.draft.package_json = JSON.stringify(pkg, null, 2)
       expect(pkgService.setCode(experience, files)).to.eql(expected)
     })
   })

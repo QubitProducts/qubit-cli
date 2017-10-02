@@ -4,9 +4,12 @@ const {getFilename} = require('./variation')
 function getCode (experience, variations) {
   const files = {}
   const experienceMeta = experience.meta ? JSON.parse(experience.meta) : {}
-  files['package.json'] = JSON.stringify({
+  const pkgJSON = _.get(experience, 'recent_iterations.draft.package_json') || '{}'
+  files['package.json'] = JSON.stringify(Object.assign({
     name: `qubit-experience-${experience.id}`,
-    description: 'An experience powered by qubit',
+    version: '1.0.0',
+    description: 'An experience powered by qubit'
+  }, JSON.parse(pkgJSON), {
     meta: {
       name: experience.name,
       propertyId: experience.property_id,
@@ -29,7 +32,7 @@ function getCode (experience, variations) {
       also: [],
       templates: _.get(experienceMeta, 'xp.templates') || []
     }
-  }, null, 2)
+  }), null, 2)
   return files
 }
 
@@ -44,6 +47,8 @@ function setCode (experience, files) {
   const pkg = JSON.parse(files['package.json'])
   experience.name = _.get(pkg, 'meta.name')
   _.set(experience, 'recent_iterations.draft.url', _.get(pkg, 'meta.previewUrl'))
+  delete pkg.meta
+  _.set(experience, 'recent_iterations.draft.package_json', JSON.stringify(pkg, null, 2))
   return experience
 }
 
