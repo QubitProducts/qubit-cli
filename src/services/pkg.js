@@ -23,6 +23,7 @@ function getCode (experience, variations) {
         }
         return memo
       }, {}),
+      templateData: _.get(experience, 'recent_iterations.draft.template_data'),
       solutionOptions: _.get(experience, 'recent_iterations.draft.solution_options'),
       visitor: {},
       also: [],
