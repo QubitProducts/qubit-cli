@@ -4,15 +4,15 @@ const variationService = require('./variation')
 const pkgService = require('./pkg')
 
 async function get (propertyId, experienceId) {
-  const [experience, variations] = [
-    await experienceService.get(propertyId, experienceId),
-    await variationService.getAll(experienceId)
-  ]
+  let experience = await experienceService.get(propertyId, experienceId)
+  let variations = await variationService.getAll(experience.recent_iterations.draft.id)
   return getCode(experience, variations)
 }
 
 async function set (propertyId, experienceId, files) {
-  const oldVariations = await variationService.getAll(experienceId)
+  const oldExperience = await experienceService.get(propertyId, experienceId)
+  const oldVariations = await variationService.getAll(oldExperience.recent_iterations.draft.id)
+
   const variations = await Promise.all(oldVariations.map(async oldVariation => {
     if (oldVariation.is_control) return oldVariation
     const newVariation = variationService.setCode(oldVariation, files)
@@ -20,8 +20,6 @@ async function set (propertyId, experienceId, files) {
       ? oldVariation
       : await variationService.set(oldVariation.id, newVariation)
   }))
-
-  const oldExperience = await experienceService.get(propertyId, experienceId)
   let newExperience = experienceService.setCode(oldExperience, files)
   newExperience = pkgService.setCode(newExperience, files)
   const experience = eql(oldExperience, newExperience)

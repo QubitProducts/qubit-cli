@@ -21,7 +21,8 @@ module.exports = async function duplicate () {
 
     if (propertyId && experienceId) {
       // if the user is in an xp experience folder, allow them to duplicate a variation
-      const variations = await variationService.getAll(experienceId)
+      const experience = await experienceService.get(propertyId, experienceId)
+      const variations = await variationService.getAll(experience.recent_iterations.draft.id)
       const nextVariationNumber = Object.keys(variations).length
       const variationChoices = getVariationChoices(variations)
 

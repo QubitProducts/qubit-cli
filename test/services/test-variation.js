@@ -6,10 +6,10 @@ const variationService = require('../../src/services/variation')
 const variationsFixture = require('../fixtures//variations.json')
 
 describe('variationService', function () {
-  let sandbox, experienceId, variationId, variations
+  let sandbox, iterationId, variationId, variations
 
   beforeEach(() => {
-    experienceId = 456
+    iterationId = 456
     variationId = 789
     variations = _.cloneDeep(variationsFixture)
     sandbox = sinon.sandbox.create()
@@ -21,10 +21,10 @@ describe('variationService', function () {
 
   describe('getAll', function () {
     it('should correctly call fetch', function () {
-      variationService.getAll(experienceId)
+      variationService.getAll(iterationId)
       expect(fetch.get.calledOnce).to.eql(true)
       expect(fetch.get.getCall(0).args).to.eql([
-        `/api/experiences/${experienceId}/all-variations`
+        `/api/iterations/${iterationId}/variations`
       ])
     })
   })
