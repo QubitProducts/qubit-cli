@@ -1,13 +1,11 @@
 const fetch = require('../lib/fetch')
 const hasNoCode = require('../lib/hasNoCode')
 const { EXECUTION, CSS } = require('../lib/constants')
-
-const experienceVariationsUrl = experienceId => `/api/experiences/${experienceId}/all-variations`
 const iterationVariationsUrl = iterationId => `/api/iterations/${iterationId}/variations`
 const variationsUrl = variationId => `/api/variations/${variationId}`
 
-function getAll (experienceId) {
-  return fetch.get(experienceVariationsUrl(experienceId))
+async function getAll (iterationId) {
+  return fetch.get(iterationVariationsUrl(iterationId))
 }
 
 function get (variationId) {
