@@ -17,6 +17,7 @@ const goals = require('./goals')
 const action = require('./action')
 const diff = require('./diff')
 const duplicate = require('./duplicate')
+const release = require('./release')
 
 module.exports = function run (pkg) {
   program
@@ -117,6 +118,28 @@ module.exports = function run (pkg) {
     .command('logout')
     .description('logout of the qubit platform')
     .action(logout)
+
+  program
+    .command('release')
+    .arguments('[version]')
+    .usage(`
+
+  xp release <version>
+
+  Examples:
+
+  $ xp release
+  $ xp release patch
+  $ xp release 1.0.2
+  $ xp release 1.0.2-beta.3 --tag=beta`)
+    .description('release a new version of your package')
+    .option('--any-branch', 'allow publishing from any branch', false)
+    .option('--no-cleanup', 'Skips cleanup of node_modules', false)
+    .option('--yolo', 'Skips cleanup and testing', false)
+    .option('--no-publish', 'Skips publishing', false)
+    .option('--tag', 'Publish under a given dist-tag', false)
+    .option('--no-yarn', `Don't use Yarn`, false)
+    .action(release)
 
   program
     .usage(`[options] <cmd>`)
