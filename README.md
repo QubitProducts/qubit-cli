@@ -1,4 +1,5 @@
-# ![extension icon](./chrome-extension/icons/on48.png) QUBIT-CLI
+# ![extension icon](./chrome-extension/icons/on48.png)
+## QUBIT-CLI
 
 A client to facilitate local development of experiences for the qubit platform
 
@@ -46,7 +47,7 @@ then drag the chrome-extension folder into the chrome extensions pane
 
 ```
 qubit pull example
-qubit --watch
+qubit
 ```
 Now open chrome and turn on qubit by clicking on the extension icon ![extension icon](./chrome-extension/icons/off16.png). You should see the background of the page turn yellow! Change the css in varaition.css, and the preview should update on the fly!
 
@@ -71,19 +72,7 @@ qubit pull
 qubit push
 ```
 
-qubit-cli warns you if there are remote changes before applying a push
-
-If so, you have two options:
-
-- overwrite local:
-```
-qubit pull
-```
-
-- overwrite platform:
-```
-qubit push --force
-```
+qubit-cli warns you if there have been any remote changes so that you have the opportunity to `qubit pull` them down. Alternatively you can `qubit push --force`
 
 ## To publish an experience:
 ```
