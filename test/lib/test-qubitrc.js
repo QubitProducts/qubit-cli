@@ -4,7 +4,7 @@ const qubitrc = require('../../src/lib/qubitrc')
 const exists = require('../../src/lib/exists')
 const { QUBITRC } = require('../../src/lib/constants')
 
-describe.only('qubitrc', function () {
+describe('qubitrc', function () {
   beforeEach(async () => {
     try {
       await fs.move(QUBITRC, QUBITRC + '.bak')
