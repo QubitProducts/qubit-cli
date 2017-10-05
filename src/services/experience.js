@@ -39,8 +39,8 @@ function status (propertyId, experienceId) {
   return fetch.get(`/api/p/${propertyId}/experiments/${experienceId}/status`)
 }
 
-function duplicate (propertyId, options) {
-  return fetch.post(`/api/p/${propertyId}/experiments/duplicate`, options)
+function duplicate (experienceId, options) {
+  return fetch.post(`/api/experiences/${experienceId}/duplicate`, options)
 }
 
 function getCode (experience) {

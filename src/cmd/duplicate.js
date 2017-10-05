@@ -75,8 +75,8 @@ async function duplicateExperience (propertyId, experienceId) {
   const targetPropertyId = await suggest.property('Select a property to duplciate the experience to')
   const name = await input.text('What do you want to call this experience?', { default: `${experience.name} (copy)` })
   const previewUrl = _.get(experience, 'recent_iterations.draft.url')
-  const duplicateOptions = { id: experienceId, name, previewUrl, targetPropertyId }
-  const duplicatedExperience = await experienceService.duplicate(propertyId, duplicateOptions)
+  const duplicateOptions = { id: experienceId, name, preview_url: previewUrl, target_property_id: targetPropertyId }
+  const duplicatedExperience = await experienceService.duplicate(experienceId, duplicateOptions)
 
   if (duplicatedExperience) {
     log(chalk.green('Experience successfully duplicated'))
