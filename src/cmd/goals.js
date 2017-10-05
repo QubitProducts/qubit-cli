@@ -1,7 +1,6 @@
 const input = require('input')
 const chalk = require('chalk')
 const getPkg = require('../lib/get-pkg')
-const experienceService = require('../services/experience')
 const goalService = require('../services/goal')
 const goalsHelper = require('../lib/goals')
 const log = require('../lib/log')
@@ -11,9 +10,7 @@ module.exports = async function goals (cmd) {
     const pkg = await getPkg()
     if (!pkg.meta) return log(chalk.red('Navigate to an experience directory and try again'))
 
-    const { propertyId, experienceId } = pkg.meta
-    const experience = await experienceService.get(propertyId, experienceId)
-    const iterationId = experience.recent_iterations.draft.id
+    const { propertyId, experienceId, iterationId } = pkg.meta
     const meta = { propertyId, experienceId, iterationId }
     const goals = await goalService.get(meta)
 

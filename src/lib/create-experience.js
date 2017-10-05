@@ -13,7 +13,7 @@ module.exports = async function createExperience (CWD, propertyId, name, control
   if (!experience.id) return log(`I'm afraid we could not create an experience at this time`)
   log(chalk.yellow('Creating experience'))
 
-  const files = await codeService.get(propertyId, experience.id)
+  const files = await codeService.get(propertyId, experience.id, experience.last_iteration_id)
   const filename = experienceFilename(experience)
   const dest = path.join(CWD, filename)
 

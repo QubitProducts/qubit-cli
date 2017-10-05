@@ -1,10 +1,10 @@
 const _ = require('lodash')
 const {getFilename} = require('./variation')
 
-function getCode (experience, variations) {
+function getCode (experience, iteration, variations) {
   const files = {}
   const experienceMeta = experience.meta ? JSON.parse(experience.meta) : {}
-  const pkgJSON = _.get(experience, 'recent_iterations.draft.package_json') || '{}'
+  const pkgJSON = iteration.package_json || '{}'
   files['package.json'] = JSON.stringify(Object.assign({
     name: `qubit-experience-${experience.id}`,
     version: '1.0.0',
@@ -14,9 +14,9 @@ function getCode (experience, variations) {
       name: experience.name,
       propertyId: experience.property_id,
       experienceId: experience.id,
-      iterationId: _.get(experience, 'recent_iterations.draft.id'),
-      previewUrl: _.get(experience, 'recent_iterations.draft.url'),
-      remoteUpdatedAt: normalizeDate(_.get(experience, 'recent_iterations.draft.updated_at')),
+      iterationId: iteration.id,
+      previewUrl: iteration.url,
+      remoteUpdatedAt: normalizeDate(iteration.updated_at),
       variations: variations.reduce((memo, variation) => {
         memo[getFilename(variation)] = {
           variationId: variation.id,
@@ -26,8 +26,8 @@ function getCode (experience, variations) {
         }
         return memo
       }, {}),
-      templateData: _.get(experience, 'recent_iterations.draft.template_data'),
-      solutionOptions: _.get(experience, 'recent_iterations.draft.solution_options'),
+      templateData: iteration.template_data,
+      solutionOptions: iteration.solution_options,
       visitor: {},
       also: [],
       templates: _.get(experienceMeta, 'xp.templates') || []
@@ -42,14 +42,14 @@ function normalizeDate (str) {
   return date
 }
 
-function setCode (experience, files) {
-  experience = _.cloneDeep(experience)
+function setCode (experience, iteration, files) {
   const pkg = JSON.parse(files['package.json'])
+  experience = _.cloneDeep(experience)
   experience.name = _.get(pkg, 'meta.name')
-  _.set(experience, 'recent_iterations.draft.url', _.get(pkg, 'meta.previewUrl'))
-  delete pkg.meta
-  _.set(experience, 'recent_iterations.draft.package_json', JSON.stringify(pkg, null, 2))
-  return experience
+  iteration = _.cloneDeep(iteration)
+  iteration.url = _.get(pkg, 'meta.previewUrl')
+  iteration.package_json = JSON.stringify(_.omit(pkg, 'meta'), null, 2)
+  return { experience, iteration }
 }
 
 module.exports = { getCode, setCode }

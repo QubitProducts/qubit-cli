@@ -3,23 +3,28 @@ const { expect } = require('chai')
 const sinon = require('sinon')
 const codeService = require('../../src/services/code')
 const experienceService = require('../../src/services/experience')
+const iterationService = require('../../src/services/iteration')
 const variationService = require('../../src/services/variation')
 const experienceFixture = require('../fixtures//experience.json')
 const variationsFixture = require('../fixtures//variations.json')
 const filesFixture = require('../fixtures//files')
 
 describe('codeService', function () {
-  let sandbox, propertyId, experienceId, experience, variations, files
+  let sandbox, propertyId, experienceId, iterationId, experience, iteration, variations, files
 
   beforeEach(() => {
     propertyId = 123
     experienceId = 456
+    iterationId = 101112
     experience = _.cloneDeep(experienceFixture)
+    iteration = _.cloneDeep(experienceFixture.recent_iterations.draft)
     variations = _.cloneDeep(variationsFixture)
     files = _.cloneDeep(filesFixture)
     sandbox = sinon.sandbox.create()
     sandbox.stub(experienceService, 'get').returns(Promise.resolve(experience))
     sandbox.stub(experienceService, 'set').returns(Promise.resolve())
+    sandbox.stub(iterationService, 'get').returns(Promise.resolve(iteration))
+    sandbox.stub(iterationService, 'set').returns(Promise.resolve())
     sandbox.stub(variationService, 'getAll').returns(Promise.resolve(variations))
     sandbox.stub(variationService, 'set').returns(Promise.resolve())
   })
@@ -28,7 +33,7 @@ describe('codeService', function () {
 
   describe('get', function () {
     it('should fetch experience, variations and translate to a files object', async function () {
-      let result = await codeService.get(propertyId, experienceId)
+      let result = await codeService.get(propertyId, experienceId, iterationId)
       expect(_.omit(result, 'package.json')).to.eql(_.omit(files, ['package.json']))
       expect(JSON.parse(result['package.json'])).to.eql(JSON.parse(files['package.json']))
     })
@@ -42,18 +47,23 @@ describe('codeService', function () {
         _.set(pkg, 'meta.name', pkg.meta.name + 1)
         return JSON.stringify(pkg, null, 2)
       })
-      await codeService.set(propertyId, experienceId, files)
+      await codeService.set(propertyId, experienceId, iterationId, files)
       expect(experienceService.set.calledOnce).to.eql(true)
       experience.name += 1
-      _.set(experience, 'recent_iterations.draft.global_code', files['global.js'])
-      _.set(experience, 'recent_iterations.draft.activation_rules.0.value', files['triggers.js'])
-      let pkg = JSON.parse(files['package.json'])
-      delete pkg.meta
-      _.set(experience, 'recent_iterations.draft.package_json', JSON.stringify(pkg, null, 2))
-      let [actualPropertyId, actualExperienceId, actualExperience] = experienceService.set.getCall(0).args
-      expect(actualPropertyId).to.eql(propertyId)
+      let [actualExperienceId, actualExperience] = experienceService.set.getCall(0).args
       expect(actualExperienceId).to.eql(experienceId)
       expect(_.omit(actualExperience, 'meta')).to.eql(experience)
+
+      iteration.global_code = files['global.js']
+      _.set(iteration, 'activation_rules.0.value', files['triggers.js'])
+      let pkg = JSON.parse(files['package.json'])
+      delete pkg.meta
+      iteration.package_json = JSON.stringify(pkg, null, 2)
+      expect(iterationService.set.callCount).to.eql(1)
+      const [actualIterationId, actualIteration] = iterationService.set.getCall(0).args
+      expect(actualIterationId).to.eql(iterationId)
+      expect(actualIteration).to.eql(iteration)
+
       let meta = JSON.parse(actualExperience.meta)
       expect(_.omit(meta, ['xp.lastPush', 'xp.version'])).to.eql({
         xp: {
@@ -62,6 +72,7 @@ describe('codeService', function () {
         }
       })
       expect(meta.xp).to.contain.keys('version', 'lastPush')
+
       expect(variationService.set.callCount).to.eql(2)
       _.each(variations, (variation, i) => {
         if (variation.is_control) return

@@ -5,9 +5,9 @@ let opn = require('opn')
 module.exports = async function open (options) {
   const pkg = await getPkg()
   pkg.meta = pkg.meta || {}
-  const { propertyId, experienceId } = pkg.meta
+  const { propertyId, experienceId, iterationId } = pkg.meta
 
-  if (!propertyId || !experienceId) {
+  if (!propertyId || !experienceId || !iterationId) {
     log(`sorry! this feature assumes you have already setup an experience locally`)
     return log(`it uses the package.json metadata to open the overview page for an existing experience`)
   }

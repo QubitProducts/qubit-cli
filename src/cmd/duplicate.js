@@ -8,6 +8,7 @@ const scaffold = require('../lib/scaffold')
 const mergePkg = require('../lib/merge-pkg')
 const cloneExperience = require('../lib/clone-experience')
 const variationService = require('../services/variation')
+const iterationService = require('../services/iteration')
 const codeService = require('../services/code')
 const experienceService = require('../services/experience')
 const cwd = process.cwd()
@@ -21,8 +22,7 @@ module.exports = async function duplicate () {
 
     if (propertyId && experienceId) {
       // if the user is in an xp experience folder, allow them to duplicate a variation
-      const experience = await experienceService.get(propertyId, experienceId)
-      const variations = await variationService.getAll(experience.recent_iterations.draft.id)
+      const variations = await variationService.getAll(iterationId)
       const nextVariationNumber = Object.keys(variations).length
       const variationChoices = getVariationChoices(variations)
 
@@ -40,7 +40,7 @@ module.exports = async function duplicate () {
       propertyId = await suggest.property('Select a property to duplicate from')
       experienceId = await suggest.experience(propertyId)
 
-      await duplicateExperience(propertyId, experienceId)
+      await duplicateExperience(propertyId, experienceId, iterationId)
     }
   } catch (err) {
     log.error(err)
@@ -61,7 +61,7 @@ async function duplicateVariation (propertyId, experienceId, iterationId, variat
 
   const newVariation = await variationService.create(iterationId)
   const fileName = variationService.getFilename(newVariation)
-  let files = _.pick(await codeService.get(propertyId, experienceId), ['package.json', `${fileName}.js`, `${fileName}.css`])
+  let files = _.pick(await codeService.get(propertyId, experienceId, iterationId), ['package.json', `${fileName}.js`, `${fileName}.css`])
 
   // delete pkg.meta.variations[fileName]
   delete _.get(pkg, `meta.variations.${fileName}`)
@@ -70,11 +70,12 @@ async function duplicateVariation (propertyId, experienceId, iterationId, variat
   await scaffold(cwd, files, false, false)
 }
 
-async function duplicateExperience (propertyId, experienceId) {
-  const experience = await experienceService.get(propertyId, experienceId)
+async function duplicateExperience (propertyId, experienceId, iterationId) {
+  const experience = await experienceService.get(experienceId)
+  const iteration = await iterationService.get(iterationId)
   const targetPropertyId = await suggest.property('Select a property to duplciate the experience to')
   const name = await input.text('What do you want to call this experience?', { default: `${experience.name} (copy)` })
-  const previewUrl = _.get(experience, 'recent_iterations.draft.url')
+  const previewUrl = iteration.url
   const duplicateOptions = { id: experienceId, name, preview_url: previewUrl, target_property_id: targetPropertyId }
   const duplicatedExperience = await experienceService.duplicate(experienceId, duplicateOptions)
 

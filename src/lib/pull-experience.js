@@ -7,7 +7,7 @@ const mergePkg = require('../lib/merge-pkg')
 
 module.exports = async function pullExperience (CWD, propertyId, experienceId) {
   log(chalk.yellow('Pulling experience'))
-  const { files } = await down(propertyId, experienceId)
+  const { files } = await down(experienceId)
   const pkg = await getPkg()
   if (pkg.meta) files['package.json'] = JSON.stringify(mergePkg(pkg, files['package.json']), null, 2)
   await scaffold(CWD, files, false, true)
