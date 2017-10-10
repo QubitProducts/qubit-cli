@@ -7,12 +7,21 @@ const chalk = require('chalk')
 const webpackConf = require('../../../webpack.conf')
 const pickVariation = require('../../lib/pick-variation')
 const log = require('../../lib/log')
+const installQubitDeps = require('../../lib/install-qubit-deps')
 const createApp = require('../app')
 const cors = require('cors')
 let CWD = process.cwd()
 
 module.exports = async function serve (options) {
   const app = await createApp()
+
+  try {
+    let deps = require('qubt-cli-deps')
+    if (!deps.hasQubitDeps) throw new Error('oh noes!')
+  } catch (err) {
+    await installQubitDeps()
+  }
+
   app.use(cors())
   options.verbose = options.verbose || false
 
@@ -43,7 +52,7 @@ module.exports = async function serve (options) {
   }
   const emitter = createEmitter()
   const compiler = webpack(Object.assign(createWebpackConfig(options)), (plumbus, stats) => {
-    if (stats.hasErrors()) log(stats.toString('errors-only').trim())
+    if (stats.hasErrors() && !options.verbose) log(stats.toString('errors-only').trim())
   })
   compiler.plugin('done', (data) => emitter.emit('rebuild', data))
   app.use(webpackDevMiddleware(compiler, Object.assign({
