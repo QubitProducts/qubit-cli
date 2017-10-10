@@ -21,6 +21,38 @@ const release = require('./release')
 
 module.exports = function run (pkg) {
   program
+    .command('login')
+    .description('login to the qubit platform')
+    .action(login)
+
+  program
+    .command('logout')
+    .description('logout of the qubit platform')
+    .action(logout)
+
+  program
+    .command('release')
+    .arguments('[version]')
+    .usage(`
+
+  xp release <version>
+
+  Examples:
+
+  $ xp release
+  $ xp release patch
+  $ xp release 1.0.2
+  $ xp release 1.0.2-beta.3 --tag=beta`)
+    .description('release a new version of your package')
+    .option('--any-branch', 'allow publishing from any branch', false)
+    .option('--no-cleanup', 'Skips cleanup of node_modules', false)
+    .option('--yolo', 'Skips cleanup and testing', false)
+    .option('--no-publish', 'Skips publishing', false)
+    .option('--tag', 'Publish under a given dist-tag', false)
+    .option('--no-yarn', `Don't use Yarn`, false)
+    .action(release)
+
+  program
     .command('create [propertyId]')
     .usage(chalk.gray(`
     Create using propertyId:
@@ -67,8 +99,8 @@ module.exports = function run (pkg) {
     .action(templatize)
 
   program
-    .command('pull [templateName]')
-    .description(`pull remote changes or template into your local experience (arguments optional)`)
+    .command('pull [name]')
+    .description(`pull remote changes or a template into your local experience (arguments optional)`)
     .action(pull)
 
   program
@@ -118,57 +150,20 @@ module.exports = function run (pkg) {
 
   program
     .command('open')
-    .option('--overview', 'open the overview page on app.qubit.com for your local experience')
-    .option('--settings', 'open the settings page on app.qubit.com for your local experience')
-    .option('--editor', 'open the editor page on app.qubit.com for your local experience')
-    .description('open the overview page on app.qubit.com for your local experience')
+    .arguments('[page]')
+    .description('open the overview, settings or editor page for the current experience')
     .action(open)
 
   program
     .command('link')
-    .option('--overview', 'logs and copies the overview link for app.qubit.com')
-    .option('--settings', 'logs and copies the settings link for app.qubit.com')
-    .option('--editor', 'logs and copies the editor link for app.qubit.com')
-    .option('--preview', 'logs and copies the preview link(s)')
-    .description('log and copy shareable links for your experience')
+    .arguments('[page]')
+    .description('get a link to the overview, settings, editor or preview page for the current experience')
     .action(link, log.error)
 
   program
     .command('extension')
     .description('open folder containing the qubit-cli chrome extension, drag into chrome extensions pane to install')
     .action(extension)
-
-  program
-    .command('login')
-    .description('login to the qubit platform')
-    .action(login)
-
-  program
-    .command('logout')
-    .description('logout of the qubit platform')
-    .action(logout)
-
-  program
-    .command('release')
-    .arguments('[version]')
-    .usage(`
-
-  xp release <version>
-
-  Examples:
-
-  $ xp release
-  $ xp release patch
-  $ xp release 1.0.2
-  $ xp release 1.0.2-beta.3 --tag=beta`)
-    .description('release a new version of your package')
-    .option('--any-branch', 'allow publishing from any branch', false)
-    .option('--no-cleanup', 'Skips cleanup of node_modules', false)
-    .option('--yolo', 'Skips cleanup and testing', false)
-    .option('--no-publish', 'Skips publishing', false)
-    .option('--tag', 'Publish under a given dist-tag', false)
-    .option('--no-yarn', `Don't use Yarn`, false)
-    .action(release)
 
   program
     .usage(`[options] <cmd>`)

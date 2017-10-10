@@ -5,29 +5,31 @@ const getPkg = require('../lib/get-pkg')
 const log = require('../lib/log')
 const getPreviewLinks = require('../lib/preview-links')
 
-module.exports = async function previewLink (options) {
+module.exports = async function links (page, options) {
   const pkg = await getPkg()
+  if (!_.get(pkg, 'meta')) return required()
   const { propertyId, experienceId } = pkg.meta
 
-  if (!_.get(pkg, 'meta.variations') || !_.get(pkg, 'meta.previewUrl') || !_.get(pkg, 'meta.propertyId')) {
-    log(`sorry! this feature assumes you have already setup an experience locally`)
-    return log(`it uses the package.json metadata to construct the preview link for an existing experience`)
+  if (!propertyId || !experienceId) return required()
+
+  const experienceUrl = `https://app.qubit.com/p/${propertyId}/experiences/${experienceId}`
+
+  if (/^editor|settings|overview$/.test(page)) {
+    return link(`${experienceUrl}/${page === 'overview' ? '' : page}`)
   }
 
-  if (options.overview || options.settings || options.editor) {
-    let route = ''
-
-    if (options.editor) route = 'editor'
-    if (options.settings) route = 'settings'
-
-    const appURL = `https://app.qubit.com/p/${propertyId}/experiences/${experienceId}/${route}`
-
-    ncp.copy(appURL, () => log(chalk.green(`App ${route || 'overview'} link copied to clipboard`)))
-    log(appURL)
-  } else {
+  if (page === 'preview') {
+    if (!_.get(pkg, 'meta.variations') || !_.get(pkg, 'meta.previewUrl')) return required()
     const links = await getPreviewLinks(pkg.meta)
+    link(links.join('\n'))
+  }
 
-    ncp.copy(links.join('\n'), () => log(chalk.green('Preview link(s) copied to clipboard')))
-    links.map(link => log(link))
+  function link (url) {
+    ncp.copy(url, () => log(chalk.gray(`copied to clipboard`)))
+    log(url)
+  }
+
+  function required () {
+    return log(chalk.red(`You must be inside an experience folder in order to use this feature!`))
   }
 }
