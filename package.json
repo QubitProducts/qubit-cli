@@ -14,9 +14,7 @@
     "dist": "docs"
   },
   "scripts": {
-    "test": "make test",
-    "build-docs": "docpress b",
-    "serve-docs": "docpress s"
+    "test": "make test"
   },
   "author": {
     "name": "Alan Clarke",
