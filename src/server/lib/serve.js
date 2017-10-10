@@ -42,7 +42,9 @@ module.exports = async function serve (options) {
     warn: options.verbose
   }
   const emitter = createEmitter()
-  const compiler = webpack(Object.assign(createWebpackConfig(options)))
+  const compiler = webpack(Object.assign(createWebpackConfig(options)), (plumbus, stats) => {
+    if (stats.hasErrors()) log(stats.toString('errors-only').trim())
+  })
   compiler.plugin('done', (data) => emitter.emit('rebuild', data))
   app.use(webpackDevMiddleware(compiler, Object.assign({
     publicPath: webpackConf.output.publicPath
