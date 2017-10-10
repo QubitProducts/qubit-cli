@@ -2,37 +2,48 @@ const _ = require('lodash')
 const execa = require('execa').shell
 const axios = require('axios')
 const config = require('../../config')
-const qubtrc = require('./qubitrc')
+const qubitrc = require('./qubitrc')
 const log = require('./log')
 const getToken = require('./get-token')
+const tokenHasExpired = require('./token-has-expired')
+const { ID_TOKEN, APP_TOKEN, REGISTRY_TOKEN, REGISTRY_SCOPES } = require('./constants')
 
 module.exports = async function setup (idToken) {
-  await updateQUBITRC(idToken)
-  await updateNPMRC(idToken)
+  await Promise.all([
+    updateQUBITRC(idToken),
+    updateNPMRC(idToken)
+  ])
   return log('login successful!')
 }
 
 async function updateQUBITRC (idToken) {
-  await qubtrc.set('ID_TOKEN', idToken)
-  await qubtrc.rm('BEARER_TOKEN', idToken)
+  await qubitrc.unset(APP_TOKEN)
+  await qubitrc.set(ID_TOKEN, idToken)
 }
 
 async function updateNPMRC (idToken) {
-  let {accessToken, scopes} = await getRegistryToken(idToken)
+  let { accessToken, scopes } = await getRegistryToken(idToken)
   await saveRegistryToken(accessToken, scopes)
 }
 
 async function getRegistryToken (idToken) {
-  let auth0Token = await getToken(idToken, config.auth.registryClientId)
+  let registryToken = await qubitrc.get(REGISTRY_TOKEN)
+  let registryScopes = await qubitrc.get(REGISTRY_SCOPES)
+  if (registryToken && !tokenHasExpired(registryToken)) {
+    return { accessToken: registryToken, scopes: registryScopes }
+  }
+  registryToken = await getToken(idToken, config.auth.registryClientId)
   return (await axios.post(config.services.registry + '/-/token', {}, {
-    headers: { 'Authorization': `Bearer ${auth0Token}` }
+    headers: { 'Authorization': `Bearer ${registryToken}` }
   })).data
 }
 
-async function saveRegistryToken (accessToken, scopes) {
+async function saveRegistryToken (registryToken, scopes) {
+  scopes = _.uniq(scopes.concat(['@qubit', '@qutics']))
+  await qubitrc.set(REGISTRY_TOKEN, registryToken)
+  await qubitrc.set(REGISTRY_SCOPES, scopes)
   const authKey = config.services.registry.replace(/^https?:/, '')
   // always ensure that @qubit and @qutics scopes are configured
-  scopes = _.uniq(scopes.concat(['@qubit', '@qutics']))
   for (let scope of scopes) await execa(`npm config set ${scope}:registry ${config.services.registry}/`)
-  await execa(`npm config set ${authKey}/:_authToken ${accessToken}`)
+  await execa(`npm config set ${authKey}/:_authToken ${registryToken}`)
 }

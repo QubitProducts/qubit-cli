@@ -17,5 +17,25 @@ const KEY_OPTIONS = {
 }
 const QUBITRC = `${os.homedir()}/.qubitrc`
 const NPMRC = `${os.homedir()}/.npmrc`
+const ID_TOKEN = 'ID_TOKEN'
+const APP_TOKEN = 'APP_TOKEN'
+const REGISTRY_TOKEN = 'REGISTRY_TOKEN'
+const REGISTRY_SCOPES = 'REGISTRY_SCOPES'
 
-module.exports = { HOME, CERT_DIR, CERT_PATH, KEY_PATH, KEY_OPTIONS, EXECUTION, CSS, GLOBAL, TRIGGERS, QUBITRC, NPMRC }
+module.exports = {
+  HOME,
+  CERT_DIR,
+  CERT_PATH,
+  KEY_PATH,
+  KEY_OPTIONS,
+  EXECUTION,
+  CSS,
+  GLOBAL,
+  TRIGGERS,
+  QUBITRC,
+  NPMRC,
+  ID_TOKEN,
+  APP_TOKEN,
+  REGISTRY_TOKEN,
+  REGISTRY_SCOPES
+}

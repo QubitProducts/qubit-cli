@@ -4,6 +4,7 @@ const qubitrc = require('./qubitrc')
 const log = require('./log')
 const ensureToken = require('./ensure-token')
 const login = require('../server/lib/login')
+const { APP_TOKEN, ID_TOKEN } = require('./constants')
 const NOT_FOUND = new Error('NOT_FOUND, the experience you requested does not exist')
 const OUT_OF_DATE = new Error('OUT_OF_DATE, your local copy of the experience is out of date')
 
@@ -16,12 +17,12 @@ module.exports = {
 function fetchWithAuth (method) {
   return async function fetch (path, data) {
     let headers, token
-    const auths = await qubitrc.get()
+    const idToken = await qubitrc.get(ID_TOKEN)
 
-    if (auths.ID_TOKEN) {
+    if (idToken) {
       try {
-        token = await ensureToken(auths.ID_TOKEN, config.auth.apertureClientId)
-        await qubitrc.set('BEARER_TOKEN', token)
+        token = await ensureToken(idToken, config.auth.apertureClientId)
+        await qubitrc.set(APP_TOKEN, token)
         headers = { 'Authorization': `Bearer ${token}` }
       } catch (err) {
         log('Could not authenticate, reinitiating login flow')

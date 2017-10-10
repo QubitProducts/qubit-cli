@@ -1,15 +1,16 @@
-const config = require('../../config')
 const axios = require('axios')
-const jwt = require('jsonwebtoken')
+const config = require('../../config')
+const tokenHasExpired = require('./token-has-expired')
 const qubitrc = require('./qubitrc')
+const {APP_TOKEN} = require('./constants')
 
 module.exports = async function getToken (idToken, targetClientId, options = {}) {
   if (!idToken) return false
-  let currentToken = (await qubitrc.get()).BEARER_TOKEN
-  if (!currentToken || isExpired(currentToken) || options.force) {
-    currentToken = await fetchToken(idToken, targetClientId)
+  let appToken = await qubitrc.get(APP_TOKEN)
+  if (!appToken || tokenHasExpired(appToken) || options.force) {
+    appToken = await fetchToken(idToken, targetClientId)
   }
-  return currentToken
+  return appToken
 }
 
 async function fetchToken (idToken, targetClientId) {
@@ -22,10 +23,4 @@ async function fetchToken (idToken, targetClientId) {
     scope: 'openid'
   })
   return response.data.id_token
-}
-
-function isExpired (token) {
-  if (!token) return true
-  let buffer = 10
-  return jwt.decode(token).exp < Math.round(Date.now() / 1000 + buffer)
 }

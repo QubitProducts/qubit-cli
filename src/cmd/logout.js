@@ -1,10 +1,9 @@
-const fs = require('fs-extra')
 const log = require('../lib/log')
-const { NPMRC } = require('../lib/constants')
+const qubitrc = require('../lib/qubitrc')
 
 module.exports = async function logoutCmd (id) {
   try {
-    await fs.remove(NPMRC)
+    await qubitrc.unsetEnv()
     log('you are now logged out!')
   } catch (err) {
     log.error(err)

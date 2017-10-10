@@ -9,7 +9,7 @@ const createApp = require('../app')
 const setup = require('../../lib/setup')
 
 module.exports = async function login () {
-  let idToken = (await qubtrc.get()).ID_TOKEN
+  let idToken = await qubtrc.get('ID_TOKEN')
 
   // try to login with existing token if it exists
   if (idToken) {
