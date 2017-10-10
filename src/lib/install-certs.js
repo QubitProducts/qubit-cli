@@ -2,11 +2,11 @@ const fs = require('fs-extra')
 const pem = require('pem')
 const childProcess = require('child_process')
 const log = require('./log')
-const {CERT_DIR, CERT_PATH, KEY_PATH, KEY_OPTIONS} = require('./constants')
+const { CERT_DIR, CERT_PATH, KEY_PATH, KEY_OPTIONS } = require('./constants')
 
 module.exports = function setup () {
   log("We'll now generate a TSL certificate and install it into your OS as a trusted certificate")
-  log("This is to make sure that browsers don't block xp from https sites")
+  log("This is to make sure that browsers don't block qubit-cli from serving to https sites")
   log('You will be asked for your sudo password')
   log("If you'd like to inspect/remove the installed certificate, you can find it in your keychain")
 
