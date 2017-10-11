@@ -1,4 +1,4 @@
-.PHONY: test bootstrap lint
+.PHONY: test bootstrap lint shrinkwrap
 
 BIN = node_modules/.bin
 
@@ -12,3 +12,8 @@ test:
 
 lint:
 	$(BIN)/standard
+
+shrinkwrap:
+	rm -rf node_modules
+	yarn
+	npm shrinkwrap
