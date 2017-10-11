@@ -1,4 +1,4 @@
 const driftwood = require('driftwood')
 const log = driftwood('Qubit-CLI')
-log.enable()
+log.enable({ '*': 'trace' })
 module.exports = log

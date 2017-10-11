@@ -2,6 +2,7 @@ const axios = require('axios')
 const ms = require('ms')
 const config = require('../../config')
 const tokenHasExpired = require('./token-has-expired')
+const log = require('./log')
 const qubitrc = require('./qubitrc')
 const {APP_TOKEN} = require('./constants')
 
@@ -9,6 +10,7 @@ module.exports = async function getToken (idToken, targetClientId, options = {})
   if (!idToken) return false
   let appToken = await qubitrc.get(APP_TOKEN)
   if (tokenHasExpired(appToken, Date.now(), ms('5 minutes')) || options.force) {
+    if (appToken) log.warn('Your app token has expired, fetching a new one')
     return fetchToken(idToken, targetClientId)
   }
   return appToken
