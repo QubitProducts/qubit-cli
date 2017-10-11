@@ -15,7 +15,7 @@ function mockJolt () {
         if (jolt) {
           jolt[method].apply(jolt, arguments)
         } else {
-          log.warn('jolt was not found')
+          log.warn('Jolt was not found')
         }
       })
     }

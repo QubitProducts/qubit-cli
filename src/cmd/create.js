@@ -10,7 +10,7 @@ module.exports = async function create (pid) {
   try {
     const propertyId = await getPropertyId(pid)
     if (!propertyId) {
-      log(`aborted`)
+      log.info(`Aborted`)
       return
     }
     const name = clean(await input.text(

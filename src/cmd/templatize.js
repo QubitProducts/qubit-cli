@@ -37,7 +37,7 @@ module.exports = async function templatize () {
 
   delete files['package.json']
 
-  log(`...creating template at ${templateDir}`)
+  log.info(`...creating template at ${templateDir}`)
 
   await scaffold(path.join(templateDir, 'template'), files, false)
 
@@ -47,7 +47,7 @@ module.exports = async function templatize () {
 
   await execa('npm', ['link'], { cwd: templateDir })
 
-  log(`Your template is npm linked and ready to use!`)
+  log.info(`Your template is npm linked and ready to use!`)
 }
 
 function addTemplateVariables (files, pkg) {

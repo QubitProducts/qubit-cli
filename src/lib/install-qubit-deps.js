@@ -4,9 +4,9 @@ const login = require('../server/lib/login')
 const log = require('./log')
 
 module.exports = async function installQubitDeps () {
-  log(`setting up qubit-cli, this may take a few mins`)
+  log.info(`Setting up qubit-cli, this may take a few mins`)
   await login()
-  log('installing some additional dependencies...')
+  log.info('Installing some additional dependencies...')
   try {
     await execa('yarn', ['add', './deps', '--production', '--non-interactive', '--no-lockfile', '--no-progress'], {
       cwd: path.resolve(__dirname, '../../')
@@ -16,5 +16,5 @@ module.exports = async function installQubitDeps () {
       cwd: path.resolve(__dirname, '../../')
     })
   }
-  log('addiitional installation steps complete!')
+  log.info('Addiitional installation steps complete!')
 }

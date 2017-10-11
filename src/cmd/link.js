@@ -1,6 +1,5 @@
 const _ = require('lodash')
 const ncp = require('copy-paste')
-const chalk = require('chalk')
 const getPkg = require('../lib/get-pkg')
 const log = require('../lib/log')
 const getPreviewLinks = require('../lib/preview-links')
@@ -25,11 +24,11 @@ module.exports = async function links (page, options) {
   }
 
   function link (url) {
-    ncp.copy(url, () => log(chalk.gray(`copied to clipboard`)))
-    log(url)
+    ncp.copy(url, () => log.info(`Copied to clipboard`))
+    log.info(url)
   }
 
   function required () {
-    return log(chalk.red(`You must be inside an experience folder in order to use this feature!`))
+    return log.warn(`You must be inside an experience folder in order to use this feature!`)
   }
 }

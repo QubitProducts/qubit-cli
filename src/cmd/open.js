@@ -1,5 +1,4 @@
 const _ = require('lodash')
-const chalk = require('chalk')
 const getPkg = require('../lib/get-pkg')
 const log = require('../lib/log')
 let opn = require('opn')
@@ -18,6 +17,6 @@ module.exports = async function previewLink (page, options) {
   }
 
   function required () {
-    return log(chalk.red(`You must be inside an experience folder in order to use this feature!`))
+    return log.warn(`You must be inside an experience folder in order to use this feature!`)
   }
 }

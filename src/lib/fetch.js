@@ -25,7 +25,7 @@ function fetchWithAuth (method) {
         await qubitrc.set(APP_TOKEN, token)
         headers = { 'Authorization': `Bearer ${token}` }
       } catch (err) {
-        log('Could not authenticate, reinitiating login flow')
+        log.info('Could not authenticate, reinitiating login flow')
       }
     }
 

@@ -14,7 +14,7 @@ module.exports = async function setup (idToken) {
     updateQUBITRC(idToken),
     updateNPMRC(idToken)
   ])
-  return log('login successful!')
+  return log.info('Login successful!')
 }
 
 async function updateQUBITRC (idToken) {

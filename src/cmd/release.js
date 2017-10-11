@@ -30,6 +30,6 @@ module.exports = async function release (version, { anyBranch, cleanup, yolo, pu
   }
 
   function logResult (pkg) {
-    log(`\n ${pkg.name} ${pkg.version} published 🎉`)
+    log.info(`\n ${pkg.name} ${pkg.version} published 🎉`)
   }
 }

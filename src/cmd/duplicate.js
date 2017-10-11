@@ -1,5 +1,4 @@
 const _ = require('lodash')
-const chalk = require('chalk')
 const input = require('input')
 const log = require('../lib/log')
 const suggest = require('../lib/suggest')
@@ -79,12 +78,12 @@ async function duplicateExperience (propertyId, experienceId) {
   const duplicatedExperience = await experienceService.duplicate(propertyId, duplicateOptions)
 
   if (duplicatedExperience) {
-    log(chalk.green('Experience successfully duplicated'))
+    log.info('Experience successfully duplicated')
     const shouldClone = await input.confirm('Do you want to clone the duplicated experience into the current directory?')
 
     if (shouldClone) await cloneExperience(cwd, targetPropertyId, duplicatedExperience.id)
   } else {
-    log(chalk.red('Experience could not be duplicated'))
+    log.warn('Experience could not be duplicated')
   }
 }
 

@@ -16,7 +16,7 @@ module.exports = async function app () {
     enableDestroy(server)
     server.listen(config.port, (err) => {
       if (err) return reject(err)
-      log(`qubit-CLI listening on port ${config.port}`)
+      log.info(`qubit-CLI listening on port ${config.port}`)
       resolve()
     })
   })

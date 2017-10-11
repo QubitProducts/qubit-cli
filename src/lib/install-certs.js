@@ -5,10 +5,10 @@ const log = require('./log')
 const { CERT_DIR, CERT_PATH, KEY_PATH, KEY_OPTIONS } = require('./constants')
 
 module.exports = function setup () {
-  log("We'll now generate a TSL certificate and install it into your OS as a trusted certificate")
-  log("This is to make sure that browsers don't block qubit-cli from serving to https sites")
-  log('You will be asked for your sudo password')
-  log("If you'd like to inspect/remove the installed certificate, you can find it in your keychain")
+  log.info("We'll now generate a TSL certificate and install it into your OS as a trusted certificate")
+  log.info("This is to make sure that browsers don't block qubit-cli from serving to https sites")
+  log.info('You will be asked for your sudo password')
+  log.info("If you'd like to inspect/remove the installed certificate, you can find it in your keychain")
 
   return fs.mkdirp(CERT_DIR)
     .then(createCerts)
@@ -66,9 +66,8 @@ function installCerts () {
       if (error) {
         return reject(new Error(['Could not install certificate:', stdout, stderr].join('\n\n')))
       }
-      log('All done!')
-      log('The certificate has been created in ' + CERT_DIR)
-      log('and has been added to your system as a trusted certificate.')
+      log.info('All done!')
+      log.info('The certificate has been created in ' + CERT_DIR + 'and has been added to your system as a trusted certificate.')
       resolve()
     })
   })

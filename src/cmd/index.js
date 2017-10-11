@@ -158,7 +158,7 @@ module.exports = function run (pkg) {
     .command('link')
     .arguments('[page]')
     .description('get a link to the overview, settings, editor or preview page for the current experience')
-    .action(link, log.error)
+    .action(link)
 
   program
     .command('extension')

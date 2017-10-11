@@ -27,9 +27,9 @@ module.exports = async function login () {
 
   opn(loginUrl, { wait: false })
 
-  log(`please log in...`)
+  log.info(`Please log in...`)
 
-  log(`opening login url: ${loginUrl}`)
+  log.info(`Opening login url: ${loginUrl}`)
 
   return new Promise((resolve) => {
     app.get('/callback', async (req, res, next) => {

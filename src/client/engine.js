@@ -1,26 +1,26 @@
 const log = require('./log')
 
 module.exports = function experienceEngine (options, globalFn, triggerFn, variationFn, bypassTriggers) {
-  log.info('running global')
+  log.info('Running global')
   globalFn()
 
   if (bypassTriggers) return execute()
-  log.info('running triggers')
+  log.info('Running triggers')
 
   if (triggerFn(options, activate) === true) execute()
 
   function activate (pass) {
     const shouldActivate = pass || typeof pass === 'undefined'
     if (!shouldActivate) {
-      log.info('triggers returned false')
+      log.info('Triggers returned false')
       return
     }
-    log.info('triggers returned true')
+    log.info('Triggers returned true')
     execute()
   }
 
   function execute () {
-    log.info('running variation')
+    log.info('Running variation')
     return variationFn(options)
   }
 }

@@ -26,18 +26,18 @@ module.exports = async function serve (options) {
   options.verbose = options.verbose || false
 
   if (/(triggers|global|.css$)/.test(options.variationFilename)) {
-    log('hint: you should be watching the entry point for your experience, i.e. your variation file!')
+    log.info('Hint: you should be watching the entry point for your experience, i.e. your variation file!')
   }
 
   if (!options.variationFilename) {
     options.variationFilename = await pickVariation(await fs.readdir(CWD))
 
     if (!options.variationFilename) {
-      log(chalk.red('ensure you are within an experience directory and try again'))
+      log.warn('Ensure you are within an experience directory and try again')
       return
     }
 
-    log(`using ${options.variationFilename}`)
+    log.info(`Using ${options.variationFilename}`)
   }
 
   // make .js optional
@@ -52,7 +52,7 @@ module.exports = async function serve (options) {
   }
   const emitter = createEmitter()
   const compiler = webpack(Object.assign(createWebpackConfig(options)), (plumbus, stats) => {
-    if (stats.hasErrors() && !options.verbose) log(stats.toString('errors-only').trim())
+    if (stats.hasErrors() && !options.verbose) log.info(stats.toString('errors-only').trim())
   })
   compiler.plugin('done', (data) => emitter.emit('rebuild', data))
   app.use(webpackDevMiddleware(compiler, Object.assign({
