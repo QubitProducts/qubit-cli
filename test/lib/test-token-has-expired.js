@@ -25,6 +25,6 @@ describe('token-has-expired', function () {
   })
 
   it('should not be expired if it expires in 2 second with a required buffer of 1 second', async function () {
-    expect(tokenHasExpired(token, now - 2000, 1000)).to.eql(true)
+    expect(tokenHasExpired(token, now - 2000, 1000)).to.eql(false)
   })
 })

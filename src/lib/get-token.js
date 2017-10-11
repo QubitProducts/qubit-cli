@@ -8,8 +8,8 @@ const {APP_TOKEN} = require('./constants')
 module.exports = async function getToken (idToken, targetClientId, options = {}) {
   if (!idToken) return false
   let appToken = await qubitrc.get(APP_TOKEN)
-  if (!appToken || tokenHasExpired(appToken, Date.now(), ms('5 minutes')) || options.force) {
-    appToken = await fetchToken(idToken, targetClientId)
+  if (tokenHasExpired(appToken, Date.now(), ms('5 minutes')) || options.force) {
+    return fetchToken(idToken, targetClientId)
   }
   return appToken
 }
