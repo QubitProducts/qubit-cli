@@ -31,7 +31,7 @@ module.exports = async function push (options) {
     let localUpdatedAts = [localExperienceUpdatedAt].concat(localVariantsUpdatedAt)
 
     if (remoteUpdatedAts.join('|') !== localUpdatedAts.join('|')) {
-      log(chalk.yellow('Remote has changed since the last xp interaction!'))
+      log(chalk.yellow('Remote has changed since the last interaction!'))
       await diff(propertyId, experienceId)
       return
     }

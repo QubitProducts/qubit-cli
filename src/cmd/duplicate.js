@@ -20,7 +20,7 @@ module.exports = async function duplicate () {
     let iterationId = _.get(pkg, 'meta.iterationId')
 
     if (propertyId && experienceId) {
-      // if the user is in an xp experience folder, allow them to duplicate a variation
+      // if the user is in an experience folder, allow them to duplicate a variation
       const experience = await experienceService.get(propertyId, experienceId)
       const variations = await variationService.getAll(experience.recent_iterations.draft.id)
       const nextVariationNumber = Object.keys(variations).length
@@ -36,7 +36,7 @@ module.exports = async function duplicate () {
         if (shouldDuplicateVariation) await duplicateVariation(propertyId, experienceId, variationId, nextVariationNumber, pkg)
       }
     } else {
-      // if the user is not in an xp experience folder, allow them to duplicate an experience
+      // if the user is not in an experience folder, allow them to duplicate an experience
       propertyId = await suggest.property('Select a property to duplicate from')
       experienceId = await suggest.experience(propertyId)
 
