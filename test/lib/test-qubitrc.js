@@ -93,7 +93,7 @@ describe('qubitrc', function () {
       process.env.NODE_ENV = NODE_ENV
     })
 
-    it.only(`should unset the variable`, async () => {
+    it(`should unset the variable`, async () => {
       await qubitrc.unsetEnv()
       expect(await qubitrc.get(type)).to.eql(void 0)
       process.env.NODE_ENV = NODE_ENV
