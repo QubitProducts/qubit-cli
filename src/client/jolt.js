@@ -10,14 +10,27 @@ function mockJolt () {
   var fakeJolt = {}
   ;['onEnrichment', 'onceEnrichment', 'onSuccess', 'onceSuccess'].forEach(method => {
     fakeJolt[method] = function () {
+      let replay, dispose, call
       waitUntil(() => qubitThings('jolt')).then(() => {
         let jolt = qubitThings('jolt')
         if (jolt) {
-          jolt[method].apply(jolt, arguments)
+          call = jolt[method].apply(jolt, arguments)
+          if (replay) call.replay()
+          if (dispose) call.dispose()
         } else {
           log.warn('Jolt was not found')
         }
       })
+      return {
+        replay: () => {
+          replay = true
+          if (call) call.replay()
+        },
+        dispose: () => {
+          dispose = true
+          if (call) call.dispose()
+        }
+      }
     }
   })
   Object.defineProperty(fakeJolt, 'events', {

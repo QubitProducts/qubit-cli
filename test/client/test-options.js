@@ -6,6 +6,8 @@ const expect = require('chai').expect
 const pkgFixture = require('../fixtures/pkg.json')
 const variationName = Object.keys(pkgFixture.meta.variations)[0]
 const testData = { test: 1 }
+const METHODS = ['onEnrichment', 'onceEnrichment', 'onSuccess', 'onceSuccess']
+const API = ['on', 'once', 'onEventSent', 'onceEventSent']
 
 describe('transform', function () {
   let pkg
@@ -60,36 +62,62 @@ describe('transform', function () {
 
     it('proxies event methods to jolt', function () {
       setupJolt()
-      for (let method of ['onEnrichment', 'onceEnrichment', 'onSuccess', 'onceSuccess']) {
+      for (let method of METHODS) {
         expect(global.window.__qubit.jolt[method].calledWith(1, 2, 3)).to.eql(false)
       }
-      for (let method of ['on', 'once', 'onEventSent', 'onceEventSent']) {
+      for (let method of API) {
         uv[method](1, 2, 3)
       }
-      for (let method of ['onEnrichment', 'onceEnrichment', 'onSuccess', 'onceSuccess']) {
+      for (let method of METHODS) {
         expect(global.window.__qubit.jolt[method].calledWith(1, 2, 3)).to.eql(true)
       }
     })
 
+    it('proxies replay', function () {
+      setupJolt()
+      for (let method of API) {
+        uv[method](1, 2, 3).replay()
+      }
+      for (let method of METHODS) {
+        expect(global[method].replay.calledOnce).to.eql(true)
+      }
+    })
+
+    it('proxies dispose', function () {
+      setupJolt()
+      for (let method of API) {
+        uv[method](1, 2, 3).dispose()
+      }
+      for (let method of METHODS) {
+        expect(global[method].dispose.calledOnce).to.eql(true)
+      }
+    })
+
     it('defers event methods and then proxies to jolt', function () {
-      for (let method of ['on', 'once', 'onEventSent', 'onceEventSent']) {
+      for (let method of API) {
         uv[method](1, 2, 3)
       }
       setupJolt()
       clock.tick(100)
-      for (let method of ['onEnrichment', 'onceEnrichment', 'onSuccess', 'onceSuccess']) {
+      for (let method of METHODS) {
         expect(global.window.__qubit.jolt[method].calledWith(1, 2, 3)).to.eql(true)
       }
     })
 
     function setupJolt () {
+      for (let method of METHODS) {
+        global[method] = {
+          replay: sinon.stub(),
+          dispose: sinon.stub()
+        }
+      }
       global.window = {
         __qubit: {
           jolt: {
-            onEnrichment: sinon.stub(),
-            onceEnrichment: sinon.stub(),
-            onSuccess: sinon.stub(),
-            onceSuccess: sinon.stub()
+            onEnrichment: sinon.stub().returns(global.onEnrichment),
+            onceEnrichment: sinon.stub().returns(global.onceEnrichment),
+            onSuccess: sinon.stub().returns(global.onSuccess),
+            onceSuccess: sinon.stub().returns(global.onceSuccess)
           }
         }
       }

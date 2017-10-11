@@ -1,5 +1,4 @@
 const input = require('input')
-const chalk = require('chalk')
 const getPkg = require('../lib/get-pkg')
 const experienceService = require('../services/experience')
 const goalService = require('../services/goal')

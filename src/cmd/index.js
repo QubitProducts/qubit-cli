@@ -1,6 +1,5 @@
 const program = require('commander')
 const chalk = require('chalk')
-const log = require('../lib/log')
 const create = require('./create')
 const extension = require('./extension')
 const open = require('./open')
