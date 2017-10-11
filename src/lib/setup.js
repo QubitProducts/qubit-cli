@@ -1,6 +1,7 @@
 const _ = require('lodash')
 const execa = require('execa').shell
 const axios = require('axios')
+const ms = require('ms')
 const config = require('../../config')
 const qubitrc = require('./qubitrc')
 const log = require('./log')
@@ -29,7 +30,7 @@ async function updateNPMRC (idToken) {
 async function getRegistryToken (idToken) {
   let registryToken = await qubitrc.get(REGISTRY_TOKEN)
   let registryScopes = await qubitrc.get(REGISTRY_SCOPES)
-  if (registryToken && !tokenHasExpired(registryToken)) {
+  if (registryToken && !tokenHasExpired(registryToken, Date.now(), ms('1 day'))) {
     return { accessToken: registryToken, scopes: registryScopes }
   }
   registryToken = await getToken(idToken, config.auth.registryClientId)
