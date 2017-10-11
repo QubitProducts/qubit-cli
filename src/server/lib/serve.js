@@ -64,7 +64,7 @@ module.exports = async function serve (options) {
     heartbeat: 100
   }, verboseOpts)))
 
-  return await app.start().then(() => {
+  return app.start().then(() => {
     return { app, emitter }
   })
 }
