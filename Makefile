@@ -1,9 +1,12 @@
-.PHONY: test
+.PHONY: test bootstrap lint
 
 BIN = node_modules/.bin
 
-test:
+bootstrap:
+	npm install
 	npm install ./deps --no-save --production
+
+test:
 	NODE_ENV=test $(BIN)/mocha --recursive
 	make lint
 
