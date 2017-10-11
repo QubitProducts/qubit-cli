@@ -19,7 +19,6 @@ const map = {
   '@qubit/stash-count': require('@qubit/stash-count'),
   '@qubit/uv-api': require('@qubit/uv-api'),
   '@qubit/visitor-pulse': require('@qubit/visitor-pulse'),
-  '@qubit/visitor-pulse-lite': require('@qubit/visitor-pulse-lite'),
   'cookieman': require('cookieman'),
   'preact': require('preact'),
   'jquery': require('@qubit/jquery'),
