@@ -23,15 +23,14 @@ module.exports = async function scaffold (dest, files, shouldConfirm = true, sho
     const actual = await fs.readdir(dest)
     const extraneous = actual.filter(file => !Object.keys(files).includes(file))
     await Promise.all(extraneous.map(async file => {
+      if (!/\.(css|js)$/.test(file)) return
       if (!shouldConfirm || await shouldRemove(file)) return fs.remove(path.join(dest, file))
     }))
   }
 
   async function scaffoldFile (name) {
     const value = files[name]
-    let result = shouldConfirm
-      ? await shouldWrite(dest, name, value)
-      : shouldOverwrite
+    let result = await shouldWrite(dest, name, value, shouldConfirm, shouldOverwrite)
     if (result) {
       if (log) log.info(`Writing to local ${chalk.green.bold(name)} file...`)
       return fs.outputFile(path.join(dest, name), value)

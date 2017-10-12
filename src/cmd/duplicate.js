@@ -34,7 +34,6 @@ module.exports = async function duplicate () {
       } else {
         const { name, value: variationId } = variationChoices[0]
         const shouldDuplicateVariation = await input.confirm(`Do you want to duplicate ${name}?`)
-
         if (shouldDuplicateVariation) await duplicateVariation(propertyId, experienceId, variationId, nextVariationNumber, pkg)
       }
     } else {

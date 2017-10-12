@@ -2,19 +2,25 @@ const _ = require('lodash')
 const yaml = require('js-yaml')
 const fs = require('fs-extra')
 let { QUBITRC } = require('./constants')
+let inMemory = false
+let data
 
 async function read () {
   try {
-    let data = String(await fs.readFile(QUBITRC))
-    return parse(data)
+    if (!inMemory) {
+      data = parse(String(await fs.readFile(QUBITRC)))
+      inMemory = true
+    }
+    return data
   } catch (err) {
     return {}
   }
 }
 
-async function write (data) {
-  let output = serialize(data)
-  return fs.writeFile(QUBITRC, output)
+async function write (newData) {
+  let output = newData
+  data = newData
+  return fs.writeFile(QUBITRC, serialize(output))
 }
 
 function get (key) {
@@ -24,32 +30,29 @@ function get (key) {
 }
 
 async function set (key, value) {
-  return read()
-    .then(data => {
-      let env = getEnv()
-      data[env] = data[env] || {}
-      Object.assign(data[env], { [key]: value })
-      return write(data)
-    })
+  return read().then(currentData => {
+    let env = getEnv()
+    currentData[env] = currentData[env] || {}
+    Object.assign(currentData[env], { [key]: value })
+    return write(currentData)
+  })
 }
 
 async function unset (key) {
-  return read()
-    .then(data => {
-      let env = getEnv()
-      data[env] = data[env] || {}
-      delete data[env][key]
-      return write(data)
-    })
+  return read().then(currentData => {
+    let env = getEnv()
+    currentData[env] = currentData[env] || {}
+    delete currentData[env][key]
+    return write(currentData)
+  })
 }
 
 async function unsetEnv () {
-  return read()
-    .then(data => {
-      let env = getEnv()
-      delete data[env]
-      return write(data)
-    })
+  return read().then(currentData => {
+    let env = getEnv()
+    delete currentData[env]
+    return write(currentData)
+  })
 }
 
 function getEnv () {
@@ -61,8 +64,8 @@ function parse (value) {
   return _.pick(value ? yaml.load(value) : {}, ['debug', 'staging', 'production', 'test'])
 }
 
-function serialize (data) {
-  return yaml.dump(data)
+function serialize (things) {
+  return yaml.dump(things)
 }
 
 module.exports = { get, set, unset, unsetEnv }

@@ -1,12 +1,13 @@
+const fs = require('fs-extra')
+const webpack = require('webpack')
 const createEmitter = require('event-kitten')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
-const webpack = require('webpack')
-const fs = require('fs-extra')
-const webpackConf = require('../../../webpack.conf')
-const pickVariation = require('../../lib/pick-variation')
-const log = require('../../lib/log')
 const installQubitDeps = require('../../lib/install-qubit-deps')
+const pickVariation = require('../../lib/pick-variation')
+const webpackConf = require('../../../webpack.conf')
+const config = require('../../../config')
+const log = require('../../lib/log')
 const createApp = require('../app')
 const cors = require('cors')
 let CWD = process.cwd()
@@ -64,6 +65,7 @@ module.exports = async function serve (options) {
   }, verboseOpts)))
 
   return app.start().then(() => {
+    log.info(`Qubit-CLI listening on port ${config.port}`)
     return { app, emitter }
   })
 }

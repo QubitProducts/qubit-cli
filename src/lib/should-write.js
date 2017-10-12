@@ -4,7 +4,7 @@ const fs = require('fs-extra')
 let checkExists = require('./exists')
 let confirm = require('confirmer')
 
-module.exports = async function shouldWrite (dest, name, newValue) {
+module.exports = async function shouldWrite (dest, name, newValue, shouldConfirm, shouldOverwrite) {
   const msg = `Do you want ${chalk.green.bold('xp')} to overwrite your local ${chalk.green.bold(name)} file?`
   const file = path.join(dest, name)
   let exists = await checkExists(file)
@@ -17,12 +17,16 @@ module.exports = async function shouldWrite (dest, name, newValue) {
   // no changes
   if (currentValue === newValue) return false
 
-  // permission
-  let result = await confirm(msg)
-  if (process) {
-    process.stdout.moveCursor(0, -1)
-    process.stdout.clearScreenDown()
+  if (shouldConfirm) {
+    // permission
+    let result = await confirm(msg)
+    if (process) {
+      process.stdout.moveCursor(0, -1)
+      process.stdout.clearScreenDown()
+    }
+
+    return result
   }
 
-  return result
+  return shouldOverwrite
 }

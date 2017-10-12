@@ -3,7 +3,6 @@ const https = require('https')
 const enableDestroy = require('server-destroy')
 const express = require('express')
 const bodyParser = require('body-parser')
-const log = require('../lib/log')
 const getCerts = require('../lib/get-certs')
 
 module.exports = async function app () {
@@ -16,7 +15,6 @@ module.exports = async function app () {
     enableDestroy(server)
     server.listen(config.port, (err) => {
       if (err) return reject(err)
-      log.info(`Qubit-CLI listening on port ${config.port}`)
       resolve()
     })
   })
