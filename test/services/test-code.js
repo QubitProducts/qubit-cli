@@ -15,7 +15,6 @@ describe('codeService', function () {
   beforeEach(() => {
     propertyId = 123
     experienceId = 456
-    iterationId = 101112
     experience = _.cloneDeep(experienceFixture)
     iteration = _.cloneDeep(experienceFixture.recent_iterations.draft)
     variations = _.cloneDeep(variationsFixture)
@@ -33,7 +32,7 @@ describe('codeService', function () {
 
   describe('get', function () {
     it('should fetch experience, variations and translate to a files object', async function () {
-      let result = await codeService.get(propertyId, experienceId, iterationId)
+      let result = await codeService.get(propertyId, experienceId)
       expect(_.omit(result, 'package.json')).to.eql(_.omit(files, ['package.json']))
       expect(JSON.parse(result['package.json'])).to.eql(JSON.parse(files['package.json']))
     })
@@ -47,7 +46,7 @@ describe('codeService', function () {
         _.set(pkg, 'meta.name', pkg.meta.name + 1)
         return JSON.stringify(pkg, null, 2)
       })
-      await codeService.set(propertyId, experienceId, iterationId, files)
+      await codeService.set(propertyId, experienceId, files)
       expect(experienceService.set.calledOnce).to.eql(true)
       experience.name += 1
       let [actualExperienceId, actualExperience] = experienceService.set.getCall(0).args
