@@ -1,5 +1,7 @@
 const sinon = require('sinon')
 const engine = require('../../src/client/engine')
+const logger = require('../../src/client/log')
+logger.enable({ '*': 'error' })
 const expect = require('chai').expect
 
 describe('engine', function () {
