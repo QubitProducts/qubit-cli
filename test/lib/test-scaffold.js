@@ -11,9 +11,13 @@ const FileC = path.join(fixtures, 'b/c')
 const FileE = path.join(fixtures, 'd/e')
 
 describe('scaffold', function () {
-  let shouldWriteStub, shouldRemoveStub, files, restore
+  let shouldWriteStub, shouldRemoveStub, files, restore, shouldConfirm, shouldOverwrite, removeExtraneous
 
+  // shouldConfirm = true, shouldOverwrite = false, removeExtraneous = false
   beforeEach(function () {
+    shouldConfirm = true
+    shouldOverwrite = false
+    removeExtraneous = false
     shouldWriteStub = sinon.stub()
     shouldRemoveStub = sinon.stub()
     restore = scaffold.__set__({
@@ -34,76 +38,145 @@ describe('scaffold', function () {
     return fs.remove(fixtures)
   })
 
-  describe('if shouldWriteStub returns true', function () {
-    beforeEach(() => shouldWriteStub.returns(Promise.resolve(true)))
-
-    it('should write the file', async function () {
-      await scaffold(fixtures, files, false)
-      expect(await fs.readFile(FileA).then(String)).to.eql(files.a)
-    })
-
-    it('should recursively create nested files in directories', async function () {
-      await scaffold(fixtures, files, false)
-      expect(await fs.readFile(FileC).then(String)).to.eql(files.b.c)
-    })
-  })
-
-  describe('if shouldWriteStub returns false', function () {
-    beforeEach(() => shouldWriteStub.returns(Promise.resolve(false)))
-    it('should not write the file', async function () {
-      await scaffold(fixtures, files, false)
-      expect(await exists(FileA)).to.eql(false)
-    })
-  })
-
-  describe('neverOverwrite flag', function () {
+  describe('shouldConfirm', function () {
     beforeEach(() => shouldWriteStub.returns(Promise.resolve(false)))
 
     describe('if true', function () {
-      let neverOverwrite
-      beforeEach(() => { neverOverwrite = true })
+      beforeEach(() => {
+        shouldConfirm = true
+        shouldOverwrite = false
+        removeExtraneous = false
+      })
 
-      it('should call shouldWriteStub with fixtures, file, value and shouldConfirm=false', async function () {
-        await scaffold(fixtures, files, neverOverwrite)
+      it('should seek confirmation', async function () {
+        await scaffold(fixtures, files, shouldConfirm, shouldOverwrite, removeExtraneous)
         expect(shouldWriteStub.calledTwice).to.eql(true)
-        expect(shouldWriteStub.getCall(0).args).to.eql([fixtures, 'a', files.a, false])
+        expect(shouldWriteStub.getCall(0).args).to.eql([fixtures, 'a', files.a])
+      })
+
+      it('should respect confirmation', async function () {
+        shouldWriteStub.returns(Promise.resolve(false))
+        await scaffold(fixtures, files, shouldConfirm, shouldOverwrite, removeExtraneous)
+        expect(await exists(FileA)).to.eql(false)
+        shouldWriteStub.returns(Promise.resolve(true))
+        await scaffold(fixtures, files, shouldConfirm, shouldOverwrite, removeExtraneous)
+        expect(await fs.readFile(FileA).then(String)).to.eql(files.a)
+      })
+
+      it('should recursively create nested files in directories', async function () {
+        shouldWriteStub.returns(Promise.resolve(true))
+        await scaffold(fixtures, files, shouldConfirm, shouldOverwrite, removeExtraneous)
+        expect(await fs.readFile(FileC).then(String)).to.eql(files.b.c)
       })
     })
 
     describe('if false', function () {
-      let neverOverwrite
-      beforeEach(() => { neverOverwrite = false })
+      beforeEach(() => {
+        shouldConfirm = false
+        shouldOverwrite = true
+        removeExtraneous = false
+      })
 
-      it('should call shouldWriteStub with fixtures, file, value and shouldConfirm=true', async function () {
-        await scaffold(fixtures, files, neverOverwrite)
-        expect(shouldWriteStub.calledTwice).to.eql(true)
-        expect(shouldWriteStub.getCall(0).args).to.eql([fixtures, 'a', files.a, true])
+      it('should not seek confirmation', async function () {
+        await scaffold(fixtures, files, shouldConfirm, shouldOverwrite, removeExtraneous)
+        expect(shouldWriteStub.called).to.eql(false)
+      })
+
+      it('should not respect confirmation', async function () {
+        shouldWriteStub.returns(Promise.resolve(false))
+        await scaffold(fixtures, files, shouldConfirm, shouldOverwrite, removeExtraneous)
+        expect(await fs.readFile(FileA).then(String)).to.eql(files.a)
+      })
+
+      it('should recursively create nested files in directories', async function () {
+        await scaffold(fixtures, files, shouldConfirm, shouldOverwrite, removeExtraneous)
+        expect(await fs.readFile(FileC).then(String)).to.eql(files.b.c)
+      })
+    })
+  })
+
+  describe('shouldOverwrite', function () {
+    beforeEach(() => shouldWriteStub.returns(Promise.resolve(false)))
+
+    describe('if true', function () {
+      beforeEach(() => {
+        shouldConfirm = false
+        shouldOverwrite = true
+        removeExtraneous = false
+      })
+
+      it('should overwrite', async function () {
+        await fs.outputFile(FileA, 'blah')
+        await scaffold(fixtures, files, shouldConfirm, shouldOverwrite, removeExtraneous)
+        expect(await fs.readFile(FileA).then(String)).to.eql(files.a)
+      })
+
+      it('should recursively create nested files in directories', async function () {
+        await scaffold(fixtures, files, shouldConfirm, shouldOverwrite, removeExtraneous)
+        expect(await fs.readFile(FileC).then(String)).to.eql(files.b.c)
+      })
+    })
+
+    describe('if false', function () {
+      beforeEach(() => {
+        shouldConfirm = false
+        shouldOverwrite = false
+        removeExtraneous = false
+      })
+
+      it('should not overwrite', async function () {
+        await scaffold(fixtures, files, shouldConfirm, shouldOverwrite, removeExtraneous)
+        expect(await exists(FileA)).to.eql(false)
+      })
+
+      it('should not recursively create nested files in directories', async function () {
+        await scaffold(fixtures, files, shouldConfirm, shouldOverwrite, removeExtraneous)
+        expect(await exists(FileC)).to.eql(false)
       })
     })
   })
 
   describe('removeExtraneous flag', function () {
     beforeEach(() => {
+      shouldConfirm = true
+      shouldOverwrite = false
+      removeExtraneous = true
+    })
+
+    beforeEach(() => {
       shouldWriteStub.returns(Promise.resolve(true))
       shouldRemoveStub.returns(Promise.resolve(true))
     })
 
-    describe('if true', function () {
-      it('should remove extraneous files', async function () {
-        await fs.outputFile(FileE, 'lel')
-        expect(await exists(FileE)).to.eql(true)
-        await scaffold(fixtures, files, false, true)
-        expect(await exists(FileA), 'file a should exist').to.eql(true)
-        expect(await exists(FileC), 'file c should exist').to.eql(true)
-        expect(await exists(FileE), 'file r should not exist').to.eql(false)
-      })
+    it('should remove extraneous files', async function () {
+      await fs.outputFile(FileE, 'lel')
+      expect(await exists(FileE)).to.eql(true)
+      await scaffold(fixtures, files, shouldConfirm, shouldOverwrite, removeExtraneous)
+      expect(await exists(FileA), 'file a should exist').to.eql(true)
+      expect(await exists(FileC), 'file c should exist').to.eql(true)
+      expect(await exists(FileE), 'file e should not exist').to.eql(false)
     })
 
-    describe('if false', function () {
+    describe('if flag is false', function () {
+      beforeEach(() => (removeExtraneous = false))
+
       it('should not remove extraneous files', async function () {
         await fs.outputFile(FileE, 'lel')
         expect(await exists(FileE)).to.eql(true)
-        await scaffold(fixtures, files, false, false)
+        await scaffold(fixtures, files, shouldConfirm, shouldOverwrite, removeExtraneous)
+        expect(await exists(FileA)).to.eql(true)
+        expect(await exists(FileC)).to.eql(true)
+        expect(await exists(FileE)).to.eql(true)
+      })
+    })
+
+    describe('confirmation', function () {
+      beforeEach(() => (shouldRemoveStub.returns(Promise.resolve(false))))
+
+      it('should respect confirmation', async function () {
+        await fs.outputFile(FileE, 'lel')
+        expect(await exists(FileE)).to.eql(true)
+        await scaffold(fixtures, files, shouldConfirm, shouldOverwrite, removeExtraneous)
         expect(await exists(FileA)).to.eql(true)
         expect(await exists(FileC)).to.eql(true)
         expect(await exists(FileE)).to.eql(true)

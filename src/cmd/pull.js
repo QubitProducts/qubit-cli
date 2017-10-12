@@ -9,7 +9,7 @@ const CWD = process.cwd()
 
 module.exports = async function pull (urlOrPidOrName, pidOrEid) {
   try {
-    // Scaffold from template?
+    // from template?
     if (isName(urlOrPidOrName)) { return template(urlOrPidOrName) }
 
     // Pulling from an id-pair?

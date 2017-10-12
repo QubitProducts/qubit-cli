@@ -1,4 +1,6 @@
 const _ = require('lodash')
+const fs = require('fs-extra')
+const path = require('path')
 const input = require('input')
 const log = require('../lib/log')
 const suggest = require('../lib/suggest')
@@ -16,9 +18,10 @@ module.exports = async function del () {
     let experienceId = _.get(pkg, 'meta.experienceId')
 
     if (propertyId && experienceId) {
+      // if the user is in an experience delete a variation
       const experience = await experienceService.get(experienceId)
       const variations = await variationService.getAll(experience.last_iteration_id)
-      const variationChoices = _(variations).filter({ is_control: 0 }).map(v => ({ name: v.name, value: v.master_id }))
+      const variationChoices = _(variations).filter({ is_control: false }).map(v => ({ name: v.name, value: v.master_id })).value()
 
       if (variationChoices.length > 1) {
         const variationId = await input.select('Which variation would you like to delete?', variationChoices)
@@ -29,12 +32,13 @@ module.exports = async function del () {
           log.error('Variation could not be deleted')
         }
         const { files } = await down(experienceId)
-        await scaffold(CWD, files, true, true)
+        await scaffold(CWD, files, false, false, true)
+        await fs.outputFile(path.join(CWD, 'package.json'), files['package.json'])
       } else {
         log.warn('There are no variations to delete')
       }
     } else {
-      // if the user is not in an xp experience folder, allow them to delete an experience
+      // if the user is not in an experience folder delete a experience
       propertyId = await suggest.property()
       if (!propertyId) return
       experienceId = await suggest.experience(propertyId)

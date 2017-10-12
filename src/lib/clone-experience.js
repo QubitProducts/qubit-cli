@@ -9,6 +9,7 @@ module.exports = async function cloneExperience (CWD, propertyId, experienceId) 
   const { experience, files } = await down(experienceId)
   const filename = experienceFilename(experience)
   const dest = path.join(CWD, filename)
-  await scaffold(dest, files, false, true)
+  // shouldConfirm = true, shouldOverwrite = false, removeExtraneous = false
+  await scaffold(dest, files, true, null, true)
   log.info(`Experience cloned into ${filename}`)
 }

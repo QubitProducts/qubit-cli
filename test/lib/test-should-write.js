@@ -24,37 +24,32 @@ describe('shouldWrite', function () {
     return fs.remove(fixtures)
   })
 
-  it('should return true if file does not exist', async () => {
+  it('should write if file does not exist', async () => {
     fileExistsStub.returns(Promise.resolve(false))
-    expect(await shouldWrite(fixtures, 'b', 'c', true)).to.eql(true)
+    expect(await shouldWrite(fixtures, 'b', 'c')).to.eql(true)
   })
 
-  it('should not overwrite if the file exists but is identical to the one being written', async () => {
+  it('should not write if the files are identical', async () => {
     fileExistsStub.returns(Promise.resolve(true))
-    expect(await shouldWrite(fixtures, 'a', 'a', true)).to.eql(false)
+    expect(await shouldWrite(fixtures, 'a', 'a')).to.eql(false)
   })
 
-  it('should call confirmation handler before overwriting an existing file', async function () {
+  it('should confirm if the file exists and is different', async function () {
     fileExistsStub.returns(Promise.resolve(true))
     confirmStub.returns(Promise.resolve(true))
-    await shouldWrite(fixtures, 'a', 'b', true)
+    await shouldWrite(fixtures, 'a', 'b')
     expect(confirmStub.calledOnce).to.eql(true)
   })
 
-  it('should overwrite if user confirms its ok to overwrite', async function () {
+  it('should overwrite if user says yes', async function () {
     fileExistsStub.returns(Promise.resolve(true))
     confirmStub.returns(Promise.resolve(true))
-    expect(await shouldWrite(fixtures, 'a', 'b', true)).to.eql(true)
+    expect(await shouldWrite(fixtures, 'a', 'b')).to.eql(true)
   })
 
   it('should not overwrite if user says no', async function () {
     fileExistsStub.returns(Promise.resolve(true))
     confirmStub.returns(Promise.resolve(false))
-    expect(await shouldWrite(fixtures, 'a', 'b', true)).to.eql(false)
-  })
-
-  it('should not overwrite if there is no confirmation handler', async () => {
-    fileExistsStub.returns(Promise.resolve(true))
-    expect(await shouldWrite(fixtures, 'a', 'b', false)).to.eql(false)
+    expect(await shouldWrite(fixtures, 'a', 'b')).to.eql(false)
   })
 })
