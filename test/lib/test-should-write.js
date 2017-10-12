@@ -1,7 +1,7 @@
 const path = require('path')
 const {expect} = require('chai')
 const sinon = require('sinon')
-const fs = require('fs-promise')
+const fs = require('fs-extra')
 const rewire = require('rewire')
 const shouldWrite = rewire('../../src/lib/should-write')
 const fixtures = path.join(__dirname, 'fixtures/tmp/should-write')

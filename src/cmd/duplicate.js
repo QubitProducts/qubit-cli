@@ -1,5 +1,4 @@
 const _ = require('lodash')
-const chalk = require('chalk')
 const input = require('input')
 const log = require('../lib/log')
 const suggest = require('../lib/suggest')
@@ -20,7 +19,7 @@ module.exports = async function duplicate () {
     let iterationId = _.get(pkg, 'meta.iterationId')
 
     if (propertyId && experienceId) {
-      // if the user is in an xp experience folder, allow them to duplicate a variation
+      // if the user is in an experience folder, allow them to duplicate a variation
       const experience = await experienceService.get(propertyId, experienceId)
       const variations = await variationService.getAll(experience.recent_iterations.draft.id)
       const nextVariationNumber = Object.keys(variations).length
@@ -36,7 +35,7 @@ module.exports = async function duplicate () {
         if (shouldDuplicateVariation) await duplicateVariation(propertyId, experienceId, variationId, nextVariationNumber, pkg)
       }
     } else {
-      // if the user is not in an xp experience folder, allow them to duplicate an experience
+      // if the user is not in an experience folder, allow them to duplicate an experience
       propertyId = await suggest.property('Select a property to duplicate from')
       experienceId = await suggest.experience(propertyId)
 
@@ -79,12 +78,12 @@ async function duplicateExperience (propertyId, experienceId) {
   const duplicatedExperience = await experienceService.duplicate(propertyId, duplicateOptions)
 
   if (duplicatedExperience) {
-    log(chalk.green('Experience successfully duplicated'))
+    log.info('Experience successfully duplicated')
     const shouldClone = await input.confirm('Do you want to clone the duplicated experience into the current directory?')
 
     if (shouldClone) await cloneExperience(cwd, targetPropertyId, duplicatedExperience.id)
   } else {
-    log(chalk.red('Experience could not be duplicated'))
+    log.warn('Experience could not be duplicated')
   }
 }
 

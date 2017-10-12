@@ -64,7 +64,7 @@ function init (bypassTriggers) {
     let options = withLog(opts, 'variation')
     options.redirectTo = redirectTo
     modules = loadModules()
-    log.info('running variation')
+    log.info('Running variation')
     try {
       removeStyles = applyStyles(STYLE_ID, modules.styles)
       cleanup.push(removeStyles)

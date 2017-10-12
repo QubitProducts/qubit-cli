@@ -1,15 +1,23 @@
-const execa = require('execa').shell
 const axios = require('axios')
 const crypto = require('crypto')
 const opn = require('opn')
 const qs = require('qs')
 const config = require('../../../config')
-const xprc = require('../../lib/xprc')
+const qubtrc = require('../../lib/qubitrc')
 const log = require('../../lib/log')
 const createApp = require('../app')
-const getToken = require('../../lib/get-token')
+const setup = require('../../lib/setup')
 
 module.exports = async function login () {
+  let idToken = await qubtrc.get('ID_TOKEN')
+
+  // try to login with existing token if it exists
+  if (idToken) {
+    try {
+      return await setup(idToken)
+    } catch (err) {}
+  }
+
   let app = await createApp()
   await app.start()
 
@@ -19,21 +27,17 @@ module.exports = async function login () {
 
   opn(loginUrl, { wait: false })
 
-  log(`please log in...`)
+  log.info(`Please log in...`)
 
-  log(`opening login url: ${loginUrl}`)
+  log.info(`Opening login url: ${loginUrl}`)
 
   return new Promise((resolve) => {
     app.get('/callback', async (req, res, next) => {
       try {
-        const idToken = await getIdToken(req.query.code, verifier)
-
-        await updateXPRC(idToken)
-        await updateNPMRC(idToken)
-
+        idToken = await getIdToken(req.query.code, verifier)
+        await setup(idToken)
         res.send('You are now logged in!. You can now close this tab.')
         await app.stop()
-        log('login successful!')
         resolve()
       } catch (err) {
         log.error(String(err))
@@ -41,29 +45,6 @@ module.exports = async function login () {
       }
     })
   })
-}
-
-async function updateXPRC (idToken) {
-  await xprc.set('ID_TOKEN', idToken)
-  await xprc.rm('BEARER_TOKEN', idToken)
-}
-
-async function updateNPMRC (idToken) {
-  let {accessToken, scopes} = await getRegistryToken(idToken)
-  await saveRegistryToken(accessToken, scopes)
-}
-
-async function getRegistryToken (idToken) {
-  let auth0Token = await getToken(idToken, config.auth.registryClientId)
-  return (await axios.post(config.services.registry + '/-/token', {}, {
-    headers: { 'Authorization': `Bearer ${auth0Token}` }
-  })).data
-}
-
-async function saveRegistryToken (accessToken, scopes) {
-  const authKey = config.services.registry.replace(/^https?:/, '')
-  for (let scope of scopes) await execa(`npm config set ${scope}:registry ${config.services.registry}/`)
-  await execa(`npm config set ${authKey}/:_authToken ${accessToken}`)
 }
 
 function getLoginUrl (verifierChallenge) {

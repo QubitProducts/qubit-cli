@@ -1,5 +1,4 @@
 const input = require('input')
-const chalk = require('chalk')
 const getPkg = require('../lib/get-pkg')
 const experienceService = require('../services/experience')
 const goalService = require('../services/goal')
@@ -9,7 +8,7 @@ const log = require('../lib/log')
 module.exports = async function goals (cmd) {
   try {
     const pkg = await getPkg()
-    if (!pkg.meta) return log(chalk.red('Navigate to an experience directory and try again'))
+    if (!pkg.meta) return log.warn('Navigate to an experience directory and try again')
 
     const { propertyId, experienceId } = pkg.meta
     const experience = await experienceService.get(propertyId, experienceId)
@@ -27,7 +26,7 @@ module.exports = async function goals (cmd) {
 }
 
 async function addGoal (meta, goals) {
-  if (goals.length >= 5) return log(chalk.red('Max goals reached, remove a goal first'))
+  if (goals.length >= 5) return log.warn('Max goals reached, remove a goal first')
 
   // see if goal exists in chosen goals
   // if it does, filter out that goal if it's an exclusive goal type (cvr, rpv, rpc)
@@ -62,7 +61,7 @@ async function addGoal (meta, goals) {
   const newGoals = goalsHelper.add(goals, goalToAdd)
   const updatedGoals = await goalService.set(meta, newGoals)
 
-  if (updatedGoals) log(chalk.green('Goal added'))
+  if (updatedGoals) log.info('Goal added')
 }
 
 async function removeGoal (meta, goals) {
@@ -71,7 +70,7 @@ async function removeGoal (meta, goals) {
   const newGoals = goalsHelper.remove(goals, goalToRemove)
   const updatedGoals = await goalService.set(meta, newGoals)
 
-  if (updatedGoals) log(chalk.green('Goal removed'))
+  if (updatedGoals) log.info('Goal removed')
 }
 
 async function setPrimaryGoal (meta, goals) {
@@ -80,10 +79,10 @@ async function setPrimaryGoal (meta, goals) {
   const newGoals = goalsHelper.setPrimary(goals, goalToMakePrimary)
   const updatedGoals = await goalService.set(meta, newGoals)
 
-  if (updatedGoals) log(chalk.green('Primary goal updated'))
+  if (updatedGoals) log.info('Primary goal updated')
 }
 
 function listGoals (meta, goals) {
   const inputOptions = goalsHelper.read(goals)
-  inputOptions.forEach((goal) => log(goal.name))
+  inputOptions.forEach((goal) => log.info(goal.name))
 }

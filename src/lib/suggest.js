@@ -19,7 +19,7 @@ async function property () {
   if (suggestions.length === 1) {
     return suggestions[0].id
   }
-  return await createAutoComplete('^g^+»^: Select a property (start typing to filter the list)', suggestions).response()
+  return createAutoComplete('^g^+»^: Select a property (start typing to filter the list)', suggestions).response()
 }
 
 async function experience (propertyId) {

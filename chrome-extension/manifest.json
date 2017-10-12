@@ -1,8 +1,8 @@
 {
-  "name": "xp-cli",
+  "name": "qubit-cli",
   "version": "0.0.1",
   "manifest_version": 2,
-  "description": "xp-cli chrome extension",
+  "description": "Qubit-CLI chrome extension",
   "browser_action": {},
   "icons": {
     "16": "icons/on16.png",

@@ -1,9 +1,14 @@
 const np = require('np/index')
 const ui = require('np/lib/ui')
 const log = require('../lib/log')
+const login = require('../server/lib/login')
 
-module.exports = function release (version, { anyBranch, cleanup, yolo, publish, tag, yarn }) {
+module.exports = async function release (version, { anyBranch, cleanup, yolo, publish, tag, yarn }) {
   let flags = { anyBranch, cleanup, yolo, publish, tag, yarn }
+
+  // Login authenticates against our private registry and configures all the associated private scopes
+  await login()
+
   return Promise.resolve()
     .then(getOptions)
     .then(runRelease)
@@ -25,6 +30,6 @@ module.exports = function release (version, { anyBranch, cleanup, yolo, publish,
   }
 
   function logResult (pkg) {
-    log(`\n ${pkg.name} ${pkg.version} published 🎉`)
+    log.info(`\n ${pkg.name} ${pkg.version} published 🎉`)
   }
 }

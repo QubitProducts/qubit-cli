@@ -1,6 +1,6 @@
 const _ = require('lodash')
 const defaultMeta = {
-  name: 'XP experience',
+  name: 'Qubit experience',
   propertyId: null,
   experienceId: null,
   iterationId: null,

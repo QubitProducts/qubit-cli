@@ -2,37 +2,45 @@ const createEmitter = require('event-kitten')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
 const webpack = require('webpack')
-const {readdir} = require('fs-promise')
-const chalk = require('chalk')
+const fs = require('fs-extra')
 const webpackConf = require('../../../webpack.conf')
 const pickVariation = require('../../lib/pick-variation')
 const log = require('../../lib/log')
+const installQubitDeps = require('../../lib/install-qubit-deps')
 const createApp = require('../app')
 const cors = require('cors')
 let CWD = process.cwd()
 
 module.exports = async function serve (options) {
   const app = await createApp()
+
+  try {
+    let deps = require('qubt-cli-deps')
+    if (!deps.hasQubitDeps) throw new Error('oh noes!')
+  } catch (err) {
+    await installQubitDeps()
+  }
+
   app.use(cors())
   options.verbose = options.verbose || false
 
-  if (/(triggers|global|.css$)/.test(options.variation)) {
-    log('hint: you should be watching the entry point for your experience, i.e. your variation file!')
+  if (/(triggers|global|.css$)/.test(options.variationFilename)) {
+    log.info('Hint: you should be watching the entry point for your experience, i.e. your variation file!')
   }
 
-  if (!options.variation) {
-    options.variation = await pickVariation(await readdir(CWD))
+  if (!options.variationFilename) {
+    options.variationFilename = await pickVariation(await fs.readdir(CWD))
 
-    if (!options.variation) {
-      log(chalk.red('ensure you are within an experience directory and try again'))
+    if (!options.variationFilename) {
+      log.warn('Ensure you are within an experience directory and try again')
       return
     }
 
-    log(`using ${options.variation}`)
+    log.info(`Using ${options.variationFilename}`)
   }
 
   // make .js optional
-  options.variation = options.variation.replace(/\.js$/, '')
+  options.variationFilename = options.variationFilename.replace(/\.js$/, '')
 
   const verboseOpts = {
     log: options.verbose ? log : false,
@@ -42,7 +50,9 @@ module.exports = async function serve (options) {
     warn: options.verbose
   }
   const emitter = createEmitter()
-  const compiler = webpack(Object.assign(createWebpackConfig(options)))
+  const compiler = webpack(Object.assign(createWebpackConfig(options)), (plumbus, stats) => {
+    if (stats.hasErrors() && !options.verbose) log.info(stats.toString('errors-only').trim())
+  })
   compiler.plugin('done', (data) => emitter.emit('rebuild', data))
   app.use(webpackDevMiddleware(compiler, Object.assign({
     publicPath: webpackConf.output.publicPath
@@ -53,7 +63,7 @@ module.exports = async function serve (options) {
     heartbeat: 100
   }, verboseOpts)))
 
-  return await app.start().then(() => {
+  return app.start().then(() => {
     return { app, emitter }
   })
 }
@@ -62,7 +72,7 @@ function createWebpackConfig (options) {
   const plugins = webpackConf.plugins.slice(0)
   plugins.push(new webpack.DefinePlugin({
     __CWD__: `'${CWD}'`,
-    __VARIATION__: `'${options.variation}'`
+    __VARIATION__: `'${options.variationFilename}'`
   }))
   const entry = webpackConf.entry.slice(0)
   return Object.assign({}, webpackConf, {

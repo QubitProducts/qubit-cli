@@ -7,7 +7,7 @@ module.exports = async function clone (urlOrPid, pidOrEid) {
   try {
     const {propertyId, experienceId} = await getPropertyAndExperienceIds(urlOrPid, pidOrEid) || {}
     if (!propertyId || !experienceId) {
-      log(`aborted`)
+      log.info(`Aborted`)
       return
     }
     await cloneExperience(CWD, propertyId, experienceId)
