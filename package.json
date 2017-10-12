@@ -26,7 +26,7 @@
     "url": "git+https://github.com/qubitdigital/xp-cli.git"
   },
   "engines": {
-    "node": ">=7.4.0"
+    "node": ">=8"
   },
   "license": "UNLICENSED",
   "dependencies": {
