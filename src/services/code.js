@@ -5,15 +5,17 @@ const variationService = require('./variation')
 const pkgService = require('./pkg')
 const withMetrics = require('../lib/with-metrics')
 
-async function get (propertyId, experienceId, iterationId) {
+async function get (propertyId, experienceId) {
   const experience = await experienceService.get(experienceId)
+  const iterationId = experience.last_iteration_id
   const iteration = await iterationService.get(iterationId)
   const variations = await variationService.getAll(iterationId)
   return getCode(experience, iteration, variations)
 }
 
-async function set (propertyId, experienceId, iterationId, files) {
+async function set (propertyId, experienceId, files) {
   const oldExperience = await experienceService.get(experienceId)
+  const iterationId = oldExperience.last_iteration_id
   const oldIteration = await iterationService.get(iterationId)
   const oldVariations = await variationService.getAll(iterationId)
 

@@ -5,8 +5,8 @@ const checkDiff = require('./check-diff')
 module.exports = async function diff () {
   try {
     const pkg = await getPkg()
-    const { propertyId, experienceId, iterationId } = pkg.meta
-    await checkDiff(propertyId, experienceId, iterationId)
+    const { propertyId, experienceId } = pkg.meta
+    await checkDiff(propertyId, experienceId)
   } catch (err) {
     log.error(err)
   }

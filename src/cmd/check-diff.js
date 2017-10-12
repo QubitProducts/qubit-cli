@@ -5,9 +5,9 @@ const readFiles = require('../lib/read-files')
 const jsdiff = require('diff')
 let CWD = process.cwd()
 
-module.exports = async function checkDiff (propertyId, experienceId, iterationId) {
+module.exports = async function checkDiff (propertyId, experienceId) {
   log('Comparing files...')
-  const files = await codeService.get(propertyId, experienceId, iterationId)
+  const files = await codeService.get(propertyId, experienceId)
   const localFiles = await readFiles(CWD)
   delete files['package.json']
   delete localFiles['package.json']
