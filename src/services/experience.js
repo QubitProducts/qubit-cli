@@ -42,7 +42,7 @@ function duplicate (experienceId, options) {
 }
 
 function remove (propertyId, experienceId) {
-  return fetch.post(`/api/p/${propertyId}/experiments/${experienceId}/delete`)
+  return fetch.delete(`/api/experiences/${experienceId}`)
 }
 
 module.exports = { get, getAll, set, create, publish, pause, resume, duplicate, status, remove }

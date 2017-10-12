@@ -22,7 +22,7 @@ function create (iterationId, data) {
 }
 
 function remove (propertyId, experienceId, variationId) {
-  return fetch.delete(variationsUrl(propertyId, experienceId, variationId))
+  return fetch.delete(variationsUrl(variationId))
 }
 
 function getCode (variation) {
