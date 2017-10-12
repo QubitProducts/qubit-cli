@@ -19,9 +19,9 @@ You can clone an existing experience simply by calling `qubit clone`.
 
 If you have access to more than one property, you will be able to select the property you want to clone the experience from, and then you will be able to search for that experience using the terminal prompt.
 
-You could also navigate to the experience in your browser, since the qubit-cli extension will detect which experience you are working on and ask if you would like to clone that one.
+You could also navigate to the experience in your browser, since the Qubit-CLI extension will detect which experience you are working on and ask if you would like to clone that one.
 
-Finally if you know the ids or have the url to hand, you can simply paste these in as an argument and qubit-cli will understand which experience you wish to clone.
+Finally if you know the ids or have the url to hand, you can simply paste these in as an argument and Qubit-CLI will understand which experience you wish to clone.
 
 If you know the experience
 ```
@@ -43,4 +43,4 @@ qubit pull
 qubit push
 ```
 
-qubit-cli warns you if there have been any remote changes so that you have the opportunity to `qubit pull` them down. Alternatively you can `qubit push --force`
+Qubit-CLI warns you if there have been any remote changes so that you have the opportunity to `qubit pull` them down. Alternatively you can `qubit push --force`

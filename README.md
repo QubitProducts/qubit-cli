@@ -1,5 +1,5 @@
  # ![extension icon](./chrome-extension/icons/on48.png)
-## QUBIT-CLI
+## Qubit-CLI
 
 A client to facilitate local development of experiences for the qubit platform
 

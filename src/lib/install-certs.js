@@ -6,7 +6,7 @@ const { CERT_DIR, CERT_PATH, KEY_PATH, KEY_OPTIONS } = require('./constants')
 
 module.exports = function setup () {
   log.info("We'll now generate a TSL certificate and install it into your OS as a trusted certificate")
-  log.info("This is to make sure that browsers don't block qubit-cli from serving to https sites")
+  log.info("This is to make sure that browsers don't block Qubit-CLI from serving to https sites")
   log.info('You will be asked for your sudo password')
   log.info("If you'd like to inspect/remove the installed certificate, you can find it in your keychain")
 

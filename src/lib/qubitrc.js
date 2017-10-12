@@ -53,7 +53,7 @@ async function unsetEnv () {
 }
 
 function getEnv () {
-  // note: this isn't wrong. the default environment for qubit-cli is production
+  // note: this isn't wrong. the default environment for Qubit-CLI is production
   return process.env.NODE_ENV || 'production'
 }
 

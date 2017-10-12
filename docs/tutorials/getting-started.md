@@ -2,7 +2,7 @@
 
 ## Running a local experience server:
 
-*This tutorial assumes you have already installed qubit-cli and the qubit-cli chrome extension*
+*This tutorial assumes you have already installed Qubit-CLI and the Qubit-CLI chrome extension*
 
 1. create a folder
 ```

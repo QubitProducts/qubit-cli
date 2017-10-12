@@ -19,7 +19,7 @@ module.exports = async function getCerts (isRetry) {
   } catch (err) {
     if (err instanceof Error && err.code === ENOENT) {
       if (!isRetry) return installCerts().then(() => getCerts(true))
-      throw new Error(`No self-signed certificates were found in ${CERT_DIR}, and qubit-cli could not automatically solve this.`)
+      throw new Error(`No self-signed certificates were found in ${CERT_DIR}, and Qubit-CLI could not automatically solve this.`)
     }
     throw err
   }

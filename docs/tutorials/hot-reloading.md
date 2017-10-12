@@ -7,7 +7,7 @@ Its actually really easy to enable this feature, just implement and return a rem
 
 The remove function should undo anything your experience does. For example, if your experience added a modal to the page, the implementation would literally remove the modal element.
 
-That way, qubit-cli can remove your experience before re-executing it, and you won't be left with two modals on the page.
+That way, Qubit-CLI can remove your experience before re-executing it, and you won't be left with two modals on the page.
 
 ```js
 function execution (options) {

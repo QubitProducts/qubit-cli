@@ -161,7 +161,7 @@ module.exports = function run (pkg) {
 
   program
     .command('extension')
-    .description('open folder containing the qubit-cli chrome extension, drag into chrome extensions pane to install')
+    .description('open folder containing the Qubit-CLI chrome extension, drag into chrome extensions pane to install')
     .action(extension)
 
   program

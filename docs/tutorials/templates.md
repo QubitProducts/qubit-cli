@@ -1,5 +1,5 @@
 # Templates
-qubit-cli allows you to create templates, so that you can easily redeploy similar experiences
+Qubit-CLI allows you to create templates, so that you can easily redeploy similar experiences
 
 ## To generate a template from your local experience files:
 

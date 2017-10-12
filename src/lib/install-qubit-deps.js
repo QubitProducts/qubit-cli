@@ -4,7 +4,7 @@ const login = require('../server/lib/login')
 const log = require('./log')
 
 module.exports = async function installQubitDeps () {
-  log.info(`Setting up qubit-cli, this may take a few mins`)
+  log.info(`Setting up Qubit-CLI, this may take a few mins`)
   await login()
   log.info('Installing some additional dependencies...')
   try {
