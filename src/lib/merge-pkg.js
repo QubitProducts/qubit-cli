@@ -1,6 +1,7 @@
 const _ = require('lodash')
 
 module.exports = function mergePkg (localPkg, remotePkg) {
+  if (!localPkg) return remotePkg
   localPkg = localPkg || {}
   remotePkg = remotePkg || {}
   if (typeof localPkg === 'string') localPkg = JSON.parse(localPkg)

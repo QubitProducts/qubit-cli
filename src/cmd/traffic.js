@@ -3,6 +3,7 @@ const getPkg = require('../lib/get-pkg')
 const experienceService = require('../services/experience')
 const iterationService = require('../services/iteration')
 const validControlSizes = require('../lib/valid-control-sizes')
+const updatePkg = require('../lib/update-pkg')
 const log = require('../lib/log')
 
 module.exports = async function traffic (options) {
@@ -23,6 +24,7 @@ module.exports = async function traffic (options) {
 
     if (updatedIteration) {
       log.info('Traffic split updated')
+      await updatePkg(experienceId)
     } else {
       log.warn('Failed to update traffic split')
     }

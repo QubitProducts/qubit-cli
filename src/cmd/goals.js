@@ -3,6 +3,7 @@ const getPkg = require('../lib/get-pkg')
 const experienceService = require('../services/experience')
 const goalService = require('../services/goal')
 const goalsHelper = require('../lib/goals')
+const updatePkg = require('../lib/update-pkg')
 const log = require('../lib/log')
 
 module.exports = async function goals (cmd) {
@@ -16,10 +17,12 @@ module.exports = async function goals (cmd) {
     const meta = { propertyId, experienceId, iterationId }
     const goals = await goalService.get(meta)
 
-    if (cmd === 'add') addGoal(meta, goals)
-    else if (cmd === 'remove') removeGoal(meta, goals)
-    else if (cmd === 'set-primary') setPrimaryGoal(meta, goals)
-    else listGoals(meta, goals)
+    switch (cmd) {
+      case 'list': return listGoals(meta, goals)
+      case 'add': return addGoal(meta, goals).then(() => updatePkg(experienceId))
+      case 'remove': return removeGoal(meta, goals).then(() => updatePkg(experienceId))
+      case 'set-primary': return setPrimaryGoal(meta, goals).then(() => updatePkg(experienceId))
+    }
   } catch (err) {
     log.error(err)
   }
