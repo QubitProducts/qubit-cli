@@ -61,7 +61,7 @@ async function duplicateVariation (propertyId, experienceId, variationId, nextVa
   variation.execution_code = code[`variation-${variationId}.js`]
   variation.custom_styles = code[`variation-${variationId}.css`]
 
-  const newVariation = await variationService.create(iterationId)
+  const newVariation = await variationService.create(iterationId, variation)
   const fileName = variationService.getFilename(newVariation)
   let files = _.pick(await codeService.get(propertyId, experienceId), ['package.json', `${fileName}.js`, `${fileName}.css`])
 
