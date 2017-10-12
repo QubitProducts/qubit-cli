@@ -18,7 +18,7 @@ module.exports = async function push (options) {
   if (!propertyId || !experienceId) return log.info('Nothing to push')
 
   if (!options.force) {
-    let { files } = await down(propertyId, experienceId)
+    let { files } = await down(experienceId)
 
     let remotePkg = JSON.parse(files['package.json'])
     let remoteExperienceUpdatedAt = remotePkg.meta.remoteUpdatedAt
@@ -31,14 +31,13 @@ module.exports = async function push (options) {
 
     if (remoteUpdatedAts.join('|') !== localUpdatedAts.join('|')) {
       log.info('Remote has changed since the last interaction!')
-      await diff(propertyId, experienceId)
-      return
+      await diff()
     }
   }
 
   log.info('Pushing...')
-  let { experience, variations } = await codeService.set(propertyId, experienceId, await readFiles(CWD))
-  let files = pkgService.getCode(experience, variations)
+  let { experience, iteration, variations } = await codeService.set(propertyId, experienceId, await readFiles(CWD))
+  let files = pkgService.getCode(experience, iteration, variations)
   files['package.json'] = JSON.stringify(mergePkg(pkg, files['package.json']), null, 2)
   await fs.writeFile(path.join(CWD, 'package.json'), files['package.json'])
   await scaffold(CWD, files, false, false)

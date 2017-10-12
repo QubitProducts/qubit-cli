@@ -1,6 +1,7 @@
 const _ = require('lodash')
 const propertyService = require('../services/property')
 const experienceService = require('../services/experience')
+const log = require('./log')
 const parseUrl = require('./parse-url')
 const createApp = require('../server/app')
 const {
@@ -10,7 +11,7 @@ const {
   createAutoComplete
 } = require('./terminal')
 
-async function property () {
+async function property (message) {
   const suggestions = await getAutoCompleteMap({
     arr: await propertyService.get(),
     title: 'name',
@@ -18,6 +19,8 @@ async function property () {
   })
   if (suggestions.length === 1) {
     return suggestions[0].id
+  } else if (message) {
+    log.info(message)
   }
   return createAutoComplete('^g^+»^: Select a property (start typing to filter the list)', suggestions).response()
 }

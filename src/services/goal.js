@@ -1,18 +1,11 @@
 const fetch = require('../lib/fetch')
 
 function get (meta) {
-  return fetch.get(getPath(meta))
+  return fetch.get(`/api/iterations/${meta.iterationId}/goals`)
 }
 
 function set (meta, goals) {
-  return fetch.post(getPath(meta, true), { goals })
-}
-
-function getPath (meta, isSet) {
-  const path = isSet ? 'sync' : ''
-  const { propertyId, experienceId, iterationId } = meta
-
-  return `/p/${propertyId}/smart_serve/experiments/${experienceId}/iterations/${iterationId}/goals/${path}`
+  return fetch.post(`/api/iterations/${meta.iterationId}/goals`, { goals })
 }
 
 module.exports = { get, set }

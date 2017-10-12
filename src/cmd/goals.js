@@ -11,8 +11,8 @@ module.exports = async function goals (cmd) {
     if (!pkg.meta) return log.warn('Navigate to an experience directory and try again')
 
     const { propertyId, experienceId } = pkg.meta
-    const experience = await experienceService.get(propertyId, experienceId)
-    const iterationId = experience.recent_iterations.draft.id
+    const { last_iteration_id: iterationId } = await experienceService.get(experienceId)
+
     const meta = { propertyId, experienceId, iterationId }
     const goals = await goalService.get(meta)
 
