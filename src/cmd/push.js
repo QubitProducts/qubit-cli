@@ -1,6 +1,6 @@
 const path = require('path')
 const _ = require('lodash')
-const fs = require('fs-promise')
+const fs = require('fs-extra')
 const log = require('../lib/log')
 const codeService = require('../services/code')
 const readFiles = require('../lib/read-files')
@@ -10,13 +10,12 @@ const scaffold = require('../lib/scaffold')
 const down = require('../services/down')
 const pkgService = require('../services/pkg')
 const diff = require('./diff')
-const chalk = require('chalk')
 let CWD = process.cwd()
 
 module.exports = async function push (options) {
   const pkg = await getPkg()
   const {propertyId, experienceId} = (pkg.meta || {})
-  if (!propertyId || !experienceId) return log('nothing to push')
+  if (!propertyId || !experienceId) return log.info('Nothing to push')
 
   if (!options.force) {
     let { files } = await down(experienceId)
@@ -31,17 +30,16 @@ module.exports = async function push (options) {
     let localUpdatedAts = [localExperienceUpdatedAt].concat(localVariantsUpdatedAt)
 
     if (remoteUpdatedAts.join('|') !== localUpdatedAts.join('|')) {
-      log(chalk.yellow('Remote has changed since the last xp interaction!'))
+      log.info('Remote has changed since the last interaction!')
       await diff()
-      return
     }
   }
 
-  log('pushing...')
+  log.info('Pushing...')
   let { experience, iteration, variations } = await codeService.set(propertyId, experienceId, await readFiles(CWD))
   let files = pkgService.getCode(experience, iteration, variations)
   files['package.json'] = JSON.stringify(mergePkg(pkg, files['package.json']), null, 2)
   await fs.writeFile(path.join(CWD, 'package.json'), files['package.json'])
   await scaffold(CWD, files, false, false)
-  log('pushed!')
+  log.info('Pushed!')
 }

@@ -1,23 +1,22 @@
-const log = require('../lib/log')
+const _ = require('lodash')
 const getPkg = require('../lib/get-pkg')
+const log = require('../lib/log')
 let opn = require('opn')
 
-module.exports = async function open (options) {
+module.exports = async function previewLink (page, options) {
   const pkg = await getPkg()
-  pkg.meta = pkg.meta || {}
+  if (!_.get(pkg, 'meta')) return required()
   const { propertyId, experienceId } = pkg.meta
 
-  if (!propertyId || !experienceId) {
-    log(`sorry! this feature assumes you have already setup an experience locally`)
-    return log(`it uses the package.json metadata to open the overview page for an existing experience`)
+  if (!propertyId || !experienceId) return required()
+
+  const experienceUrl = `https://app.qubit.com/p/${propertyId}/experiences/${experienceId}`
+
+  if (/^editor|settings|overview$/.test(page)) {
+    return opn(`${experienceUrl}/${page === 'overview' ? '' : page}`)
   }
 
-  let route = ''
-
-  if (options.editor) route = 'editor'
-  if (options.settings) route = 'settings'
-
-  const appUrl = `https://app.qubit.com/p/${propertyId}/experiences/${experienceId}/${route}`
-  log(`Opening app ${route || 'overview'} page: ${appUrl}`)
-  opn(appUrl, { wait: false })
+  function required () {
+    return log.warn(`You must be inside an experience folder in order to use this feature!`)
+  }
 }

@@ -1,6 +1,6 @@
 /* globals chrome fetch */
 const CONNECT_ENDPOINT = 'https://localhost:41337/connect'
-const NAMESPACE = 'xp-cli'
+const NAMESPACE = 'qubit-cli'
 const ICONS = {
   on: 'icons/on48.png',
   off: 'icons/off48.png'

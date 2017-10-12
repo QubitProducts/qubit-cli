@@ -9,13 +9,13 @@ module.exports = async function connect () {
   await app.start()
 
   return new Promise((resolve) => {
-    log('navigate to an `experience` page to scaffold your experience from it')
+    log.info('Navigate to an `experience` page to scaffold your experience from it')
     app.post('/connect', async (req, res) => {
       res.end()
-      if (!req.body.url) return log.error('request to /connect endpoint received with no params')
+      if (!req.body.url) return log.error('Request to /connect endpoint received with no params')
       const {propertyId, experienceId} = parseUrl(req.body.url)
       const msg = `You recently navigated to ${highlight(req.body.url)}\n` +
-      `Would you like ${highlight('xp')} to scaffold your local project from this experiment? ${highlight('(y/n)')}`
+      `Would you like ${highlight('Qubit-CLI')} to scaffold your local project from this experiment? ${highlight('(y/n)')}`
       const yes = await confirm(msg)
       if (!yes) return
       await app.stop()

@@ -37,7 +37,7 @@ async function set (propertyId, experienceId, files) {
     const newVariation = variationService.setCode(oldVariation, files)
     return eql(oldVariation, newVariation)
       ? oldVariation
-      : await variationService.set(oldVariation.id, newVariation)
+      : variationService.set(oldVariation.id, newVariation)
   }))
 
   return { experience, iteration, variations }

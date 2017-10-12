@@ -1,5 +1,4 @@
 const path = require('path')
-const chalk = require('chalk')
 const experienceService = require('../services/experience')
 const codeService = require('../services/code')
 const experienceFilename = require('./experience-filename')
@@ -10,15 +9,15 @@ module.exports = async function createExperience (CWD, propertyId, name, control
   const recentIterations = buildRecentIterations(controlDecimal)
   const experience = await experienceService.create({ propertyId, name, recent_iterations: recentIterations })
 
-  if (!experience.id) return log(`I'm afraid we could not create an experience at this time`)
-  log(chalk.yellow('Creating experience'))
+  if (!experience.id) return log.info(`I'm afraid we could not create an experience at this time`)
+  log.info('Creating experience')
 
   const files = await codeService.get(propertyId, experience.id)
   const filename = experienceFilename(experience)
   const dest = path.join(CWD, filename)
 
   await scaffold(dest, files, false)
-  log(chalk.green(`Created at ${filename}`))
+  log.info(`Created at ${filename}`)
 }
 
 function buildRecentIterations (controlDecimal) {

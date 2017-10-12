@@ -7,3 +7,5 @@ _docpress
 .idea/**/tasks.xml
 .idea/dictionaries
 .idea/markdown-navigator/*
+config/local*
+*package-lock.json

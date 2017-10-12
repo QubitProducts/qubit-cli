@@ -10,7 +10,7 @@ module.exports = async function create (pid) {
   try {
     const propertyId = await getPropertyId(pid)
     if (!propertyId) {
-      log(`aborted`)
+      log.info(`Aborted`)
       return
     }
     const name = clean(await input.text(
@@ -18,9 +18,7 @@ module.exports = async function create (pid) {
       { default: 'Created by xp' }
     ))
     const controlDecimal = await input.select('Select control size:', validControlSizes, { default: 0.5 })
-    log(`creating experience`)
     await createExperience(CWD, propertyId, name, controlDecimal)
-    log(`experience created`)
   } catch (err) {
     log.error(err)
   }

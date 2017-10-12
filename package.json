@@ -1,10 +1,10 @@
 {
-  "name": "@qubit/xp-cli",
+  "name": "qubit-cli",
   "version": "1.32.1",
   "description": "a utility for previewing experiences built using the qubit experience platform",
   "main": "src/index.js",
   "bin": {
-    "xp": "bin/xp"
+    "qubit": "bin/qubit"
   },
   "directories": {
     "example": "example"
@@ -14,9 +14,7 @@
     "dist": "docs"
   },
   "scripts": {
-    "test": "make test",
-    "build-docs": "docpress b",
-    "serve-docs": "docpress s"
+    "test": "make test"
   },
   "author": {
     "name": "Alan Clarke",
@@ -32,24 +30,6 @@
   },
   "license": "UNLICENSED",
   "dependencies": {
-    "@qubit/advanced-modal": "^1.0.1",
-    "@qubit/biscotti": "^5.7.0",
-    "@qubit/email-scheduler": "^1.7.1",
-    "@qubit/exit-checker": "^1.0.5",
-    "@qubit/floating-panel": "^1.2.0",
-    "@qubit/growl": "^1.1.0",
-    "@qubit/image-carousel": "^1.2.0",
-    "@qubit/jolt": "^7.25.0",
-    "@qubit/jquery": "^1.8.2",
-    "@qubit/mvt": "^1.1.1",
-    "@qubit/poller": "^1.5.15",
-    "@qubit/product-recommendations": "^1.2.2",
-    "@qubit/remember-preview": "^1.1.0",
-    "@qubit/send-uv-event": "^1.1.0",
-    "@qubit/social-proof": "^1.1.6",
-    "@qubit/stash-count": "^1.3.8",
-    "@qubit/uv-api": "^4.1.0",
-    "@qubit/visitor-pulse": "^1.0.7",
     "axios": "^0.16.0",
     "body-parser": "^1.17.1",
     "buble": "^0.15.2",
@@ -66,9 +46,8 @@
     "event-kitten": "^1.1.0",
     "execa": "^0.6.3",
     "express": "^4.15.2",
-    "fs-promise": "^2.0.2",
+    "fs-extra": "^4.0.2",
     "input": "^1.0.1",
-    "joi": "^10.4.1",
     "js-yaml": "^3.8.2",
     "json-loader": "^0.5.4",
     "jsonwebtoken": "^7.3.0",
@@ -76,6 +55,7 @@
     "less-loader": "^4.0.3",
     "lodash": "^4.17.4",
     "micro-amd": "^1.2.3",
+    "ms": "^2.0.0",
     "now-plus": "^1.0.3",
     "np": "^2.16.0",
     "opn": "^4.0.2",
@@ -111,12 +91,9 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "eslint": "^4.4.1",
-    "eslint-plugin-react": "^7.2.1",
-    "eslint-plugin-standard": "^3.0.1",
     "mocha": "^3.2.0",
     "rewire": "^2.5.2",
     "sinon": "^2.1.0",
-    "standard": "^9.0.2"
+    "standard": "^10.0.3"
   }
 }

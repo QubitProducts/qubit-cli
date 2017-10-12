@@ -18,7 +18,7 @@ module.exports = async function pull (urlOrPidOrName, pidOrEid) {
     if (pkg.meta) {
       // Get ids from package.json?
       ;({propertyId, experienceId} = _.get(pkg, 'meta') || {})
-      log(`using property-id and experience-id from package.json`)
+      log.info(`Using property-id and experience-id from package.json`)
     } else {
       // Get ids from the user?
       ;({propertyId, experienceId} = await getPropertyAndExperienceIds(urlOrPidOrName, pidOrEid) || {})
@@ -28,7 +28,7 @@ module.exports = async function pull (urlOrPidOrName, pidOrEid) {
     if (propertyId && experienceId) {
       await pullExperience(CWD, propertyId, experienceId)
     } else {
-      log(`aborted`)
+      log.warn(`Aborted`)
     }
   } catch (err) {
     log.error(err)

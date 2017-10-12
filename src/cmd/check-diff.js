@@ -6,7 +6,7 @@ const jsdiff = require('diff')
 let CWD = process.cwd()
 
 module.exports = async function checkDiff (propertyId, experienceId) {
-  log('Comparing files...')
+  log.info('Comparing files...')
   const files = await codeService.get(propertyId, experienceId)
   const localFiles = await readFiles(CWD)
   delete files['package.json']
@@ -14,17 +14,17 @@ module.exports = async function checkDiff (propertyId, experienceId) {
   const fileDiffs = checkDiff(localFiles, files)
 
   if (fileDiffs.length) {
-    log('Showing diff between local and remote files...')
+    log.info('Showing diff between local and remote files...')
     for (let diffObj of fileDiffs) {
       const { fileName, diff } = diffObj
-      console.log(`${chalk.blue.bold(fileName)} \n`)
+      log.info(`${chalk.blue.bold(fileName)} \n`)
       diff.forEach(parts => {
         const color = parts.added ? 'green' : parts.removed ? 'red' : 'grey'
-        console.log(`${chalk[color](parts.value)}`)
+        log.info(`${chalk[color](parts.value)}`)
       })
     }
   } else {
-    log('Both versions are the same!')
+    log.info('Both versions are the same!')
   }
 
   function checkDiff (localFiles, files) {

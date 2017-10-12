@@ -42,13 +42,13 @@ module.exports = async function template (name) {
 
   output['package.json'] = JSON.stringify(outPkg, null, 2)
 
-  return await scaffold(CWD, output, false)
+  return scaffold(CWD, output, false)
 }
 
 async function getTemplateFiles (template) {
   let templateDir = path.dirname(require.resolve(template))
   if (!/\/template$/.test(templateDir)) templateDir = path.join(templateDir, 'template')
-  return await readFiles(path.join(templateDir))
+  return readFiles(path.join(templateDir))
 }
 
 function addTemplateMetrics (meta, templateName) {
