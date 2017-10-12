@@ -2,12 +2,13 @@ const np = require('np/index')
 const ui = require('np/lib/ui')
 const log = require('../lib/log')
 const login = require('../server/lib/login')
+const { getRegistryToken } = require('../lib/get-token')
 
 module.exports = async function release (version, { anyBranch, cleanup, yolo, publish, tag, yarn }) {
   let flags = { anyBranch, cleanup, yolo, publish, tag, yarn }
 
   // Login authenticates against our private registry and configures all the associated private scopes
-  await login()
+  await getRegistryToken(() => login(), true)
 
   return Promise.resolve()
     .then(getOptions)
