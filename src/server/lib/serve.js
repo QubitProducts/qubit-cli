@@ -44,7 +44,7 @@ module.exports = async function serve (options) {
   options.variationFilename = options.variationFilename.replace(/\.js$/, '')
 
   const verboseOpts = {
-    log: options.verbose ? log : false,
+    log: options.verbose ? console.log : false,
     noInfo: !options.verbose,
     quiet: !options.verbose,
     stats: options.verbose,
