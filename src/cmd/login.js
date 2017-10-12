@@ -3,7 +3,7 @@ const log = require('../lib/log')
 
 module.exports = async function loginCmd (id) {
   try {
-    await login()
+    await login(true)
     log.info('Login successful!')
   } catch (err) {
     log.error(err)

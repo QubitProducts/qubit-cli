@@ -11,13 +11,13 @@ const log = require('../../lib/log')
 const createApp = require('../app')
 const { getRegistryToken } = require('../../lib/get-token')
 
-module.exports = async function login () {
+module.exports = async function login (forceRefresh) {
   let idToken = await qubtrc.get(ID_TOKEN)
 
   // try to login with existing token if it exists
   if (!tokenHasExpired(idToken, Date.now(), ms('1 day'))) {
     try {
-      await getRegistryToken(() => idToken)
+      await getRegistryToken(() => idToken, forceRefresh)
       return idToken
     } catch (err) {
       return log.error(err)
@@ -42,7 +42,7 @@ module.exports = async function login () {
       try {
         idToken = await getIdToken(req.query.code, verifier)
         await qubtrc.set(ID_TOKEN, idToken)
-        await getRegistryToken(() => idToken)
+        await getRegistryToken(() => idToken, forceRefresh)
         res.send('You are now logged in!. You can now close this tab.')
         await app.stop()
         resolve(idToken)
