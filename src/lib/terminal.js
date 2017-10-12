@@ -96,6 +96,8 @@ const createAutoComplete = (prompt, suggestions) => {
         } else if (name === 'ESCAPE') {
           abortFn()
           resolve(null)
+        } else if (name === 'CTRL_C') {
+          process.exit()
         }
       }
       term.on('key', onKey)

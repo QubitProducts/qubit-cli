@@ -38,8 +38,10 @@ module.exports = async function duplicate () {
       }
     } else {
       // if the user is not in an xp experience folder, allow them to duplicate an experience
-      const selectedPropertyId = await suggest.property('Select a property to duplicate from')
+      const selectedPropertyId = await suggest.property('What property would you like to duplicate from?')
+      if (!selectedPropertyId) return
       const selectedExperienceId = await suggest.experience(selectedPropertyId)
+      if (!selectedExperienceId) return
       const selectedExperience = await experienceService.get(selectedExperienceId)
       await duplicateExperience(selectedExperience)
     }
@@ -76,7 +78,8 @@ async function duplicateExperience (experience) {
   const experienceId = experience.id
   const iterationId = experience.last_iteration_id
   const iteration = await iterationService.get(iterationId)
-  const targetPropertyId = await suggest.property('Select a property to duplciate the experience to')
+  const targetPropertyId = await suggest.property('What property would you like to duplicate to?')
+  if (!targetPropertyId) return
   const name = await input.text('What do you want to call this experience?', { default: `${experience.name} (copy)` })
   const previewUrl = iteration.url
   const duplicateOptions = { id: experienceId, name, preview_url: previewUrl, target_property_id: targetPropertyId }
