@@ -1,16 +1,9 @@
-const path = require('path')
 const _ = require('lodash')
-const fs = require('fs-extra')
 const log = require('../lib/log')
-const codeService = require('../services/code')
-const readFiles = require('../lib/read-files')
 const getPkg = require('../lib/get-pkg')
-const mergePkg = require('../lib/merge-pkg')
-const scaffold = require('../lib/scaffold')
+const updatePkg = require('../lib/update-pkg')
 const down = require('../services/down')
-const pkgService = require('../services/pkg')
 const diff = require('./diff')
-let CWD = process.cwd()
 
 module.exports = async function push (options) {
   const pkg = await getPkg()
@@ -36,10 +29,6 @@ module.exports = async function push (options) {
   }
 
   log.info('Pushing...')
-  let { experience, iteration, variations } = await codeService.set(propertyId, experienceId, await readFiles(CWD))
-  let files = pkgService.getCode(experience, iteration, variations)
-  files['package.json'] = JSON.stringify(mergePkg(pkg, files['package.json']), null, 2)
-  await fs.writeFile(path.join(CWD, 'package.json'), files['package.json'])
-  await scaffold(CWD, files, false, false)
+  await updatePkg(experienceId)
   log.info('Pushed!')
 }

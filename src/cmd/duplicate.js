@@ -1,16 +1,17 @@
 const _ = require('lodash')
+const path = require('path')
 const input = require('input')
+const fs = require('fs-extra')
 const log = require('../lib/log')
 const suggest = require('../lib/suggest')
 const getPkg = require('../lib/get-pkg')
 const scaffold = require('../lib/scaffold')
-const mergePkg = require('../lib/merge-pkg')
 const cloneExperience = require('../lib/clone-experience')
+const down = require('../services/down')
 const variationService = require('../services/variation')
 const iterationService = require('../services/iteration')
-const codeService = require('../services/code')
 const experienceService = require('../services/experience')
-const cwd = process.cwd()
+const CWD = process.cwd()
 
 module.exports = async function duplicate () {
   try {
@@ -25,7 +26,7 @@ module.exports = async function duplicate () {
       // if the user is in an xp experience folder, allow them to duplicate a variation
       const variations = await variationService.getAll(iterationId)
       const nextVariationNumber = Object.keys(variations).length
-      const variationChoices = getVariationChoices(variations)
+      const variationChoices = _(variations).filter({ is_control: false }).map(v => ({ name: v.name, value: v.master_id })).value()
 
       if (variationChoices.length > 1) {
         const variationId = await input.select('Which variation would you like to duplicate?', variationChoices)
@@ -33,7 +34,6 @@ module.exports = async function duplicate () {
       } else {
         const { name, value: variationId } = variationChoices[0]
         const shouldDuplicateVariation = await input.confirm(`Do you want to duplicate ${name}?`)
-
         if (shouldDuplicateVariation) await duplicateVariation(propertyId, experienceId, variationId, nextVariationNumber, pkg)
       }
     } else {
@@ -63,15 +63,10 @@ async function duplicateVariation (propertyId, experienceId, variationId, nextVa
   variation.execution_code = code[`variation-${variationId}.js`]
   variation.custom_styles = code[`variation-${variationId}.css`]
 
-  const newVariation = await variationService.create(iterationId, variation)
-  const fileName = variationService.getFilename(newVariation)
-  let files = _.pick(await codeService.get(propertyId, experienceId), ['package.json', `${fileName}.js`, `${fileName}.css`])
-
-  // delete pkg.meta.variations[fileName]
-  delete _.get(pkg, `meta.variations.${fileName}`)
-
-  if (_.get(pkg, 'meta')) files['package.json'] = JSON.stringify(mergePkg(pkg, files['package.json']), null, 2)
-  await scaffold(cwd, files, false, false)
+  await variationService.create(iterationId, variation)
+  let { files } = await down(experienceId)
+  await fs.outputFile(path.join(CWD, 'package.json'), files['package.json'])
+  await scaffold(CWD, files, false, false, false)
 }
 
 async function duplicateExperience (experience) {
@@ -88,21 +83,8 @@ async function duplicateExperience (experience) {
   if (duplicatedExperience) {
     log.info('Experience successfully duplicated')
     const shouldClone = await input.confirm('Do you want to clone the duplicated experience into the current directory?')
-
-    if (shouldClone) await cloneExperience(cwd, targetPropertyId, duplicatedExperience.id)
+    if (shouldClone) await cloneExperience(CWD, targetPropertyId, duplicatedExperience.id)
   } else {
     log.warn('Experience could not be duplicated')
   }
-}
-
-function getVariationChoices (variations) {
-  const controlKey = Object.keys(variations)[0]
-  const allVariations = _.omit(variations, controlKey)
-
-  return _.map(allVariations, variation => {
-    return {
-      name: variation.name,
-      value: variation.master_id
-    }
-  })
 }

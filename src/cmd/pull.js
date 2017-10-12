@@ -9,7 +9,7 @@ const CWD = process.cwd()
 
 module.exports = async function pull (urlOrPidOrName, pidOrEid) {
   try {
-    // Scaffold from template?
+    // from template?
     if (isName(urlOrPidOrName)) { return template(urlOrPidOrName) }
 
     // Pulling from an id-pair?
@@ -18,7 +18,6 @@ module.exports = async function pull (urlOrPidOrName, pidOrEid) {
     if (pkg.meta) {
       // Get ids from package.json?
       ;({propertyId, experienceId} = _.get(pkg, 'meta') || {})
-      log.info(`Using property-id and experience-id from package.json`)
     } else {
       // Get ids from the user?
       ;({propertyId, experienceId} = await getPropertyAndExperienceIds(urlOrPidOrName, pidOrEid) || {})

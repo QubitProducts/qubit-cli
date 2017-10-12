@@ -2,20 +2,26 @@ const axios = require('axios')
 const crypto = require('crypto')
 const opn = require('opn')
 const qs = require('qs')
+const ms = require('ms')
 const config = require('../../../config')
 const qubtrc = require('../../lib/qubitrc')
+const tokenHasExpired = require('../../lib/token-has-expired')
+const { ID_TOKEN } = require('../../lib/constants')
 const log = require('../../lib/log')
 const createApp = require('../app')
-const setup = require('../../lib/setup')
+const { getRegistryToken } = require('../../lib/get-token')
 
 module.exports = async function login () {
-  let idToken = await qubtrc.get('ID_TOKEN')
+  let idToken = await qubtrc.get(ID_TOKEN)
 
   // try to login with existing token if it exists
-  if (idToken) {
+  if (!tokenHasExpired(idToken, Date.now(), ms('1 day'))) {
     try {
-      return await setup(idToken)
-    } catch (err) {}
+      await getRegistryToken(() => idToken)
+      return idToken
+    } catch (err) {
+      return log.error(err)
+    }
   }
 
   let app = await createApp()
@@ -31,17 +37,19 @@ module.exports = async function login () {
 
   log.info(`Opening login url: ${loginUrl}`)
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     app.get('/callback', async (req, res, next) => {
       try {
         idToken = await getIdToken(req.query.code, verifier)
-        await setup(idToken)
+        await qubtrc.set(ID_TOKEN, idToken)
+        await getRegistryToken(() => idToken)
         res.send('You are now logged in!. You can now close this tab.')
         await app.stop()
-        resolve()
+        resolve(idToken)
       } catch (err) {
-        log.error(String(err))
         res.end()
+        log.error(err)
+        reject(err)
       }
     })
   })

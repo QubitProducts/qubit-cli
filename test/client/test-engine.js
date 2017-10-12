@@ -1,5 +1,8 @@
+const config = require('config')
 const sinon = require('sinon')
 const engine = require('../../src/client/engine')
+const logger = require('../../src/client/log')
+logger.enable({ '*': config.logger.level })
 const expect = require('chai').expect
 
 describe('engine', function () {

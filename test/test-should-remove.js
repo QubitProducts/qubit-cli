@@ -17,11 +17,6 @@ describe('shouldRemove', function () {
     restore()
   })
 
-  it('should return false if file is not css or js', async () => {
-    confirmStub.returns(Promise.resolve(true))
-    expect(await shouldRemove('.git')).to.eql(false)
-  })
-
   it('should return true if file is css or js', async () => {
     confirmStub.returns(Promise.resolve(true))
     expect(await shouldRemove('test.js')).to.eql(true)

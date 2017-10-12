@@ -1,4 +1,5 @@
 const confirm = require('confirmer')
+const config = require('../../../config')
 const highlight = require('../../lib/highlight')
 const log = require('../../lib/log')
 const parseUrl = require('../../lib/parse-url')
@@ -7,6 +8,7 @@ const createApp = require('../app')
 module.exports = async function connect () {
   let app = await createApp()
   await app.start()
+  log.info(`Qubit-CLI listening on port ${config.port}`)
 
   return new Promise((resolve) => {
     log.info('Navigate to an `experience` page to scaffold your experience from it')
