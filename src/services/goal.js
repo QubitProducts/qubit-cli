@@ -5,7 +5,7 @@ function get (meta) {
 }
 
 function set (meta, goals) {
-  return fetch.post(`/api/iterations/${meta.iterationId}`, { goals })
+  return fetch.post(`/api/iterations/${meta.iterationId}/goals`, { goals })
 }
 
 module.exports = { get, set }
