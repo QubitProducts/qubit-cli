@@ -1,11 +1,10 @@
 const path = require('path')
-const chalk = require('chalk')
 const fs = require('fs-extra')
 let checkExists = require('./exists')
 let confirm = require('confirmer')
 
 module.exports = async function shouldWrite (dest, name, newValue, shouldConfirm, shouldOverwrite) {
-  const msg = `Do you want ${chalk.green.bold('xp')} to overwrite your local ${chalk.green.bold(name)} file?`
+  const msg = `Do you want Qubit-CLI to overwrite your local ${name} file?`
   const file = path.join(dest, name)
   let exists = await checkExists(file)
 

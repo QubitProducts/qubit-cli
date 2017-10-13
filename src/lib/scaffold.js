@@ -1,5 +1,4 @@
 const path = require('path')
-const chalk = require('chalk')
 const fs = require('fs-extra')
 const log = require('./log')
 const exists = require('./exists')
@@ -32,7 +31,7 @@ module.exports = async function scaffold (dest, files, shouldConfirm = true, sho
     const value = files[name]
     let result = await shouldWrite(dest, name, value, shouldConfirm, shouldOverwrite)
     if (result) {
-      if (log) log.info(`Writing to local ${chalk.green.bold(name)} file...`)
+      if (log) log.info(`Writing to local ${name} file...`)
       return fs.outputFile(path.join(dest, name), value)
     }
   }
