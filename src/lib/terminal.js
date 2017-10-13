@@ -128,7 +128,7 @@ const createAutoComplete = (prompt, suggestions) => {
         // print the prompt to the terminal
         term.restoreCursor()
         term.eraseDisplayBelow()
-        term(`${prompt}: ^_${subStr}^`)
+        term(`${prompt}     ^_${subStr}^`)
 
         // figure out terminal spacing for the menu
         const cursorPos = await getCursorLocation()
@@ -151,7 +151,7 @@ const createAutoComplete = (prompt, suggestions) => {
       // The loop terminated, so we got an answer or an abort from the user.
       term.restoreCursor()
       term.eraseDisplayBelow()
-      term(`${prompt}: ^b^+${answer ? answer.title : ''}^\n`)
+      term(`${prompt}    ^b^+${answer ? answer.title : ''}^\n`)
       cleanTerminal()
       deferred.resolve(answer && answer.value)
     } catch (err) {

@@ -2,6 +2,7 @@ const _ = require('lodash')
 const propertyService = require('../services/property')
 const experienceService = require('../services/experience')
 const log = require('./log')
+const formatLog = require('./format-log')
 const parseUrl = require('./parse-url')
 const createApp = require('../server/app')
 const {
@@ -22,7 +23,7 @@ async function property (message) {
   } else if (message) {
     log.info(message)
   }
-  return createAutoComplete('^g^+»^: Select a property (start typing to filter the list)', suggestions).response()
+  return createAutoComplete('     Select a property (start typing to filter the list)\n', suggestions).response()
 }
 
 async function experience (propertyId) {
@@ -31,7 +32,7 @@ async function experience (propertyId) {
     title: 'name',
     value: 'id'
   })
-  return createAutoComplete('^g^+»^: Select an experience (start typing to filter the list)', suggestions).response()
+  return createAutoComplete('     Select an experience (start typing to filter the list)\n', suggestions).response()
 }
 
 async function both () {
@@ -42,7 +43,7 @@ async function both () {
   })
 
   // main prompt
-  const prompt = '^g^+»^: Select a property or navigate to an experience in your browser (start typing to filter the list)'
+  const prompt = '     Select a property or navigate to an experience in your browser (start typing to filter the list)\n'
 
   // start app to monitor browser navigation
   const app = await createApp()
@@ -64,10 +65,10 @@ async function both () {
       // offer choice to use navigated url
       const [, url] = req.body.url.match(/^https?:\/\/(.+?)\/?$/)
       term(prompt + '\n')
-      term.up(1).column(prompt.length + 999)
+      term.up(4).column(prompt.length + 999)
       term.eraseDisplayBelow()
       term('\n')
-      const yesNoPrompt = `  ^g^+›^: You just navigated to: ^_${url}^ \n    Do you want to select that experience?`
+      const yesNoPrompt = formatLog(`\n     You just navigated to: ^_${url}^ \n     Do you want to select that experience?`)
       if (await yesOrNo(yesNoPrompt)) {
         // use navigated url
         resolve(parseUrl(req.body.url))
@@ -97,7 +98,7 @@ async function both () {
 
 async function getAutoCompleteMap ({arr, title, value}) {
   return arr.map((iteree) => ({
-    title: iteree[title],
+    title: formatLog(iteree[title]).substr(4),
     value: iteree[value]
   }))
 }

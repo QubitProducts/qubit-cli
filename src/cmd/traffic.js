@@ -3,6 +3,7 @@ const getPkg = require('../lib/get-pkg')
 const experienceService = require('../services/experience')
 const iterationService = require('../services/iteration')
 const validControlSizes = require('../lib/valid-control-sizes')
+const formatLog = require('../lib/format-log')
 const updatePkg = require('../lib/update-pkg')
 const log = require('../lib/log')
 
@@ -19,7 +20,7 @@ module.exports = async function traffic (options) {
 
     if (options.view) return log.info(`Current control size is ${currentControlPercentage}`)
 
-    const newControlDecimal = await input.select(`Select control size (current ${currentControlPercentage}):`, validControlSizes, { 'default': currentControlDecimal })
+    const newControlDecimal = await input.select(formatLog(`Select control size (current ${currentControlPercentage.trim()})`).substr(2), validControlSizes, { 'default': currentControlDecimal })
     const updatedIteration = await iterationService.set(iterationId, { control_size: newControlDecimal })
 
     if (updatedIteration) {

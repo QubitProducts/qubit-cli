@@ -9,7 +9,7 @@ module.exports = async function createExperience (CWD, propertyId, name, control
   const recentIterations = buildRecentIterations(controlDecimal)
   const experience = await experienceService.create({ propertyId, name, recent_iterations: recentIterations })
 
-  if (!experience.id) return log.info(`I'm afraid we could not create an experience at this time`)
+  if (!experience.id) return log.error(`I'm afraid we could not create an experience at this time`)
   log.info('Creating experience')
 
   const files = await codeService.get(propertyId, experience.id)

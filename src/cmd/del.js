@@ -3,6 +3,7 @@ const fs = require('fs-extra')
 const path = require('path')
 const input = require('input')
 const log = require('../lib/log')
+const formatLog = require('../lib/format-log')
 const suggest = require('../lib/suggest')
 const scaffold = require('../lib/scaffold')
 const getPkg = require('../lib/get-pkg')
@@ -24,7 +25,7 @@ module.exports = async function del () {
       const variationChoices = _(variations).filter({ is_control: false }).map(v => ({ name: v.name, value: v.master_id })).value()
 
       if (variationChoices.length > 1) {
-        const variationId = await input.select('Which variation would you like to delete?', variationChoices)
+        const variationId = await input.select(formatLog('Which variation would you like to delete?'), variationChoices)
         const deletedVariation = await variationService.remove(propertyId, experienceId, variationId)
         if (deletedVariation) {
           log.info('Variation successfully deleted')

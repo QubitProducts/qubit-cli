@@ -4,7 +4,7 @@ const qubitrc = require('../lib/qubitrc')
 module.exports = async function logoutCmd (id) {
   try {
     await qubitrc.unsetEnv()
-    log.info('You are now logged out!')
+    log.info('Logout successful!')
   } catch (err) {
     log.error(err)
   }
