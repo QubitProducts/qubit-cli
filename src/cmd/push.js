@@ -2,8 +2,11 @@ const _ = require('lodash')
 const log = require('../lib/log')
 const getPkg = require('../lib/get-pkg')
 const updatePkg = require('../lib/update-pkg')
+const readFiles = require('../lib/read-files')
+const codeService = require('../services/code')
 const down = require('../services/down')
 const diff = require('./diff')
+let CWD = process.cwd()
 
 module.exports = async function push (options) {
   const pkg = await getPkg()
@@ -29,6 +32,7 @@ module.exports = async function push (options) {
   }
 
   log.info('Pushing...')
+  await codeService.set(propertyId, experienceId, await readFiles(CWD))
   await updatePkg(experienceId)
   log.info('Pushed!')
 }
