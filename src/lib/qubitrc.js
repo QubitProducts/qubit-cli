@@ -18,6 +18,8 @@ async function read () {
 }
 
 async function write (newData) {
+  newData = newData || {}
+  newData.ENV = getEnv()
   let output = newData
   data = newData
   return fs.writeFile(QUBITRC, serialize(output))
@@ -61,11 +63,17 @@ function getEnv () {
 }
 
 function parse (value) {
-  return _.pick(value ? yaml.load(value) : {}, ['debug', 'staging', 'production', 'test'])
+  return _.pick(value ? yaml.load(value) : {}, ['debug', 'staging', 'production', 'test', 'ENV'])
 }
 
 function serialize (things) {
   return yaml.dump(things)
 }
 
-module.exports = { get, set, unset, unsetEnv }
+async function switched () {
+  let prevENV = (await read()).ENV
+  let currentENV = getEnv()
+  return prevENV !== currentENV
+}
+
+module.exports = { get, set, unset, unsetEnv, switched }

@@ -50,10 +50,12 @@ async function getRegistryToken (getIDToken, forceRefresh) {
 }
 
 async function setupNPMRC (registryToken, scopes) {
+  let commands = []
   const authKey = config.services.registry.replace(/^https?:/, '')
   // always ensure that @qubit and @qutics scopes are configured
-  await execa.shell(`npm config set ${authKey}/:_authToken ${registryToken}`)
-  for (let scope of scopes) await execa.shell(`npm config set ${scope}:registry ${config.services.registry}/`)
+  commands.push(`npm config set ${authKey}/:_authToken ${registryToken}`)
+  for (let scope of scopes) commands.push(`npm config set ${scope}:registry ${config.services.registry}/`)
+  return execa.shell(commands.join(' && '))
 }
 
 module.exports = { getAppToken, getRegistryToken }
