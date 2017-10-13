@@ -4,8 +4,9 @@ const log = require('../lib/log')
 const login = require('../server/lib/login')
 const { getRegistryToken } = require('../lib/get-token')
 
-module.exports = async function release (version, { anyBranch, cleanup, yolo, publish, tag, yarn }) {
-  let flags = { anyBranch, cleanup, yolo, publish, tag, yarn }
+// { anyBranch, cleanup, yolo, publish, tag, yarn }
+module.exports = async function release (version, options) {
+  let flags = options
 
   // Login authenticates against our private registry and configures all the associated private scopes
   await getRegistryToken(() => login(), true)

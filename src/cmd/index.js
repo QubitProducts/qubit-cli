@@ -52,18 +52,22 @@ module.exports = function run (pkg) {
   $ xp release 1.0.2
   $ xp release 1.0.2-beta.3 --tag=beta`)
     .description('release a new version of your package')
-    .option('--any-branch', 'allow publishing from any branch', false)
-    .option('--no-cleanup', 'Skips cleanup of node_modules', false)
-    .option('--yolo', 'Skips cleanup and testing', false)
-    .option('--no-publish', 'Skips publishing', false)
-    .option('--tag', 'Publish under a given dist-tag', false)
-    .option('--no-yarn', `Don't use Yarn`, false)
+    .option('--any-branch', 'allow publishing from any branch')
+    .option('--no-cleanup', 'Skips cleanup of node_modules')
+    .option('--yolo', 'Skips cleanup and testing')
+    .option('--no-publish', 'Skips publishing')
+    .option('--tag', 'Publish under a given dist-tag')
+    .option('--no-yarn', `Don't use Yarn`)
     .action(function runRelease (version, options) {
       if (/^(development|staging|production)$/.test(version)) {
         log.warn(`qubit release no longer accepts an environment option`)
         this.outputHelp(chalk.red)
         return
       }
+      // Defer to np's defaults
+      if (options.cleanup) delete options.cleanup
+      if (options.publish) delete options.publish
+      if (options.yarn) delete options.yarn
       return release(version, options)
     })
 
@@ -194,7 +198,7 @@ module.exports = function run (pkg) {
 
   program.on('--help', function () {
     console.log(`
-    For more info visit https://github.com/qubitdigital/xp-cli/blob/master/README.md`)
+    For more info visit https://github.com/qubitdigital/qubit-cli/blob/master/README.md`)
   })
 
   program.parse(process.argv)

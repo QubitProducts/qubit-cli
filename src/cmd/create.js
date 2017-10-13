@@ -15,7 +15,7 @@ module.exports = async function create (pid) {
     }
     const name = clean(await input.text(
       'What would you like to call your experience?',
-      { default: 'Created by xp' }
+      { default: 'Created by Qubit-CLI' }
     ))
     const controlDecimal = await input.select('Select control size:', validControlSizes, { default: 0.5 })
     await createExperience(CWD, propertyId, name, controlDecimal)
