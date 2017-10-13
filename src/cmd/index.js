@@ -1,5 +1,6 @@
 const program = require('commander')
 const chalk = require('chalk')
+const log = require('../lib/log')
 const create = require('./create')
 const extension = require('./extension')
 const open = require('./open')
@@ -23,7 +24,14 @@ module.exports = function run (pkg) {
   program
     .command('login')
     .description('login to the qubit platform')
-    .action(login)
+    .action(function runLogin (options) {
+      if (/^(development|staging|production)$/.test(options)) {
+        log.warn(`qubit release no longer accepts an environment option`)
+        this.outputHelp(chalk.red)
+        return
+      }
+      return login()
+    })
 
   program
     .command('logout')
@@ -50,7 +58,14 @@ module.exports = function run (pkg) {
     .option('--no-publish', 'Skips publishing', false)
     .option('--tag', 'Publish under a given dist-tag', false)
     .option('--no-yarn', `Don't use Yarn`, false)
-    .action(release)
+    .action(function runRelease (version, options) {
+      if (/^(development|staging|production)$/.test(version)) {
+        log.warn(`qubit release no longer accepts an environment option`)
+        this.outputHelp(chalk.red)
+        return
+      }
+      return release(version, options)
+    })
 
   program
     .command('create [propertyId]')
