@@ -20,7 +20,7 @@ module.exports = async function traffic (options) {
 
     if (options.view) return log.info(`Current control size is ${currentControlPercentage}`)
 
-    const newControlDecimal = await input.select(formatLog(`Select control size (current ${currentControlPercentage.trim()})`).substr(2), validControlSizes, { 'default': currentControlDecimal })
+    const newControlDecimal = await input.select(formatLog(`   Select control size (current ${currentControlPercentage.trim()})`), validControlSizes, { 'default': currentControlDecimal })
     const updatedIteration = await iterationService.set(iterationId, { control_size: newControlDecimal })
 
     if (updatedIteration) {

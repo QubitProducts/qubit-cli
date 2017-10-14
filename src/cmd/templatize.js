@@ -4,6 +4,7 @@ const fs = require('fs-extra')
 const input = require('input')
 const execa = require('execa')
 const getPkg = require('../lib/get-pkg')
+const formatLog = require('../lib/format-log')
 const readFiles = require('../lib/read-files')
 const scaffold = require('../lib/scaffold')
 const log = require('../lib/log')
@@ -15,9 +16,9 @@ module.exports = async function templatize () {
 
   let tmpPkg = { version: '1.0.0', main: 'index.js' }
 
-  tmpPkg.name = clean(await input.text('What would you like to call your template?', { default: pkg.name || 'template' }))
+  tmpPkg.name = clean(await input.text(formatLog('   What would you like to call your template?'), { default: pkg.name || 'template' }))
 
-  tmpPkg.description = await input.text('Please provide a description:')
+  tmpPkg.description = await input.text(formatLog('   Please provide a description:'))
 
   let templateDir = path.join(path.dirname(CWD), tmpPkg.name)
 

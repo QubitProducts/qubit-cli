@@ -5,6 +5,7 @@ const goalService = require('../services/goal')
 const goalsHelper = require('../lib/goals')
 const updatePkg = require('../lib/update-pkg')
 const log = require('../lib/log')
+const formatLog = require('../lib/format-log')
 
 module.exports = async function goals (cmd) {
   try {
@@ -40,7 +41,7 @@ async function addGoal (meta, goals) {
     return uniqueGoal
   })
 
-  const key = await input.select('Add new goal:', goalsAvailableToAdd)
+  const key = await input.select(formatLog('   Add new goal:'), goalsAvailableToAdd)
   const isUrlGoal = key === 'pageviews.url'
   const isEventGoal = key === 'pageviews.customvalues.uv.events.action'
   const primary = false
@@ -49,14 +50,14 @@ async function addGoal (meta, goals) {
   let value = ''
 
   if (isUrlGoal) {
-    op = await input.select('Choose operator:', goalsHelper.operators)
+    op = await input.select(formatLog('   Choose operator:'), goalsHelper.operators)
   } else if (isEventGoal) {
     op = 'eq'
   }
 
   if (isUrlGoal || isEventGoal) {
     const additionalPrompt = op === 'in' ? '(space separate for OR\'ing of values)' : ''
-    value = (await input.text(`Set value ${additionalPrompt}:`)).split(' ')
+    value = (await input.text(formatLog(`   Set value ${additionalPrompt}:`))).split(' ')
     type = 'string'
   }
 
@@ -69,7 +70,7 @@ async function addGoal (meta, goals) {
 
 async function removeGoal (meta, goals) {
   const inputOptions = goalsHelper.read(goals)
-  const goalToRemove = await input.select(`Remove goal:`, inputOptions)
+  const goalToRemove = await input.select(formatLog(`   Remove goal:`), inputOptions)
   const newGoals = goalsHelper.remove(goals, goalToRemove)
   const updatedGoals = await goalService.set(meta, newGoals)
 
@@ -78,7 +79,7 @@ async function removeGoal (meta, goals) {
 
 async function setPrimaryGoal (meta, goals) {
   const inputOptions = goalsHelper.read(goals)
-  const goalToMakePrimary = await input.select(`Set primary goal to:`, inputOptions)
+  const goalToMakePrimary = await input.select(formatLog(`   Set primary goal to:`), inputOptions)
   const newGoals = goalsHelper.setPrimary(goals, goalToMakePrimary)
   const updatedGoals = await goalService.set(meta, newGoals)
 

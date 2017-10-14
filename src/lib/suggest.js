@@ -23,7 +23,7 @@ async function property (message) {
   } else if (message) {
     log.info(message)
   }
-  return createAutoComplete('     Select a property (start typing to filter the list)\n', suggestions).response()
+  return createAutoComplete('\n     Select a property (start typing to filter the list)\n', suggestions).response()
 }
 
 async function experience (propertyId) {
@@ -32,7 +32,7 @@ async function experience (propertyId) {
     title: 'name',
     value: 'id'
   })
-  return createAutoComplete('     Select an experience (start typing to filter the list)\n', suggestions).response()
+  return createAutoComplete('\n     Select an experience (start typing to filter the list)\n', suggestions).response()
 }
 
 async function both () {
@@ -43,7 +43,7 @@ async function both () {
   })
 
   // main prompt
-  const prompt = '     Select a property or navigate to an experience in your browser (start typing to filter the list)\n'
+  const prompt = '\n     Select a property or navigate to an experience in your browser (start typing to filter the list)\n'
 
   // start app to monitor browser navigation
   const app = await createApp()
@@ -74,7 +74,7 @@ async function both () {
         resolve(parseUrl(req.body.url))
       } else {
         // restart auto-complete picker
-        term.up(3).column(1)
+        term.up(4).column(1)
         term.eraseDisplayBelow()
         ac.resume()
       }
@@ -98,7 +98,7 @@ async function both () {
 
 async function getAutoCompleteMap ({arr, title, value}) {
   return arr.map((iteree) => ({
-    title: formatLog(iteree[title]).substr(4),
+    title: ' ' + formatLog(iteree[title]),
     value: iteree[value]
   }))
 }

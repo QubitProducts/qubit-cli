@@ -19,8 +19,6 @@ const action = require('./action')
 const diff = require('./diff')
 const duplicate = require('./duplicate')
 const release = require('./release')
-console.log('')
-process.on('exit', () => console.log(''))
 
 module.exports = function run (pkg) {
   program
