@@ -1,4 +1,4 @@
-const input = require('input')
+const input = require('../lib/input')
 const getPkg = require('../lib/get-pkg')
 const experienceService = require('../services/experience')
 const goalService = require('../services/goal')

@@ -23,7 +23,7 @@ async function property (message) {
   } else if (message) {
     log.info(message)
   }
-  return createAutoComplete('\n     Select a property (start typing to filter the list)\n', suggestions).response()
+  return createAutoComplete(msg(`Select a property (start typing to filter the list)`), suggestions).response()
 }
 
 async function experience (propertyId) {
@@ -32,7 +32,7 @@ async function experience (propertyId) {
     title: 'name',
     value: 'id'
   })
-  return createAutoComplete('\n     Select an experience (start typing to filter the list)\n', suggestions).response()
+  return createAutoComplete(msg('Select an experience (start typing to filter the list)'), suggestions).response()
 }
 
 async function both () {
@@ -43,7 +43,7 @@ async function both () {
   })
 
   // main prompt
-  const prompt = '\n     Select a property or navigate to an experience in your browser (start typing to filter the list)\n'
+  const prompt = msg('Select a property or navigate to an experience in your browser (start typing to filter the list)')
 
   // start app to monitor browser navigation
   const app = await createApp()
@@ -101,6 +101,10 @@ async function getAutoCompleteMap ({arr, title, value}) {
     title: ' ' + formatLog(iteree[title]),
     value: iteree[value]
   }))
+}
+
+function msg (str) {
+  return `\n${formatLog(str, 'warn')}\n`
 }
 
 module.exports = {property, experience, both}
