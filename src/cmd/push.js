@@ -27,7 +27,7 @@ module.exports = async function push (options) {
 
     if (remoteUpdatedAts.join('|') !== localUpdatedAts.join('|')) {
       log.info('Remote has changed since the last interaction!')
-      await diff()
+      return diff()
     }
   }
 
