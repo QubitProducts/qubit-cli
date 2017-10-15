@@ -50,7 +50,7 @@ chrome.tabs.onActivated.addListener(function (activeInfo) {
 
 function render (state) {
   chrome.browserAction.setIcon({ path: state.enabled ? ICONS.on : ICONS.off })
-  chrome.browserAction.setTitle({ title: `XP Cli - ${state.enabled ? 'ON' : 'OFF'}` })
+  chrome.browserAction.setTitle({ title: `Qubit CLI - ${state.enabled ? 'ON' : 'OFF'}` })
 }
 
 function getState (id, callback) {
