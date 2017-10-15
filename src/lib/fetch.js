@@ -14,6 +14,7 @@ module.exports = {
 function fetchWithAuth (method) {
   return async function fetch (path, data, isRetry) {
     const url = config.services.app + path
+    log.debug(`${method} ${url}`)
     let headers, appToken
     try {
       appToken = await getAppToken(() => login())

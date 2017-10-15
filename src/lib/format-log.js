@@ -20,6 +20,7 @@ function getSymbol (level) {
     case 'warn': return chalk.green('?')
     case 'info': return chalk.green('✓')
     case 'error': return chalk.red('x')
+    case 'debug': return chalk.white('ℹ')
     default: return false
   }
 }

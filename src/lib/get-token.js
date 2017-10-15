@@ -24,6 +24,7 @@ async function getAppToken (getIDToken, force) {
   let appToken = await qubitrc.get(APP_TOKEN)
   if (force || tokenHasExpired(appToken, Date.now(), ms('5 minutes'))) {
     if (!force && appToken) log.warn('Your app token has expired, fetching a new one')
+    log.debug('Fetching app token')
     let idToken = await getIDToken()
     appToken = await getToken(idToken, config.auth.apertureClientId)
     await qubitrc.set(APP_TOKEN, appToken)
@@ -34,7 +35,8 @@ async function getAppToken (getIDToken, force) {
 async function getRegistryToken (getIDToken, forceRefresh) {
   let registryToken = await qubitrc.get(REGISTRY_TOKEN)
   if (forceRefresh || tokenHasExpired(registryToken, Date.now(), ms('6 hours'))) {
-    if (!forceRefresh && registryToken) log.warn('Your registry token has expired, fetching a new one')
+    if (!forceRefresh && registryToken) log.debug('Your registry token has expired, fetching a new one')
+    log.debug('Fetching registry token')
     let idToken = await getIDToken()
     registryToken = await getToken(idToken, config.auth.registryClientId)
     let { accessToken, scopes } = (await axios.post(config.services.registry + '/-/token', {}, {
@@ -50,6 +52,7 @@ async function getRegistryToken (getIDToken, forceRefresh) {
 }
 
 async function setupNPMRC (registryToken, scopes) {
+  log.debug('Setting up npmrc')
   let commands = []
   const authKey = config.services.registry.replace(/^https?:/, '')
   // always ensure that @qubit and @qutics scopes are configured

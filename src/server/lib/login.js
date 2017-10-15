@@ -23,6 +23,8 @@ module.exports = async function login (forceRefresh) {
     }
   }
 
+  if (idToken) log.debug('Your id token has expired, fetching a new one')
+
   let app = await createApp()
   await app.start()
 

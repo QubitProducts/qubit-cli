@@ -10,4 +10,4 @@ services:
   registry: https://registry.qubit.com
   auth: https://qubit.auth0.com
 logger:
-  level: trace
+  level: info
