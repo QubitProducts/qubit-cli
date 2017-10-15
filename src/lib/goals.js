@@ -1,10 +1,12 @@
+const formatLog = require('./format-log')
+
 const goalNames = [
-  { value: 'metrics.conversions_per_visitor', name: 'Conversions per visitor', exclusive: true },
-  { value: 'metrics.revenue_per_visitor', name: 'Revenue per visitor', exclusive: true },
-  { value: 'metrics.revenue_per_converter', name: 'Revenue per converter', exclusive: true },
-  { value: 'pageviews.url', name: 'Page URL', exclusive: false },
-  { value: 'pageviews.customvalues.uv.events.action', name: 'Event action (UV)', exclusive: false },
-  { value: 'pageviews.customvalues.uv.page.category', name: 'Category event (UV)', exclusive: false }
+  { value: 'metrics.conversions_per_visitor', name: formatLog('   Conversions per visitor'), exclusive: true },
+  { value: 'metrics.revenue_per_visitor', name: formatLog('   Revenue per visitor'), exclusive: true },
+  { value: 'metrics.revenue_per_converter', name: formatLog('   Revenue per converter'), exclusive: true },
+  { value: 'pageviews.url', name: formatLog('   Page URL'), exclusive: false },
+  { value: 'pageviews.customvalues.uv.events.action', name: formatLog('   Event action (UV)'), exclusive: false },
+  { value: 'pageviews.customvalues.uv.page.category', name: formatLog('   Category event (UV)'), exclusive: false }
 ]
 
 const operators = [
