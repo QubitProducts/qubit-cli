@@ -1,8 +1,10 @@
+const uv = require('./uv')()
+
 module.exports = function onSecondPageView (cb, runAcrossViews) {
   const viewRegex = /^([^.]+\.)?[a-z]{2}View$/
   waitFor(() => window.__qubit.uv, 50, () => {
-    window.uv.once(viewRegex, () => {
-      window.uv.on(viewRegex, () => {
+    uv.once(viewRegex, () => {
+      uv.on(viewRegex, () => {
         if (!runAcrossViews()) cb()
       })
     }).replay()
