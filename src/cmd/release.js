@@ -15,6 +15,7 @@ module.exports = async function release (version, options) {
     .then(getOptions)
     .then(runRelease)
     .then(logResult)
+    .catch(logError)
 
   function getOptions () {
     if (version) {
@@ -24,6 +25,10 @@ module.exports = async function release (version, options) {
       })
     }
     return ui(flags)
+  }
+
+  function logError (err) {
+    log.error(err)
   }
 
   function runRelease (options) {
