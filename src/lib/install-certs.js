@@ -62,9 +62,11 @@ function installCerts () {
       break
   }
   return new Promise(function (resolve, reject) {
-    childProcess.exec(cmd, function (error, stdout, stderr) {
-      if (error) {
-        return reject(new Error(['Could not install certificate:', stdout, stderr].join('\n\n')))
+    childProcess.exec(cmd, async function (error, stdout, stderr) {
+      if (error || stderr) {
+        await fs.remove(CERT_DIR)
+        log.error('Could not install certificates')
+        process.exit()
       }
       log.info('All done!')
       log.info('The certificate has been created in ' + CERT_DIR + 'and has been added to your system as a trusted certificate.')

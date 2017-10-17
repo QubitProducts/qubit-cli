@@ -33,8 +33,7 @@ module.exports = async function serve (options) {
     options.variationFilename = await pickVariation(await fs.readdir(CWD))
 
     if (!options.variationFilename) {
-      log.warn('Ensure you are within an experience directory and try again')
-      return
+      return log.warn('Ensure you are within an experience directory and try again')
     }
 
     log.info(`Using ${options.variationFilename}`)

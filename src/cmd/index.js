@@ -194,7 +194,10 @@ module.exports = function run (pkg) {
     .version(pkg.version)
     .arguments('[variationFilename]')
     .option('-v, --verbose', 'log verbose output', false)
-    .action(serve)
+    .action((variationFileName, opts) => {
+      if (!variationFileName.includes('variation')) return log.error(`${variationFileName} command does not exist`)
+      return serve(variationFileName, opts)
+    })
 
   program.on('--help', function () {
     console.log(`
