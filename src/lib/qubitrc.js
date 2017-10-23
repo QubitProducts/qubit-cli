@@ -35,7 +35,7 @@ function get (key) {
 async function set (key, value) {
   return read().then(currentData => {
     let env = getEnv()
-    log.debug(`setting ${env}:${key} in to ${value}`)
+    log.debug(`setting ${env}:${key} to ${value}`)
     currentData[env] = currentData[env] || {}
     Object.assign(currentData[env], { [key]: value })
     return write(currentData)

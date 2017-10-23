@@ -14,7 +14,10 @@ module.exports = async function push (options) {
   if (!propertyId || !experienceId) return log.info('Nothing to push')
 
   if (!options.force) {
-    let { files } = await down(experienceId)
+    let { files, experience } = await down(experienceId)
+    if (experience.solution_id === 7) {
+      throw new Error('qubit-cli does not support simple message experiences')
+    }
 
     let remotePkg = JSON.parse(files['package.json'])
     let remoteExperienceUpdatedAt = remotePkg.meta.remoteUpdatedAt
