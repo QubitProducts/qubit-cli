@@ -8,7 +8,6 @@ const log = require('./log')
 module.exports = async function createExperience (CWD, propertyId, name, controlDecimal) {
   const recentIterations = buildRecentIterations(controlDecimal)
   const experience = await experienceService.create({ propertyId, name, recent_iterations: recentIterations })
-
   if (experience.solution_id === 7) {
     throw new Error('qubit-cli does not support simple message experiences')
   }
