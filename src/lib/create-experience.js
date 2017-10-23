@@ -9,7 +9,9 @@ module.exports = async function createExperience (CWD, propertyId, name, control
   const recentIterations = buildRecentIterations(controlDecimal)
   const experience = await experienceService.create({ propertyId, name, recent_iterations: recentIterations })
 
-  if (!experience.id) return log.error(`I'm afraid we could not create an experience at this time`)
+  if (experience.solution_id === 7) {
+    throw new Error('qubit-cli does not support simple message experiences')
+  }
   log.info('Creating experience')
 
   const files = await codeService.get(propertyId, experience.id)
