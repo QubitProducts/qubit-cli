@@ -2,11 +2,12 @@ const _ = require('lodash')
 const ms = require('ms')
 const axios = require('axios')
 const execa = require('execa')
+const exists = require('./exists')
 const config = require('../../config')
 const tokenHasExpired = require('./token-has-expired')
 const qubitrc = require('./qubitrc')
 const log = require('./log')
-const { APP_TOKEN, REGISTRY_TOKEN, REGISTRY_SCOPES } = require('./constants')
+const { APP_TOKEN, REGISTRY_TOKEN, REGISTRY_SCOPES, NPMRC } = require('./constants')
 
 async function getToken (idToken, targetClientId) {
   const response = await axios.post(config.services.auth + '/delegation', {
@@ -34,8 +35,8 @@ async function getAppToken (getIDToken, force) {
 
 async function getRegistryToken (getIDToken, forceRefresh) {
   let registryToken = await qubitrc.get(REGISTRY_TOKEN)
-  if (forceRefresh || tokenHasExpired(registryToken, Date.now(), ms('6 hours'))) {
-    if (!forceRefresh && registryToken) log.debug('Your registry token has expired, fetching a new one')
+  if (forceRefresh || tokenHasExpired(registryToken, Date.now(), ms('6 hours')) || !await exists(NPMRC)) {
+    if (!forceRefresh && registryToken) log.debug('Your registry token is missing or about to expire, fetching a new one')
     log.debug('Fetching registry token')
     let idToken = await getIDToken()
     registryToken = await getToken(idToken, config.auth.registryClientId)
