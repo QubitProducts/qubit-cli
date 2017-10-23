@@ -1,5 +1,6 @@
 const _ = require('lodash')
 const yaml = require('js-yaml')
+const log = require('./log')
 const fs = require('fs-extra')
 let { QUBITRC } = require('./constants')
 let inMemory = false
@@ -34,6 +35,7 @@ function get (key) {
 async function set (key, value) {
   return read().then(currentData => {
     let env = getEnv()
+    log.debug(`setting ${env}:${key} in to ${value}`)
     currentData[env] = currentData[env] || {}
     Object.assign(currentData[env], { [key]: value })
     return write(currentData)
