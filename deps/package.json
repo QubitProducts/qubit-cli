@@ -5,7 +5,6 @@
   "main": "index.js",
   "dependencies": {
     "@qubit/advanced-modal": "^1.0.1",
-    "@qubit/biscotti": "^5.8.0",
     "@qubit/email-scheduler": "^1.8.1",
     "@qubit/exit-checker": "^1.0.5",
     "@qubit/floating-panel": "^1.2.0",
