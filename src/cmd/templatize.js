@@ -12,43 +12,47 @@ const log = require('../lib/log')
 let CWD = process.cwd()
 
 module.exports = async function templatize () {
-  let pkg = await getPkg()
+  try {
+    let pkg = await getPkg()
 
-  let tmpPkg = { version: '1.0.0', main: 'index.js' }
+    let tmpPkg = { version: '1.0.0', main: 'index.js' }
 
-  tmpPkg.name = clean(await input.text(formatLog('   What would you like to call your template?'), { default: pkg.name || 'template' }))
+    tmpPkg.name = clean(await input.text(formatLog('   What would you like to call your template?'), { default: pkg.name || 'template' }))
 
-  tmpPkg.description = await input.text(formatLog('   Please provide a description:'))
+    tmpPkg.description = await input.text(formatLog('   Please provide a description:'))
 
-  let templateDir = path.join(path.dirname(CWD), tmpPkg.name)
+    let templateDir = path.join(path.dirname(CWD), tmpPkg.name)
 
-  await fs.ensureDir(path.join(templateDir, 'template'))
+    await fs.ensureDir(path.join(templateDir, 'template'))
 
-  let files = await readFiles(CWD)
+    let files = await readFiles(CWD)
 
-  if (pkg.meta) {
-    addTemplateVariables(files, pkg)
-    _.each(pkg.meta.variations, (variation, filename) => {
-      files['variation.js'] = files[`${filename}.js`]
-      files['variation.css'] = files[`${filename}.css`]
-      delete files[`${filename}.js`]
-      delete files[`${filename}.css`]
-    })
+    if (pkg.meta) {
+      addTemplateVariables(files, pkg)
+      _.each(pkg.meta.variations, (variation, filename) => {
+        files['variation.js'] = files[`${filename}.js`]
+        files['variation.css'] = files[`${filename}.css`]
+        delete files[`${filename}.js`]
+        delete files[`${filename}.css`]
+      })
+    }
+
+    delete files['package.json']
+
+    log.info(`...creating template at ${templateDir}`)
+
+    await scaffold(path.join(templateDir, 'template'), files, false, true, true)
+
+    await fs.writeFile(path.join(templateDir, 'package.json'), JSON.stringify(tmpPkg, null, 2))
+
+    await fs.writeFile(path.join(templateDir, 'index.js'), '')
+
+    await execa('npm', ['link'], { cwd: templateDir })
+
+    log.info(`Your template is npm linked and ready to use!`)
+  } catch (err) {
+    log.error(err)
   }
-
-  delete files['package.json']
-
-  log.info(`...creating template at ${templateDir}`)
-
-  await scaffold(path.join(templateDir, 'template'), files, false, true, true)
-
-  await fs.writeFile(path.join(templateDir, 'package.json'), JSON.stringify(tmpPkg, null, 2))
-
-  await fs.writeFile(path.join(templateDir, 'index.js'), '')
-
-  await execa('npm', ['link'], { cwd: templateDir })
-
-  log.info(`Your template is npm linked and ready to use!`)
 }
 
 function addTemplateVariables (files, pkg) {

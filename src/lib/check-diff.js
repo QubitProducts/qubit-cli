@@ -1,14 +1,13 @@
 const chalk = require('chalk')
 const codeService = require('../services/code')
-const log = require('../lib/log')
-const readFiles = require('../lib/read-files')
+const log = require('./log')
+const readFiles = require('./read-files')
 const jsdiff = require('diff')
-let CWD = process.cwd()
 
-module.exports = async function checkDiff (propertyId, experienceId) {
+module.exports = async function checkDiff (cwd, propertyId, experienceId) {
   log.info('Comparing files...')
   const files = await codeService.get(propertyId, experienceId)
-  const localFiles = await readFiles(CWD)
+  const localFiles = await readFiles(cwd)
   delete files['package.json']
   delete localFiles['package.json']
   const fileDiffs = checkDiff(localFiles, files)

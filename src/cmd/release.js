@@ -5,17 +5,16 @@ const login = require('../server/lib/login')
 const { getRegistryToken } = require('../lib/get-token')
 
 // { anyBranch, cleanup, yolo, publish, tag, yarn }
-module.exports = async function release (version, options) {
-  let flags = options
-
-  // Login authenticates against our private registry and configures all the associated private scopes
-  await getRegistryToken(() => login(), true)
-
-  return Promise.resolve()
-    .then(getOptions)
-    .then(runRelease)
-    .then(logResult)
-    .catch(logError)
+module.exports = async function release (version, flags) {
+  try {
+    // Login authenticates against our private registry and configures all the associated private scopes
+    await getRegistryToken(() => login(), true)
+    const options = await getOptions()
+    const pkg = await runRelease(options)
+    log.info(`\n ${pkg.name} ${pkg.version} published 🎉`)
+  } catch (err) {
+    log.error(err)
+  }
 
   function getOptions () {
     if (version) {
@@ -27,16 +26,8 @@ module.exports = async function release (version, options) {
     return ui(flags)
   }
 
-  function logError (err) {
-    log.error(err)
-  }
-
   function runRelease (options) {
     if (!options.confirm) process.exit()
     return np(options.version, options)
-  }
-
-  function logResult (pkg) {
-    log.info(`\n ${pkg.name} ${pkg.version} published 🎉`)
   }
 }
