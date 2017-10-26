@@ -1,7 +1,8 @@
 const chalk = require('chalk')
 
 module.exports = function formatLog (message, level) {
-  return `${getPrefix(level)}${chalk.grey(highlighter(message))}`
+  let prefix = getPrefix(level)
+  return `${prefix}${chalk.grey(highlighter(message)).replace(/\n/g, '\n' + prefix)}`
 }
 
 function highlighter (message) {

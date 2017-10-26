@@ -1,4 +1,5 @@
 const fs = require('fs-extra')
+const chalk = require('chalk')
 const webpack = require('webpack')
 const createEmitter = require('event-kitten')
 const webpackDevMiddleware = require('webpack-dev-middleware')
@@ -49,20 +50,27 @@ module.exports = async function serve (options) {
     stats: options.verbose,
     warn: options.verbose
   }
-  const emitter = createEmitter()
-  const compiler = webpack(Object.assign(createWebpackConfig(options)), (plumbus, stats) => {
-    if (stats.hasErrors() && !options.verbose) log.info(stats.toString('errors-only').trim())
-  })
-  compiler.plugin('done', (data) => emitter.emit('rebuild', data))
-  app.use(webpackDevMiddleware(compiler, Object.assign({
-    publicPath: webpackConf.output.publicPath
-  }, verboseOpts)))
-  app.use(webpackHotMiddleware(compiler, Object.assign({
-    reload: true,
-    path: '/__webpack_hmr',
-    heartbeat: 100
-  }, verboseOpts)))
 
+  const emitter = createEmitter()
+  const compile = new Promise(resolve => {
+    const compiler = webpack(Object.assign(createWebpackConfig(options)), (plumbus, stats) => {
+      resolve()
+      if (stats.hasErrors() && !options.verbose) log.error(chalk.red(stats.toString('errors-only').trim()))
+    })
+
+    compiler.plugin('done', (data) => emitter.emit('rebuild', data))
+    app.use(webpackDevMiddleware(compiler, Object.assign({
+      publicPath: webpackConf.output.publicPath
+    }, verboseOpts)))
+    app.use(webpackHotMiddleware(compiler, Object.assign({
+      reload: true,
+      path: '/__webpack_hmr',
+      heartbeat: 100
+    }, verboseOpts)))
+  })
+
+  // wait for compilation, otherwse you get errors in the browser by loading too quickly
+  await compile
   return app.start().then(() => {
     log.info(`Qubit-CLI listening on port ${config.port}`)
     return { app, emitter }
