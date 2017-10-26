@@ -29,10 +29,10 @@ templates
 
 ```
 using npm:
-npm install -g qubit-cli
+npm install -g qubitdigital/qubit-cli
 
 using yarn:
-yarn global add qubit-cli
+yarn global add qubitdigital/qubit-cli
 
 qubit login
 ```
