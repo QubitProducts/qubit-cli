@@ -19,6 +19,7 @@ describe('codeService', function () {
     iteration = _.cloneDeep(experienceFixture.recent_iterations.draft)
     variations = _.cloneDeep(variationsFixture)
     files = _.cloneDeep(filesFixture)
+    iteration.schema = files['fields.json']
     sandbox = sinon.sandbox.create()
     sandbox.stub(experienceService, 'get').returns(Promise.resolve(experience))
     sandbox.stub(experienceService, 'set').returns(Promise.resolve())
@@ -32,19 +33,27 @@ describe('codeService', function () {
 
   describe('get', function () {
     it('should fetch experience, variations and translate to a files object', async function () {
-      let result = await codeService.get(propertyId, experienceId)
-      expect(_.omit(result, 'package.json')).to.eql(_.omit(files, ['package.json']))
+      const result = await codeService.get(propertyId, experienceId)
+      expect(_.omit(result, ['package.json', 'fields.json'])).to.eql(_.omit(files, ['package.json', 'fields.json']))
       expect(JSON.parse(result['package.json'])).to.eql(JSON.parse(files['package.json']))
+      expect(JSON.parse(result['fields.json'])).to.eql(JSON.parse(files['fields.json']))
     })
   })
 
   describe('set', function () {
     it('should update models correctly', async function () {
       files = _.mapValues(files, (val, key) => {
-        if (key !== 'package.json') return val + 1
-        let pkg = JSON.parse(val)
-        _.set(pkg, 'meta.name', pkg.meta.name + 1)
-        return JSON.stringify(pkg, null, 2)
+        if (key === 'package.json') {
+          const pkg = JSON.parse(val)
+          _.set(pkg, 'meta.name', pkg.meta.name + 1)
+          return JSON.stringify(pkg, null, 2)
+        }
+        if (key === 'fields.json') {
+          const schema = JSON.parse(val)
+          schema.groups[0].title += 1
+          return JSON.stringify(schema, null, 2)
+        }
+        return val + 1
       })
       await codeService.set(propertyId, experienceId, files)
       expect(experienceService.set.calledOnce).to.eql(true)
@@ -55,6 +64,7 @@ describe('codeService', function () {
 
       iteration.global_code = files['global.js']
       _.set(iteration, 'activation_rules.0.value', files['triggers.js'])
+      iteration.schema = files['fields.json']
       let pkg = JSON.parse(files['package.json'])
       delete pkg.meta
       iteration.package_json = JSON.stringify(pkg, null, 2)
