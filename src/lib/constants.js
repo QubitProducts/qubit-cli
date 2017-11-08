@@ -6,6 +6,7 @@ const CERT_PATH = path.join(CERT_DIR, 'qubit-serve.crt')
 const KEY_PATH = path.join(CERT_DIR, 'qubit-serve.key')
 const EXECUTION = 'function execution (options) { // eslint-disable-line no-unused-vars\n\n}\n'
 const GLOBAL = ''
+const COMMON = ''
 const TRIGGERS = 'function triggers (options, cb) { // eslint-disable-line no-unused-vars\n  cb()\n}\n'
 const CSS = ''
 const KEY_OPTIONS = {
@@ -31,6 +32,7 @@ module.exports = {
   EXECUTION,
   CSS,
   GLOBAL,
+  COMMON,
   TRIGGERS,
   QUBITRC,
   NPMRC,
