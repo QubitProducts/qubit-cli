@@ -43,6 +43,7 @@ describe('iterationService', function () {
       expect(iterationService.getCode(iteration)).to.eql({
         'fields.json': '{}',
         'global.js': 'console.log("global code")',
+        'common.js': 'console.log("common code")',
         'triggers.js': 'console.log("triggers")'
       })
     })
@@ -52,9 +53,11 @@ describe('iterationService', function () {
     it('should modify an experience object appropriately given a files object', () => {
       const newIteration = iterationService.setCode(iteration, {
         'global.js': 'console.log("some other global code")',
+        'common.js': 'console.log("some other common code")',
         'triggers.js': 'console.log("some other triggers")'
       })
       expect(newIteration.global_code).to.eql('console.log("some other global code")')
+      expect(newIteration.common_code).to.eql('console.log("some other common code")')
       expect(newIteration).to.have.deep.property('activation_rules.0.value', 'console.log("some other triggers")')
     })
   })

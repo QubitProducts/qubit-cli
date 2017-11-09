@@ -22,6 +22,7 @@
       "updated_at": "2016-08-10T14:32:17.000Z",
       "url": "http://blowtrump.com",
       "global_code": "console.log(\"global code\")",
+      "common_code": "console.log(\"common code\")",
       "activation_rules": [{
         "key": "custom_javascript",
         "type": "code",

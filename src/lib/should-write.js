@@ -2,6 +2,7 @@ const path = require('path')
 const fs = require('fs-extra')
 let checkExists = require('./exists')
 let confirm = require('confirmer')
+const readline = require('readline')
 
 module.exports = async function shouldWrite (dest, name, newValue, shouldConfirm, shouldOverwrite) {
   const msg = `Do you want Qubit-CLI to overwrite your local ${name} file?`
@@ -20,8 +21,8 @@ module.exports = async function shouldWrite (dest, name, newValue, shouldConfirm
     // permission
     let result = await confirm(msg)
     if (process) {
-      process.stdout.moveCursor(0, -1)
-      process.stdout.clearScreenDown()
+      readline.cursorTo(process.stdout, 0, -1)
+      readline.clearScreenDown(process.stdout)
     }
 
     return result

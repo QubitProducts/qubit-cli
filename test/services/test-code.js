@@ -5,9 +5,9 @@ const codeService = require('../../src/services/code')
 const experienceService = require('../../src/services/experience')
 const iterationService = require('../../src/services/iteration')
 const variationService = require('../../src/services/variation')
-const experienceFixture = require('../fixtures//experience.json')
-const variationsFixture = require('../fixtures//variations.json')
-const filesFixture = require('../fixtures//files')
+const experienceFixture = require('../fixtures/experience.json')
+const variationsFixture = require('../fixtures/variations.json')
+const filesFixture = require('../fixtures/files')
 
 describe('codeService', function () {
   let sandbox, propertyId, experienceId, iterationId, experience, iteration, variations, files
@@ -63,6 +63,7 @@ describe('codeService', function () {
       expect(_.omit(actualExperience, 'meta')).to.eql(experience)
 
       iteration.global_code = files['global.js']
+      iteration.common_code = files['common.js']
       _.set(iteration, 'activation_rules.0.value', files['triggers.js'])
       iteration.schema = files['fields.json']
       let pkg = JSON.parse(files['package.json'])
