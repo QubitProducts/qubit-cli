@@ -14,7 +14,6 @@ lint:
 	$(BIN)/standard
 
 shrinkwrap:
-	yarn remove qubt-cli-deps
+	npm uninstall --save qubt-cli-deps
 	rm -rf node_modules
-	yarn
-	npm shrinkwrap
+	npm install
