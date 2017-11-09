@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const fetch = require('../lib/fetch')
 const hasNoCode = require('../lib/hasNoCode')
-const { GLOBAL, TRIGGERS } = require('../lib/constants')
+const { GLOBAL, TRIGGERS, SCHEMA } = require('../lib/constants')
 
 const iterationsUrl = iterationId => `/api/iterations/${iterationId}`
 
@@ -11,6 +11,7 @@ function get (iterationId) {
 
 function set (iterationId, iteration) {
   delete iteration.update_sequence_id
+  if (_.isString(iteration.schema)) iteration.schema = JSON.parse(iteration.schema)
   return fetch.put(iterationsUrl(iterationId), { iteration: iteration })
 }
 
@@ -19,9 +20,11 @@ function getCode (iteration) {
   const rule = rules && rules.find(rule => rule.key === 'custom_javascript')
   const triggers = rule && rule.value
   const globalCode = iteration.global_code
+  const schema = iteration.schema
   return {
     'global.js': hasNoCode(globalCode) ? GLOBAL : globalCode,
-    'triggers.js': hasNoCode(triggers) ? TRIGGERS : triggers
+    'triggers.js': hasNoCode(triggers) ? TRIGGERS : triggers,
+    'fields.json': hasNoCode(schema) ? SCHEMA : schema
   }
 }
 
@@ -40,6 +43,7 @@ function setCode (iteration, files) {
   }
   Object.assign(iteration, {
     global_code: files['global.js'] || GLOBAL,
+    schema: files['fields.json'] || SCHEMA,
     activation_rules: rules
   })
   return iteration

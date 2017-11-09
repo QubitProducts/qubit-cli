@@ -8,6 +8,7 @@ const EXECUTION = 'function execution (options) { // eslint-disable-line no-unus
 const GLOBAL = ''
 const TRIGGERS = 'function triggers (options, cb) { // eslint-disable-line no-unused-vars\n  cb()\n}\n'
 const CSS = ''
+const SCHEMA = '{}'
 const KEY_OPTIONS = {
   days: 365,
   selfSigned: true,
@@ -30,6 +31,7 @@ module.exports = {
   KEY_OPTIONS,
   EXECUTION,
   CSS,
+  SCHEMA,
   GLOBAL,
   TRIGGERS,
   QUBITRC,
