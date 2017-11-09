@@ -41,6 +41,7 @@ describe('iterationService', function () {
   describe('getCode', function () {
     it('should build a files object from an experience', () => {
       expect(iterationService.getCode(iteration)).to.eql({
+        'fields.json': '{}',
         'global.js': 'console.log("global code")',
         'common.js': 'console.log("common code")',
         'triggers.js': 'console.log("triggers")'
