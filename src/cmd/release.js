@@ -11,7 +11,7 @@ module.exports = async function release (version, flags) {
     await getRegistryToken(() => login(), true)
     const options = await getOptions()
     const pkg = await runRelease(options)
-    log.info(`\n ${pkg.name} ${pkg.version} published 🎉`)
+    log.info(`${pkg.name} ${pkg.version} published 🎉`)
   } catch (err) {
     log.error(err)
   }
