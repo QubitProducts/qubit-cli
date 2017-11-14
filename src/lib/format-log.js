@@ -18,6 +18,7 @@ function getPrefix (level) {
 
 function getSymbol (level) {
   switch (level) {
+    case 'question': return chalk.green('?')
     case 'warn': return chalk.green('?')
     case 'info': return chalk.green('✓')
     case 'error': return chalk.red('x')

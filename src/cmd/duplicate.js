@@ -30,11 +30,11 @@ module.exports = async function duplicate () {
       const variationChoices = _(variations).filter({ is_control: false }).map(v => ({ name: v.name, value: v.master_id })).value()
 
       if (variationChoices.length > 1) {
-        const variationId = await input.select(formatLog('   Which variation would you like to duplicate?'), variationChoices)
+        const variationId = await input.select(formatLog('Which variation would you like to duplicate?', 'question'), variationChoices)
         await duplicateVariation(propertyId, experienceId, variationId, nextVariationNumber, pkg)
       } else {
         const { name, value: variationId } = variationChoices[0]
-        const shouldDuplicateVariation = await input.confirm(formatLog(`   Do you want to duplicate ${name}?`))
+        const shouldDuplicateVariation = await input.confirm(formatLog(`Do you want to duplicate ${name}?`, 'question'))
         if (shouldDuplicateVariation) await duplicateVariation(propertyId, experienceId, variationId, nextVariationNumber, pkg)
       }
     } else {
@@ -83,7 +83,7 @@ async function duplicateExperience (experience, targetPropertyId) {
 
   if (duplicatedExperience) {
     log.info('Experience successfully duplicated')
-    const shouldClone = await input.confirm(formatLog('   Do you want to clone the duplicated experience into the current directory?'))
+    const shouldClone = await input.confirm(formatLog('Do you want to clone the duplicated experience into the current directory?', 'question'))
     if (shouldClone) await cloneExperience(CWD, targetPropertyId, duplicatedExperience.id)
   } else {
     log.warn('Experience could not be duplicated')
