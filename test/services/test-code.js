@@ -19,7 +19,7 @@ describe('codeService', function () {
     iteration = _.cloneDeep(experienceFixture.recent_iterations.draft)
     variations = _.cloneDeep(variationsFixture)
     files = _.cloneDeep(filesFixture)
-    iteration.schema = files['fields.json']
+    iteration.schema = JSON.parse(files['fields.json'])
     sandbox = sinon.sandbox.create()
     sandbox.stub(experienceService, 'get').returns(Promise.resolve(experience))
     sandbox.stub(experienceService, 'set').returns(Promise.resolve())
