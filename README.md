@@ -1,4 +1,4 @@
- # ![extension icon](./chrome-extension/icons/on48.png)
+ # ![logo](https://user-images.githubusercontent.com/640611/32888373-fbdc7134-cabe-11e7-9b0e-027a49cef8bf.png)
 ## Qubit-CLI
 
 A client to facilitate local development of experiences for the qubit platform
