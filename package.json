@@ -1,6 +1,6 @@
 {
   "name": "qubit-cli",
-  "version": "1.33.2",
+  "version": "1.33.3",
   "description": "a utility for previewing experiences built using the qubit experience platform",
   "main": "src/index.js",
   "bin": {
