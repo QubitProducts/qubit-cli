@@ -21,7 +21,7 @@ function getCode (iteration) {
   const triggers = rule && rule.value
   const globalCode = iteration.global_code
   const commonCode = iteration.common_code
-  const schema = iteration.schema
+  const schema = JSON.stringify(iteration.schema, null, 2)
 
   return {
     'global.js': hasNoCode(globalCode) ? GLOBAL : globalCode,
