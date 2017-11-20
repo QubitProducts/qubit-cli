@@ -14,8 +14,8 @@ module.exports = async function links (page, options) {
 
     const experienceUrl = `https://app.qubit.com/p/${propertyId}/experiences/${experienceId}`
 
-    if (/^editor|settings|overview$/.test(page)) {
-      return link(`${experienceUrl}/${page === 'overview' ? '' : page}`)
+    if (/^editor|settings$/.test(page)) {
+      return link(`${experienceUrl}/${page}`)
     }
 
     if (page === 'preview') {
@@ -23,6 +23,8 @@ module.exports = async function links (page, options) {
       const links = await getPreviewLinks(pkg.meta)
       link(links.join('\n'))
     }
+
+    return link(experienceUrl)
   } catch (err) {
     log.error(err)
   }
