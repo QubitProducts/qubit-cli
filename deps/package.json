@@ -1,5 +1,5 @@
 {
-  "name": "qubt-cli-deps",
+  "name": "qubit-cli-deps",
   "version": "1.0.0",
   "description": "A wrapper for all the private dependencies required by xp",
   "main": "index.js",

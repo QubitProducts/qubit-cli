@@ -21,6 +21,7 @@ module.exports = {
   devtool: '#source-map',
   resolve: {
     modules: [cwd, path.join(cwd, 'node_modules'), path.join(__dirname, 'node_modules')],
+    mainFields: ['browser', 'main'],
     alias: {
       jquery: '@qubit/jquery'
     }

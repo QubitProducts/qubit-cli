@@ -17,7 +17,7 @@ module.exports = async function serve (options) {
   const app = await createApp()
 
   try {
-    let deps = require('qubt-cli-deps')
+    let deps = require('qubit-cli-deps')
     if (!deps.hasQubitDeps) throw new Error('oh noes!')
   } catch (err) {
     await installQubitDeps()
