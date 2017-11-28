@@ -36,8 +36,6 @@ module.exports = async function serve (options) {
     if (!options.variationFilename) {
       return log.warn('Ensure you are within an experience directory and try again')
     }
-
-    log.info(`Using ${options.variationFilename}`)
   }
 
   // make .js optional
@@ -70,8 +68,10 @@ module.exports = async function serve (options) {
   })
 
   // wait for compilation, otherwse you get errors in the browser by loading too quickly
-  await compile
+  app.use((req, res, next) => compile.then(next))
+
   return app.start().then(() => {
+    log.info(`Using ${options.variationFilename}`)
     log.info(`Qubit-CLI listening on port ${config.port}`)
     return { app, emitter }
   })
