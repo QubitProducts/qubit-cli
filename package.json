@@ -71,7 +71,7 @@
     "terminal-kit": "^1.13.13",
     "update-notifier": "^2.3.0",
     "urlite": "^1.2.8",
-    "webpack": "^3.7.1",
+    "webpack": "^3.8.1",
     "webpack-dev-middleware": "^1.12.0",
     "webpack-hot-middleware": "^2.19.1"
   },
