@@ -1,5 +1,5 @@
 const experienceState = {}
-const _ = require('lodash')
+const _ = require('slapdash')
 const getBrowserState = require('@qubit/jolt/lib/getBrowserState')
 const defaultVisitor = require('./visitor')
 const log = require('./log')

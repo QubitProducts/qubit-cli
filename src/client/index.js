@@ -1,6 +1,6 @@
 /* globals __VARIATION__ __CWD__ */
 const context = require.context(__CWD__, false)
-const _ = require('lodash').noConflict()
+const _ = require('slapdash')
 const Promise = require('sync-p/extra')
 const engine = require('./engine')
 const also = require('./also')
@@ -9,7 +9,7 @@ const options = require('./options')
 const onSecondPageView = require('./pageview')
 const redirectTo = require('./redirect-to')
 const applyStyles = require('./styles')
-const globalFn = _.once(() => eval.call(window, require('global'))) // eslint-disable-line
+const globalFn = once(() => eval.call(window, require('global'))) // eslint-disable-line
 const STYLE_ID = 'qubit-xp-styles'
 
 require('./amd')()
@@ -125,6 +125,15 @@ function registerHotReloads (restart) {
   })
 
   function allModules () {
-    return _.uniq(context.keys().map(key => context.resolve(key))).concat([require.resolve(__VARIATION__ + '.js')])
+    return _.unique(context.keys().map(key => context.resolve(key))).concat([require.resolve(__VARIATION__ + '.js')])
+  }
+}
+
+function once (fn) {
+  let called = false
+  return function callOnce () {
+    if (called) return
+    called = true
+    fn()
   }
 }

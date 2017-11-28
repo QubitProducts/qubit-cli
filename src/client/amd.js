@@ -1,4 +1,3 @@
-const _ = require('lodash')
 const microAmd = require('micro-amd')
 const map = {
   '@qubit/abandonment-recovery': require('@qubit/abandonment-recovery'),
@@ -16,7 +15,7 @@ const map = {
   '@qubit/mvt': require('@qubit/mvt'),
   '@qubit/poller': require('@qubit/poller'),
   '@qubit/product-recommendations': require('@qubit/product-recommendations'),
-  '@qubit/remember-preview': _.noop,
+  '@qubit/remember-preview': noop,
   '@qubit/send-uv-event': require('@qubit/send-uv-event'),
   '@qubit/social-proof': require('@qubit/social-proof'),
   '@qubit/stash-count': require('@qubit/stash-count'),
@@ -33,7 +32,11 @@ const map = {
 module.exports = function createAMD () {
   const amd = microAmd({ base: '//d22rutvoghj3db.cloudfront.net/' })
   for (let id in map) if (map.hasOwnProperty(id)) amd.define(id, () => map[id])
-  _.set(window, '__qubit.xp.amd', amd)
+  window.__qubit = window.__qubit || {}
+  window.__qubit.xp = window.__qubit.xp || {}
+  window.__qubit.xp.amd = amd
   Object.defineProperty(window.__qubit, 'amd', { get: () => amd })
   return amd
 }
+
+function noop () {}
