@@ -1,24 +1,6 @@
 const program = require('commander')
 const chalk = require('chalk')
 const log = require('../lib/log')
-const create = require('./create')
-const extension = require('./extension')
-const open = require('./open')
-const link = require('./link')
-const clone = require('./clone')
-const pull = require('./pull')
-const push = require('./push')
-const del = require('./del')
-const serve = require('./serve')
-const login = require('./login')
-const logout = require('./logout')
-const templatize = require('./templatize')
-const traffic = require('./traffic')
-const goals = require('./goals')
-const action = require('./action')
-const diff = require('./diff')
-const duplicate = require('./duplicate')
-const release = require('./release')
 
 module.exports = function run (pkg) {
   program
@@ -30,13 +12,13 @@ module.exports = function run (pkg) {
         this.outputHelp(chalk.red)
         return
       }
-      return login()
+      return require('./login')()
     })
 
   program
     .command('logout')
     .description('logout of the qubit platform')
-    .action(logout)
+    .action(cmd('logout'))
 
   program
     .command('release')
@@ -68,7 +50,7 @@ module.exports = function run (pkg) {
       if (options.cleanup) delete options.cleanup
       if (options.publish) delete options.publish
       if (options.yarn) delete options.yarn
-      return release(version, options)
+      return require('./release')(version, options)
     })
 
   program
@@ -80,7 +62,7 @@ module.exports = function run (pkg) {
     Create using autocomplete or by navigating to your experience in the browser:
     qubit clone`))
     .description('create an experience (arguments optional)')
-    .action(create)
+    .action(cmd('create'))
 
   program
     .command('clone [url] [propertyId] [experienceId]')
@@ -95,49 +77,49 @@ module.exports = function run (pkg) {
     Clone using autocomplete or by navigating to your experience in the browser:
     qubit clone`))
     .description(`clone an experience (arguments optional)`)
-    .action(clone)
+    .action(cmd('clone'))
 
   program
     .command('publish')
     .description('publish an experience')
-    .action(action)
+    .action(cmd('action'))
 
   program
     .command('pause')
     .description('pause an experience')
-    .action(action)
+    .action(cmd('action'))
 
   program
     .command('resume')
     .description('resume an experience')
-    .action(action)
+    .action(cmd('action'))
 
   program
     .command('templatize')
     .description('create a template from an experience')
-    .action(templatize)
+    .action(cmd('templatize'))
 
   program
     .command('pull [name]')
     .description(`pull remote changes or a template into your local experience (arguments optional)`)
-    .action(pull)
+    .action(cmd('pull'))
 
   program
     .command('push')
     .option('--force', 'force push local changes even though there have been remote changes')
     .description('push local changes to the platform')
-    .action(push)
+    .action(cmd('push'))
 
   program
     .command('duplicate')
     .description('create a new variation within your experience')
-    .action(duplicate)
+    .action(cmd('duplicate'))
 
   program
     .command('traffic')
     .option('--view', 'view the current control size')
     .description('set the control size of an experience')
-    .action(traffic)
+    .action(cmd('traffic'))
 
   program
     .command('goals [cmd]')
@@ -155,39 +137,39 @@ module.exports = function run (pkg) {
   Change the primary goal of your experience:
   qubit goals set-primary`))
     .description('list or edit experience goals')
-    .action(goals)
+    .action(cmd('goals'))
 
   program
     .command('diff')
     .description('compare local and remote versions of an experience')
-    .action(diff)
+    .action(cmd('diff'))
 
   program
     .command('delete')
     .description('delete and experience or variation')
-    .action(del)
+    .action(cmd('del'))
 
   program
     .command('status')
     .description('check the publish status of an experience')
-    .action(action)
+    .action(cmd('action'))
 
   program
     .command('open')
     .arguments('[page]')
     .description('open the overview, settings or editor page for the current experience')
-    .action(open)
+    .action(cmd('open'))
 
   program
     .command('link')
     .arguments('[page]')
     .description('get a link to the overview, settings, editor or preview page for the current experience')
-    .action(link)
+    .action(cmd('link'))
 
   program
     .command('extension')
     .description('open folder containing the Qubit-CLI chrome extension, drag into chrome extensions pane to install')
-    .action(extension)
+    .action(cmd('extension'))
 
   program
     .usage(`[options] <cmd>`)
@@ -196,7 +178,7 @@ module.exports = function run (pkg) {
     .option('-v, --verbose', 'log verbose output', false)
     .action((variationFileName, opts) => {
       if (!variationFileName.includes('variation')) return log.error(`${variationFileName} command does not exist`)
-      return serve(variationFileName, opts)
+      return require('./serve')(variationFileName, opts)
     })
 
   program.on('--help', function () {
@@ -206,5 +188,9 @@ module.exports = function run (pkg) {
 
   program.parse(process.argv)
 
-  if (!program.args.length) serve(null, program)
+  if (!program.args.length) require('./serve')(null, program)
+}
+
+function cmd (command) {
+  return (...args) => require('./' + command)(...args)
 }
