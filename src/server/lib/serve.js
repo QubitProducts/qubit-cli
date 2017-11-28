@@ -16,13 +16,6 @@ let CWD = process.cwd()
 module.exports = async function serve (options) {
   const app = await createApp()
 
-  try {
-    let deps = require('qubit-cli-deps')
-    if (!deps.hasQubitDeps) throw new Error('oh noes!')
-  } catch (err) {
-    await installQubitDeps()
-  }
-
   app.use(cors())
   options.verbose = options.verbose || false
 
@@ -45,21 +38,30 @@ module.exports = async function serve (options) {
     log: options.verbose ? console.log : false,
     noInfo: !options.verbose,
     quiet: !options.verbose,
-    stats: options.verbose,
+    stats: options.verbose ? 'normal' : false,
     warn: options.verbose
   }
 
   const emitter = createEmitter()
-  const compile = new Promise(resolve => {
+  const compile = new Promise(async resolve => {
+    try {
+      let deps = require('qubit-cli-deps')
+      if (!deps.hasQubitDeps) throw new Error('oh noes!')
+    } catch (err) {
+      await installQubitDeps()
+    }
+
     const compiler = webpack(Object.assign(createWebpackConfig(options)), (plumbus, stats) => {
       resolve()
       if (stats.hasErrors() && !options.verbose) log.error(chalk.red(stats.toString('errors-only').trim()))
     })
 
     compiler.plugin('done', (data) => emitter.emit('rebuild', data))
+
     app.use(webpackDevMiddleware(compiler, Object.assign({
       publicPath: webpackConf.output.publicPath
     }, verboseOpts)))
+
     app.use(webpackHotMiddleware(compiler, Object.assign({
       reload: true,
       path: '/__webpack_hmr',
@@ -67,7 +69,7 @@ module.exports = async function serve (options) {
     }, verboseOpts)))
   })
 
-  // wait for compilation, otherwse you get errors in the browser by loading too quickly
+  // Wait for initial compilation
   app.use((req, res, next) => compile.then(next))
 
   return app.start().then(() => {
