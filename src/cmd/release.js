@@ -26,8 +26,16 @@ module.exports = async function release (version, flags) {
     return ui(flags)
   }
 
-  function runRelease (options) {
+  async function runRelease (options) {
     if (!options.confirm) process.exit()
-    return np(options.version, options)
+    let result
+    if (process.env.NODE_ENV === 'production') {
+      process.env.NODE_ENV = 'development'
+      result = await np(options.version, options)
+      process.env.NODE_ENV = 'production'
+    } else {
+      result = await np(options.version, options)
+    }
+    return result
   }
 }
