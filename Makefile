@@ -9,7 +9,6 @@ bootstrap:
 test:
 	npm install ./deps --no-save --production
 	NODE_ENV=test $(BIN)/mocha --recursive
-	npm uninstall qubit-cli-deps
 	make lint
 
 lint:
