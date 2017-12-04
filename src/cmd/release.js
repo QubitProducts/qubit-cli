@@ -28,16 +28,6 @@ module.exports = async function release (version, flags) {
 
   async function runRelease (options) {
     if (!options.confirm) process.exit()
-    let result
-    // np should not be run in production-mode, because it will not install dev-dependencies.
-    // So if necessary, we're temporarily switching to development-mode.
-    if (process.env.NODE_ENV === 'production') {
-      process.env.NODE_ENV = 'development'
-      result = await np(options.version, options)
-      process.env.NODE_ENV = 'production'
-    } else {
-      result = await np(options.version, options)
-    }
-    return result
+    return np(options.version, options)
   }
 }
