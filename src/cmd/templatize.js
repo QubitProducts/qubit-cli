@@ -15,7 +15,7 @@ module.exports = async function templatize () {
   try {
     let pkg = await getPkg()
 
-    let tmpPkg = { version: '1.0.0', main: 'index.js' }
+    let tmpPkg = _.extend({}, pkg, { version: '1.0.0', main: 'index.js', meta: {} })
 
     tmpPkg.name = clean(await input.text(formatLog('   What would you like to call your template?'), { default: pkg.name || 'template' }))
 
@@ -44,6 +44,7 @@ module.exports = async function templatize () {
     await scaffold(path.join(templateDir, 'template'), files, false, true, true)
 
     await fs.writeFile(path.join(templateDir, 'package.json'), JSON.stringify(tmpPkg, null, 2))
+    await fs.writeFile(path.join(templateDir, 'template/package.json'), JSON.stringify(tmpPkg, null, 2))
 
     await fs.writeFile(path.join(templateDir, 'index.js'), '')
 
