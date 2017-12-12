@@ -4,6 +4,12 @@ const updateNotifier = require('update-notifier')
 const run = require('../src/cmd')
 const pkg = require('../package.json')
 
-updateNotifier({ pkg, updateCheckInterval: config.updateCheckInterval }).notify({ defer: false })
+updateNotifier({
+  pkg,
+  updateCheckInterval: config.updateCheckInterval
+}).notify({
+  defer: false,
+  isGlobal: true
+})
 
 run(pkg)
