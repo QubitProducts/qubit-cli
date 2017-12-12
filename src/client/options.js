@@ -31,7 +31,7 @@ module.exports = function transform (pkg, key) {
         set: set
       },
       log,
-      getVisitorState: () => resolve(_.cloneDeep(visitor)),
+      getVisitorState: () => resolve(_.assign({}, visitor)),
       getBrowserState: () => resolve(getBrowserState()),
       uv: {
         emit: uv.emit,
