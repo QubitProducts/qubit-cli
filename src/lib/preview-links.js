@@ -7,6 +7,6 @@ module.exports = async function getPreviewLinks ({ variations, previewUrl }) {
 
   function getLink ({ variationMasterId }) {
     const separator = previewUrl.match(/#/) ? '&' : '#'
-    return `${previewUrl}${separator}qb_experiences=${variationMasterId}&qb_opts=preview,bypass_segments`
+    return `${previewUrl}${separator}qb_opts=preview,bypass_segments&qb_experiences=${variationMasterId}`
   }
 }
