@@ -1,11 +1,12 @@
 const _ = require('lodash')
 
-module.exports = async function getPreviewLinks ({ variations, previewUrl, propertyId }) {
+module.exports = async function getPreviewLinks ({ variations, previewUrl }) {
   return _.values(variations)
     .filter((v) => !v.variationIsControl)
     .map(getLink)
 
-  function getLink (v) {
-    return `${previewUrl}#smartserve_p=${propertyId}&qb_experiences=${v.variationId}&qb_opts=preview,bypass_segments`
+  function getLink ({ variationMasterId }) {
+    const separator = previewUrl.match(/#/) ? '&' : '#'
+    return `${previewUrl}${separator}qb_experiences=${variationMasterId}&qb_opts=preview,bypass_segments`
   }
 }
