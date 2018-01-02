@@ -3930,7 +3930,7 @@
       "integrity": "sha512-GQl3txLCcuKzmkYxMjZ3idiICyyjxZTfDz2k92LXU3byxY1nz249iKbfMKvSmWYUHs85TqWYZCkMJ316OKjTfA==",
       "requires": {
         "inquirer": "3.3.0",
-        "rxjs": "5.5.5",
+        "rxjs": "5.5.6",
         "through": "2.3.8"
       },
       "dependencies": {
@@ -4017,9 +4017,9 @@
           "integrity": "sha1-Cx4Rr4vESDbwSmQH6S2kJGe3lEQ="
         },
         "rxjs": {
-          "version": "5.5.5",
-          "resolved": "https://registry.npmjs.org/rxjs/-/rxjs-5.5.5.tgz",
-          "integrity": "sha512-D/MfQnPMBk8P8gfwGxvCkuaWBcG58W7dUMT//URPoYzIbDEKT0GezdirkK5whMgKFBATfCoTpxO8bJQGJ04W5A==",
+          "version": "5.5.6",
+          "resolved": "https://registry.npmjs.org/rxjs/-/rxjs-5.5.6.tgz",
+          "integrity": "sha512-v4Q5HDC0FHAQ7zcBX7T2IL6O5ltl1a2GX4ENjPXg6SjDY69Cmx9v4113C99a4wGF16ClPv5Z8mghuYorVkg/kg==",
           "requires": {
             "symbol-observable": "1.0.1"
           }
@@ -4777,9 +4777,9 @@
       "integrity": "sha1-8/ca1P0ejeftr/lhdopqIrAI0Bk="
     },
     "np": {
-      "version": "2.18.2",
-      "resolved": "https://registry.npmjs.org/np/-/np-2.18.2.tgz",
-      "integrity": "sha1-RXHIyPqkSlLP0l0mt9c68fD7FAc=",
+      "version": "2.18.3",
+      "resolved": "https://registry.npmjs.org/np/-/np-2.18.3.tgz",
+      "integrity": "sha512-o5jaG54VTkHZiScRpGz/PaqWsJNpH/wVYsIpXT51xGKjLjNIMCTxO20cp2jHsg3dlmi7QxMHeDVokFdD2HPK9w==",
       "requires": {
         "any-observable": "0.2.0",
         "chalk": "2.3.0",
