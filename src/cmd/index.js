@@ -1,5 +1,6 @@
 const program = require('commander')
 const chalk = require('chalk')
+const hasYarn = require('has-yarn')
 const log = require('../lib/log')
 
 module.exports = function run (pkg) {
@@ -49,7 +50,11 @@ module.exports = function run (pkg) {
       // Defer to np's defaults
       if (options.cleanup) delete options.cleanup
       if (options.publish) delete options.publish
-      if (options.yarn) delete options.yarn
+      // options.yarn must be a boolean, if it's true
+      // use the same yarn detection as np does in cli.js
+      if (options.yarn === true) {
+        options.yarn = hasYarn()
+      }
       return require('./release')(version, options)
     })
 
