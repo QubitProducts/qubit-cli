@@ -1,13 +1,12 @@
 const _ = require('lodash')
 const ms = require('ms')
 const axios = require('axios')
-const execa = require('execa')
 const exists = require('./exists')
 const config = require('../../config')
 const tokenHasExpired = require('./token-has-expired')
 const qubitrc = require('./qubitrc')
 const log = require('./log')
-const { APP_TOKEN, REGISTRY_TOKEN, REGISTRY_SCOPES, NPMRC } = require('./constants')
+const { APP_TOKEN, REGISTRY_TOKEN, NPMRC } = require('./constants')
 
 async function getToken (idToken, targetClientId) {
   const response = await axios.post(config.services.auth + '/delegation', {
@@ -45,21 +44,9 @@ async function getRegistryToken (getIDToken, forceRefresh) {
     })).data
     scopes = _.uniq(scopes.concat(['@qubit', '@qutics']))
     registryToken = accessToken
-    await qubitrc.set(REGISTRY_TOKEN, registryToken)
-    await qubitrc.set(REGISTRY_SCOPES, scopes)
-    await setupNPMRC(registryToken, scopes)
+    await qubitrc.login(registryToken, scopes)
   }
   return registryToken
-}
-
-async function setupNPMRC (registryToken, scopes) {
-  log.debug('Setting up npmrc')
-  let commands = []
-  const authKey = config.services.registry.replace(/^https?:/, '')
-  // always ensure that @qubit and @qutics scopes are configured
-  commands.push(`npm config set ${authKey}/:_authToken ${registryToken}`)
-  for (let scope of scopes) commands.push(`npm config set ${scope}:registry ${config.services.registry}/`)
-  return execa.shell(commands.join(' && '))
 }
 
 module.exports = { getAppToken, getRegistryToken }

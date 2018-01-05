@@ -1,8 +1,10 @@
 const _ = require('lodash')
 const yaml = require('js-yaml')
+const config = require('../../config')
 const log = require('./log')
 const fs = require('fs-extra')
-let { QUBITRC } = require('./constants')
+const execa = require('execa')
+let { QUBITRC, REGISTRY_TOKEN, REGISTRY_SCOPES } = require('./constants')
 let inMemory = false
 let data
 
@@ -65,7 +67,7 @@ function getEnv () {
 }
 
 function parse (value) {
-  return _.pick(value ? yaml.load(value) : {}, ['debug', 'staging', 'production', 'test', 'ENV'])
+  return _.pick(value ? yaml.load(value) : {}, ['debug', 'development', 'staging', 'production', 'test', 'ENV'])
 }
 
 function serialize (things) {
@@ -78,4 +80,39 @@ async function switched () {
   return prevENV !== currentENV
 }
 
-module.exports = { get, set, unset, unsetEnv, switched }
+async function setNPMRC (registryToken, scopes) {
+  log.debug('Setting up npmrc')
+  let commands = []
+  const authKey = config.services.registry.replace(/^https?:/, '')
+  // always ensure that @qubit and @qutics scopes are configured
+  commands.push(`npm config set ${authKey}/:_authToken ${registryToken}`)
+  for (let scope of scopes) commands.push(`npm config set ${scope}:registry ${config.services.registry}/`)
+  return execa.shell(commands.join(' && '))
+}
+
+async function unsetNPMRC () {
+  let scopes = await get(REGISTRY_SCOPES)
+  log.debug('Unsetting npmrc')
+  let commands = []
+  const authKey = config.services.registry.replace(/^https?:/, '')
+  // always ensure that @qubit and @qutics scopes are configured
+  commands.push(`npm config delete ${authKey}/:_authToken`)
+  log.debug(`Scopes: ${scopes && scopes.join(', ')}`)
+  if (scopes) {
+    for (let scope of scopes) commands.push(`npm config delete ${scope}:registry ${config.services.registry}/`)
+  }
+  return execa.shell(commands.join(' && '))
+}
+
+async function login (registryToken, scopes) {
+  await set(REGISTRY_TOKEN, registryToken)
+  await set(REGISTRY_SCOPES, scopes)
+  await setNPMRC(registryToken, scopes)
+}
+
+async function logout () {
+  await unsetNPMRC()
+  await unsetEnv()
+}
+
+module.exports = { get, set, unset, unsetEnv, switched, setNPMRC, unsetNPMRC, login, logout }
