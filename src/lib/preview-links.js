@@ -1,13 +1,13 @@
 const _ = require('lodash')
 const url = require('urlite')
-const propertyService = require('../services/property')
+let propertyService = require('../services/property')
 
 module.exports = async function getPreviewLinks ({ propertyId, variations, previewUrl }) {
   const propertyMeta = await propertyService.get(propertyId)
   return _.values(variations)
     .filter((v) => !v.variationIsControl)
     .map(getLink)
-  
+
   function getLink ({ variationMasterId }) {
     let withParams
     const previewParams = `qb_opts=preview,bypass_segments&qb_experiences=${variationMasterId}`

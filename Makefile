@@ -7,8 +7,7 @@ bootstrap:
 	npm install ./deps --no-save --production
 
 test:
-	npm install ./deps --no-save --production
-	NODE_ENV=test $(BIN)/mocha --recursive
+	node test/setup && NODE_ENV=test $(BIN)/mocha --recursive
 	make lint
 
 lint:
