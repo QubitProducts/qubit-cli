@@ -1,4 +1,4 @@
-const {getPropertyAndExperienceIds} = require('../lib/getPropertyAndExperienceIds')
+const {getPropertyAndExperienceIds} = require('../lib/get-property-and-experience-ids')
 const cloneExperience = require('../lib/clone-experience')
 const CWD = process.cwd()
 const log = require('../lib/log')

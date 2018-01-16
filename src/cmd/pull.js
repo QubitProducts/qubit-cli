@@ -1,5 +1,5 @@
 const _ = require('lodash')
-const {getPropertyAndExperienceIds} = require('../lib/getPropertyAndExperienceIds')
+const {getPropertyAndExperienceIds} = require('../lib/get-property-and-experience-ids')
 const template = require('./template')
 const getPkg = require('../lib/get-pkg')
 const log = require('../lib/log')
