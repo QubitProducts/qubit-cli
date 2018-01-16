@@ -5,7 +5,7 @@ const formatLog = require('../lib/format-log')
 const log = require('../lib/log')
 const CWD = process.cwd()
 
-const {getPropertyId} = require('../lib/getPropertyAndExperienceIds')
+const {getPropertyId} = require('../lib/get-property-and-experience-ids')
 
 module.exports = async function create (pid) {
   try {
