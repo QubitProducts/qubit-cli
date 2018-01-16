@@ -44,12 +44,7 @@ module.exports = async function serve (options) {
 
   const emitter = createEmitter()
   const compile = new Promise(async resolve => {
-    try {
-      let deps = require('qubit-cli-deps')
-      if (!deps.hasQubitDeps) throw new Error('oh noes!')
-    } catch (err) {
-      await installQubitDeps()
-    }
+    await installQubitDeps()
 
     const compiler = webpack(Object.assign(createWebpackConfig(options)), (plumbus, stats) => {
       resolve()

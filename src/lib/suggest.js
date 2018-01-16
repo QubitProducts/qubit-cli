@@ -14,7 +14,7 @@ const {
 
 async function property (message) {
   const suggestions = await getAutoCompleteMap({
-    arr: await propertyService.get(),
+    arr: await propertyService.getAll(),
     title: 'name',
     value: 'id'
   })
@@ -28,7 +28,7 @@ async function property (message) {
 
 async function experience (propertyId) {
   const suggestions = await getAutoCompleteMap({
-    arr: await experienceService.getAll(propertyId),
+    arr: await experienceService.get(propertyId),
     title: 'name',
     value: 'id'
   })
@@ -37,7 +37,7 @@ async function experience (propertyId) {
 
 async function both () {
   const propertySuggestions = await getAutoCompleteMap({
-    arr: await propertyService.get(),
+    arr: await propertyService.getAll(),
     title: 'name',
     value: 'id'
   })
