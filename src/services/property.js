@@ -1,7 +1,7 @@
 const fetch = require('../lib/fetch')
 const memoize = require('p-memoize')
 
-const getAll = memoize(async function getAll () {
+const getAll = memoize(function getAll () {
   return fetch.get('/api/user/properties')
 })
 

@@ -28,7 +28,7 @@ async function property (message) {
 
 async function experience (propertyId) {
   const suggestions = await getAutoCompleteMap({
-    arr: await experienceService.get(propertyId),
+    arr: await experienceService.getAll(propertyId),
     title: 'name',
     value: 'id'
   })
