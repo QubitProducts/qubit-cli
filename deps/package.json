@@ -4,7 +4,6 @@
   "description": "A wrapper for all the private dependencies required by xp",
   "main": "index.js",
   "dependencies": {
-    "@qubit/abandonment-recovery": "^0.1.4",
     "@qubit/advanced-modal": "^1.0.1",
     "@qubit/datasets": "^1.0.0",
     "@qubit/email-scheduler": "^1.8.1",
@@ -19,13 +18,10 @@
     "@qubit/message-scheduler": "^0.1.1",
     "@qubit/mvt": "^1.1.1",
     "@qubit/poller": "^1.5.15",
-    "@qubit/product-recommendations": "^1.3.4",
     "@qubit/remember-preview": "^1.2.0",
     "@qubit/send-uv-event": "^1.1.0",
-    "@qubit/social-proof": "^1.3.0",
     "@qubit/stash-count": "^1.3.8",
     "@qubit/uv-api": "^4.1.0",
-    "@qubit/visitor-pulse": "^1.0.7",
     "qubit-react": "^1.2.2"
   }
 }
