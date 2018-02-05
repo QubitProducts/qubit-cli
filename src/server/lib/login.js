@@ -12,6 +12,7 @@ const createApp = require('../app')
 const { getRegistryToken } = require('../../lib/get-token')
 
 module.exports = async function login (forceRefresh) {
+  forceRefresh = forceRefresh || await qubitrc.switched()
   let idToken = await qubitrc.get(ID_TOKEN)
   // try to login with existing token if it exists
   if (!tokenHasExpired(idToken, Date.now(), ms('1 day'))) {

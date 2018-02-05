@@ -14,6 +14,8 @@ const cors = require('cors')
 let CWD = process.cwd()
 
 module.exports = async function serve (options) {
+  await installQubitDeps()
+
   const app = await createApp()
 
   app.use(cors())
@@ -44,8 +46,6 @@ module.exports = async function serve (options) {
 
   const emitter = createEmitter()
   const compile = new Promise(async resolve => {
-    await installQubitDeps()
-
     const compiler = webpack(Object.assign(createWebpackConfig(options)), (plumbus, stats) => {
       resolve()
       if (stats.hasErrors() && !options.verbose) log.error(chalk.red(stats.toString('errors-only').trim()))
