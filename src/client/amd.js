@@ -1,6 +1,5 @@
 const microAmd = require('micro-amd')
 const map = {
-  '@qubit/abandonment-recovery': require('@qubit/abandonment-recovery'),
   '@qubit/datasets': require('@qubit/datasets'),
   '@qubit/advanced-modal': require('@qubit/advanced-modal'),
   '@qubit/email-scheduler': require('@qubit/email-scheduler'),
@@ -12,15 +11,11 @@ const map = {
   '@qubit/image-carousel': require('@qubit/image-carousel'),
   '@qubit/message-scheduler': require('@qubit/message-scheduler'),
   '@qubit/jquery': require('@qubit/jquery'),
-  '@qubit/mvt': require('@qubit/mvt'),
   '@qubit/poller': require('@qubit/poller'),
-  '@qubit/product-recommendations': require('@qubit/product-recommendations'),
   '@qubit/remember-preview': noop,
   '@qubit/send-uv-event': require('@qubit/send-uv-event'),
-  '@qubit/social-proof': require('@qubit/social-proof'),
   '@qubit/stash-count': require('@qubit/stash-count'),
   '@qubit/uv-api': require('@qubit/uv-api'),
-  '@qubit/visitor-pulse': require('@qubit/visitor-pulse'),
   'cookieman': require('cookieman'),
   'jquery': require('@qubit/jquery'),
   'preact': require('preact'),
