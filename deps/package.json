@@ -16,7 +16,6 @@
     "@qubit/jolt": "^7.33.0",
     "@qubit/jquery": "^1.8.2",
     "@qubit/message-scheduler": "^0.1.1",
-    "@qubit/mvt": "^1.1.1",
     "@qubit/poller": "^1.5.15",
     "@qubit/remember-preview": "^1.2.0",
     "@qubit/send-uv-event": "^1.1.0",
