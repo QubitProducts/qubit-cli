@@ -34,6 +34,7 @@ module.exports = {
       { test: /\.js$/, include: [path.join(__dirname, 'node_modules', '@qubit')], loader: 'experience-css' },
       { test: /\.css$/, include: [path.join(__dirname, 'node_modules', '@qubit')], loader: 'style-loader!raw-loader!less-loader' },
       { test: /global\.js$/, loader: 'raw-loader' },
+      { test: /index\.js$/, include: [path.join(__dirname, 'src/client')], loader: 'entry!buble-loader?{"objectAssign": "Object.assign", "transforms": { "dangerousForOf": true, "dangerousTaggedTemplateString": true } }' },
       { test: /\.js$/, include: [cwd], exclude: [/global\.js/, /node_modules/], loader: 'experience-js!buble-loader?{"objectAssign": "Object.assign", "transforms": { "dangerousForOf": true, "dangerousTaggedTemplateString": true } }' },
       { test: /\.css$/, loader: 'raw-loader!less-loader', exclude: [path.join(__dirname, 'node_modules')] },
       { test: /\.json$/, loader: 'json-loader' }
