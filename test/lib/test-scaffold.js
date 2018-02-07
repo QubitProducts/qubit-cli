@@ -23,7 +23,8 @@ describe('scaffold', function () {
     shouldRemoveStub = sinon.stub()
     confirm = sinon.stub()
     restores.push(shouldWrite.__set__({
-      confirm
+      confirm,
+      clearLine: () => {}
     }))
     restores.push(scaffold.__set__({
       shouldWrite,

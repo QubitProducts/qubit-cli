@@ -1,7 +1,7 @@
 const loader = require('../loaders/experience-js/lib/rewrite')
 const { expect } = require('chai')
 
-describe('xp-loader', function () {
+describe('qubit-cli-loader', function () {
   describe('with no deps', function () {
     it('should add module.exports to the start', function () {
       expect(loader('function () {}', 'filename')).to.eql('module.exports = function () {}')

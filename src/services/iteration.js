@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const fetch = require('../lib/fetch')
 const hasNoCode = require('../lib/hasNoCode')
-const { GLOBAL, COMMON, TRIGGERS, SCHEMA } = require('..//constants')
+const { GLOBAL, COMMON, TRIGGERS, SCHEMA } = require('../constants')
 
 const iterationsUrl = iterationId => `/api/iterations/${iterationId}`
 
