@@ -1,6 +1,6 @@
 const path = require('path')
 const hasNoCode = require('../../../src/lib/hasNoCode')
-const { TRIGGERS, EXECUTION } = require('../../../src/lib/constants')
+const { TRIGGERS, EXECUTION } = require('../../../src/constants')
 
 module.exports = function rewrite (content, file, hasDeps) {
   const filename = path.basename(file)

@@ -2,7 +2,7 @@ const fs = require('fs-extra')
 const pem = require('pem')
 const childProcess = require('child_process')
 const log = require('./log')
-const { CERT_DIR, CERT_PATH, KEY_PATH, KEY_OPTIONS } = require('./constants')
+const { CERT_DIR, CERT_PATH, KEY_PATH, KEY_OPTIONS } = require('../constants')
 
 module.exports = function setup () {
   log.info("We'll now generate a TSL certificate and install it into your OS as a trusted certificate")

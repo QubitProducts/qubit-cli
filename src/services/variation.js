@@ -1,6 +1,6 @@
 const fetch = require('../lib/fetch')
 const hasNoCode = require('../lib/hasNoCode')
-const { EXECUTION, CSS } = require('../lib/constants')
+const { EXECUTION, CSS } = require('..//constants')
 const iterationVariationsUrl = iterationId => `/api/iterations/${iterationId}/variations`
 const variationsUrl = variationId => `/api/variations/${variationId}`
 
