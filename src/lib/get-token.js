@@ -6,7 +6,7 @@ const config = require('../../config')
 const tokenHasExpired = require('./token-has-expired')
 const qubitrc = require('./qubitrc')
 const log = require('./log')
-const { APP_TOKEN, REGISTRY_TOKEN, NPMRC } = require('./constants')
+const { APP_TOKEN, REGISTRY_TOKEN, NPMRC } = require('../constants')
 
 async function getToken (idToken, targetClientId) {
   const response = await axios.post(config.services.auth + '/delegation', {

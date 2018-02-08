@@ -4,7 +4,7 @@ const config = require('../../config')
 const log = require('./log')
 const fs = require('fs-extra')
 const execa = require('execa')
-let { QUBITRC, REGISTRY_TOKEN, REGISTRY_SCOPES } = require('./constants')
+let { QUBITRC, REGISTRY_TOKEN, REGISTRY_SCOPES } = require('../constants')
 let inMemory = false
 let data
 

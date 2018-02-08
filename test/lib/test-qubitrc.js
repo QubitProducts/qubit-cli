@@ -2,7 +2,7 @@ const fs = require('fs-extra')
 const { expect } = require('chai')
 const qubitrc = require('../../src/lib/qubitrc')
 const exists = require('../../src/lib/exists')
-const { QUBITRC } = require('../../src/lib/constants')
+const { QUBITRC } = require('../../src/constants')
 
 describe('qubitrc', function () {
   beforeEach(async () => {

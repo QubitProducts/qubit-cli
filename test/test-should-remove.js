@@ -9,7 +9,8 @@ describe('shouldRemove', function () {
   beforeEach(async function () {
     confirmStub = sinon.stub()
     restore = shouldRemove.__set__({
-      confirm: confirmStub
+      confirm: confirmStub,
+      clearLine: () => {}
     })
   })
 
