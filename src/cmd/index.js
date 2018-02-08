@@ -117,7 +117,7 @@ module.exports = function run (pkg) {
 
   program
     .command('duplicate')
-    .description('create a new variation within your experience')
+    .description('Duplicate an experience (or variation if you are within an experience folder)')
     .action(cmd('duplicate'))
 
   program
@@ -175,6 +175,11 @@ module.exports = function run (pkg) {
     .command('extension')
     .description('open folder containing the Qubit-CLI chrome extension, drag into chrome extensions pane to install')
     .action(cmd('extension'))
+
+  program
+    .command('scopes')
+    .description('show what scopes you have access to')
+    .action(cmd('scopes'))
 
   program
     .usage(`[options] <cmd>`)
