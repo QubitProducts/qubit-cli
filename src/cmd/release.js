@@ -1,6 +1,6 @@
-const np = require('np/index')
 const ui = require('np/lib/ui')
 const log = require('../lib/log')
+const np = require('../lib/release')
 const login = require('../server/lib/login')
 
 // { anyBranch, cleanup, yolo, publish, tag, yarn }
