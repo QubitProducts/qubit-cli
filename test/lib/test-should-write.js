@@ -16,8 +16,7 @@ describe('shouldWrite', function () {
     confirmStub = sinon.stub()
     restore = shouldWrite.__set__({
       checkExists: fileExistsStub,
-      confirm: confirmStub,
-      clearLine: () => {}
+      confirm: confirmStub
     })
     return fs.outputFile(path.join(fixtures, 'a'), 'a')
   })

@@ -1,7 +1,7 @@
 const {expect} = require('chai')
 const sinon = require('sinon')
 const rewire = require('rewire')
-const shouldRemove = rewire('../src/lib/should-remove')
+const shouldRemove = rewire('../../src/lib/should-remove')
 
 describe('shouldRemove', function () {
   let confirmStub, restore
@@ -9,8 +9,7 @@ describe('shouldRemove', function () {
   beforeEach(async function () {
     confirmStub = sinon.stub()
     restore = shouldRemove.__set__({
-      confirm: confirmStub,
-      clearLine: () => {}
+      confirm: confirmStub
     })
   })
 

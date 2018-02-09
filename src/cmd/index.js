@@ -22,6 +22,11 @@ module.exports = function run (pkg) {
     .action(cmd('logout'))
 
   program
+    .command('scopes')
+    .description('show what scopes you have access to')
+    .action(cmd('scopes'))
+
+  program
     .command('release')
     .arguments('[version]')
     .usage(`
@@ -121,9 +126,14 @@ module.exports = function run (pkg) {
     .action(cmd('push'))
 
   program
-    .command('duplicate')
-    .description('Duplicate an experience (or variation if you are within an experience folder)')
-    .action(cmd('duplicate'))
+    .command('duplicate-experience [propertyId] [experienceId] [destinationPropertyId]')
+    .description('Duplicate an experience')
+    .action(cmd('duplicate-experience'))
+
+  program
+    .command('duplicate-variation')
+    .description('from an experience folder, duplicate the last variation')
+    .action(cmd('duplicate-variation'))
 
   program
     .command('traffic')
@@ -132,7 +142,7 @@ module.exports = function run (pkg) {
     .action(cmd('traffic'))
 
   program
-    .command('goals [cmd]')
+    .command('goals <cmd>')
     .usage(chalk.grey(`
 
   List goals:
@@ -167,24 +177,19 @@ module.exports = function run (pkg) {
   program
     .command('open')
     .arguments('[page]')
-    .description('open the overview, settings or editor page for the current experience')
+    .description(`shortcut to open the 'overview', 'settings' or 'editor' page for the current experience`)
     .action(cmd('open'))
 
   program
     .command('link')
     .arguments('[page]')
-    .description('get a link to the overview, settings, editor or preview page for the current experience')
+    .description(`shortcut to get a link to the 'overview', 'settings', 'editor' or 'preview' page for the current experience`)
     .action(cmd('link'))
 
   program
     .command('extension')
     .description('open folder containing the Qubit-CLI chrome extension, drag into chrome extensions pane to install')
     .action(cmd('extension'))
-
-  program
-    .command('scopes')
-    .description('show what scopes you have access to')
-    .action(cmd('scopes'))
 
   program
     .usage(`[options] <cmd>`)
@@ -198,7 +203,7 @@ module.exports = function run (pkg) {
 
   program.on('--help', function () {
     console.log(`
-    For more info visit https://github.com/qubitdigital/qubit-cli/blob/master/README.md`)
+    For more info visit https://docs.qubit.com/content/developers/cli-overview`)
   })
 
   program.parse(process.argv)
