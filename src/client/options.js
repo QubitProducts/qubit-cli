@@ -22,6 +22,7 @@ module.exports = function transform (pkg, key) {
 
   return {
     also: _.get(pkg, `meta.also`) || [],
+    exclude: _.get(pkg, `meta.exclude`) || [],
     api: {
       data: meta.templateData,
       emitCustomGoal: (id, options) => log.info('Custom goal emitted', { id, options }),

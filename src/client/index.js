@@ -3,7 +3,7 @@ const context = require.context(__CWD__, false)
 const _ = require('slapdash')
 const Promise = require('sync-p/extra')
 const engine = require('./engine')
-const also = require('./also')
+const previewSettings = require('./preview-settings')
 const log = require('./log')
 const options = require('./options')
 const onSecondPageView = require('./pageview')
@@ -34,7 +34,7 @@ function init (bypassTriggers) {
   const cleanup = []
   const opts = options(modules.pkg, __VARIATION__)
 
-  also(opts.also, opts.api.meta.cookieDomain)
+  previewSettings(opts.api.meta, opts.also, opts.exclude)
   engine(opts.api, globalFn, triggerFn, variationFn, bypassTriggers)
 
   function triggerFn (opts, cb) {
