@@ -107,4 +107,4 @@ function msg (str) {
   return `\n${formatLog(str, 'warn')}\n`
 }
 
-module.exports = {property, experience, both}
+module.exports = { property, experience, both }

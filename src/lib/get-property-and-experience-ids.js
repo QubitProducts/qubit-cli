@@ -1,6 +1,6 @@
 const suggest = require('./suggest')
 const parseUrl = require('./parse-url')
-const {isUrl, isId} = require('./is-type')
+const { isUrl, isId } = require('./is-type')
 
 /**
  * Get the property-id and experience-id from the user.

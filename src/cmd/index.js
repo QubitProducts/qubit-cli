@@ -85,6 +85,11 @@ module.exports = function run (pkg) {
     .action(cmd('clone'))
 
   program
+    .command('clone-all [propertyId]')
+    .description(`clone all experiences from a given property`)
+    .action(cmd('clone-all'))
+
+  program
     .command('publish')
     .description('publish an experience')
     .action(cmd('action'))

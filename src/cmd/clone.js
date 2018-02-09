@@ -5,7 +5,7 @@ const log = require('../lib/log')
 
 module.exports = async function clone (urlOrPid, pidOrEid) {
   try {
-    const {propertyId, experienceId} = await getPropertyAndExperienceIds(urlOrPid, pidOrEid) || {}
+    const { propertyId, experienceId } = await getPropertyAndExperienceIds(urlOrPid, pidOrEid) || {}
     if (!propertyId || !experienceId) {
       log.info(`Aborted`)
       return
