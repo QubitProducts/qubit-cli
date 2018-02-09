@@ -30,7 +30,7 @@
       }
     },
     "also": [],
-    "excluded": [],
+    "exclude": [],
     "visitor": {},
     "templates": []
   }

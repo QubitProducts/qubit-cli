@@ -30,7 +30,7 @@ function getCode (experience, iteration, variations) {
       solutionOptions: iteration.solution_options,
       visitor: {},
       also: [],
-      excluded: [],
+      exclude: [],
       templates: _.get(experienceMeta, 'xp.templates') || []
     }
   }), null, 2)
