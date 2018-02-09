@@ -1,3 +1,3 @@
-const createLogger = require('driftwood')
-createLogger.enable({ '*': 'trace' })
-module.exports = createLogger('Qubit-CLI')
+const logger = require('driftwood')('Qubit-CLI')
+logger.enable({ '*': 'trace' })
+module.exports = logger

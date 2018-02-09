@@ -1,6 +1,4 @@
-/* globals __VARIATION__ __CWD__ */
-const context = require.context(__CWD__, false)
-const _ = require('slapdash')
+/* globals __VARIATION__ __FILES__ */
 const Promise = require('sync-p/extra')
 const engine = require('./engine')
 const previewSettings = require('./preview-settings')
@@ -10,7 +8,7 @@ const onSecondPageView = require('./pageview')
 const redirectTo = require('./redirect-to')
 const applyStyles = require('./styles')
 const globalFn = once(() => eval.call(window, require('global'))) // eslint-disable-line
-const STYLE_ID = 'qubit-xp-styles'
+const STYLE_ID = 'qubit-cli-styles'
 
 require('./amd')()
 let {destroy, modules, variationIsSpent, triggersIsSpent, hasActivated, runAcrossViews} = init()
@@ -109,7 +107,7 @@ function restart (bypassTriggers) {
 
 function registerHotReloads (restart) {
   if (!module.hot) return
-  module.hot.accept(allModules(), () => {
+  module.hot.accept(__FILES__, () => {
     const newModules = loadModules()
     const edited = Object.keys(newModules).find(m => newModules[m] !== modules[m])
     modules = newModules
@@ -123,10 +121,6 @@ function registerHotReloads (restart) {
     if (hasActivated()) restart(true)
     // if hasn't activated yet no need to restart, as variation is loaded dynamically
   })
-
-  function allModules () {
-    return _.unique(context.keys().map(key => context.resolve(key))).concat([require.resolve(__VARIATION__ + '.js')])
-  }
 }
 
 function once (fn) {

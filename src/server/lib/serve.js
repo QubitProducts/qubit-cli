@@ -77,7 +77,6 @@ module.exports = async function serve (options) {
 function createWebpackConfig (options) {
   const plugins = webpackConf.plugins.slice(0)
   plugins.push(new webpack.DefinePlugin({
-    __CWD__: `'${CWD}'`,
     __VARIATION__: `'${options.variationFilename}'`
   }))
   const entry = webpackConf.entry.slice(0)
