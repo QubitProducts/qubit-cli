@@ -27,9 +27,9 @@ module.exports = function rewrite (content, file, hasDeps) {
 }
 
 function addModuleExports (code) {
-  return code.includes('module.exports')
+  return isCommonjs(code)
     ? code
-    : 'module.exports = ' + code
+    : addExports(code)
 }
 
 function everythingAMD (code) {
@@ -38,4 +38,12 @@ function everythingAMD (code) {
 
 function asyncAMD (code) {
   return code.replace(/(?:^|\s+)require\s*\((\s*)\[/g, '$1window.__qubit.xp.amd.require($1[')
+}
+
+function isCommonjs (code) {
+  return /(^|\n)\s*module\.exports/m.test(code)
+}
+
+function addExports (code) {
+  return code.replace(/(^|\n)(\s*)([(\w])/m, '$1$2module.exports = $3')
 }
