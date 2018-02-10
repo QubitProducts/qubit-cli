@@ -126,7 +126,7 @@ module.exports = function run (pkg) {
     .action(cmd('push'))
 
   program
-    .command('duplicate-experience [propertyId] [experienceId] [destinationPropertyId]')
+    .command('duplicate-experience [destinationPropertyId] [experienceId]')
     .description('Duplicate an experience')
     .action(cmd('duplicate-experience'))
 
