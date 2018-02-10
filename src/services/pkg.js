@@ -29,7 +29,8 @@ function getCode (experience, iteration, variations) {
       templateData: iteration.template_data,
       solutionOptions: iteration.solution_options,
       visitor: {},
-      also: [],
+      isPreview: true,
+      include: [],
       exclude: [],
       templates: _.get(experienceMeta, 'xp.templates') || []
     }

@@ -7,7 +7,7 @@ module.exports = function getJolt () {
 }
 
 function mockJolt () {
-  var fakeJolt = {}
+  let fakeJolt = {}
   ;['onEnrichment', 'onceEnrichment', 'onSuccess', 'onceSuccess'].forEach(method => {
     fakeJolt[method] = function () {
       let replay, dispose, call

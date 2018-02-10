@@ -21,7 +21,7 @@ module.exports = function transform (pkg, key) {
   }
 
   return {
-    also: _.get(pkg, `meta.also`),
+    include: _.get(pkg, `meta.also`) || _.get(pkg, `meta.include`),
     exclude: _.get(pkg, `meta.exclude`),
     api: {
       data: meta.templateData,
