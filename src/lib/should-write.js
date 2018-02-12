@@ -1,6 +1,5 @@
 const path = require('path')
 const fs = require('fs-extra')
-let clearLine = require('./clear-line')
 let checkExists = require('./exists')
 let confirm = require('confirmer')
 
@@ -20,7 +19,6 @@ module.exports = async function shouldWrite (dest, name, newValue, shouldConfirm
   if (shouldConfirm) {
     // permission
     let result = await confirm(msg)
-    clearLine()
 
     return result
   }
