@@ -50,6 +50,16 @@ function location () {
 }
 
 function reload (url) {
+  let parsed = yurl.parse(url)
+  if (parsed.hash) {
+    window.location.hash = parsed.hash
+  } else {
+    if (window.history.pushState) {
+      window.history.pushState('', '/', window.location.pathname)
+    } else {
+      window.location.hash = ''
+    }
+  }
   window.location.replace(url)
   window.location.reload()
 }
