@@ -29,9 +29,10 @@
         "variationId": 5
       }
     },
-    "also": [],
-    "exclude": [],
     "visitor": {},
+    "isPreview": true,
+    "include": [],
+    "exclude": [],
     "templates": []
   }
 }

@@ -32,7 +32,7 @@ function init (bypassTriggers) {
   const cleanup = []
   const opts = options(modules.pkg, __VARIATION__)
 
-  previewSettings(opts.api.meta, opts.also, opts.exclude)
+  previewSettings(opts.api.meta, opts.include, opts.exclude)
   engine(opts.api, globalFn, triggerFn, variationFn, bypassTriggers)
 
   function triggerFn (opts, cb) {
