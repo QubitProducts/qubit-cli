@@ -26,6 +26,21 @@ const TRIGGERS = defaults.activation_rules
 const CSS = defaults.custom_styles
 const SCHEMA = defaults.schema
 
+const DEFAULT_EXPERIENCE = {
+  name: 'Created by Qubit-CLI',
+  propertyId: null,
+  editor_version: 3,
+  recent_iterations: {
+    draft: {
+      variations: [{
+        advanced_mode: 1,
+        execution_code: EXECUTION
+      }]
+    }
+  },
+  solution_id: 6
+}
+
 module.exports = {
   HOME,
   CERT_DIR,
@@ -43,5 +58,6 @@ module.exports = {
   ID_TOKEN,
   APP_TOKEN,
   REGISTRY_TOKEN,
-  REGISTRY_SCOPES
+  REGISTRY_SCOPES,
+  DEFAULT_EXPERIENCE
 }

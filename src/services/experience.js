@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const fetch = require('../lib/fetch')
 const withMetrics = require('../lib/with-metrics')
-const EXPERIENCE = require('./experience.json')
+const { DEFAULT_EXPERIENCE } = require('../constants')
 
 function get (experienceId) {
   return fetch.get(`/api/experiences/${experienceId}`)
@@ -17,7 +17,7 @@ function set (experienceId, experience) {
 }
 
 function create (experience) {
-  const experiment = _.merge({}, withMetrics(EXPERIENCE, { created: true }), experience)
+  const experiment = _.merge({}, withMetrics(DEFAULT_EXPERIENCE, { created: true }), experience)
   return fetch.post(`/api/p/${experience.propertyId}/experiences`, { experiment })
 }
 
