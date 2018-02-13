@@ -45,13 +45,7 @@ qubit extension
 ```
 then drag the chrome-extension folder into the chrome extensions pane
 
-## Tutorials
-- [getting-started](docs/tutorials/getting-started.md)
-- [hot-reloading](docs/tutorials/hot-reloading.md)
-- [pushing-and-pulling](docs/tutorials/pushing-and-pulling.md)
-- [templates](docs/tutorials/templates.md)
-- [manipulating-experiences](docs/tutorials/manipulating-experiences.md)
-- [links](docs/tutorials/links.md)
-- [tips-and-tricks](docs/tutorials/tips-and-tricks.md)
+## Docs
+See https://docs.qubit.com/content/developers/cli-overview
 
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
