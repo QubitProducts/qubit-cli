@@ -46,7 +46,7 @@ async function set (propertyId, experienceId, files) {
 }
 
 function eql (a, b) {
-  return _.isEqual(_.omit(a, ['meta']), _.omit(b, ['meta']))
+  return _.isEqual(a, b)
 }
 
 function getCode (experience, iteration, variations) {
