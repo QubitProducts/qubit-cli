@@ -4,6 +4,7 @@ const iterationService = require('./iteration')
 const variationService = require('./variation')
 const pkgService = require('./pkg')
 const withMetrics = require('../lib/with-metrics')
+const getId = require('../lib/get-id')
 
 async function get (propertyId, experienceId) {
   const experience = await experienceService.get(experienceId)
@@ -20,7 +21,8 @@ async function set (propertyId, experienceId, files) {
   const oldVariations = await variationService.getAll(iterationId)
 
   const pkg = (files['package.json'] && JSON.parse(files['package.json'])) || {}
-  const newExperience = withMetrics(oldExperience, { templates: _.get(pkg, 'meta.templates') || [] })
+  const id = await getId()
+  const newExperience = withMetrics(oldExperience, { id, templates: _.get(pkg, 'meta.templates') || [] })
   const newIteration = iterationService.setCode(oldIteration, files)
   const pkgCode = pkgService.setCode(newExperience, newIteration, files)
 
