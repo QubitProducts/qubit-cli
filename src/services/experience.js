@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const fetch = require('../lib/fetch')
 const withMetrics = require('../lib/with-metrics')
-const getId = require('../lib/get-id')
+const getUser = require('../lib/get-user')
 const { DEFAULT_EXPERIENCE } = require('../constants')
 
 function get (experienceId) {
@@ -18,8 +18,8 @@ function set (experienceId, experience) {
 }
 
 async function create (experience) {
-  const id = await getId()
-  const experiment = _.merge({}, withMetrics(DEFAULT_EXPERIENCE, { id, created: true }), experience)
+  const user = await getUser()
+  const experiment = _.merge({}, withMetrics(DEFAULT_EXPERIENCE, { ...user, created: true }), experience)
   return fetch.post(`/api/p/${experience.propertyId}/experiences`, { experiment })
 }
 

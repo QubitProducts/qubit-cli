@@ -6,8 +6,12 @@ module.exports = async function getId () {
   let token = await qubitrc.get(ID_TOKEN)
   if (!token) return
   try {
-    return Number(jsonwebtoken.decode(token).user_id.replace('auth0|', '').split('-')[1])
+    const decoded = jsonwebtoken.decode(token) || {}
+    return {
+      username: decoded.user_id && decoded.user_id.replace('auth0|', ''),
+      email: decoded.email
+    }
   } catch (err) {
-    return `could not parse ${jsonwebtoken.decode(token).user_id}`
+    return {}
   }
 }

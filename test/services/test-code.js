@@ -74,7 +74,7 @@ describe('codeService', function () {
       expect(actualIterationId).to.eql(iterationId)
       expect(actualIteration).to.eql(iteration)
 
-      let meta = JSON.parse(actualExperience.meta)
+      let meta = actualExperience.meta
       expect(_.omit(meta, ['xp.lastPush', 'xp.version'])).to.eql({
         xp: {
           pushes: 1,
