@@ -1,4 +1,3 @@
-const defaults = require('@qubit/experience-defaults').custom
 const os = require('os')
 const path = require('path')
 const HOME = process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME']
@@ -19,45 +18,16 @@ const APP_TOKEN = 'APP_TOKEN'
 const REGISTRY_TOKEN = 'REGISTRY_TOKEN'
 const REGISTRY_SCOPES = 'REGISTRY_SCOPES'
 
-const EXECUTION = defaults.execution_code
-const GLOBAL = defaults.global_code
-const COMMON = defaults.common_code
-const TRIGGERS = defaults.activation_rules
-const CSS = defaults.custom_styles
-const SCHEMA = defaults.schema
-
-const DEFAULT_EXPERIENCE = {
-  name: 'Created by Qubit-CLI',
-  propertyId: null,
-  editor_version: 3,
-  recent_iterations: {
-    draft: {
-      variations: [{
-        advanced_mode: 1,
-        execution_code: EXECUTION
-      }]
-    }
-  },
-  solution_id: 6
-}
-
 module.exports = {
   HOME,
   CERT_DIR,
   CERT_PATH,
   KEY_PATH,
   KEY_OPTIONS,
-  EXECUTION,
-  CSS,
-  SCHEMA,
-  GLOBAL,
-  COMMON,
-  TRIGGERS,
   QUBITRC,
   NPMRC,
   ID_TOKEN,
   APP_TOKEN,
   REGISTRY_TOKEN,
-  REGISTRY_SCOPES,
-  DEFAULT_EXPERIENCE
+  REGISTRY_SCOPES
 }

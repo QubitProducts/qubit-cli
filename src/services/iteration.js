@@ -1,7 +1,12 @@
 const _ = require('lodash')
 const fetch = require('../lib/fetch')
 const hasNoCode = require('../lib/hasNoCode')
-const { GLOBAL, COMMON, TRIGGERS, SCHEMA } = require('../constants')
+const {
+  global_code: GLOBAL_CODE,
+  common_code: COMMON_CODE,
+  activation_rules: TRIGGERS,
+  schema: SCHEMA
+} = require('@qubit/experience-defaults').custom
 
 const iterationsUrl = iterationId => `/api/iterations/${iterationId}`
 
@@ -24,10 +29,10 @@ function getCode (iteration) {
   const schema = JSON.stringify(iteration.schema, null, 2)
 
   return {
-    'global.js': hasNoCode(globalCode) ? GLOBAL : globalCode,
+    'global.js': hasNoCode(globalCode) ? GLOBAL_CODE : globalCode,
     'triggers.js': hasNoCode(triggers) ? TRIGGERS : triggers,
     'fields.json': hasNoCode(schema) ? SCHEMA : schema,
-    'common.js': hasNoCode(commonCode) ? COMMON : commonCode
+    'common.js': hasNoCode(commonCode) ? COMMON_CODE : commonCode
   }
 }
 
@@ -45,8 +50,8 @@ function setCode (iteration, files) {
     })
   }
   Object.assign(iteration, {
-    global_code: files['global.js'] || GLOBAL,
-    common_code: files['common.js'] || COMMON,
+    global_code: files['global.js'] || GLOBAL_CODE,
+    common_code: files['common.js'] || COMMON_CODE,
     schema: files['fields.json'] || SCHEMA,
     activation_rules: rules
   })
