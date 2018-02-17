@@ -2,8 +2,10 @@ const program = require('commander')
 const chalk = require('chalk')
 const hasYarn = require('has-yarn')
 const log = require('../lib/log')
+const installQubitDeps = require('../lib/install-qubit-deps')
 
-module.exports = function run (pkg) {
+module.exports = async function run (pkg) {
+  await installQubitDeps()
   program
     .command('login')
     .description('login to the qubit platform')

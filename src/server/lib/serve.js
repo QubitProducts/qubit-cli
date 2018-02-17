@@ -4,7 +4,6 @@ const webpack = require('webpack')
 const createEmitter = require('event-kitten')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
-const installQubitDeps = require('../../lib/install-qubit-deps')
 const pickVariation = require('../../lib/pick-variation')
 const webpackConf = require('../../../webpack.conf')
 const config = require('../../../config')
@@ -14,8 +13,6 @@ const cors = require('cors')
 let CWD = process.cwd()
 
 module.exports = async function serve (options) {
-  await installQubitDeps()
-
   const app = await createApp()
 
   app.use(cors())

@@ -1,5 +1,5 @@
 const _ = require('lodash')
-const config = require('config')
+const config = require('../../config')
 const driftwood = require('driftwood/src/create')
 const log = driftwood(logger)('Qubit-CLI')
 const formatLog = require('./format-log')

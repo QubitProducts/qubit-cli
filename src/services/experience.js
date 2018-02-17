@@ -2,7 +2,21 @@ const _ = require('lodash')
 const fetch = require('../lib/fetch')
 const withMetrics = require('../lib/with-metrics')
 const getUser = require('../lib/get-user')
-const { DEFAULT_EXPERIENCE } = require('../constants')
+const { execution_code: EXECUTION_CODE } = require('@qubit/experience-defaults').custom
+const DEFAULT_EXPERIENCE = {
+  name: 'Created by Qubit-CLI',
+  propertyId: null,
+  editor_version: 3,
+  recent_iterations: {
+    draft: {
+      variations: [{
+        advanced_mode: 1,
+        execution_code: EXECUTION_CODE
+      }]
+    }
+  },
+  solution_id: 6
+}
 
 function get (experienceId) {
   return fetch.get(`/api/experiences/${experienceId}`)
