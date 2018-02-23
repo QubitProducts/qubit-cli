@@ -47,7 +47,8 @@ function chmodCerts (certs) {
 async function installCerts () {
   try {
     if (process.platform === 'darwin') await installCertsOSX()
-    if (process.platform === 'linux') await installCertsLinux()
+    else if (process.platform === 'linux') await installCertsLinux()
+    else if (process.platform === 'win32') await installCertsWin()
     log.info('All done!')
     log.info('The certificate has been created in ' + CERT_DIR + 'and has been added to your system as a trusted certificate.')
   } catch (err) {
@@ -75,4 +76,8 @@ async function installCertsLinux () {
   await fs.ensureDir(certDir)
   await fs.copy(CERT_PATH, certDir)
   return execa.shell(`sudo ${updateCmd}`)
+}
+
+async function installCertsWin () {
+  await execa.shell(`CertMgr.exe /add ${CERT_PATH} /s /r localMachine root`)
 }
