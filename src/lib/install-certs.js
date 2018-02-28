@@ -1,3 +1,4 @@
+const execa = require('execa')
 const fs = require('fs-extra')
 const pem = require('pem')
 const childProcess = require('child_process')
@@ -40,37 +41,42 @@ function chmodCerts (certs) {
   ])
 }
 
-function installCerts () {
-  let cmd
-  switch (process.platform) {
-    case 'darwin':
-      cmd = 'sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ' + CERT_PATH
-      break
-    case 'linux':
-      let certDir
-      let updateCmd
-
-      if (childProcess.spawnSync('which', ['update-ca-certificates']).status === 0) {
-        certDir = '/usr/local/share/ca-certificates'
-        updateCmd = 'update-ca-certificates'
-      } else {
-        certDir = '/etc/ca-certificates/trust-source/anchors'
-        updateCmd = 'trust extract-compat'
-      }
-
-      cmd = ['sudo mkdir -p', certDir, '&& sudo cp', CERT_PATH, certDir, '&& sudo', updateCmd].join(' ')
-      break
+async function installCerts () {
+  try {
+    if (process.platform === 'darwin') await installCertsOSX()
+    else if (process.platform === 'linux') await installCertsLinux()
+    else if (process.platform === 'win32') await installCertsWin()
+    log.info('All done!')
+    log.info('The certificate has been created in ' + CERT_DIR + 'and has been added to your system as a trusted certificate.')
+  } catch (err) {
+    await fs.remove(CERT_DIR)
+    log.error('Could not install certificates')
+    process.exit()
   }
-  return new Promise(function (resolve, reject) {
-    childProcess.exec(cmd, async function (error, stdout, stderr) {
-      if (error || stderr) {
-        await fs.remove(CERT_DIR)
-        log.error('Could not install certificates')
-        process.exit()
-      }
-      log.info('All done!')
-      log.info('The certificate has been created in ' + CERT_DIR + 'and has been added to your system as a trusted certificate.')
-      resolve()
-    })
-  })
+}
+
+async function installCertsOSX () {
+  return execa.shell('sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ' + CERT_PATH)
+}
+
+async function installCertsLinux () {
+  let certDir
+  let updateCmd
+
+  if (childProcess.spawnSync('which', ['update-ca-certificates']).status === 0) {
+    certDir = '/usr/local/share/ca-certificates'
+    updateCmd = 'update-ca-certificates'
+  } else {
+    certDir = '/etc/ca-certificates/trust-source/anchors'
+    updateCmd = 'trust extract-compat'
+  }
+  await fs.ensureDir(certDir)
+  await fs.copy(CERT_PATH, certDir)
+  return execa.shell(`sudo ${updateCmd}`)
+}
+
+async function installCertsWin () {
+  log.error(`
+Could not install ssl certificates automatically, please manually add an exception from within chrome when using Qubit CLI
+`)
 }
