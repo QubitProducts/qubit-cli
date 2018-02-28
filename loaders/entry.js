@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs-extra')
+const slash = require('slash')
 const CWD = process.cwd()
 
 module.exports = function loader (content, { file }) {
@@ -12,5 +13,8 @@ module.exports = function loader (content, { file }) {
 }
 
 async function getFiles () {
-  return (await fs.readdir(CWD)).filter(f => /\.(js|css|json)$/.test(f)).map(f => `require.resolve('${path.join(CWD, f)}')`)
+  const files = await fs.readdir(CWD)
+  return files
+    .filter(f => /\.(js|css|json)$/.test(f))
+    .map(f => `require.resolve('${slash(path.join(CWD, f))}')`)
 }

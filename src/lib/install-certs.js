@@ -3,10 +3,7 @@ const fs = require('fs-extra')
 const pem = require('pem')
 const childProcess = require('child_process')
 const log = require('./log')
-const { CERT_DIR, CERT_PATH, KEY_PATH, KEY_OPTIONS, WIN_OPENSSL_PATH } = require('../constants')
-if (process.platform === 'win32') {
-  pem.config({ pathOpenSSL: WIN_OPENSSL_PATH })
-}
+const { CERT_DIR, CERT_PATH, KEY_PATH, KEY_OPTIONS } = require('../constants')
 
 module.exports = function setup () {
   log.info("We'll now generate a TSL certificate and install it into your OS as a trusted certificate")
@@ -79,5 +76,7 @@ async function installCertsLinux () {
 }
 
 async function installCertsWin () {
-  await execa.shell(`CertMgr.exe /add ${CERT_PATH} /s /r localMachine root`)
+  log.error(`
+Could not install ssl certificates automatically, please manually add an exception from within chrome when using Qubit CLI
+`)
 }

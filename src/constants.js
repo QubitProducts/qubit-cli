@@ -1,7 +1,6 @@
 const os = require('os')
 const path = require('path')
 const HOME = process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME']
-const WIN_OPENSSL_PATH = path.join(__dirname, '../bin/openssl.exe')
 const CERT_DIR = path.join(HOME, '.qubit-ssl')
 const CERT_PATH = path.join(CERT_DIR, 'qubit-serve.crt')
 const KEY_PATH = path.join(CERT_DIR, 'qubit-serve.key')
@@ -30,6 +29,5 @@ module.exports = {
   ID_TOKEN,
   APP_TOKEN,
   REGISTRY_TOKEN,
-  REGISTRY_SCOPES,
-  WIN_OPENSSL_PATH
+  REGISTRY_SCOPES
 }
