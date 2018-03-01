@@ -12,7 +12,8 @@ module.exports = async function installQubitDeps () {
     await login()
     log.info('Installing some additional dependencies...')
     await execa('npm', ['install', './deps', '--production', '--no-save'], {
-      cwd: path.resolve(__dirname, '../../')
+      cwd: path.resolve(__dirname, '../../'),
+      stdio: 'inherit'
     })
     log.info('Additional installation steps complete!')
   }
