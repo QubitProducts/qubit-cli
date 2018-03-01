@@ -1,4 +1,7 @@
 const execa = require('execa')
+const windosu = require('windosu')
+const confirm = require('confirmer')
+const opn = require('opn')
 const fs = require('fs-extra')
 const pem = require('pem')
 const childProcess = require('child_process')
@@ -49,14 +52,24 @@ async function installCerts () {
     log.info('All done!')
     log.info('The certificate has been created in ' + CERT_DIR + 'and has been added to your system as a trusted certificate.')
   } catch (err) {
-    await fs.remove(CERT_DIR)
-    log.error('Could not install certificates')
+    log.error('Could not install certificates automatically')
+    const result = await confirm(`Would you like to install them manually?`)
+    if (result) {
+      if (process.platform === 'win32') {
+        log.info(`Please add "${CERT_PATH}" to your machine's 'Trusted Root Certification Authority'`)
+      } else if (process.platform === 'darwin') {
+        log.info(`Please double click on "${CERT_PATH}", install it to your keychain and then set it's trust settings to 'always trust'`)
+      }
+      await opn(CERT_DIR)
+    } else {
+      await fs.remove(CERT_DIR)
+    }
     process.exit()
   }
 }
 
 async function installCertsOSX () {
-  return execa.shell('sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ' + CERT_PATH)
+  return execa.shell(`sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "${CERT_PATH}"`)
 }
 
 async function installCertsLinux () {
@@ -75,8 +88,6 @@ async function installCertsLinux () {
   return execa.shell(`sudo ${updateCmd}`)
 }
 
-async function installCertsWin () {
-  log.error(`
-Could not install ssl certificates automatically, please manually add an exception from within chrome when using Qubit CLI
-`)
+function installCertsWin () {
+  return windosu.exec(`certutil -addstore -enterprise -f -v root "${CERT_PATH}"`)
 }
