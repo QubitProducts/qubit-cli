@@ -28,15 +28,7 @@ templates
 
 ## Installation
 
-```
-using npm:
-npm install -g qubit-cli
-
-using yarn:
-yarn global add qubit-cli
-
-qubit login
-```
+`npm install -g qubit-cli`
 
 ## Setup
 
