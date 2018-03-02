@@ -20,8 +20,16 @@ module.exports = function transform (pkg, key) {
     return experienceState[key]
   }
 
+  function getInclude () {
+    let include = _.get(pkg, `meta.include`)
+    if (typeof include !== 'undefined') return include
+    include = _.get(pkg, `meta.also`)
+    if (typeof include !== 'undefined') return include
+    return []
+  }
+
   return {
-    include: _.get(pkg, `meta.also`) || _.get(pkg, `meta.include`),
+    include: getInclude(),
     exclude: _.get(pkg, `meta.exclude`),
     api: {
       data: meta.templateData,
