@@ -22,8 +22,8 @@ function set (iterationId, iteration) {
 
 function getCode (iteration) {
   const rules = iteration.activation_rules
-  const rule = rules && rules.find(rule => rule.key === 'custom_javascript')
-  const triggers = rule && rule.value
+  // TODO: remove this conditional once API returns triggers
+  const triggers = iteration.triggers || (rules && _.get(rules.find(rule => rule.key === 'custom_javascript'), 'value'))
   const globalCode = iteration.global_code
   const commonCode = iteration.common_code
   const schema = JSON.stringify(iteration.schema, null, 2)
@@ -37,25 +37,13 @@ function getCode (iteration) {
 }
 
 function setCode (iteration, files) {
-  iteration = _.cloneDeep(iteration)
-  const rules = iteration.activation_rules || []
-  const customJs = rules.find(rule => rule.key === 'custom_javascript')
-  if (customJs) {
-    customJs.value = hasNoCode(files['triggers.js']) ? TRIGGERS : files['triggers.js']
-  } else {
-    rules.push({
-      key: 'custom_javascript',
-      type: 'code',
-      value: hasNoCode(files['triggers.js']) ? TRIGGERS : files['triggers.js']
-    })
+  return {
+    ...iteration,
+    global_code: hasNoCode(files['global.js']) ? GLOBAL_CODE : files['global.js'],
+    common_code: hasNoCode(files['common.js']) ? COMMON_CODE : files['common.js'],
+    schema: JSON.parse(hasNoCode(files['fields.json']) ? SCHEMA : files['fields.json']),
+    triggers: hasNoCode(files['triggers.js']) ? TRIGGERS : files['triggers.js']
   }
-  Object.assign(iteration, {
-    global_code: files['global.js'] || GLOBAL_CODE,
-    common_code: files['common.js'] || COMMON_CODE,
-    schema: files['fields.json'] || SCHEMA,
-    activation_rules: rules
-  })
-  return iteration
 }
 
 module.exports = { get, set, getCode, setCode }

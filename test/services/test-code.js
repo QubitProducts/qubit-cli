@@ -41,57 +41,90 @@ describe('codeService', function () {
   })
 
   describe('set', function () {
-    it('should update models correctly', async function () {
+    it('should update experience models correctly', async function () {
       files = _.mapValues(files, (val, key) => {
-        if (key === 'package.json') {
-          const pkg = JSON.parse(val)
-          _.set(pkg, 'meta.name', pkg.meta.name + 1)
-          return JSON.stringify(pkg, null, 2)
-        }
         if (key === 'fields.json') {
           const schema = JSON.parse(val)
           schema.groups[0].title += 1
           return JSON.stringify(schema, null, 2)
         }
+        if (key === 'package.json') {
+          const pkg = JSON.parse(val)
+          _.set(pkg, 'meta.name', pkg.meta.name + 1)
+          return JSON.stringify(pkg, null, 2)
+        }
         return val + 1
       })
       await codeService.set(propertyId, experienceId, files)
-      expect(experienceService.set.calledOnce).to.eql(true)
-      experience.name += 1
-      let [actualExperienceId, actualExperience] = experienceService.set.getCall(0).args
-      expect(actualExperienceId).to.eql(experienceId)
-      expect(_.omit(actualExperience, 'meta')).to.eql(experience)
+      let [updatedExperienceId, updatedExperience] = experienceService.set.getCall(0).args
 
-      iteration.global_code = files['global.js']
-      iteration.common_code = files['common.js']
-      _.set(iteration, 'activation_rules.0.value', files['triggers.js'])
-      iteration.schema = files['fields.json']
-      let pkg = JSON.parse(files['package.json'])
-      delete pkg.meta
-      iteration.package_json = JSON.stringify(pkg, null, 2)
-      expect(iterationService.set.callCount).to.eql(1)
-      const [actualIterationId, actualIteration] = iterationService.set.getCall(0).args
-      expect(actualIterationId).to.eql(iterationId)
-      expect(actualIteration).to.eql(iteration)
-
-      let meta = actualExperience.meta
-      expect(_.omit(meta, ['xp.lastPush', 'xp.version'])).to.eql({
+      expect(updatedExperienceId).to.eql(experienceId)
+      expect(_.omit(updatedExperience, 'meta')).to.eql({ ...experience, name: experience.name + 1 })
+      expect(_.omit(updatedExperience.meta, ['xp.lastPush', 'xp.version'])).to.eql({
         xp: {
           pushes: 1,
           templates: []
         }
       })
-      expect(meta.xp).to.contain.keys('version', 'lastPush')
+      expect(updatedExperience.meta.xp).to.contain.keys('version', 'lastPush')
+    })
 
+    it('should update iteration models correctly', async function () {
+      files = _.mapValues(files, (val, key) => {
+        if (key === 'fields.json') {
+          const schema = JSON.parse(val)
+          schema.groups[0].title += 1
+          return JSON.stringify(schema, null, 2)
+        }
+        if (key === 'package.json') {
+          const pkg = JSON.parse(val)
+          _.set(pkg, 'meta.name', pkg.meta.name + 1)
+          return JSON.stringify(pkg, null, 2)
+        }
+        return val + 1
+      })
+
+      await codeService.set(propertyId, experienceId, files)
+
+      let expectedIteration = {
+        ...iteration,
+        global_code: files['global.js'],
+        common_code: files['common.js'],
+        triggers: files['triggers.js'],
+        schema: JSON.parse(files['fields.json']),
+        package_json: _.omit(JSON.parse(files['package.json']), 'meta')
+      }
+      const [updatedIterationId, updatedIteration] = iterationService.set.getCall(0).args
+      expect(updatedIterationId).to.eql(iterationId)
+      expect(updatedIteration).to.eql(expectedIteration)
+    })
+
+    it('should update variation models correctly', async function () {
+      files = _.mapValues(files, (val, key) => {
+        if (key === 'fields.json') {
+          const schema = JSON.parse(val)
+          schema.groups[0].title += 1
+          return JSON.stringify(schema, null, 2)
+        }
+        if (key === 'package.json') {
+          const pkg = JSON.parse(val)
+          _.set(pkg, 'meta.name', pkg.meta.name + 1)
+          return JSON.stringify(pkg, null, 2)
+        }
+        return val + 1
+      })
+
+      await codeService.set(propertyId, experienceId, files)
       expect(variationService.set.callCount).to.eql(2)
       _.each(variations, (variation, i) => {
         if (variation.is_control) return
         expect(variationService.set.getCall(i - 1).args).to.eql([
           variation.id,
-          Object.assign(variation, {
+          {
+            ...variation,
             execution_code: variation.execution_code + 1,
             custom_styles: variation.custom_styles + 1
-          })
+          }
         ])
       })
     })

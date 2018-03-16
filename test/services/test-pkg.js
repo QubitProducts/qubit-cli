@@ -34,7 +34,7 @@ describe('pkgService', () => {
       expectedIteration.url = pkg.meta.previewUrl
       files['package.json'] = JSON.stringify(pkg)
       delete pkg.meta
-      expectedIteration.package_json = JSON.stringify(pkg, null, 2)
+      expectedIteration.package_json = pkg
 
       const setCall = pkgService.setCode(experience, iteration, files)
       expect(setCall.experience).to.eql(expectedExperience)

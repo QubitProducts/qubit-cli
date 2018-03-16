@@ -58,7 +58,7 @@ describe('iterationService', function () {
       })
       expect(newIteration.global_code).to.eql('console.log("some other global code")')
       expect(newIteration.common_code).to.eql('console.log("some other common code")')
-      expect(newIteration).to.have.deep.property('activation_rules.0.value', 'console.log("some other triggers")')
+      expect(newIteration.triggers).to.eql('console.log("some other triggers")')
     })
   })
 })
