@@ -27,7 +27,7 @@ module.exports = async function pull (urlOrPidOrName, pidOrEid) {
     if (propertyId && experienceId) {
       await pullExperience(CWD, propertyId, experienceId)
     } else {
-      log.warn(`Aborted`)
+      log.warn(`PropertyId not found, are you in an experience folder?`)
     }
   } catch (err) {
     log.error(err)

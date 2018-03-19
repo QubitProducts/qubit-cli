@@ -11,7 +11,7 @@ module.exports = async function create (pid) {
   try {
     const propertyId = await getPropertyId(pid)
     if (!propertyId) {
-      log.info(`Aborted`)
+      log.info(`PropertyId not found, are you in an experience folder?`)
       return
     }
     const name = clean(await input.text(

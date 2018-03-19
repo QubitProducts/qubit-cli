@@ -1,15 +1,8 @@
 #!/usr/bin/env node
-const config = require('../config')
-const updateNotifier = require('update-notifier')
+const getUpdate = require('../src/lib/getUpdate')
 const run = require('../src/cmd')
 const pkg = require('../package.json')
 
-updateNotifier({
-  pkg,
-  updateCheckInterval: config.updateCheckInterval
-}).notify({
-  defer: false,
-  isGlobal: true
-})
+getUpdate()
 
 run(pkg)

@@ -1,5 +1,5 @@
 port: 41337
-updateCheckInterval: 3600000
+updateCheckInterval: 0
 auth:
   port: 41338
   xpClientId: BlkYEHauoKWvGcN2my1TGlqh5dHHuW30
