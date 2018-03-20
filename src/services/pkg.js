@@ -4,12 +4,15 @@ const {getFilename} = require('./variation')
 function getCode (experience, iteration, variations) {
   const files = {}
   const experienceMeta = experience.meta ? JSON.parse(experience.meta) : {}
-  const pkgJSON = iteration.package_json || '{}'
+  // TODO: remove this conditional once API returns parsed package_json
+  const pkgJSON = iteration.package_json
+    ? (_.isString(iteration.package_json) ? JSON.parse(iteration.package_json) : iteration.package_json)
+    : {}
   files['package.json'] = JSON.stringify(Object.assign({
     name: `qubit-experience-${experience.id}`,
     version: '1.0.0',
     description: 'An experience powered by qubit'
-  }, JSON.parse(pkgJSON), {
+  }, pkgJSON, {
     meta: {
       name: experience.name,
       propertyId: experience.property_id,
@@ -50,7 +53,7 @@ function setCode (experience, iteration, files) {
   experience.name = _.get(pkg, 'meta.name')
   iteration = _.cloneDeep(iteration)
   iteration.url = _.get(pkg, 'meta.previewUrl')
-  iteration.package_json = JSON.stringify(_.omit(pkg, 'meta'), null, 2)
+  iteration.package_json = _.omit(pkg, 'meta')
   return { experience, iteration }
 }
 
