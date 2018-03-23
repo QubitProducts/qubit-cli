@@ -32,7 +32,7 @@ function getCode (iteration) {
     'global.js': hasNoCode(globalCode) ? GLOBAL_CODE : globalCode,
     'triggers.js': hasNoCode(triggers) ? TRIGGERS : triggers,
     'fields.json': hasNoCode(schema) ? SCHEMA : schema,
-    'common.js': hasNoCode(commonCode) ? COMMON_CODE : commonCode
+    'utils.js': hasNoCode(commonCode) ? COMMON_CODE : commonCode
   }
 }
 
@@ -40,7 +40,7 @@ function setCode (iteration, files) {
   return {
     ...iteration,
     global_code: hasNoCode(files['global.js']) ? GLOBAL_CODE : files['global.js'],
-    common_code: hasNoCode(files['common.js']) ? COMMON_CODE : files['common.js'],
+    common_code: hasNoCode(files['utils.js']) ? COMMON_CODE : files['utils.js'],
     schema: JSON.parse(hasNoCode(files['fields.json']) ? SCHEMA : files['fields.json']),
     triggers: hasNoCode(files['triggers.js']) ? TRIGGERS : files['triggers.js']
   }
