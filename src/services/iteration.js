@@ -4,7 +4,7 @@ const hasNoCode = require('../lib/hasNoCode')
 const {
   global_code: GLOBAL_CODE,
   common_code: COMMON_CODE,
-  activation_rules: TRIGGERS,
+  triggers: TRIGGERS,
   schema: SCHEMA
 } = require('@qubit/experience-defaults').custom
 

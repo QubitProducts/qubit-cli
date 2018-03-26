@@ -8,7 +8,7 @@
     "@qubit/datasets": "^1.0.0",
     "@qubit/email-scheduler": "^1.8.1",
     "@qubit/exit-checker": "^1.0.5",
-    "@qubit/experience-defaults": "^1.2.1",
+    "@qubit/experience-defaults": "^1.2.4",
     "@qubit/floating-panel": "^1.2.0",
     "@qubit/growl": "^1.1.0",
     "@qubit/http-api-stash": "^1.1.1",
