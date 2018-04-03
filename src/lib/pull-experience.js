@@ -9,7 +9,7 @@ module.exports = async function pullExperience (CWD, propertyId, experienceId) {
   if (experience.solution_id === 7) {
     throw new Error('qubit-cli does not support simple message experiences')
   }
-  await commonCodeWarning(CWD, 'pull', files)
+  await commonCodeWarning(CWD, files)
 
   // shouldConfirm = true, shouldOverwrite = false, removeExtraneous = false
   await scaffold(CWD, files, true, null, true)

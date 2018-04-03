@@ -1,15 +1,17 @@
-const log = require('./log')
 const path = require('path')
 const fs = require('fs-extra')
+const confirmer = require('confirmer')
 
-module.exports = async function commonCodeWarning (dest, action, remoteFiles) {
+module.exports = async function commonCodeWarning (dest, remoteFiles) {
   const commonFilePath = path.join(dest, './common.js')
   const utilsFilePath = path.join(dest, './utils.js')
 
   const [ commonFileExists, utilsFileExists ] = await Promise.all([fs.pathExists(commonFilePath), fs.pathExists(utilsFilePath)])
-  // common.js exists locally in their directory and they havent ran qubit push/pull yet
   if (commonFileExists && !utilsFileExists) {
-    log.info(`common.js will be utils.js going forward. Renaming local common.js to utils.js before ${action}ing...`)
-    await fs.move(commonFilePath, utilsFilePath)
+    const result = await confirmer('common.js is now utils.js, is it ok to rename your common.js file?')
+    // keep local common.js and add blank utils.js
+    if (!result) await fs.touch(utilsFilePath)
+    // rename local common.js to utils.js
+    return fs.move(commonFilePath, utilsFilePath)
   }
 }
