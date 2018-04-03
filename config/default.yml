@@ -2,7 +2,7 @@ port: 41337
 updateCheckInterval: 0
 auth:
   port: 41338
-  xpClientId: BlkYEHauoKWvGcN2my1TGlqh5dHHuW30
+  cliClientId: BlkYEHauoKWvGcN2my1TGlqh5dHHuW30
   apertureClientId: dbiUqhi4U6m7oYpEPKzJbJu3ZHVFImf0
   registryClientId: 7Iav52mxENMvUGAj55zBJLaS3CRjj2jp
 services:

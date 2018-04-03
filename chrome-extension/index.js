@@ -7,11 +7,11 @@ if (isEditor()) {
 } else {
   chrome.storage.onChanged.addListener(function () {
     chrome.runtime.sendMessage({ command: 'getState' }, function (state) {
-      if (!enabled && state.enabled) return xp(state)
+      if (!enabled && state.enabled) return runCli(state)
       if (enabled && !state.enabled) return window.location.reload()
     })
   })
-  chrome.runtime.sendMessage({ command: 'getState' }, xp)
+  chrome.runtime.sendMessage({ command: 'getState' }, runCli)
 }
 
 function isEditor () {
@@ -26,7 +26,7 @@ function connect () {
   }, log)
 }
 
-function xp (state) {
+function runCli (state) {
   return new Promise((resolve) => {
     if (document.body) resolve()
     document.addEventListener('DOMContentLoaded', resolve)

@@ -1,8 +1,8 @@
 // NOTE: This file is used to compile experiences, not to compile the xp-cli tool itself.
 
-var path = require('path')
-var webpack = require('webpack')
-var cwd = process.cwd()
+const path = require('path')
+const webpack = require('webpack')
+const CWD = process.cwd()
 
 module.exports = {
   entry: [
@@ -10,8 +10,8 @@ module.exports = {
     'webpack-hot-middleware/client?path=https://localhost:41337/__webpack_hmr&timeout=20000&reload=true&&noInfo=true&&quiet=true'
   ],
   output: {
-    path: __dirname,
-    publicPath: 'https://localhost:41337/',
+    path: CWD,
+    publicPath: '/',
     filename: 'bundle.js'
   },
   bail: false,
@@ -20,14 +20,14 @@ module.exports = {
   },
   devtool: '#source-map',
   resolve: {
-    modules: [cwd, path.join(cwd, 'node_modules'), path.join(__dirname, 'node_modules')],
+    modules: [CWD, path.join(CWD, 'node_modules'), path.join(__dirname, 'node_modules')],
     mainFields: ['browser', 'main'],
     alias: {
       jquery: '@qubit/jquery'
     }
   },
   resolveLoader: {
-    modules: [path.join(__dirname, 'node_modules'), path.join(__dirname, 'loaders')]
+    modules: [path.join(__dirname, 'loaders'), path.join(__dirname, 'node_modules')]
   },
   module: {
     loaders: [
@@ -35,7 +35,7 @@ module.exports = {
       { test: /\.css$/, include: [path.join(__dirname, 'node_modules', '@qubit')], loader: 'style-loader!raw-loader!less-loader' },
       { test: /global\.js$/, loader: 'raw-loader' },
       { test: /index\.js$/, include: [path.join(__dirname, 'src/client')], loader: 'entry!buble-loader?{"objectAssign": "Object.assign", "transforms": { "dangerousForOf": true, "dangerousTaggedTemplateString": true } }' },
-      { test: /\.js$/, include: [cwd], exclude: [/global\.js/, /node_modules/], loader: 'experience-js!buble-loader?{"objectAssign": "Object.assign", "transforms": { "dangerousForOf": true, "dangerousTaggedTemplateString": true } }' },
+      { test: /\.js$/, include: [CWD], exclude: [/global\.js/, /node_modules/], loader: 'experience-js!buble-loader?{"objectAssign": "Object.assign", "transforms": { "dangerousForOf": true, "dangerousTaggedTemplateString": true } }' },
       { test: /\.css$/, loader: 'raw-loader!less-loader', exclude: [path.join(__dirname, 'node_modules')] },
       { test: /\.json$/, loader: 'json-loader' }
     ]

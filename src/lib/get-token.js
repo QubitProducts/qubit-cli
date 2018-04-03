@@ -10,7 +10,7 @@ const { APP_TOKEN, REGISTRY_TOKEN, NPMRC } = require('../constants')
 
 async function getToken (idToken, targetClientId) {
   const response = await axios.post(config.services.auth + '/delegation', {
-    client_id: config.auth.xpClientId,
+    client_id: config.auth.cliClientId,
     grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
     id_token: idToken,
     api_type: 'auth0',

@@ -35,7 +35,7 @@ function getCode (experience, iteration, variations) {
       isPreview: true,
       include: [],
       exclude: [],
-      templates: _.get(experienceMeta, 'xp.templates') || []
+      templates: _.get(experienceMeta, 'cli.templates') || []
     }
   }), null, 2)
   return files

@@ -60,13 +60,13 @@ describe('codeService', function () {
 
       expect(updatedExperienceId).to.eql(experienceId)
       expect(_.omit(updatedExperience, 'meta')).to.eql({ ...experience, name: experience.name + 1 })
-      expect(_.omit(updatedExperience.meta, ['xp.lastPush', 'xp.version'])).to.eql({
-        xp: {
+      expect(_.omit(updatedExperience.meta, ['cli.lastPush', 'cli.version'])).to.eql({
+        cli: {
           pushes: 1,
           templates: []
         }
       })
-      expect(updatedExperience.meta.xp).to.contain.keys('version', 'lastPush')
+      expect(updatedExperience.meta.cli).to.contain.keys('version', 'lastPush')
     })
 
     it('should update iteration models correctly', async function () {

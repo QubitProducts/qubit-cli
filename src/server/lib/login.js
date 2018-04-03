@@ -61,7 +61,7 @@ function getLoginUrl (verifierChallenge) {
   return config.services.auth + '/authorize?' + qs.stringify({
     'response_type': 'code',
     'scope': 'openid profile',
-    'client_id': config.auth.xpClientId,
+    'client_id': config.auth.cliClientId,
     'redirect_uri': redirectUri(),
     'code_challenge': verifierChallenge,
     'code_challenge_method': 'S256'
@@ -72,7 +72,7 @@ async function getIdToken (code, verifier) {
   const response = await axios.post(config.services.auth + '/oauth/token', {
     code: code,
     code_verifier: verifier,
-    client_id: config.auth.xpClientId,
+    client_id: config.auth.cliClientId,
     grant_type: 'authorization_code',
     redirect_uri: redirectUri()
   })
