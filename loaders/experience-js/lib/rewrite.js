@@ -36,11 +36,16 @@ function addModuleExports (code) {
 }
 
 function everythingAMD (code) {
-  return code.replace(/(^|\s+)require\s*\(/g, '$1window.__qubit.xp.amd.require(')
+  return code.replace(/(^|[^.])require\s*\(([^)]*)/gm, (match, p1, p2) => {
+    if (p2.includes('./') && !p2.includes('[')) return match
+    return `${p1}window.__qubit.cli.amd.require(${p2}`
+  })
 }
 
 function asyncAMD (code) {
-  return code.replace(/(?:^|\s+)require\s*\((\s*)\[/g, '$1window.__qubit.xp.amd.require($1[')
+  return code.replace(/(^|[^.])require(\s*\(\s*[^'"\s])/g, (match, p1, p2) => {
+    return `${p1}window.__qubit.cli.amd.require${p2}`
+  })
 }
 
 function isCommonjs (code) {
