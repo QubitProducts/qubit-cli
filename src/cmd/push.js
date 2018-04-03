@@ -15,8 +15,8 @@ module.exports = async function push (options) {
     const {propertyId, experienceId} = (pkg.meta || {})
     if (!propertyId || !experienceId) return log.info('Nothing to push')
 
-    let { files, experience } = await down(experienceId)
     if (!options.force) {
+      let { files, experience } = await down(experienceId)
       if (experience.solution_id === 7) {
         throw new Error('qubit-cli does not support simple message experiences')
       }
