@@ -1,6 +1,9 @@
 const path = require('path')
 const hasNoCode = require('../../../src/lib/hasNoCode')
-const { TRIGGERS, EXECUTION } = require('../../../src/constants')
+const {
+  execution_code: EXECUTION_CODE,
+  triggers: TRIGGERS
+} = require('@qubit/experience-defaults').custom
 
 module.exports = function rewrite (content, file, hasDeps) {
   const filename = path.basename(file)
@@ -12,7 +15,7 @@ module.exports = function rewrite (content, file, hasDeps) {
 
   if (hasNoCode(code)) {
     if (filename.includes('triggers')) code = TRIGGERS
-    if (filename.includes('variation')) code = EXECUTION
+    if (filename.includes('variation')) code = EXECUTION_CODE
   }
 
   code = addModuleExports(code)
