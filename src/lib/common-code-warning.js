@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs-extra')
 const confirmer = require('confirmer')
 
-module.exports = async function commonCodeWarning (dest, remoteFiles) {
+module.exports = async function commonCodeWarning (dest) {
   const commonFilePath = path.join(dest, './common.js')
   const utilsFilePath = path.join(dest, './utils.js')
 

@@ -36,7 +36,7 @@ module.exports = async function push (options) {
       }
     }
 
-    await commonCodeWarning(CWD, files)
+    await commonCodeWarning(CWD)
 
     log.info('Pushing...')
     await codeService.set(propertyId, experienceId, await readFiles(CWD))

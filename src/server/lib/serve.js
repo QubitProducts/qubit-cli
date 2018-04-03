@@ -9,6 +9,7 @@ const webpackConf = require('../../../webpack.conf')
 const config = require('../../../config')
 const log = require('../../lib/log')
 const createApp = require('../app')
+const commonCodeWarning = require('../../lib/common-code-warning')
 const cors = require('cors')
 let CWD = process.cwd()
 
@@ -21,6 +22,8 @@ module.exports = async function serve (options) {
   if (/(triggers|global|.css$)/.test(options.variationFilename)) {
     log.info('Hint: you should be watching the entry point for your experience, i.e. your variation file!')
   }
+
+  await commonCodeWarning(CWD)
 
   if (!options.variationFilename) {
     options.variationFilename = await pickVariation(await fs.readdir(CWD))
