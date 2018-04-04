@@ -7,16 +7,20 @@ describe('qubit-cli-loader', function () {
       expect(loader('function () {}', 'filename')).to.eql('module.exports = function () {}')
     })
 
-    it('should replace sync require with window.__qubit.xp.amd.require', function () {
-      expect(loader('require(', 'filename')).to.eql('module.exports = window.__qubit.xp.amd.require(')
+    it('should replace sync require with window.__qubit.cli.amd.require', function () {
+      expect(loader('require(', 'filename')).to.eql('module.exports = window.__qubit.cli.amd.require(')
     })
 
-    it('should replace async require with window.__qubit.xp.amd.require', function () {
-      expect(loader('require( [ "jquery" ]', 'filename')).to.eql('module.exports = window.__qubit.xp.amd.require( [ "jquery" ]')
+    it('should not replace sync require with window.__qubit.cli.amd.require if relative', function () {
+      expect(loader('module.exports = require("./relative"', 'filename')).to.eql('module.exports = require("./relative"')
     })
 
-    it('should preserve existing window.__qubit.xp.amd.require', function () {
-      expect(loader('window.__qubit.xp.amd.require(', 'filename')).to.eql('module.exports = window.__qubit.xp.amd.require(')
+    it('should replace async require with window.__qubit.cli.amd.require', function () {
+      expect(loader('require( [ "jquery" ]', 'filename')).to.eql('module.exports = window.__qubit.cli.amd.require( [ "jquery" ]')
+    })
+
+    it('should preserve existing window.__qubit.cli.amd.require', function () {
+      expect(loader('window.__qubit.cli.amd.require(', 'filename')).to.eql('module.exports = window.__qubit.cli.amd.require(')
     })
   })
   describe('with deps', function () {
@@ -24,16 +28,16 @@ describe('qubit-cli-loader', function () {
       expect(loader('function () {}', 'filename', true)).to.eql('module.exports = function () {}')
     })
 
-    it('should not replace sync require with window.__qubit.xp.amd.require', function () {
+    it('should not replace sync require with window.__qubit.cli.amd.require', function () {
       expect(loader('require(', 'filename', true)).to.eql('module.exports = require(')
     })
 
-    it('should replace async require with window.__qubit.xp.amd.require', function () {
-      expect(loader('require( [ "jquery" ]', 'filename', true)).to.eql('module.exports = window.__qubit.xp.amd.require( [ "jquery" ]')
+    it('should replace async require with window.__qubit.cli.amd.require', function () {
+      expect(loader('require( [ "jquery" ]', 'filename', true)).to.eql('module.exports = window.__qubit.cli.amd.require( [ "jquery" ]')
     })
 
-    it('should preserve existing window.__qubit.xp.amd.require', function () {
-      expect(loader('window.__qubit.xp.amd.require(', 'filename', true)).to.eql('module.exports = window.__qubit.xp.amd.require(')
+    it('should preserve existing window.__qubit.cli.amd.require', function () {
+      expect(loader('window.__qubit.cli.amd.require(', 'filename', true)).to.eql('module.exports = window.__qubit.cli.amd.require(')
     })
   })
 })
