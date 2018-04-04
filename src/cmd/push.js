@@ -3,6 +3,7 @@ const log = require('../lib/log')
 const getPkg = require('../lib/get-pkg')
 const updatePkg = require('../lib/update-pkg')
 const readFiles = require('../lib/read-files')
+const commonCodeWarning = require('../lib/common-code-warning')
 const codeService = require('../services/code')
 const down = require('../services/down')
 const diff = require('./diff')
@@ -34,6 +35,8 @@ module.exports = async function push (options) {
         return diff()
       }
     }
+
+    await commonCodeWarning(CWD)
 
     log.info('Pushing...')
     await codeService.set(propertyId, experienceId, await readFiles(CWD))

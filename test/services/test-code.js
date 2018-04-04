@@ -89,7 +89,7 @@ describe('codeService', function () {
       let expectedIteration = {
         ...iteration,
         global_code: files['global.js'],
-        common_code: files['common.js'],
+        common_code: files['utils.js'],
         triggers: files['triggers.js'],
         schema: JSON.parse(files['fields.json']),
         package_json: _.omit(JSON.parse(files['package.json']), 'meta')
