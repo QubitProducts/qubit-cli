@@ -11,7 +11,7 @@ module.exports = {
   ],
   output: {
     path: CWD,
-    publicPath: '/',
+    publicPath: 'https://localhost:41337/',
     filename: 'bundle.js'
   },
   bail: false,
