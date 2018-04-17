@@ -7,7 +7,7 @@
     "qubit": "bin/qubit"
   },
   "directories": {
-    "example": "example"
+    "test": "test"
   },
   "docpress": {
     "github": "qubitdigital/xp-cli",
@@ -16,11 +16,7 @@
   "scripts": {
     "test": "make test"
   },
-  "author": {
-    "name": "Alan Clarke",
-    "email": "alan@qubit.com",
-    "url": "qubit.com"
-  },
+  "author": "Alan Clarke <alan@qubit.com> (qubit.com)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/qubitdigital/qubit-cli.git"
@@ -28,6 +24,7 @@
   "engines": {
     "node": ">=8.6"
   },
+  "engineStrict": true,
   "license": "UNLICENSED",
   "dependencies": {
     "axios": "^0.16.2",
@@ -100,5 +97,9 @@
     "rewire": "^2.5.2",
     "sinon": "^2.4.1",
     "standard": "^10.0.3"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/qubitdigital/qubit-cli/issues"
+  },
+  "homepage": "https://github.com/qubitdigital/qubit-cli#readme"
 }
