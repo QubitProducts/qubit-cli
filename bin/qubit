@@ -1,7 +1,9 @@
 #!/usr/bin/env node
-const getUpdate = require('../src/lib/getUpdate')
-const run = require('../src/cmd')
-const pkg = require('../package.json')
+var pkg = require('../package.json')
+require('../src/lib/version-check')(pkg)
+
+var getUpdate = require('../src/lib/getUpdate')
+var run = require('../src/cmd')
 
 getUpdate()
 
