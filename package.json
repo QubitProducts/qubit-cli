@@ -25,7 +25,7 @@
     "node": ">=8.6"
   },
   "engineStrict": true,
-  "license": "UNLICENSED",
+  "license": "ISC",
   "dependencies": {
     "axios": "^0.16.2",
     "body-parser": "^1.18.2",
