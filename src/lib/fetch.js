@@ -25,7 +25,7 @@ function fetchWithAuth (method) {
     let headers, appToken
     try {
       appToken = await getAppToken(() => login())
-      headers = Object.assign({ 'Authorization': `Bearer ${appToken}` }, options.headers || {})
+      headers = { ...options.headers || {}, 'Authorization': `Bearer ${appToken}` }
       return await axios(url, { method, data, headers }).then(handler, errorHandler)
     } catch (err) {
       if (options.isRetry) {
@@ -36,8 +36,7 @@ function fetchWithAuth (method) {
         log.debug(`Error trying to fetch ${url}`)
         log.debug(err)
       }
-      const optionsWithRetry = Object.assign({ isRetry: true }, options)
-      return fetch(path, data, optionsWithRetry)
+      return fetch(path, data, { ...options, isRetry: true })
     }
 
     function checkErrors (resp) {
