@@ -7,7 +7,7 @@ module.exports = async function uploadImages (files) {
   const fileUrls = files.map(file => {
     const data = new FormData()
     data.append(`image[file]`, fs.createReadStream(file))
-    return fetch.post(`/p/2500/images`, data, {
+    return fetch.post(`/p/2500/assets/images`, data, {
       headers: data.getHeaders()
     })
   })
