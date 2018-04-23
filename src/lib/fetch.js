@@ -13,7 +13,7 @@ module.exports = {
 }
 
 function fetchWithAuth (method) {
-  return async function fetch (path, data, isRetry) {
+  return async function fetch (path, data, options = {}) {
     const notifier = getUpdate()
     if (notifier.update) {
       log.error(`Please ensure you are on the latest version in order to interact with qubit's APIs`)
@@ -25,10 +25,10 @@ function fetchWithAuth (method) {
     let headers, appToken
     try {
       appToken = await getAppToken(() => login())
-      headers = { 'Authorization': `Bearer ${appToken}` }
+      headers = Object.assign({ 'Authorization': `Bearer ${appToken}` }, options.headers || {})
       return await axios(url, { method, data, headers }).then(handler, errorHandler)
     } catch (err) {
-      if (isRetry) {
+      if (options.isRetry) {
         log.error(`Error trying to fetch ${url}`)
         log.error(err)
         throw err
@@ -36,7 +36,8 @@ function fetchWithAuth (method) {
         log.debug(`Error trying to fetch ${url}`)
         log.debug(err)
       }
-      return fetch(path, data, true)
+      const optionsWithRetry = Object.assign({ isRetry: true }, options)
+      return fetch(path, data, optionsWithRetry)
     }
 
     function checkErrors (resp) {

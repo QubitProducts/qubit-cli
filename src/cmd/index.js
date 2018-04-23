@@ -33,14 +33,14 @@ module.exports = async function run (pkg) {
     .arguments('[version]')
     .usage(`
 
-  xp release <version>
+  qubit release <version>
 
   Examples:
 
-  $ xp release
-  $ xp release patch
-  $ xp release 1.0.2
-  $ xp release 1.0.2-beta.3 --tag=beta`)
+  $ qubit release
+  $ qubit release patch
+  $ qubit release 1.0.2
+  $ qubit release 1.0.2-beta.3 --tag=beta`)
     .description('release a new version of your package')
     .option('--any-branch', 'allow publishing from any branch')
     .option('--no-cleanup', 'Skips cleanup of node_modules')
@@ -170,6 +170,12 @@ module.exports = async function run (pkg) {
     .command('delete')
     .description('delete and experience or variation')
     .action(cmd('del'))
+
+  program
+    .command('upload')
+    .arguments('[files...]')
+    .description('upload images to the qubit cdn')
+    .action(cmd('upload'))
 
   program
     .command('status')
