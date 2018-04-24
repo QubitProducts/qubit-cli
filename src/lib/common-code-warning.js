@@ -8,7 +8,7 @@ module.exports = async function commonCodeWarning (dest) {
 
   const [ commonFileExists, utilsFileExists ] = await Promise.all([fs.pathExists(commonFilePath), fs.pathExists(utilsFilePath)])
   if (commonFileExists && !utilsFileExists) {
-    const result = await confirmer('common.js is now utils.js, is it ok to rename your common.js file?')
+    const result = await confirmer('common.js is now utils.js, is it ok to rename your common.js file? (y/n)')
     // keep local common.js and add blank utils.js
     if (!result) await fs.ensureFile(utilsFilePath)
     // rename local common.js to utils.js
