@@ -1,6 +1,6 @@
 const fs = require('fs-extra')
 const installCerts = require('./install-certs')
-const {CERT_PATH, KEY_PATH, CERT_DIR} = require('../constants')
+const { CERT_PATH, KEY_PATH, CERT_DIR } = require('../constants')
 const ms = require('ms')
 const ENOENT = 'ENOENT'
 
