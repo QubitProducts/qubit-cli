@@ -1,23 +1,18 @@
 /* globals chrome fetch */
 const CONNECT_ENDPOINT = 'https://localhost:41337/connect'
 const NAMESPACE = 'qubit-cli'
-const ICONS = {
-  on: 'icons/on48.png',
-  off: 'icons/off48.png'
-}
+const ICONS = { on: 'icons/on48.png', off: 'icons/off48.png' }
 
 chrome.browserAction.onClicked.addListener(() => {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     let id = tabs.length && tabs[0].id
     if (id) {
-      getState(id, (state) => setState(id, {
-        enabled: !state.enabled
-      }, render))
+      getState(id, state => setState(id, { enabled: !state.enabled }, render))
     }
   })
 })
 
-chrome.tabs.onRemoved.addListener((tabId) => {
+chrome.tabs.onRemoved.addListener(tabId => {
   setState(tabId, {})
 })
 
@@ -27,12 +22,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       mode: 'cors',
       method: 'post',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        url: request.url
-      })
+      body: JSON.stringify({ url: request.url })
     })
-    .then((response) => response.json().then(sendResponse))
-    .catch(() => sendResponse(false))
+      .then(response => response.json().then(sendResponse))
+      .catch(() => sendResponse(false))
   } else if (request.command === 'getState') {
     getState(sender.tab.id, sendResponse)
   }
@@ -50,11 +43,13 @@ chrome.tabs.onActivated.addListener(function (activeInfo) {
 
 function render (state) {
   chrome.browserAction.setIcon({ path: state.enabled ? ICONS.on : ICONS.off })
-  chrome.browserAction.setTitle({ title: `Qubit CLI - ${state.enabled ? 'ON' : 'OFF'}` })
+  chrome.browserAction.setTitle({
+    title: `Qubit CLI - ${state.enabled ? 'ON' : 'OFF'}`
+  })
 }
 
 function getState (id, callback) {
-  chrome.storage.local.get(NAMESPACE, (result) => {
+  chrome.storage.local.get(NAMESPACE, result => {
     let state = result[NAMESPACE] || {}
     state = state[id] || {}
     if (callback) callback(state)
@@ -62,7 +57,7 @@ function getState (id, callback) {
 }
 
 function setState (id, state, callback) {
-  chrome.storage.local.get(NAMESPACE, (obj) => {
+  chrome.storage.local.get(NAMESPACE, obj => {
     obj = obj || {}
     obj[NAMESPACE] = obj[NAMESPACE] || {}
     obj[NAMESPACE][id] = state

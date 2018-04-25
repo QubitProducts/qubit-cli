@@ -20,19 +20,18 @@ function isEditor () {
 }
 
 function connect () {
-  chrome.runtime.sendMessage({
-    command: 'connect',
-    url: window.location.href
-  }, log)
+  chrome.runtime.sendMessage(
+    { command: 'connect', url: window.location.href },
+    log
+  )
 }
 
 function runCli (state) {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     if (document.body) resolve()
     document.addEventListener('DOMContentLoaded', resolve)
     window.addEventListener('load', resolve)
-  })
-  .then(() => {
+  }).then(() => {
     if (state.enabled) {
       if (!enabled) enabled = true
       appendScript()
