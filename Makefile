@@ -10,7 +10,7 @@ test: lint
 	npm test
 
 lint:
-	npm lint
+	npm run lint
 
 shrinkwrap:
 	npm uninstall --save qubit-cli-deps
