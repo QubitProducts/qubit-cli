@@ -14,7 +14,8 @@
     "dist": "docs"
   },
   "scripts": {
-    "test": "make test"
+    "test": "node test/setup && NODE_ENV=test nyc --reporter=lcov --reporter=text-summary mocha --recursive",
+    "lint": "standard"
   },
   "author": "Alan Clarke <alan@qubit.com> (qubit.com)",
   "repository": {
@@ -94,11 +95,12 @@
     ]
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "mocha": "^3.5.3",
-    "rewire": "^2.5.2",
-    "sinon": "^2.4.1",
-    "standard": "^10.0.3"
+    "chai": "^4.1.2",
+    "mocha": "^5.1.1",
+    "nyc": "^11.7.1",
+    "rewire": "^4.0.1",
+    "sinon": "^4.5.0",
+    "standard": "^11.0.1"
   },
   "bugs": {
     "url": "https://github.com/qubitdigital/qubit-cli/issues"

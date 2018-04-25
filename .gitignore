@@ -2,6 +2,7 @@ node_modules
 .DS_Store
 coverage
 _docpress
+.nyc_output*
 
 .idea/**/workspace.xml
 .idea/**/tasks.xml

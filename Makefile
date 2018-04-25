@@ -6,12 +6,11 @@ bootstrap:
 	npm install
 	npm install ./deps --no-save --production
 
-test:
-	node test/setup && NODE_ENV=test $(BIN)/mocha --recursive
-	make lint
+test: lint
+	npm test
 
 lint:
-	$(BIN)/standard
+	npm lint
 
 shrinkwrap:
 	npm uninstall --save qubit-cli-deps
