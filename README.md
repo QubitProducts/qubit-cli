@@ -9,23 +9,23 @@ A client to facilitate local development of experiences for the qubit platform
 
 ## Features
 
-fast previewing
+Fast previewing
 - built in experience server for instant preview on any website
 - live hot reloading of css
 - ability to enable live hot reloading of js with a little bit of code
 
-local tools
+Local tools
 - use your local editor/IDE of choice to write experience code
 - use your own workflow and versioning tools
 - write and run local unit tests
 
-interact with the platform from the command line
+Interact with the platform from the command line
 - create new experiences or clone existing ones
 - push remote changes to the platform
 - pull remote changes from the platform
 - publish | pause | resume your experience
 
-templates
+Templates
 - speed up local development
 - share ideas and examples
 
@@ -35,10 +35,7 @@ templates
 
 ## Setup
 
-```
-qubit extension
-```
-then drag the chrome-extension folder into the chrome extensions pane
+Run `qubit extension` and then drag the chrome-extension folder into your chrome extensions pane
 
 ## Docs
 See https://docs.qubit.com/content/developers/cli-overview
