@@ -38,7 +38,7 @@ module.exports = async function template (name) {
 
     output = resolveTemplate(output, pkg.meta)
 
-    const outPkg = mergePkg(pkg, output['package.json'])
+    const outPkg = mergePkg(output['package.json'], pkg)
 
     outPkg.meta = addTemplateMetrics(outPkg.meta, path.basename(name))
 
