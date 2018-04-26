@@ -20,7 +20,6 @@ module.exports = function experienceEngine (options, globalFn, triggerFn, variat
   }
 
   function execute () {
-    log.info('Running variation')
     return variationFn(options)
   }
 }

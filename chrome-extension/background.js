@@ -3,18 +3,23 @@ const CONNECT_ENDPOINT = 'https://localhost:41337/connect'
 const NAMESPACE = 'qubit-cli'
 const ICONS = { on: 'icons/on48.png', off: 'icons/off48.png' }
 
+render()
+
 chrome.browserAction.onClicked.addListener(() => {
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    let id = tabs.length && tabs[0].id
-    if (id) {
-      getState(id, state => setState(id, { enabled: !state.enabled }, render))
+  chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+    let tabId = tabs.length && tabs[0].id
+    if (tabId) {
+      getState(
+        tabId,
+        state => setState(tabId, { enabled: !state.enabled }, render)
+      )
     }
   })
 })
 
-chrome.tabs.onRemoved.addListener(tabId => {
-  setState(tabId, {})
-})
+chrome.tabs.onRemoved.addListener(tabId => setState(tabId, {}, render))
+
+chrome.tabs.onUpdated.addListener(render)
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.command === 'connect') {
@@ -32,19 +37,26 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   return true
 })
 
-chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-  let id = tabs.length && tabs[0].id
-  if (id) getState(id, render)
-})
-
-chrome.tabs.onActivated.addListener(function (activeInfo) {
-  return getState(activeInfo.tabId, render)
-})
-
-function render (state) {
-  chrome.browserAction.setIcon({ path: state.enabled ? ICONS.on : ICONS.off })
-  chrome.browserAction.setTitle({
-    title: `Qubit CLI - ${state.enabled ? 'ON' : 'OFF'}`
+function render () {
+  chrome.windows.getLastFocused(null, window => {
+    chrome.tabs.getSelected(null, tab => {
+      chrome.browserAction.setIcon({ path: ICONS.off })
+      chrome.browserAction.setTitle({ title: `Qubit CLI - OFF` })
+    })
+  })
+  chrome.tabs.query({}, tabs => {
+    tabs.forEach(tab => {
+      getState(tab.id, state => {
+        chrome.browserAction.setIcon({
+          path: state.enabled ? ICONS.on : ICONS.off,
+          tabId: tab.id
+        })
+        chrome.browserAction.setTitle({
+          title: `Qubit CLI - ${state.enabled ? 'ON' : 'OFF'}`,
+          tabId: tab.id
+        })
+      })
+    })
   })
 }
 

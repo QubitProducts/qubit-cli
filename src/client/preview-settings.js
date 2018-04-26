@@ -6,13 +6,13 @@ const PREVIEW_KEYS = ['qb_opts', 'qb_experiences', 'qb_exclude', 'smartserve_pre
 let cm = require('cookieman')
 
 module.exports = function previewSettings (meta, include, exclude) {
-  let initialCookieVal = cm.val('qb_opts')
+  const initialCookieVal = cm.val('qb_opts')
   cm.clearAll('qb_opts')
   const cookieOptions = getCookieOptions(meta.cookieDomain)
   const cookieVal = getPreviewCookie(meta, include, exclude)
   cm.set('qb_opts', cookieVal, cookieOptions)
   // if the current value is different we need to reload, as smartserve may already have fired
-  let url = getUrl(location(), initialCookieVal !== cookieVal)
+  const url = getUrl(location(), initialCookieVal && (initialCookieVal !== cookieVal))
   if (url) reload(url)
 }
 
@@ -22,7 +22,7 @@ function getCookieOptions (cookieDomain) {
 
 function getPreviewCookie (meta, include, exclude) {
   exclude = exclude || []
-  let previewOptions = { preview: meta.isPreview, exclude: exclude.concat(meta.experienceId).sort() }
+  const previewOptions = { preview: meta.isPreview, exclude: exclude.concat(meta.experienceId).sort() }
   if (include) previewOptions.experiences = include.sort()
   return encodeURIComponent(JSON.stringify(previewOptions))
 }
@@ -35,9 +35,9 @@ function urlHasPreviewKeys (params) {
 }
 
 function getUrl (location, mustReload) {
-  let parsed = yurl.parse(location)
+  const parsed = yurl.parse(location)
   if (parsed.hash) parsed.hash = hashParser.parse(parsed.hash)
-  let params = _.assign({}, parsed.search, parsed.hash)
+  const params = _.assign({}, parsed.search, parsed.hash)
   if (urlHasPreviewKeys(params)) mustReload = true
   if (!mustReload) return
   if (parsed.search) parsed.search = omit(parsed.search, PREVIEW_KEYS)
@@ -50,7 +50,7 @@ function location () {
 }
 
 function reload (url) {
-  let parsed = yurl.parse(url)
+  const parsed = yurl.parse(url)
   if (parsed.hash) {
     window.location.hash = parsed.hash
   } else {
@@ -66,7 +66,7 @@ function reload (url) {
 
 function omit (obj, keys) {
   var result = {}
-  for (var key in obj) {
+  for (let key in obj) {
     if (!keys.includes(key)) obj[key] = result[key]
   }
   return result
