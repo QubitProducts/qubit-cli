@@ -12,6 +12,7 @@ const createApp = require('../app')
 const commonCodeWarning = require('../../lib/common-code-warning')
 const cssCodeWarning = require('../../lib/css-code-warning')
 const cors = require('cors')
+const { STYLE_EXTENSION } = require('../../constants')
 let CWD = process.cwd()
 
 module.exports = async function serve (options) {
@@ -20,7 +21,7 @@ module.exports = async function serve (options) {
   app.use(cors())
   options.verbose = options.verbose || false
 
-  if (/(triggers|global|.less$)/.test(options.variationFilename)) {
+  if (/(triggers|global|.less|.css$)/.test(options.variationFilename)) {
     log.info('Hint: you should be watching the entry point for your experience, i.e. your variation file!')
   }
 
@@ -79,7 +80,8 @@ module.exports = async function serve (options) {
 function createWebpackConfig (options) {
   const plugins = webpackConf.plugins.slice(0)
   plugins.push(new webpack.DefinePlugin({
-    __VARIATION__: `'${options.variationFilename}'`
+    __VARIATION__: `'${options.variationFilename}'`,
+    __VARIATION_STYLE_EXTENSION__: `'${STYLE_EXTENSION}'`
   }))
   const entry = webpackConf.entry.slice(0)
   return Object.assign({}, webpackConf, {

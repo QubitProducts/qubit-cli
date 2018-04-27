@@ -1,4 +1,4 @@
-/* globals __VARIATION__ __FILES__ */
+/* globals __VARIATION__ __VARIATION_STYLE_EXTENSION__ __FILES__ */
 const Promise = require('sync-p/extra')
 const engine = require('./engine')
 const previewSettings = require('./preview-settings')
@@ -20,7 +20,7 @@ function loadModules () {
   return {
     pkg: require('package.json'),
     variation: require(__VARIATION__),
-    styles: require(__VARIATION__ + '.less'),
+    styles: require(__VARIATION__ + __VARIATION_STYLE_EXTENSION__),
     global: require('global'),
     triggers: require('triggers')
   }

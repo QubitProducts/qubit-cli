@@ -59,5 +59,5 @@ function fetchWithAuth (method) {
 }
 
 function isLoggedOut (resp) {
-  return resp.data === 'Unauthorized' || (typeof resp.data === 'string' && resp.data.includes('login.less'))
+  return resp.data === 'Unauthorized' || (typeof resp.data === 'string' && resp.data.includes('login.css'))
 }

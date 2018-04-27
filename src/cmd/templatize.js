@@ -7,6 +7,7 @@ const getPkg = require('../lib/get-pkg')
 const formatLog = require('../lib/format-log')
 const readFiles = require('../lib/read-files')
 const scaffold = require('../lib/scaffold')
+const { STYLE_EXTENSION } = require('../constants')
 const log = require('../lib/log')
 
 let CWD = process.cwd()
@@ -31,9 +32,9 @@ module.exports = async function templatize () {
       addTemplateVariables(files, pkg)
       _.each(pkg.meta.variations, (variation, filename) => {
         files['variation.js'] = files[`${filename}.js`]
-        files['variation.less'] = files[`${filename}.less`]
+        files[`variation${STYLE_EXTENSION}`] = files[`${filename}${STYLE_EXTENSION}`]
         delete files[`${filename}.js`]
-        delete files[`${filename}.less`]
+        delete files[`${filename}${STYLE_EXTENSION}`]
       })
     }
 

@@ -7,6 +7,7 @@ const {
 } = require('@qubit/experience-defaults').custom
 const iterationVariationsUrl = iterationId => `/api/iterations/${iterationId}/variations`
 const variationsUrl = variationId => `/api/variations/${variationId}`
+const { STYLE_EXTENSION } = require('../constants')
 
 async function getAll (iterationId) {
   return fetch.get(iterationVariationsUrl(iterationId))
@@ -35,7 +36,7 @@ function getCode (variation) {
   // Automatically update old default js to new default js
   if (variation.execution_code === 'function (options) {}') delete variation.execution_code
   code[`${filename}.js`] = hasNoCode(variation.execution_code) ? EXECUTION_CODE : variation.execution_code
-  code[`${filename}.less`] = hasNoCode(variation.custom_styles) ? CUSTOM_STYLES : variation.custom_styles
+  code[`${filename}${STYLE_EXTENSION}`] = hasNoCode(variation.custom_styles) ? CUSTOM_STYLES : variation.custom_styles
   return code
 }
 
@@ -43,7 +44,7 @@ function setCode (variation, files) {
   const filename = getFilename(variation)
   return Object.assign({}, variation, {
     execution_code: hasNoCode(files[`${filename}.js`]) ? EXECUTION_CODE : files[`${filename}.js`],
-    custom_styles: hasNoCode(files[`${filename}.less`]) ? CUSTOM_STYLES : files[`${filename}.less`]
+    custom_styles: hasNoCode(files[`${filename}${STYLE_EXTENSION}`]) ? CUSTOM_STYLES : files[`${filename}${STYLE_EXTENSION}`]
   })
 }
 

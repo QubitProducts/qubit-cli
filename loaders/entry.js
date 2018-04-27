@@ -15,6 +15,6 @@ module.exports = function loader (content, { file }) {
 async function getFiles () {
   const files = await fs.readdir(CWD)
   return files
-    .filter(f => /\.(js|css|json)$/.test(f))
+    .filter(f => /\.(js|css|less|json)$/.test(f))
     .map(f => `require.resolve('${slash(path.join(CWD, f))}')`)
 }
