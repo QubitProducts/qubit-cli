@@ -10,6 +10,7 @@ const config = require('../../../config')
 const log = require('../../lib/log')
 const createApp = require('../app')
 const commonCodeWarning = require('../../lib/common-code-warning')
+const cssCodeWarning = require('../../lib/css-code-warning')
 const cors = require('cors')
 let CWD = process.cwd()
 
@@ -19,11 +20,12 @@ module.exports = async function serve (options) {
   app.use(cors())
   options.verbose = options.verbose || false
 
-  if (/(triggers|global|.css$)/.test(options.variationFilename)) {
+  if (/(triggers|global|.less$)/.test(options.variationFilename)) {
     log.info('Hint: you should be watching the entry point for your experience, i.e. your variation file!')
   }
 
   await commonCodeWarning(CWD)
+  await cssCodeWarning(CWD)
 
   if (!options.variationFilename) {
     options.variationFilename = await pickVariation(await fs.readdir(CWD))

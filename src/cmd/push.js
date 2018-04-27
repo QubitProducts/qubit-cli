@@ -4,6 +4,7 @@ const getPkg = require('../lib/get-pkg')
 const updatePkg = require('../lib/update-pkg')
 const readFiles = require('../lib/read-files')
 const commonCodeWarning = require('../lib/common-code-warning')
+const cssCodeWarning = require('../lib/css-code-warning')
 const codeService = require('../services/code')
 const down = require('../services/down')
 const diff = require('./diff')
@@ -12,8 +13,11 @@ let CWD = process.cwd()
 module.exports = async function push (options) {
   try {
     const pkg = await getPkg()
-    const {propertyId, experienceId} = (pkg.meta || {})
+    const { propertyId, experienceId } = (pkg.meta || {})
     if (!propertyId || !experienceId) return log.info('Nothing to push')
+
+    await commonCodeWarning(CWD)
+    await cssCodeWarning(CWD)
 
     if (!options.force) {
       let { files, experience } = await down(experienceId)
@@ -35,8 +39,6 @@ module.exports = async function push (options) {
         return diff()
       }
     }
-
-    await commonCodeWarning(CWD)
 
     log.info('Pushing...')
     await codeService.set(propertyId, experienceId, await readFiles(CWD))

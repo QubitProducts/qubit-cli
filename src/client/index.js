@@ -20,7 +20,7 @@ function loadModules () {
   return {
     pkg: require('package.json'),
     variation: require(__VARIATION__),
-    styles: require(__VARIATION__ + '.css'),
+    styles: require(__VARIATION__ + '.less'),
     global: require('global'),
     triggers: require('triggers')
   }

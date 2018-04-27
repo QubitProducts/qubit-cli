@@ -1,5 +1,6 @@
 const fetch = require('../lib/fetch')
 const hasNoCode = require('../lib/hasNoCode')
+const getFilename = require('../lib/variation-filename')
 const {
   execution_code: EXECUTION_CODE,
   custom_styles: CUSTOM_STYLES
@@ -34,7 +35,7 @@ function getCode (variation) {
   // Automatically update old default js to new default js
   if (variation.execution_code === 'function (options) {}') delete variation.execution_code
   code[`${filename}.js`] = hasNoCode(variation.execution_code) ? EXECUTION_CODE : variation.execution_code
-  code[`${filename}.css`] = hasNoCode(variation.custom_styles) ? CUSTOM_STYLES : variation.custom_styles
+  code[`${filename}.less`] = hasNoCode(variation.custom_styles) ? CUSTOM_STYLES : variation.custom_styles
   return code
 }
 
@@ -42,12 +43,8 @@ function setCode (variation, files) {
   const filename = getFilename(variation)
   return Object.assign({}, variation, {
     execution_code: hasNoCode(files[`${filename}.js`]) ? EXECUTION_CODE : files[`${filename}.js`],
-    custom_styles: hasNoCode(files[`${filename}.css`]) ? CUSTOM_STYLES : files[`${filename}.css`]
+    custom_styles: hasNoCode(files[`${filename}.less`]) ? CUSTOM_STYLES : files[`${filename}.less`]
   })
-}
-
-function getFilename (variation) {
-  return `variation-${variation.master_id}`
 }
 
 module.exports = { getAll, get, set, create, remove, getCode, setCode, getFilename }

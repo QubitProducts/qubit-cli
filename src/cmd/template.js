@@ -29,11 +29,11 @@ module.exports = async function template (name) {
       _.each(pkg.meta.variations, (variation, filename) => {
         if (!variation.variationIsControl) {
           output[`${filename}.js`] = output['variation.js']
-          output[`${filename}.css`] = output['variation.css']
+          output[`${filename}.less`] = output['variation.less']
         }
       })
       delete output['variation.js']
-      delete output['variation.css']
+      delete output['variation.less']
     }
 
     output = resolveTemplate(output, pkg.meta)

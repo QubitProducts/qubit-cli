@@ -20,12 +20,12 @@ describe('shouldRemove', function () {
   it('should return true if file is css or js', async () => {
     confirmStub.returns(Promise.resolve(true))
     expect(await shouldRemove('test.js')).to.eql(true)
-    expect(await shouldRemove('test.css')).to.eql(true)
+    expect(await shouldRemove('test.less')).to.eql(true)
   })
 
   it('should return false if user does not confirm', async () => {
     confirmStub.returns(Promise.resolve(false))
     expect(await shouldRemove('test.js')).to.eql(false)
-    expect(await shouldRemove('test.css')).to.eql(false)
+    expect(await shouldRemove('test.less')).to.eql(false)
   })
 })

@@ -23,7 +23,7 @@ module.exports = async function duplicateVariation () {
 
     newVariation.name = `Variation ${variations.length}`
     newVariation.execution_code = code[`variation-${variation.id}.js`]
-    newVariation.custom_styles = code[`variation-${variation.id}.css`]
+    newVariation.custom_styles = code[`variation-${variation.id}.less`]
 
     await variationService.create(iterationId, newVariation)
     let { files } = await down(experienceId)

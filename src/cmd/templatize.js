@@ -31,9 +31,9 @@ module.exports = async function templatize () {
       addTemplateVariables(files, pkg)
       _.each(pkg.meta.variations, (variation, filename) => {
         files['variation.js'] = files[`${filename}.js`]
-        files['variation.css'] = files[`${filename}.css`]
+        files['variation.less'] = files[`${filename}.less`]
         delete files[`${filename}.js`]
-        delete files[`${filename}.css`]
+        delete files[`${filename}.less`]
       })
     }
 
