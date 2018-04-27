@@ -9,9 +9,7 @@ module.exports = async function renameFileWarning (dest, from, to) {
   const [ fromExists, toExists ] = await Promise.all([fs.pathExists(fromPath), fs.pathExists(toPath)])
   if (fromExists && !toExists) {
     const result = await confirmer(`${from} is now ${to}, is it ok to rename your ${from} file? (y/n)`)
-    // keep local common.js and add blank utils.js
     if (!result) await fs.ensureFile(fromPath)
-    // rename local common.js to utils.js
     return fs.move(fromPath, toPath)
   }
 }
