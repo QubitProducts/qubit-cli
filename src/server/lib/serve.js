@@ -21,7 +21,7 @@ module.exports = async function serve (options) {
   app.use(cors())
   options.verbose = options.verbose || false
 
-  if (/(triggers|global|.less|.css$)/.test(options.variationFilename)) {
+  if (/(triggers|global|\.less|\.css$)/.test(options.variationFilename)) {
     log.info('Hint: you should be watching the entry point for your experience, i.e. your variation file!')
   }
 
