@@ -54,7 +54,7 @@ describe('variationService', function () {
     it('should build a files object from a variation', () => {
       expect(variationService.getCode(variations[1])).to.eql({
         'variation-4.js': 'function () { console.log("variation 1") }',
-        'variation-4.css': 'a {\n color: purple; \n}'
+        'variation-4.less': 'a {\n color: purple; \n}'
       })
     })
   })
@@ -63,7 +63,7 @@ describe('variationService', function () {
     it('should modify a variation object appropriately given a files object', () => {
       let newVariation = variationService.setCode(variations[2], {
         'variation-6.js': 'function () { console.log("variation 1") }',
-        'variation-6.css': 'a {\n color: purple; \n}'
+        'variation-6.less': 'a {\n color: purple; \n}'
       })
       expect(newVariation).to.have.deep.property('execution_code', 'function () { console.log("variation 1") }')
       expect(newVariation).to.have.deep.property('custom_styles', 'a {\n color: purple; \n}')

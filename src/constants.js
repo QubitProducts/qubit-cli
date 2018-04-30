@@ -18,6 +18,7 @@ const ID_TOKEN = 'ID_TOKEN'
 const APP_TOKEN = 'APP_TOKEN'
 const REGISTRY_TOKEN = 'REGISTRY_TOKEN'
 const REGISTRY_SCOPES = 'REGISTRY_SCOPES'
+const STYLE_EXTENSION = '.less'
 
 module.exports = {
   HOME,
@@ -31,5 +32,6 @@ module.exports = {
   ID_TOKEN,
   APP_TOKEN,
   REGISTRY_TOKEN,
-  REGISTRY_SCOPES
+  REGISTRY_SCOPES,
+  STYLE_EXTENSION
 }

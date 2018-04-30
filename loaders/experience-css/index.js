@@ -1,5 +1,10 @@
-module.exports = function (src) {
-  return src.replace(/require\(['"]css!([^)]+)['"]/g, function (all, thing) {
-    return "require('" + thing + ".css'"
-  })
-}
+module.exports = src =>
+  src
+    .replace(
+      /require\(['"]css!([^)]+)['"]/g,
+      (all, thing) => "require('" + thing + ".css'"
+    )
+    .replace(
+      /require\(['"]less!([^)]+)['"]/g,
+      (all, thing) => "require('" + thing + ".less'"
+    )
