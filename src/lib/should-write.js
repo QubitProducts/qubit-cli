@@ -4,7 +4,7 @@ let checkExists = require('./exists')
 let confirm = require('confirmer')
 
 module.exports = async function shouldWrite (dest, name, newValue, shouldConfirm, shouldOverwrite) {
-  const msg = `Do you want Qubit-CLI to overwrite your local ${name} file?`
+  const msg = `Do you want Qubit-CLI to overwrite your local ${name} file? (y/n)`
   const file = path.join(dest, name)
   let exists = await checkExists(file)
 

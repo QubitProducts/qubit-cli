@@ -5,8 +5,8 @@ const commonCodeWarning = require('../lib/common-code-warning')
 const cssCodeWarning = require('../lib/css-code-warning')
 
 module.exports = async function pullExperience (CWD, propertyId, experienceId) {
-  log.info('Pulling experience')
   const { files, experience } = await down(experienceId)
+  log.info(`Pulling experience ${experienceId}: ${experience.name}`)
   if (experience.solution_id === 7) {
     throw new Error('qubit-cli does not support simple message experiences')
   }
