@@ -97,6 +97,11 @@ module.exports = async function run (pkg) {
     .action(cmd('clone-all'))
 
   program
+    .command('pull-all')
+    .description(`pull remote changes for all experience folders in the current directory`)
+    .action(cmd('pull-all'))
+
+  program
     .command('publish')
     .description('publish an experience')
     .action(cmd('action'))
