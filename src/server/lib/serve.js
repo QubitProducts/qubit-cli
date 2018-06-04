@@ -21,23 +21,23 @@ module.exports = async function serve (options) {
   app.use(cors())
   options.verbose = options.verbose || false
 
-  if (/(triggers|global|\.less|\.css$)/.test(options.variationFilename)) {
+  if (/(triggers|global|\.less|\.css$)/.test(options.variationFileName)) {
     log.info('Hint: you should be watching the entry point for your experience, i.e. your variation file!')
   }
 
   await commonCodeWarning(CWD)
   await cssCodeWarning(CWD)
 
-  if (!options.variationFilename) {
-    options.variationFilename = await pickVariation(await fs.readdir(CWD))
+  if (!options.variationFileName) {
+    options.variationFileName = await pickVariation(await fs.readdir(CWD))
 
-    if (!options.variationFilename) {
+    if (!options.variationFileName) {
       return log.warn('Ensure you are within an experience directory and try again')
     }
   }
 
   // make .js optional
-  options.variationFilename = options.variationFilename.replace(/\.js$/, '')
+  options.variationFileName = options.variationFileName.replace(/\.js$/, '')
 
   const verboseOpts = {
     log: options.verbose ? console.log : false,
@@ -71,7 +71,7 @@ module.exports = async function serve (options) {
   app.use((req, res, next) => compile.then(next))
 
   return app.start().then(() => {
-    log.info(`Using ${options.variationFilename}`)
+    log.info(`Using ${options.variationFileName}`)
     log.info(`Qubit-CLI listening on port ${config.port}`)
     return { app, emitter }
   })
@@ -80,7 +80,7 @@ module.exports = async function serve (options) {
 function createWebpackConfig (options) {
   const plugins = webpackConf.plugins.slice(0)
   plugins.push(new webpack.DefinePlugin({
-    __VARIATION__: `'${options.variationFilename}'`,
+    __VARIATION__: `'${options.variationFileName}'`,
     __VARIATION_STYLE_EXTENSION__: `'${STYLE_EXTENSION}'`
   }))
   const entry = webpackConf.entry.slice(0)
