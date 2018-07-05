@@ -42,9 +42,8 @@ async function getRegistryToken (getIDToken, forceRefresh) {
     let { accessToken, scopes } = (await axios.post(config.services.registry + '/-/token', {}, {
       headers: { 'Authorization': `Bearer ${registryToken}` }
     })).data
-    scopes = _.uniq((scopes === 'all' ? [] : scopes).concat(['@qubit', '@qutics']))
     registryToken = accessToken
-    await qubitrc.login(registryToken, scopes)
+    await qubitrc.login(registryToken, _.uniq(scopes))
   }
   return registryToken
 }
