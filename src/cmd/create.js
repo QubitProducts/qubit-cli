@@ -7,7 +7,7 @@ const log = require('../lib/log')
 const CWD = process.cwd()
 
 const { getPropertyId } = require('../lib/get-property-and-experience-ids')
-const { getAll } = require('../services/templates')
+const { getTemplates } = require('../lib/get-templates')
 
 module.exports = async function create (pid) {
   try {
@@ -16,20 +16,14 @@ module.exports = async function create (pid) {
       log.info(`PropertyId not found, are you in an experience folder?`)
       return
     }
-    const templates = await getAll(propertyId)
-    const wantTemplate = await input.select(
-      formatLog(`   Would you like to create this experience from a template?`),
-      [
-        { name: '   Yes', value: true },
-        { name: '   No', value: false }
-      ],
-      { default: true }
-    )
+    const templates = await getTemplates(propertyId)
     let selectedTemplate = null
-    if (wantTemplate) {
+
+    if (templates.length) {
       selectedTemplate = await input.select(
         formatLog(`   Please select a template you'd like to create this experience from:`),
-        formatTemplates(templates)
+        formatTemplates(templates),
+        { default: null }
       )
     }
 
