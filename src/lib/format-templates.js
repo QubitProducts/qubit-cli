@@ -1,6 +1,6 @@
 module.exports = function formatTemplates (templates) {
   const defaultNoTemplate = [{
-    name: `   No template`,
+    name: `   Custom`,
     value: null
   }]
   return defaultNoTemplate.concat(templates.map(({ id, name }) => {
