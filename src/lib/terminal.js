@@ -65,8 +65,10 @@ const createAutoComplete = (prompt, suggestions) => {
   function renderSingleMenu (candidates) {
     const titles = candidates.map(c => c.title)
     const itemStyle = {
-      noFormat: (str) => {
-        term(str.replace(new RegExp(`(${_.escapeRegExp(subStr)})`, 'i'), `^_$1^:`))
+      forceStyleOnReset: {
+        noFormat: (str) => {
+          term(str.replace(new RegExp(`(${_.escapeRegExp(subStr)})`, 'i'), `^_$1^:`))
+        }
       }
     }
     term.grabInput({mouse: 'motion'})
