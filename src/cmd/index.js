@@ -77,6 +77,15 @@ module.exports = async function run (pkg) {
     .action(cmd('create'))
 
   program
+    .command('create-template [propertyId]')
+    .usage(chalk.gray(`
+    Create a template using propertyId:
+    qubit create-template 1010
+    `))
+    .description('create a template (arguments optional)')
+    .action(cmd('create-template'))
+
+  program
     .command('clone [url] [propertyId] [experienceId]')
     .usage(chalk.gray(`
 

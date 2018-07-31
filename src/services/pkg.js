@@ -1,7 +1,8 @@
 const _ = require('lodash')
 const {getFilename} = require('./variation')
 
-function getCode (experience, iteration, variations) {
+function getCode (experience, iteration, variations, isTemplate) {
+  const type = isTemplate ? 'template' : 'experience'
   const files = {}
   const experienceMeta = experience.meta ? JSON.parse(experience.meta) : {}
   // TODO: remove this conditional once API returns parsed package_json
@@ -9,9 +10,9 @@ function getCode (experience, iteration, variations) {
     ? (_.isString(iteration.package_json) ? JSON.parse(iteration.package_json) : iteration.package_json)
     : {}
   files['package.json'] = JSON.stringify(Object.assign({
-    name: `qubit-experience-${experience.id}`,
+    name: `qubit-${type}-${experience.id}`,
     version: '1.0.0',
-    description: 'An experience powered by qubit'
+    description: `${type} powered by qubit`
   }, pkgJSON, {
     meta: {
       name: experience.name,
@@ -33,6 +34,7 @@ function getCode (experience, iteration, variations) {
       solutionOptions: iteration.solution_options,
       visitor: {},
       isPreview: true,
+      isTemplate: !!experience.is_template,
       include: [],
       exclude: [],
       templates: _.get(experienceMeta, 'cli.templates') || []
