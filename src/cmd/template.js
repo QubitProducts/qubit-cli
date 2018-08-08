@@ -53,7 +53,7 @@ module.exports = async function template (name) {
 
   output['package.json'] = JSON.stringify(outPkg, null, 2)
 
-  return scaffold(CWD, output, true, null, false)
+  return scaffold(CWD, output)
 }
 
 async function getTemplateFiles (template) {

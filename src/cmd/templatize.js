@@ -41,7 +41,11 @@ module.exports = async function templatize () {
 
   log.info(`...creating template at ${templateDir}`)
 
-  await scaffold(path.join(templateDir, 'template'), files, false, true, true)
+  await scaffold(path.join(templateDir, 'template'), files, {
+    shouldConfirm: false,
+    shouldOverwrite: true,
+    removeExtraneous: true
+  })
 
   await fs.writeFile(path.join(templateDir, 'package.json'), JSON.stringify(tmpPkg, null, 2))
   await fs.writeFile(path.join(templateDir, 'template/package.json'), JSON.stringify(tmpPkg, null, 2))

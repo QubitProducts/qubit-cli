@@ -12,7 +12,10 @@ module.exports = async function createTemplate (CWD, propertyId, name, descripti
   const filename = experienceFilename(template)
   const dest = path.join(CWD, filename)
 
-  // shouldConfirm = true, shouldOverwrite = false, removeExtraneous = false
-  await scaffold(dest, files, true, null, true)
+  await scaffold(dest, files, {
+    shouldConfirm: true,
+    shouldOverwrite: false,
+    removeExtraneous: true
+  })
   log.info(`Created at ${filename}`)
 }
