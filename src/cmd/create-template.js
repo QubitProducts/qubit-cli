@@ -15,7 +15,12 @@ module.exports = async function create (pid) {
     }
 
     const name = clean(await input.text(
-      formatLog('   What would you like to call your template?')
+      formatLog('   What would you like to call your template?'), {
+        validate (name) {
+          if (name.length > 2) return true
+          return `Template names must be greater than 2 charachters long`
+        }
+      }
     ))
 
     const description = clean(await input.text(
