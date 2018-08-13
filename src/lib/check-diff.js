@@ -10,7 +10,7 @@ module.exports = async function checkDiff (cwd, propertyId, experienceId) {
   const localFiles = await readFiles(cwd)
   delete files['package.json']
   delete localFiles['package.json']
-  const fileDiffs = checkDiff(localFiles, files)
+  const fileDiffs = jsDiffCheck(localFiles, files)
 
   if (fileDiffs.length) {
     log.info('Showing diff between local and remote files...')
@@ -26,16 +26,20 @@ module.exports = async function checkDiff (cwd, propertyId, experienceId) {
     log.info('Both versions are the same!')
   }
 
-  function checkDiff (localFiles, files) {
+  function jsDiffCheck (localFiles, files) {
     let diffs = []
     for (let name in files) {
-      const remoteVal = files[name] || ''
-      const localVal = localFiles[name] || ''
+      const remoteVal = clean(files[name] || '')
+      const localVal = clean(localFiles[name] || '')
       if (remoteVal !== localVal) {
-        const diff = jsdiff.diffLines(remoteVal, localVal, [{ignoreWhitespace: true}])
+        const diff = jsdiff.diffTrimmedLines(remoteVal, localVal, [{ ignoreWhitespace: true }])
         diffs.push({fileName: name.toUpperCase(), diff: diff})
       }
     }
     return diffs
+  }
+
+  function clean (str) {
+    return str.trim()
   }
 }
