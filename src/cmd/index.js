@@ -225,5 +225,5 @@ module.exports = async function run (pkg) {
 }
 
 function cmd (command) {
-  return (...args) => require('./' + command)(...args)
+  return (...args) => require('./' + command)(...args).catch(err => log.error(err))
 }

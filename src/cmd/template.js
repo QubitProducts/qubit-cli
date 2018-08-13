@@ -1,7 +1,6 @@
 const _ = require('lodash')
 const path = require('path')
 const execa = require('execa')
-const log = require('../lib/log')
 const scaffold = require('../lib/scaffold')
 const readFiles = require('../lib/read-files')
 const getPkg = require('../lib/get-pkg')
@@ -17,48 +16,44 @@ const { STYLE_EXTENSION } = require('../constants')
 let CWD = process.cwd()
 
 module.exports = async function template (name) {
-  try {
-    let output
-    const pkg = await getPkg()
-    if (name === 'example') name = path.resolve(__dirname, '../../example')
+  let output
+  const pkg = await getPkg()
+  if (name === 'example') name = path.resolve(__dirname, '../../example')
 
-    name = templateName(name)
+  name = templateName(name)
 
-    await execa('npm', ['link', moduleName(name)], { cwd: ROOT_DIR })
+  await execa('npm', ['link', moduleName(name)], { cwd: ROOT_DIR })
 
-    await commonCodeWarning(CWD)
-    await cssCodeWarning(CWD)
+  await commonCodeWarning(CWD)
+  await cssCodeWarning(CWD)
 
-    output = await getTemplateFiles(name)
+  output = await getTemplateFiles(name)
 
-    output = _.mapKeys(output, (val, key) => {
-      if (/^common\.js$/.test(key)) key = 'utils.js'
-      return key.replace(/\.css$/, '.less')
+  output = _.mapKeys(output, (val, key) => {
+    if (/^common\.js$/.test(key)) key = 'utils.js'
+    return key.replace(/\.css$/, '.less')
+  })
+
+  if (hasVariations(pkg)) {
+    _.each(pkg.meta.variations, (variation, filename) => {
+      if (!variation.variationIsControl) {
+        output[`${filename}.js`] = output['variation.js']
+        output[`${filename}${STYLE_EXTENSION}`] = output[`variation${STYLE_EXTENSION}`]
+      }
     })
-
-    if (hasVariations(pkg)) {
-      _.each(pkg.meta.variations, (variation, filename) => {
-        if (!variation.variationIsControl) {
-          output[`${filename}.js`] = output['variation.js']
-          output[`${filename}${STYLE_EXTENSION}`] = output[`variation${STYLE_EXTENSION}`]
-        }
-      })
-      delete output['variation.js']
-      delete output[`variation${STYLE_EXTENSION}`]
-    }
-
-    output = resolveTemplate(output, pkg.meta)
-
-    const outPkg = mergePkg(output['package.json'], pkg)
-
-    outPkg.meta = addTemplateMetrics(outPkg.meta, path.basename(name))
-
-    output['package.json'] = JSON.stringify(outPkg, null, 2)
-
-    return await scaffold(CWD, output, true, null, false)
-  } catch (err) {
-    log.error(err)
+    delete output['variation.js']
+    delete output[`variation${STYLE_EXTENSION}`]
   }
+
+  output = resolveTemplate(output, pkg.meta)
+
+  const outPkg = mergePkg(output['package.json'], pkg)
+
+  outPkg.meta = addTemplateMetrics(outPkg.meta, path.basename(name))
+
+  output['package.json'] = JSON.stringify(outPkg, null, 2)
+
+  return scaffold(CWD, output, true, null, false)
 }
 
 async function getTemplateFiles (template) {

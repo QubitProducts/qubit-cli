@@ -13,45 +13,41 @@ const experienceService = require('../services/experience')
 let CWD = process.cwd()
 
 module.exports = async function del () {
-  try {
-    const pkg = await getPkg()
-    let propertyId = _.get(pkg, 'meta.propertyId')
-    let experienceId = _.get(pkg, 'meta.experienceId')
+  const pkg = await getPkg()
+  let propertyId = _.get(pkg, 'meta.propertyId')
+  let experienceId = _.get(pkg, 'meta.experienceId')
 
-    if (propertyId && experienceId) {
-      // if the user is in an experience delete a variation
-      const experience = await experienceService.get(experienceId)
-      const variations = await variationService.getAll(experience.last_iteration_id)
-      const variationChoices = _(variations).filter({ is_control: false }).map(v => ({ name: v.name, value: v.master_id })).value()
+  if (propertyId && experienceId) {
+    // if the user is in an experience delete a variation
+    const experience = await experienceService.get(experienceId)
+    const variations = await variationService.getAll(experience.last_iteration_id)
+    const variationChoices = _(variations).filter({ is_control: false }).map(v => ({ name: v.name, value: v.master_id })).value()
 
-      if (variationChoices.length > 1) {
-        const variationId = await input.select(formatLog('   Which variation would you like to delete?'), variationChoices)
-        const deletedVariation = await variationService.remove(propertyId, experienceId, variationId)
-        if (deletedVariation) {
-          log.info('Variation successfully deleted')
-        } else {
-          log.error('Variation could not be deleted')
-        }
-        const { files } = await down(experienceId)
-        await scaffold(CWD, files, false, false, true)
-        await fs.outputFile(path.join(CWD, 'package.json'), files['package.json'])
+    if (variationChoices.length > 1) {
+      const variationId = await input.select(formatLog('   Which variation would you like to delete?'), variationChoices)
+      const deletedVariation = await variationService.remove(propertyId, experienceId, variationId)
+      if (deletedVariation) {
+        log.info('Variation successfully deleted')
       } else {
-        log.warn('There are no variations to delete')
+        log.error('Variation could not be deleted')
       }
+      const { files } = await down(experienceId)
+      await scaffold(CWD, files, false, false, true)
+      await fs.outputFile(path.join(CWD, 'package.json'), files['package.json'])
     } else {
-      // if the user is not in an experience folder delete a experience
-      propertyId = await suggest.property()
-      if (!propertyId) return
-      experienceId = await suggest.experience(propertyId)
-      if (!experienceId) return
-      const deletedExperience = await experienceService.remove(propertyId, experienceId)
-      if (deletedExperience) {
-        log.info('Experience successfully deleted')
-      } else {
-        log.error('Experience could not be deleted')
-      }
+      log.warn('There are no variations to delete')
     }
-  } catch (err) {
-    log.error(err)
+  } else {
+    // if the user is not in an experience folder delete a experience
+    propertyId = await suggest.property()
+    if (!propertyId) return
+    experienceId = await suggest.experience(propertyId)
+    if (!experienceId) return
+    const deletedExperience = await experienceService.remove(propertyId, experienceId)
+    if (deletedExperience) {
+      log.info('Experience successfully deleted')
+    } else {
+      log.error('Experience could not be deleted')
+    }
   }
 }

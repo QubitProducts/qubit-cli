@@ -8,29 +8,25 @@ const updatePkg = require('../lib/update-pkg')
 const log = require('../lib/log')
 
 module.exports = async function traffic (options) {
-  try {
-    const pkg = await getPkg()
-    if (!pkg.meta) return log.warn('Navigate to an experience directory and try again')
+  const pkg = await getPkg()
+  if (!pkg.meta) return log.warn('Navigate to an experience directory and try again')
 
-    const {experienceId} = pkg.meta
-    const { last_iteration_id: iterationId } = await experienceService.get(experienceId)
-    const iteration = await iterationService.get(iterationId)
-    const currentControlDecimal = iteration.control_size
-    const currentControlPercentage = getControlPercentage(currentControlDecimal)
+  const {experienceId} = pkg.meta
+  const { last_iteration_id: iterationId } = await experienceService.get(experienceId)
+  const iteration = await iterationService.get(iterationId)
+  const currentControlDecimal = iteration.control_size
+  const currentControlPercentage = getControlPercentage(currentControlDecimal)
 
-    if (options.view) return log.info(`Current control size is ${currentControlPercentage}`)
+  if (options.view) return log.info(`Current control size is ${currentControlPercentage}`)
 
-    const newControlDecimal = await input.select(formatLog(`   Select control size (current ${currentControlPercentage.trim()})`), validControlSizes, { 'default': currentControlDecimal })
-    const updatedIteration = await iterationService.set(iterationId, { control_size: newControlDecimal })
+  const newControlDecimal = await input.select(formatLog(`   Select control size (current ${currentControlPercentage.trim()})`), validControlSizes, { 'default': currentControlDecimal })
+  const updatedIteration = await iterationService.set(iterationId, { control_size: newControlDecimal })
 
-    if (updatedIteration) {
-      log.info('Traffic split updated')
-      await updatePkg(experienceId)
-    } else {
-      log.warn('Failed to update traffic split')
-    }
-  } catch (err) {
-    log.error(err)
+  if (updatedIteration) {
+    log.info('Traffic split updated')
+    await updatePkg(experienceId)
+  } else {
+    log.warn('Failed to update traffic split')
   }
 }
 
