@@ -4,14 +4,10 @@ const CWD = process.cwd()
 const log = require('../lib/log')
 
 module.exports = async function clone (urlOrPid, pidOrEid) {
-  try {
-    const { propertyId, experienceId } = await getPropertyAndExperienceIds(urlOrPid, pidOrEid) || {}
-    if (!propertyId || !experienceId) {
-      log.info(`PropertyId not found, are you in an experience folder?`)
-      return
-    }
-    await cloneExperience(CWD, propertyId, experienceId)
-  } catch (err) {
-    log.error(err)
+  const { propertyId, experienceId } = await getPropertyAndExperienceIds(urlOrPid, pidOrEid) || {}
+  if (!propertyId || !experienceId) {
+    log.info(`PropertyId not found, are you in an experience folder?`)
+    return
   }
+  await cloneExperience(CWD, propertyId, experienceId)
 }

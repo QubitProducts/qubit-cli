@@ -8,24 +8,20 @@ const log = require('../lib/log')
 const formatLog = require('../lib/format-log')
 
 module.exports = async function goals (cmd) {
-  try {
-    const pkg = await getPkg()
-    if (!pkg.meta) return log.warn('Navigate to an experience directory and try again')
+  const pkg = await getPkg()
+  if (!pkg.meta) return log.warn('Navigate to an experience directory and try again')
 
-    const { propertyId, experienceId } = pkg.meta
-    const { last_iteration_id: iterationId } = await experienceService.get(experienceId)
+  const { propertyId, experienceId } = pkg.meta
+  const { last_iteration_id: iterationId } = await experienceService.get(experienceId)
 
-    const meta = { propertyId, experienceId, iterationId }
-    const goals = await goalService.get(meta)
+  const meta = { propertyId, experienceId, iterationId }
+  const goals = await goalService.get(meta)
 
-    switch (cmd) {
-      case 'list': return listGoals(meta, goals)
-      case 'add': return addGoal(meta, goals).then(() => updatePkg(experienceId))
-      case 'remove': return removeGoal(meta, goals).then(() => updatePkg(experienceId))
-      case 'set-primary': return setPrimaryGoal(meta, goals).then(() => updatePkg(experienceId))
-    }
-  } catch (err) {
-    log.error(err)
+  switch (cmd) {
+    case 'list': return listGoals(meta, goals)
+    case 'add': return addGoal(meta, goals).then(() => updatePkg(experienceId))
+    case 'remove': return removeGoal(meta, goals).then(() => updatePkg(experienceId))
+    case 'set-primary': return setPrimaryGoal(meta, goals).then(() => updatePkg(experienceId))
   }
 }
 

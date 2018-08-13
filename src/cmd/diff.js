@@ -1,14 +1,16 @@
 const log = require('../lib/log')
 const getPkg = require('../lib/get-pkg')
-const checkDiff = require('../lib/check-diff')
+const getDiff = require('../lib/get-diff')
+const logDiff = require('../lib/log-diff')
 let CWD = process.cwd()
 
 module.exports = async function diff () {
-  try {
-    const pkg = await getPkg()
-    const { propertyId, experienceId } = pkg.meta
-    await checkDiff(CWD, propertyId, experienceId)
-  } catch (err) {
-    log.error(err)
+  const pkg = await getPkg()
+  const { propertyId, experienceId } = pkg.meta
+  let diffs = await getDiff(CWD, propertyId, experienceId)
+  if (diffs.length) {
+    logDiff(diffs)
+  } else {
+    log.info('Both versions are the same!')
   }
 }

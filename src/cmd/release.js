@@ -5,15 +5,11 @@ const login = require('../server/lib/login')
 
 // { anyBranch, cleanup, yolo, publish, tag, yarn }
 module.exports = async function release (version, flags) {
-  try {
-    // Login authenticates against our private registry and configures all the associated private scopes
-    await login()
-    const options = await getOptions()
-    const pkg = await runRelease(options)
-    log.info(`${pkg.name} ${pkg.version} published 🎉`)
-  } catch (err) {
-    log.error(err)
-  }
+  // Login authenticates against our private registry and configures all the associated private scopes
+  await login()
+  const options = await getOptions()
+  const pkg = await runRelease(options)
+  log.info(`${pkg.name} ${pkg.version} published 🎉`)
 
   function getOptions () {
     if (version) {
