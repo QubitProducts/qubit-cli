@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const chalk = require('chalk')
 const log = require('../lib/log')
 const getPkg = require('../lib/get-pkg')
 const updatePkg = require('../lib/update-pkg')
@@ -7,7 +8,8 @@ const commonCodeWarning = require('../lib/common-code-warning')
 const cssCodeWarning = require('../lib/css-code-warning')
 const codeService = require('../services/code')
 const down = require('../services/down')
-const diff = require('./diff')
+const getDiff = require('../lib/get-diff')
+const logDiff = require('../lib/log-diff')
 let CWD = process.cwd()
 
 module.exports = async function push (options) {
@@ -34,8 +36,11 @@ module.exports = async function push (options) {
     let localUpdatedAts = [localExperienceUpdatedAt].concat(localVariantsUpdatedAt)
 
     if (remoteUpdatedAts.join('|') !== localUpdatedAts.join('|')) {
-      log.info('Remote has changed since the last interaction!')
-      return diff()
+      let diffs = await getDiff(CWD, propertyId, experienceId)
+      if (diffs.length) {
+        log.error(chalk.bold.red('Remote has changed!'))
+        return logDiff(diffs)
+      }
     }
   }
 
