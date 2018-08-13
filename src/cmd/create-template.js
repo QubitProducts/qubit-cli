@@ -15,13 +15,12 @@ module.exports = async function create (pid) {
     }
 
     const name = clean(await input.text(
-      formatLog('   What would you like to call your template?'),
-      { default: 'Template Created by Qubit-CLI' }
+      formatLog('   What would you like to call your template?')
     ))
 
     const description = clean(await input.text(
       formatLog('   Write a description for your template?'),
-      { default: 'Generic template' }
+      { default: 'This template was created with qubit-cli' }
     ))
 
     await createTemplate(CWD, propertyId, name, description)
