@@ -126,13 +126,13 @@ module.exports = async function run (pkg) {
     .action(cmd('action'))
 
   program
-    .command('templatize')
+    .command('templatize [experienceId]')
     .description('create a template from an experience')
     .action(cmd('templatize'))
 
   program
     .command('pull [name]')
-    .description(`pull remote changes or a template into your local experience (arguments optional)`)
+    .description(`pull remote changes into your local experience (arguments optional)`)
     .action(cmd('pull'))
 
   program

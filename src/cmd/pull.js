@@ -1,16 +1,11 @@
 const _ = require('lodash')
 const {getPropertyAndExperienceIds} = require('../lib/get-property-and-experience-ids')
-const template = require('./template')
 const getPkg = require('../lib/get-pkg')
 const log = require('../lib/log')
-const {isName} = require('../lib/is-type')
 const pullExperience = require('../lib/pull-experience')
 const CWD = process.cwd()
 
 module.exports = async function pull (urlOrPidOrName, pidOrEid) {
-  // from template?
-  if (isName(urlOrPidOrName)) { return template(urlOrPidOrName) }
-
   // Pulling from an id-pair?
   let propertyId, experienceId
   const pkg = await getPkg()
