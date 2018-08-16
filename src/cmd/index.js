@@ -126,8 +126,17 @@ module.exports = async function run (pkg) {
     .action(cmd('action'))
 
   program
-    .command('templatize [experienceId]')
-    .description('create a template from an experience')
+    .command('templatize [url] [propertyId] [experienceId]')
+    .description(`
+      Templatize from url:
+      qubit templatize http://app.qubit.com/p/1010/experiences/10101/
+
+      Templatize using propertyId and experienceId:
+      qubit templatize 1010 10101
+
+      Templatize using autocomplete or by navigating to your experience in the browser:
+      qubit templatize
+    `)
     .action(cmd('templatize'))
 
   program
