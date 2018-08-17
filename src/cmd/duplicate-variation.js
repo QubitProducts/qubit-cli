@@ -29,5 +29,5 @@ module.exports = async function duplicateVariation () {
   await variationService.create(iterationId, newVariation)
   let { files } = await down(experienceId)
   await fs.outputFile(path.join(CWD, 'package.json'), files['package.json'])
-  await scaffold(CWD, files, false, false, false)
+  await scaffold(CWD, files, { shouldConfirm: false })
 }

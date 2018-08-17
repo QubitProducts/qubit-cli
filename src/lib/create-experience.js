@@ -27,8 +27,7 @@ module.exports = async function createExperience (CWD, propertyId, name, control
   const filename = experienceFilename(experience)
   const dest = path.join(CWD, filename)
 
-  // shouldConfirm = true, shouldOverwrite = false, removeExtraneous = false
-  await scaffold(dest, files, true, null, true)
+  await scaffold(dest, files, { removeExtraneous: true })
   log.info(`Created at ${filename}`)
 }
 

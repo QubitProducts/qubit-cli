@@ -77,6 +77,15 @@ module.exports = async function run (pkg) {
     .action(cmd('create'))
 
   program
+    .command('create-template [propertyId]')
+    .usage(chalk.gray(`
+    Create a template using propertyId:
+    qubit create-template 1010
+    `))
+    .description('create a template (arguments optional)')
+    .action(cmd('create-template'))
+
+  program
     .command('clone [url] [propertyId] [experienceId]')
     .usage(chalk.gray(`
 
@@ -117,13 +126,22 @@ module.exports = async function run (pkg) {
     .action(cmd('action'))
 
   program
-    .command('templatize')
-    .description('create a template from an experience')
+    .command('templatize [url] [propertyId] [experienceId]')
+    .description(`
+      Templatize from url:
+      qubit templatize http://app.qubit.com/p/1010/experiences/10101/
+
+      Templatize using propertyId and experienceId:
+      qubit templatize 1010 10101
+
+      Templatize using autocomplete or by navigating to your experience in the browser:
+      qubit templatize
+    `)
     .action(cmd('templatize'))
 
   program
     .command('pull [name]')
-    .description(`pull remote changes or a template into your local experience (arguments optional)`)
+    .description(`pull remote changes into your local experience (arguments optional)`)
     .action(cmd('pull'))
 
   program

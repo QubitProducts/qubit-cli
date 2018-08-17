@@ -5,7 +5,12 @@ const exists = require('./exists')
 let shouldWrite = require('./should-write')
 let shouldRemove = require('./should-remove')
 
-module.exports = async function scaffold (dest, files, shouldConfirm = true, shouldOverwrite = false, removeExtraneous = false) {
+module.exports = async function scaffold (dest, files, options) {
+  const {
+    shouldConfirm = true,
+    shouldOverwrite = false,
+    removeExtraneous = false
+  } = options
   for (let name in files) {
     if (files.hasOwnProperty(name)) {
       const value = files[name]
@@ -13,7 +18,7 @@ module.exports = async function scaffold (dest, files, shouldConfirm = true, sho
         await scaffoldFile(name)
       } else {
         await fs.mkdirp(path.join(dest, name))
-        await scaffold(path.join(dest, name), value, shouldConfirm, shouldOverwrite, removeExtraneous)
+        await scaffold(path.join(dest, name), value, options)
       }
     }
   }
@@ -31,6 +36,7 @@ module.exports = async function scaffold (dest, files, shouldConfirm = true, sho
     const value = files[name]
     let result = await shouldWrite(dest, name, value, shouldConfirm, shouldOverwrite)
     if (result) {
+      //  isTemplate
       if (log) log.info(`Writing to local ${name} file...`)
       return fs.outputFile(path.join(dest, name), value)
     }

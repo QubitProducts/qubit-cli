@@ -6,12 +6,12 @@ const pkgService = require('./pkg')
 const withMetrics = require('../lib/with-metrics')
 const getUser = require('../lib/get-user')
 
-async function get (propertyId, experienceId) {
+async function get (propertyId, experienceId, isTemplate) {
   const experience = await experienceService.get(experienceId)
   const iterationId = experience.last_iteration_id
   const iteration = await iterationService.get(iterationId)
   const variations = await variationService.getAll(iterationId)
-  return getCode(experience, iteration, variations)
+  return getCode(experience, iteration, variations, isTemplate)
 }
 
 async function set (propertyId, experienceId, files) {
@@ -49,9 +49,9 @@ function eql (a, b) {
   return _.isEqual(a, b)
 }
 
-function getCode (experience, iteration, variations) {
+function getCode (experience, iteration, variations, isTemplate) {
   const files = {}
-  Object.assign(files, iterationService.getCode(iteration), pkgService.getCode(experience, iteration, variations))
+  Object.assign(files, iterationService.getCode(iteration), pkgService.getCode(experience, iteration, variations, isTemplate))
   variations.filter((v) => !v.is_control).map(variationService.getCode).forEach((v) => Object.assign(files, v))
   return files
 }

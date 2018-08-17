@@ -4,8 +4,8 @@ function getAll (propertyId) {
   return fetch.get(`/api/p/${propertyId}/templates`)
 }
 
-function createTemplate (propertyId, template) {
-  return fetch.post(`/api/p/${propertyId}/templates`, template)
+function create (propertyId, template) {
+  return fetch.post(`/api/p/${propertyId}/templates`, { template })
 }
 
 function get (templateId) {
@@ -20,4 +20,8 @@ async function createExperienceFromTemplate (templateId, experiment) {
   return fetch.post(`/api/templates/${templateId}/create-experience`, { experiment })
 }
 
-module.exports = { get, getAll, createTemplate, update, createExperienceFromTemplate }
+async function createTemplateFromExperience (experienceId, template) {
+  return fetch.post(`/api/experiences/${experienceId}/create-template`, { template })
+}
+
+module.exports = { get, getAll, create, update, createExperienceFromTemplate, createTemplateFromExperience }

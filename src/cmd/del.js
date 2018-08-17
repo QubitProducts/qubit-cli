@@ -32,7 +32,7 @@ module.exports = async function del () {
         log.error('Variation could not be deleted')
       }
       const { files } = await down(experienceId)
-      await scaffold(CWD, files, false, false, true)
+      await scaffold(CWD, files, { shouldConfirm: false, removeExtraneous: true })
       await fs.outputFile(path.join(CWD, 'package.json'), files['package.json'])
     } else {
       log.warn('There are no variations to delete')

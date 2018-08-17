@@ -13,7 +13,6 @@ module.exports = async function pullExperience (CWD, propertyId, experienceId) {
   await commonCodeWarning(CWD)
   await cssCodeWarning(CWD)
 
-  // shouldConfirm = true, shouldOverwrite = false, removeExtraneous = false
-  await scaffold(CWD, files, true, null, true)
+  await scaffold(CWD, files, { removeExtraneous: true })
   log.info(`Experience pulled into current working directory`)
 }
