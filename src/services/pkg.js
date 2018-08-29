@@ -56,6 +56,7 @@ function setCode (experience, iteration, files) {
   iteration = _.cloneDeep(iteration)
   iteration.url = _.get(pkg, 'meta.previewUrl')
   iteration.package_json = _.omit(pkg, 'meta')
+  if (iteration.template_data) iteration.template_data = _.get(pkg, 'meta.templateData')
   return { experience, iteration }
 }
 
