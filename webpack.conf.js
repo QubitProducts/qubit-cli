@@ -36,12 +36,15 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        include: [ path.join(__dirname, 'node_modules', '@qubit') ],
+        include: [
+          path.join(CWD, 'node_modules', '@qubit'),
+          path.join(__dirname, 'node_modules', '@qubit')
+        ],
         loader: 'experience-css'
       },
       {
         test: /\.(css|less)$/,
-        include: [ path.join(__dirname, 'node_modules', '@qubit') ],
+        include: [path.join(__dirname, 'node_modules', '@qubit')],
         loader: 'style-loader!raw-loader!less-loader'
       },
       { test: /global\.js$/, loader: 'raw-loader' },
