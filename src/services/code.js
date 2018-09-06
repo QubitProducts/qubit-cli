@@ -18,7 +18,7 @@ async function set (propertyId, experienceId, files) {
   const oldExperience = await experienceService.get(experienceId)
   const iterationId = oldExperience.last_iteration_id
   const oldIteration = await iterationService.get(iterationId)
-  const oldVariations = await variationService.getAll(iterationId)
+  let oldVariations = await variationService.getAll(iterationId)
 
   const pkg = (files['package.json'] && JSON.parse(files['package.json'])) || {}
   const user = await getUser()
@@ -34,6 +34,9 @@ async function set (propertyId, experienceId, files) {
     ? oldIteration
     : await iterationService.set(iterationId, pkgCode.iteration)
 
+  // Updating iteration.template_data updates variation.template_data
+  // so we need to get the most up to date version of variations
+  oldVariations = await variationService.getAll(iterationId)
   const variations = await Promise.all(oldVariations.map(async oldVariation => {
     if (oldVariation.is_control) return oldVariation
     const newVariation = variationService.setCode(oldVariation, files)
