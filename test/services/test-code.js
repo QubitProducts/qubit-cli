@@ -15,6 +15,7 @@ describe('codeService', function () {
   beforeEach(() => {
     propertyId = 123
     experienceId = 456
+    iterationId = 101112
     experience = _.cloneDeep(experienceFixture)
     iteration = _.cloneDeep(experienceFixture.recent_iterations.draft)
     variations = _.cloneDeep(variationsFixture)
@@ -24,7 +25,7 @@ describe('codeService', function () {
     sandbox.stub(experienceService, 'get').returns(Promise.resolve(experience))
     sandbox.stub(experienceService, 'set').returns(Promise.resolve())
     sandbox.stub(iterationService, 'get').returns(Promise.resolve(iteration))
-    sandbox.stub(iterationService, 'set').returns(Promise.resolve())
+    sandbox.stub(iterationService, 'set').returns(Promise.resolve(iteration))
     sandbox.stub(variationService, 'getAll').returns(Promise.resolve(variations))
     sandbox.stub(variationService, 'set').returns(Promise.resolve())
   })

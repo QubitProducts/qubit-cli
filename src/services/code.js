@@ -30,16 +30,17 @@ async function set (propertyId, experienceId, files) {
     ? oldExperience
     : await experienceService.set(experienceId, pkgCode.experience)
 
-  const iteration = _.isEqual(oldIteration, pkgCode.iteration)
+  const iteration = eql(oldIteration, pkgCode.iteration)
     ? oldIteration
     : await iterationService.set(iterationId, pkgCode.iteration)
 
-  // Updating iteration.template_data updates variation.template_data
-  // so we need to get the most up to date version of variations
   oldVariations = await variationService.getAll(iterationId)
   const variations = await Promise.all(oldVariations.map(async oldVariation => {
     if (oldVariation.is_control) return oldVariation
-    const newVariation = variationService.setCode(oldVariation, files)
+    let newVariation = variationService.setCode(oldVariation, files)
+    // If we update iteration template_data we want to update variation too
+    // (this is while we move iteration.template_data column to variations table)
+    if (iteration.template_data) newVariation = { ...newVariation, template_data: iteration.template_data }
     return eql(oldVariation, newVariation)
       ? oldVariation
       : variationService.set(oldVariation.id, newVariation)
