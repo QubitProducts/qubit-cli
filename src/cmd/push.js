@@ -6,6 +6,7 @@ const updatePkg = require('../lib/update-pkg')
 const readFiles = require('../lib/read-files')
 const commonCodeWarning = require('../lib/common-code-warning')
 const cssCodeWarning = require('../lib/css-code-warning')
+const ensureTemplateData = require('../lib/ensure-template-data')
 const codeService = require('../services/code')
 const down = require('../services/down')
 const getDiff = require('../lib/get-diff')
@@ -19,6 +20,7 @@ module.exports = async function push (options) {
 
   await commonCodeWarning(CWD)
   await cssCodeWarning(CWD)
+  await ensureTemplateData(CWD)
 
   if (!options.force) {
     let { files, experience } = await down(experienceId)
