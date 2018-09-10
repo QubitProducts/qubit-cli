@@ -7,7 +7,8 @@ const resolve = require('sync-p/resolve')
 const uv = require('./uv')()
 const jolt = require('./jolt')()
 
-module.exports = function transform (pkg, key) {
+module.exports = function transform (modules, key) {
+  const pkg = modules.pkg
   const variationOpts = _.get(pkg, `meta.variations.${key}`) || {}
   const meta = Object.assign({}, pkg.meta, variationOpts)
   const visitor = Object.assign({}, defaultVisitor(), _.get(pkg, 'meta.visitor'))
@@ -32,7 +33,7 @@ module.exports = function transform (pkg, key) {
     include: getInclude(),
     exclude: _.get(pkg, `meta.exclude`),
     api: {
-      data: meta.templateData,
+      data: modules.templateData,
       emitCustomGoal: (id, options) => log.info('Custom goal emitted', { id, options }),
       solution: meta.solutionOptions,
       state: {

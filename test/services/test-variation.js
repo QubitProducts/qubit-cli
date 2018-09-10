@@ -54,6 +54,7 @@ describe('variationService', function () {
     it('should build a files object from a variation', () => {
       expect(variationService.getCode(variations[1])).to.eql({
         'variation-4.js': 'function () { console.log("variation 1") }',
+        'variation-4.json': '{\n  "a": 4\n}',
         'variation-4.less': 'a {\n color: purple; \n}'
       })
     })

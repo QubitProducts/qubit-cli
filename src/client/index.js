@@ -3,7 +3,7 @@ const Promise = require('sync-p/extra')
 const engine = require('./engine')
 const previewSettings = require('./preview-settings')
 const log = require('./log')
-const options = require('./options')
+const getOptions = require('./options')
 const onSecondPageView = require('./pageview')
 const redirectTo = require('./redirect-to')
 const applyStyles = require('./styles')
@@ -20,6 +20,7 @@ function loadModules () {
   return {
     pkg: require('package.json'),
     variation: require(__VARIATION__),
+    templateData: require(__VARIATION__ + '.json'),
     styles: require(__VARIATION__ + __VARIATION_STYLE_EXTENSION__),
     global: require('global'),
     triggers: require('triggers')
@@ -30,13 +31,13 @@ function init (bypassTriggers) {
   let variationSpent, triggersSpent, isActive, runAcrossViews
   let modules = loadModules()
   const cleanup = []
-  const opts = options(modules.pkg, __VARIATION__)
+  const opts = getOptions(modules, __VARIATION__)
 
   previewSettings(opts.api.meta, opts.include, opts.exclude)
   engine(opts.api, globalFn, triggerFn, variationFn, bypassTriggers)
 
   function triggerFn (opts, cb) {
-    let options = withLog(opts, 'triggers')
+    const options = withLog(opts, 'triggers')
     let deferred = Promise.defer()
     let api
     try {

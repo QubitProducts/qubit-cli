@@ -42,20 +42,26 @@ describe('codeService', function () {
   })
 
   describe('set', function () {
-    it('should update experience models correctly', async function () {
+    beforeEach(function () {
       files = _.mapValues(files, (val, key) => {
+        if (key.includes('.json')) val = JSON.parse(val)
         if (key === 'fields.json') {
-          const schema = JSON.parse(val)
-          schema.groups[0].title += 1
-          return JSON.stringify(schema, null, 2)
+          val.groups[0].title += 1
+          return JSON.stringify(val, null, 2)
         }
         if (key === 'package.json') {
-          const pkg = JSON.parse(val)
-          _.set(pkg, 'meta.name', pkg.meta.name + 1)
-          return JSON.stringify(pkg, null, 2)
+          _.set(val, 'meta.name', val.meta.name + 1)
+          return JSON.stringify(val, null, 2)
+        }
+        if (key.includes('variation') && key.includes('.json')) {
+          _.set(val, 'data', true)
+          return JSON.stringify(val, null, 2)
         }
         return val + 1
       })
+    })
+
+    it('should update experience models correctly', async function () {
       await codeService.set(propertyId, experienceId, files)
       let [updatedExperienceId, updatedExperience] = experienceService.set.getCall(0).args
 
@@ -71,20 +77,6 @@ describe('codeService', function () {
     })
 
     it('should update iteration models correctly', async function () {
-      files = _.mapValues(files, (val, key) => {
-        if (key === 'fields.json') {
-          const schema = JSON.parse(val)
-          schema.groups[0].title += 1
-          return JSON.stringify(schema, null, 2)
-        }
-        if (key === 'package.json') {
-          const pkg = JSON.parse(val)
-          _.set(pkg, 'meta.name', pkg.meta.name + 1)
-          return JSON.stringify(pkg, null, 2)
-        }
-        return val + 1
-      })
-
       await codeService.set(propertyId, experienceId, files)
 
       let expectedIteration = {
@@ -101,21 +93,8 @@ describe('codeService', function () {
     })
 
     it('should update variation models correctly', async function () {
-      files = _.mapValues(files, (val, key) => {
-        if (key === 'fields.json') {
-          const schema = JSON.parse(val)
-          schema.groups[0].title += 1
-          return JSON.stringify(schema, null, 2)
-        }
-        if (key === 'package.json') {
-          const pkg = JSON.parse(val)
-          _.set(pkg, 'meta.name', pkg.meta.name + 1)
-          return JSON.stringify(pkg, null, 2)
-        }
-        return val + 1
-      })
-
       await codeService.set(propertyId, experienceId, files)
+
       expect(variationService.set.callCount).to.eql(2)
       _.each(variations, (variation, i) => {
         if (variation.is_control) return
@@ -124,7 +103,11 @@ describe('codeService', function () {
           {
             ...variation,
             execution_code: variation.execution_code + 1,
-            custom_styles: variation.custom_styles + 1
+            custom_styles: variation.custom_styles + 1,
+            template_data: {
+              ...variation.template_data,
+              data: true
+            }
           }
         ])
       })

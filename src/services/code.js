@@ -40,6 +40,7 @@ async function set (propertyId, experienceId, files) {
     let newVariation = variationService.setCode(oldVariation, files)
     // If we update iteration template_data we want to update variation too
     // (this is while we move iteration.template_data column to variations table)
+    // todo: delete this line when we want to be able to push up changes to iteration data
     if (iteration.template_data) newVariation = { ...newVariation, template_data: iteration.template_data }
     return eql(oldVariation, newVariation)
       ? oldVariation
