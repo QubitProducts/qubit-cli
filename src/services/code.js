@@ -18,7 +18,6 @@ async function set (propertyId, experienceId, files) {
   const oldExperience = await experienceService.get(experienceId)
   const iterationId = oldExperience.last_iteration_id
   const oldIteration = await iterationService.get(iterationId)
-  let oldVariations = await variationService.getAll(iterationId)
 
   const pkg = (files['package.json'] && JSON.parse(files['package.json'])) || {}
   const user = await getUser()
@@ -34,14 +33,10 @@ async function set (propertyId, experienceId, files) {
     ? oldIteration
     : await iterationService.set(iterationId, pkgCode.iteration)
 
-  oldVariations = await variationService.getAll(iterationId)
+  const oldVariations = await variationService.getAll(iterationId)
   const variations = await Promise.all(oldVariations.map(async oldVariation => {
     if (oldVariation.is_control) return oldVariation
-    let newVariation = variationService.setCode(oldVariation, files)
-    // If we update iteration template_data we want to update variation too
-    // (this is while we move iteration.template_data column to variations table)
-    // todo: delete this line when we want to be able to push up changes to template data
-    if (iteration.template_data) newVariation = { ...newVariation, template_data: iteration.template_data }
+    const newVariation = variationService.setCode(oldVariation, files)
     return eql(oldVariation, newVariation)
       ? oldVariation
       : variationService.set(oldVariation.id, newVariation)
