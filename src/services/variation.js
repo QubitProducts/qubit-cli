@@ -1,9 +1,10 @@
 const fetch = require('../lib/fetch')
-const hasNoCode = require('../lib/hasNoCode')
+const hasNoCode = require('../lib/has-no-code')
 const getFilename = require('../lib/variation-filename')
 const {
   execution_code: EXECUTION_CODE,
-  custom_styles: CUSTOM_STYLES
+  custom_styles: CUSTOM_STYLES,
+  template_data: TEMPLATE_DATA
 } = require('@qubit/experience-defaults').custom
 const iterationVariationsUrl = iterationId => `/api/iterations/${iterationId}/variations`
 const variationsUrl = variationId => `/api/variations/${variationId}`
@@ -33,9 +34,11 @@ function remove (propertyId, experienceId, variationId) {
 function getCode (variation) {
   const code = {}
   const filename = getFilename(variation)
+  const templateData = variation.template_data && JSON.stringify(variation.template_data, null, 2)
   // Automatically update old default js to new default js
   if (variation.execution_code === 'function (options) {}') delete variation.execution_code
   code[`${filename}.js`] = hasNoCode(variation.execution_code) ? EXECUTION_CODE : variation.execution_code
+  code[`${filename}.json`] = hasNoCode(templateData) ? TEMPLATE_DATA : templateData
   code[`${filename}${STYLE_EXTENSION}`] = hasNoCode(variation.custom_styles) ? CUSTOM_STYLES : variation.custom_styles
   return code
 }
@@ -44,6 +47,7 @@ function setCode (variation, files) {
   const filename = getFilename(variation)
   return Object.assign({}, variation, {
     execution_code: hasNoCode(files[`${filename}.js`]) ? EXECUTION_CODE : files[`${filename}.js`],
+    template_data: JSON.parse(hasNoCode(files[`${filename}.json`]) ? TEMPLATE_DATA : files[`${filename}.json`]),
     custom_styles: hasNoCode(files[`${filename}${STYLE_EXTENSION}`]) ? CUSTOM_STYLES : files[`${filename}${STYLE_EXTENSION}`]
   })
 }

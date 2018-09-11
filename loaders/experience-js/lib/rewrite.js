@@ -1,5 +1,5 @@
 const path = require('path')
-const hasNoCode = require('../../../src/lib/hasNoCode')
+const hasNoCode = require('../../../src/lib/has-no-code')
 const {
   execution_code: EXECUTION_CODE,
   triggers: TRIGGERS

@@ -1,6 +1,6 @@
 const _ = require('lodash')
 const fetch = require('../lib/fetch')
-const hasNoCode = require('../lib/hasNoCode')
+const hasNoCode = require('../lib/has-no-code')
 const {
   global_code: GLOBAL_CODE,
   common_code: COMMON_CODE,

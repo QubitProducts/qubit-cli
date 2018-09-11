@@ -11,5 +11,7 @@ module.exports['utils.js'] = experience.recent_iterations.draft.common_code
 module.exports['triggers.js'] = experience.recent_iterations.draft.activation_rules[0].value
 module.exports[`variation-${variations[1].master_id}.less`] = variations[1].custom_styles
 module.exports[`variation-${variations[1].master_id}.js`] = variations[1].execution_code
+module.exports[`variation-${variations[1].master_id}.json`] = JSON.stringify(variations[1].template_data, null, 2)
 module.exports[`variation-${variations[2].master_id}.less`] = variations[2].custom_styles
 module.exports[`variation-${variations[2].master_id}.js`] = variations[2].execution_code
+module.exports[`variation-${variations[2].master_id}.json`] = JSON.stringify(variations[2].template_data, null, 2)

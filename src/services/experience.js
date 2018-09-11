@@ -2,7 +2,7 @@ const _ = require('lodash')
 const fetch = require('../lib/fetch')
 const withMetrics = require('../lib/with-metrics')
 const getUser = require('../lib/get-user')
-const { execution_code: EXECUTION_CODE } = require('@qubit/experience-defaults').custom
+const { execution_code: EXECUTION_CODE, template_data: TEMPLATE_DATA } = require('@qubit/experience-defaults').custom
 const DEFAULT_EXPERIENCE = {
   name: 'Created by Qubit-CLI',
   propertyId: null,
@@ -11,7 +11,8 @@ const DEFAULT_EXPERIENCE = {
     draft: {
       variations: [{
         advanced_mode: 1,
-        execution_code: EXECUTION_CODE
+        execution_code: EXECUTION_CODE,
+        template_data: TEMPLATE_DATA
       }]
     }
   },

@@ -11,6 +11,7 @@ const log = require('../../lib/log')
 const createApp = require('../app')
 const commonCodeWarning = require('../../lib/common-code-warning')
 const cssCodeWarning = require('../../lib/css-code-warning')
+const ensureTemplateData = require('../../lib/ensure-template-data')
 const cors = require('cors')
 const { STYLE_EXTENSION } = require('../../constants')
 let CWD = process.cwd()
@@ -27,6 +28,7 @@ module.exports = async function serve (options) {
 
   await commonCodeWarning(CWD)
   await cssCodeWarning(CWD)
+  await ensureTemplateData(CWD)
 
   if (!options.variationFileName) {
     options.variationFileName = await pickVariation(await fs.readdir(CWD))
@@ -81,7 +83,8 @@ function createWebpackConfig (options) {
   const plugins = webpackConf.plugins.slice(0)
   plugins.push(new webpack.DefinePlugin({
     __VARIATION__: `'${options.variationFileName}'`,
-    __VARIATION_STYLE_EXTENSION__: `'${STYLE_EXTENSION}'`
+    __VARIATION_STYLE_EXTENSION__: `'${STYLE_EXTENSION}'`,
+    __VARIATION_DATA_EXTENSION__: `'${STYLE_EXTENSION}'`
   }))
   const entry = webpackConf.entry.slice(0)
   return Object.assign({}, webpackConf, {

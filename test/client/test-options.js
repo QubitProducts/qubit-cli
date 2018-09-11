@@ -10,9 +10,12 @@ const METHODS = ['onEnrichment', 'onceEnrichment', 'onSuccess', 'onceSuccess']
 const API = ['on', 'once', 'onEventSent', 'onceEventSent']
 
 describe('transform', function () {
-  let pkg
+  let modules
   beforeEach(function () {
-    pkg = _.cloneDeep(pkgFixture)
+    modules = {
+      pkg: _.cloneDeep(pkgFixture),
+      templateData: { a: 1 }
+    }
     global.window = {
       location: {
         host: 'cookieDomain'
@@ -21,18 +24,22 @@ describe('transform', function () {
   })
 
   it('exports an object with a state attribute', function () {
-    expect(transform(pkg, variationName).api).to.have.property('state')
+    expect(transform(modules, variationName).api).to.have.property('state')
   })
 
   it('exports an object with a meta attribute', function () {
-    expect(transform(pkg, variationName).api).to.have.property('meta')
+    expect(transform(modules, variationName).api).to.have.property('meta')
+  })
+
+  it('gets enriched with a data attribute', function () {
+    expect(transform(modules, variationName).api.data).to.eql({ a: 1 })
   })
 
   describe('state object', function () {
     var state
 
     beforeEach(function () {
-      state = transform(pkg, variationName).api.state
+      state = transform(modules, variationName).api.state
     })
 
     it('has a get and set function that stores data against a key', function () {
@@ -52,7 +59,7 @@ describe('transform', function () {
 
     beforeEach(function () {
       clock = sinon.useFakeTimers()
-      uv = transform(pkg, variationName).api.uv
+      uv = transform(modules, variationName).api.uv
     })
 
     afterEach(() => {
@@ -127,7 +134,7 @@ describe('transform', function () {
   describe('meta object', function () {
     var meta
     beforeEach(function () {
-      meta = transform(pkg, variationName).api.meta
+      meta = transform(modules, variationName).api.meta
     })
 
     it('gets enriched with a cookieDomain attribute', function () {
