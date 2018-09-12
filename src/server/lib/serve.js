@@ -11,11 +11,13 @@ const log = require('../../lib/log')
 const createApp = require('../app')
 const commonCodeWarning = require('../../lib/common-code-warning')
 const cssCodeWarning = require('../../lib/css-code-warning')
+const installQubitDeps = require('../../lib/install-qubit-deps')
 const cors = require('cors')
 const { STYLE_EXTENSION } = require('../../constants')
 let CWD = process.cwd()
 
 module.exports = async function serve (options) {
+  await installQubitDeps()
   const app = await createApp()
 
   app.use(cors())

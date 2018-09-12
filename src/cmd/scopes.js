@@ -1,10 +1,10 @@
 const log = require('../lib/log')
 const qubitrc = require('../lib/qubitrc')
-const login = require('../server/lib/login')
+const { getRegistryToken } = require('../lib/get-delegate-token')
 const { REGISTRY_SCOPES } = require('../constants')
 
 module.exports = async function scopesCmd (id) {
-  await login(false)
+  await getRegistryToken()
   let scopes = await qubitrc.get(REGISTRY_SCOPES)
   log.info(`You have access to the following scopes: ${scopes.join(', ').replace(/([^,]+),([^,]+)$/, '$1 and$2')}`)
 }

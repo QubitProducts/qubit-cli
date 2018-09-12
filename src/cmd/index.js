@@ -2,10 +2,8 @@ const program = require('commander')
 const chalk = require('chalk')
 const hasYarn = require('has-yarn')
 const log = require('../lib/log')
-const installQubitDeps = require('../lib/install-qubit-deps')
 
 module.exports = async function run (pkg) {
-  await installQubitDeps()
   program
     .command('login')
     .description('login to the qubit platform')
@@ -221,6 +219,16 @@ module.exports = async function run (pkg) {
     .command('extension')
     .description('open folder containing the Qubit-CLI chrome extension, drag into chrome extensions pane to install')
     .action(cmd('extension'))
+
+  program
+    .command('token')
+    .description('generate an auth token, e.g. for use with CI')
+    .action(cmd('token'))
+
+  program
+    .command('revoke')
+    .description('revoke an auth token')
+    .action(cmd('revoke'))
 
   program
     .usage(`[options] <cmd>`)

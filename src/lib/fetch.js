@@ -1,9 +1,8 @@
 const config = require('../../config')
 const axios = require('axios')
 const log = require('./log')
-const login = require('../server/lib/login')
 const getUpdate = require('./getUpdate')
-const { getAppToken } = require('./get-token')
+const { getAppToken } = require('./get-delegate-token')
 
 module.exports = {
   get: fetchWithAuth('GET'),
@@ -23,8 +22,8 @@ function fetchWithAuth (method) {
     const url = config.services.app + path
     log.debug(`${method} ${url}`)
     let headers, appToken
+    appToken = await getAppToken()
     try {
-      appToken = await getAppToken(() => login())
       headers = { ...options.headers || {}, 'Authorization': `Bearer ${appToken}` }
       return await axios(url, { method, data, headers }).then(handler, errorHandler)
     } catch (err) {
