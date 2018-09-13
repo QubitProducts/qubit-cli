@@ -15,7 +15,7 @@ async function getDelegateToken (tokenOpts, targetClientId) {
     client_id: config.auth.cliClientId,
     grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
     api_type: 'auth0',
-    scope: 'openid',
+    scope: 'openid profile offline_access',
     ...tokenOpts
   })
   return response.data.id_token
