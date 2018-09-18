@@ -37,7 +37,11 @@ async function create (experience) {
   return fetch.post(`/api/p/${experience.propertyId}/experiences`, { experiment })
 }
 
-function publish (propertyId, experienceId) {
+async function publish (propertyId, experienceId) {
+  const experience = await get(experienceId)
+  if (experience.is_template) {
+    return fetch.post(`/api/templates/${experienceId}/publish`)
+  }
   return fetch.post(`/api/p/${propertyId}/experiments/${experienceId}/publish`)
 }
 
