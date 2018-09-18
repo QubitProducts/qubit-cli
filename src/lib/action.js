@@ -5,7 +5,7 @@ const experienceStatus = require('../lib/experience-status')
 
 module.exports = async function action (propertyId, experienceId, action) {
   try {
-    const experience = await get(experienceId)
+    const experience = await experienceService.get(experienceId)
     if (experience.is_template) {
       if (action === 'publish') {
         await templateService.publish(experienceId)

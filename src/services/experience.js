@@ -37,7 +37,7 @@ async function create (experience) {
   return fetch.post(`/api/p/${experience.propertyId}/experiences`, { experiment })
 }
 
-async function publish (propertyId, experienceId) {
+function publish (propertyId, experienceId) {
   return fetch.post(`/api/p/${propertyId}/experiments/${experienceId}/publish`)
 }
 

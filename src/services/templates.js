@@ -21,7 +21,7 @@ function publish (templateId) {
 }
 
 async function status (templateId) {
-  const { status } = await fetch.post(`/api/templates/${templateId}/status`)
+  const { status } = await fetch.get(`/api/templates/${templateId}/status`)
   return status
 }
 
