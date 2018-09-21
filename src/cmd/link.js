@@ -1,5 +1,4 @@
 const _ = require('lodash')
-const ncp = require('copy-paste')
 const getPkg = require('../lib/get-pkg')
 const log = require('../lib/log')
 const getPreviewLinks = require('../lib/preview-links')
@@ -27,7 +26,6 @@ module.exports = async function links (page, options) {
 }
 
 function link (url) {
-  ncp.copy(url, () => log.info(`Copied to clipboard`))
   log.info(url)
 }
 

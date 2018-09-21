@@ -223,6 +223,16 @@ module.exports = async function run (pkg) {
     .action(cmd('extension'))
 
   program
+    .command('token')
+    .description('generate an auth token, e.g. for use with CI')
+    .action(cmd('token'))
+
+  program
+    .command('revoke')
+    .description('revoke an auth token')
+    .action(cmd('revoke'))
+
+  program
     .usage(`[options] <cmd>`)
     .version(pkg.version)
     .arguments('[variationFilename]')
