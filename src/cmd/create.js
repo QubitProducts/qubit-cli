@@ -6,7 +6,7 @@ const formatTemplates = require('../lib/format-templates')
 const log = require('../lib/log')
 const CWD = process.cwd()
 const { getPropertyId } = require('../lib/get-property-and-experience-ids')
-const { getTemplates } = require('../lib/get-templates')
+const { getPublishedTemplates } = require('../lib/get-templates')
 
 module.exports = async function create (pid) {
   const propertyId = await getPropertyId(pid)
@@ -14,7 +14,7 @@ module.exports = async function create (pid) {
     log.info(`PropertyId not found, are you in an experience folder?`)
     return
   }
-  const templates = await getTemplates(propertyId)
+  const templates = await getPublishedTemplates(propertyId)
   let selectedTemplate = null
 
   if (templates.length) {
