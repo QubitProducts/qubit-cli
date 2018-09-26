@@ -127,7 +127,8 @@ module.exports = async function run (pkg) {
 
   program
     .command('templatize [url] [propertyId] [experienceId]')
-    .description(`
+    .description('templatize an experience')
+    .usage(chalk.gray(`
       Templatize from url:
       qubit templatize http://app.qubit.com/p/1010/experiences/10101/
 
@@ -136,7 +137,7 @@ module.exports = async function run (pkg) {
 
       Templatize using autocomplete or by navigating to your experience in the browser:
       qubit templatize
-    `)
+    `))
     .action(cmd('templatize'))
 
   program
@@ -169,18 +170,18 @@ module.exports = async function run (pkg) {
   program
     .command('goals <cmd>')
     .usage(chalk.grey(`
+      List goals:
+      qubit goals list
 
-  List goals:
-  qubit goals list
+      Add a goal:
+      qubit goals add
 
-  Add a goal:
-  qubit goals add
+      Remove a goal:
+      qubit goals remove
 
-  Remove a goal:
-  qubit goals remove
-
-  Change the primary goal of your experience:
-  qubit goals set-primary`))
+      Change the primary goal of your experience:
+      qubit goals set-primary`)
+    )
     .description('list or edit experience goals')
     .action(cmd('goals'))
 
