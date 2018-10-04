@@ -34,6 +34,7 @@ module.exports = function transform (pkg, key) {
     api: {
       data: meta.templateData,
       emitCustomGoal: (id, options) => log.info('Custom goal emitted', { id, options }),
+      emitMetric: (type, productId, metadata) => log.info(`Emitting metric ${type}`, { productId, metadata }),
       solution: meta.solutionOptions,
       state: {
         get: get,
