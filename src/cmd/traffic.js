@@ -14,19 +14,22 @@ module.exports = async function traffic (options) {
   const {experienceId} = pkg.meta
   const { last_iteration_id: iterationId } = await experienceService.get(experienceId)
   const iteration = await iterationService.get(iterationId)
-  const currentControlDecimal = iteration.control_size
-  const currentControlPercentage = getControlPercentage(currentControlDecimal)
-
-  if (options.view) return log.info(`Current control size is ${currentControlPercentage}`)
-  log.info('Custom traffic splits  can be set from within the Qubit platform on the settings page of this experience.')
-  const newControlDecimal = await input.select(formatLog(`   Select control size (current ${currentControlPercentage.trim()})`), validControlSizes, { 'default': currentControlDecimal })
-  const updatedIteration = await iterationService.set(iterationId, { control_size: newControlDecimal })
-
-  if (updatedIteration) {
-    log.info('Traffic split updated')
-    await updatePkg(experienceId)
+  if (iteration.custom_traffic_split) {
+    log.warn('This experience has a custom traffic split. At present custom traffic splits can be only be updated from within the Qubit platform on the settings page of this experience.')
   } else {
-    log.warn('Failed to update traffic split')
+    const currentControlDecimal = iteration.control_size
+    const currentControlPercentage = getControlPercentage(currentControlDecimal)
+
+    if (options.view) return log.info(`Current control size is ${currentControlPercentage}`)
+    const newControlDecimal = await input.select(formatLog(`   Select control size (current ${currentControlPercentage.trim()})`), validControlSizes, { 'default': currentControlDecimal })
+    const updatedIteration = await iterationService.set(iterationId, { control_size: newControlDecimal })
+
+    if (updatedIteration) {
+      log.info('Traffic split updated')
+      await updatePkg(experienceId)
+    } else {
+      log.warn('Failed to update traffic split')
+    }
   }
 }
 
