@@ -18,7 +18,7 @@ module.exports = async function traffic (options) {
   const currentControlPercentage = getControlPercentage(currentControlDecimal)
 
   if (options.view) return log.info(`Current control size is ${currentControlPercentage}`)
-
+  log.info('Custom traffic splits  can be set from within the Qubit platform on the settings page of this experience.')
   const newControlDecimal = await input.select(formatLog(`   Select control size (current ${currentControlPercentage.trim()})`), validControlSizes, { 'default': currentControlDecimal })
   const updatedIteration = await iterationService.set(iterationId, { control_size: newControlDecimal })
 
