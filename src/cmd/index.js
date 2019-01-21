@@ -146,6 +146,11 @@ module.exports = async function run (pkg) {
     .action(cmd('pull'))
 
   program
+    .command('iterations')
+    .description(`pull a previous version of your experience into your local folder`)
+    .action(cmd('iterations'))
+
+  program
     .command('push')
     .option('--force', 'force push local changes even though there have been remote changes')
     .description('push local changes to the platform')
@@ -254,5 +259,8 @@ module.exports = async function run (pkg) {
 }
 
 function cmd (command) {
-  return (...args) => require('./' + command)(...args).catch(err => log.error(err))
+  return (...args) => {
+    log.trace(`running ${command}`)
+    return require('./' + command)(...args).catch(err => log.error(err))
+  }
 }
