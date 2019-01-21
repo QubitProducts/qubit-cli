@@ -1,6 +1,7 @@
 const _ = require('lodash')
 const propertyService = require('../services/property')
 const experienceService = require('../services/experience')
+const iterationService = require('../services/iteration')
 const log = require('./log')
 const formatLog = require('./format-log')
 const parseUrl = require('./parse-url')
@@ -33,6 +34,15 @@ async function experience (propertyId) {
     value: 'id'
   })
   return createAutoComplete(msg('Select an experience (start typing to filter the list)'), suggestions).response()
+}
+
+async function iteration (experienceId) {
+  const suggestions = await getAutoCompleteMap({
+    arr: await iterationService.getAll(experienceId),
+    title: 'name',
+    value: 'id'
+  })
+  return createAutoComplete(msg('Select an iteration (start typing to filter the list)'), suggestions).response()
 }
 
 async function both () {
@@ -107,4 +117,4 @@ function msg (str) {
   return `\n${formatLog(str, 'warn')}\n`
 }
 
-module.exports = { property, experience, both }
+module.exports = { property, experience, iteration, both }
