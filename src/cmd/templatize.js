@@ -1,21 +1,14 @@
 const input = require('../lib/input')
+const getPkg = require('../lib/get-pkg')
 const formatLog = require('../lib/format-log')
 const log = require('../lib/log')
-const { getPropertyAndExperienceIds } = require('../lib/get-property-and-experience-ids')
+const { getPropertyAndExperienceIds } = require('../lib/get-resource-ids')
 const templatizeExperience = require('../lib/templatize')
 const CWD = process.cwd()
 
-module.exports = async function templatize (urlOrPid, pidOrEid) {
-  const { propertyId, experienceId } = await getPropertyAndExperienceIds(urlOrPid, pidOrEid) || {}
-  if (!propertyId || !experienceId) {
-    log.info(`PropertyId not found, are you in an experience folder?`)
-    return
-  }
-
-  if (!experienceId) {
-    log.info(`Experience id not entered or not found, are you in an experience folder?`)
-    return
-  }
+module.exports = async function templatize (propertyId, experienceId) {
+  const pkg = await getPkg()
+  ;({ propertyId, experienceId } = await getPropertyAndExperienceIds(propertyId, experienceId, pkg) || {})
 
   const template = {}
   template.name = await input.text(formatLog('   What would you like to call your template?'), {

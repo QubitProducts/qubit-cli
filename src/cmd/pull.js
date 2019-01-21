@@ -1,26 +1,11 @@
-const _ = require('lodash')
-const {getPropertyAndExperienceIds} = require('../lib/get-property-and-experience-ids')
 const getPkg = require('../lib/get-pkg')
-const log = require('../lib/log')
 const pullExperience = require('../lib/pull-experience')
+const { getPropertyAndExperienceIds } = require('../lib/get-resource-ids')
 const CWD = process.cwd()
 
-module.exports = async function pull (urlOrPidOrName, pidOrEid) {
-  // Pulling from an id-pair?
-  let propertyId, experienceId
+module.exports = async function pull (propertyId, experienceId) {
   const pkg = await getPkg()
-  if (pkg.meta) {
-    // Get ids from package.json?
-    ;({propertyId, experienceId} = _.get(pkg, 'meta') || {})
-  } else {
-    // Get ids from the user?
-    ;({propertyId, experienceId} = await getPropertyAndExperienceIds(urlOrPidOrName, pidOrEid) || {})
-  }
+  ;({ propertyId, experienceId } = await getPropertyAndExperienceIds(propertyId, experienceId, pkg) || {})
 
-  // Do or abort
-  if (propertyId && experienceId) {
-    await pullExperience(CWD, propertyId, experienceId)
-  } else {
-    log.warn(`PropertyId not found, are you in an experience folder?`)
-  }
+  return pullExperience(CWD, propertyId, experienceId)
 }
