@@ -12,12 +12,10 @@ const iterationsUrl = iterationId => `/api/iterations/${iterationId}`
 const experienceIterationsUrl = experienceId => `/api/experiences/${experienceId}/iterations`
 
 function get (iterationId) {
-  debugger;
   return fetch.get(iterationsUrl(iterationId))
 }
 
 function getAll (experienceId) {
-  debugger;
   return fetch.get(experienceIterationsUrl(experienceId))
 }
 
