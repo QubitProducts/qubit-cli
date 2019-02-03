@@ -151,6 +151,11 @@ module.exports = async function run (pkg) {
     .action(cmd('iterations'))
 
   program
+    .command('changes')
+    .description('Check for any unpublished changes in the remote')
+    .action(cmd('changes'))
+
+  program
     .command('push')
     .option('--force', 'force push local changes even though there have been remote changes')
     .description('push local changes to the platform')

@@ -6,9 +6,9 @@ const pkgService = require('./pkg')
 const withMetrics = require('../lib/with-metrics')
 const getUser = require('../lib/get-user')
 
-async function get (propertyId, experienceId, isTemplate) {
+async function get (propertyId, experienceId, isTemplate, namedIterationId) {
   const experience = await experienceService.get(experienceId)
-  const iterationId = experience.last_iteration_id
+  const iterationId = namedIterationId || experience.last_iteration_id
   const iteration = await iterationService.get(iterationId)
   const variations = await variationService.getAll(iterationId)
   return getCode(experience, iteration, variations, isTemplate)
