@@ -8,7 +8,7 @@ const log = require('./log')
 module.exports = async function createTemplate (CWD, propertyId, name, description) {
   log.info('Creating template')
   const template = await templatesService.create(propertyId, { name, description })
-  const files = await codeService.get(propertyId, template.id, true)
+  const files = await codeService.get(propertyId, template.id)
   const filename = experienceFilename(template)
   const dest = path.join(CWD, filename)
 

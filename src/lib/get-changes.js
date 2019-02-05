@@ -10,8 +10,8 @@ module.exports = async function checkChanges (cwd, propertyId, experienceId) {
   })
 
   if (unpublishedIterationId && lastPublishedIterationId) {
-    const lastUnpublishedCode = await codeService.get(propertyId, experienceId, false, iterations[0].id)
-    const lastPublishedCode = await codeService.get(propertyId, experienceId, false, iterations[1].id)
+    const lastUnpublishedCode = await codeService.get(propertyId, experienceId, iterations[0].id)
+    const lastPublishedCode = await codeService.get(propertyId, experienceId, iterations[1].id)
     return jsDiffCheck(lastUnpublishedCode, lastPublishedCode)
   }
 

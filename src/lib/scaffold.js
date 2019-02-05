@@ -36,7 +36,6 @@ module.exports = async function scaffold (dest, files, options) {
     const value = files[name]
     let result = await shouldWrite(dest, name, value, shouldConfirm, shouldOverwrite)
     if (result) {
-      //  isTemplate
       if (log) log.info(`Writing to local ${name} file...`)
       return fs.outputFile(path.join(dest, name), value)
     }
