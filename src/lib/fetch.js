@@ -1,7 +1,7 @@
 const config = require('../../config')
 const axios = require('axios')
 const log = require('./log')
-const getUpdate = require('./getUpdate')
+const getUpdate = require('./get-update')
 const { getAppToken } = require('./get-delegate-token')
 
 module.exports = {

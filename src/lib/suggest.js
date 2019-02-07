@@ -1,6 +1,7 @@
 const _ = require('lodash')
 const propertyService = require('../services/property')
 const experienceService = require('../services/experience')
+const iterationService = require('../services/iteration')
 const log = require('./log')
 const formatLog = require('./format-log')
 const parseUrl = require('./parse-url')
@@ -33,6 +34,15 @@ async function experience (propertyId) {
     value: 'id'
   })
   return createAutoComplete(msg('Select an experience (start typing to filter the list)'), suggestions).response()
+}
+
+async function iteration (experienceId) {
+  const suggestions = await getAutoCompleteMap({
+    arr: formatIterationNames(await iterationService.getAll(experienceId)),
+    title: 'listName',
+    value: 'id'
+  })
+  return createAutoComplete(msg('Select an iteration (start typing to filter the list)'), suggestions).response()
 }
 
 async function both () {
@@ -107,4 +117,16 @@ function msg (str) {
   return `\n${formatLog(str, 'warn')}\n`
 }
 
-module.exports = { property, experience, both }
+function formatIterationNames (iterations) {
+  iterations.forEach(i => {
+    i.listName = `${i.name} | ${i.state}`
+  })
+  let [draft, published] = _.take(iterations, 2)
+  draft.listName = `${draft.listName} (Draft)`
+  if (published) {
+    published.listName = `${published.listName} (Current)`
+  }
+  return iterations
+}
+
+module.exports = { property, experience, iteration, both }

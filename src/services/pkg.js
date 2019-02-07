@@ -1,7 +1,8 @@
 const _ = require('lodash')
 const {getFilename} = require('./variation')
 
-function getCode (experience, iteration, variations, isTemplate) {
+function getCode (experience, iteration, variations) {
+  const isTemplate = Boolean(experience.is_template)
   const type = isTemplate ? 'template' : 'experience'
   const files = {}
   const experienceMeta = experience.meta ? JSON.parse(experience.meta) : {}
@@ -34,7 +35,7 @@ function getCode (experience, iteration, variations, isTemplate) {
       solutionOptions: iteration.solution_options,
       visitor: {},
       isPreview: true,
-      isTemplate: !!experience.is_template,
+      isTemplate: isTemplate,
       include: [],
       exclude: [],
       templates: _.get(experienceMeta, 'cli.templates') || []

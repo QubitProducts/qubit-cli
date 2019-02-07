@@ -9,9 +9,14 @@ const {
 } = require('@qubit/experience-defaults').custom
 
 const iterationsUrl = iterationId => `/api/iterations/${iterationId}`
+const experienceIterationsUrl = experienceId => `/api/experiences/${experienceId}/iterations`
 
 function get (iterationId) {
   return fetch.get(iterationsUrl(iterationId))
+}
+
+function getAll (experienceId) {
+  return fetch.get(experienceIterationsUrl(experienceId))
 }
 
 function set (iterationId, iteration) {
@@ -46,4 +51,4 @@ function setCode (iteration, files) {
   }
 }
 
-module.exports = { get, set, getCode, setCode }
+module.exports = { get, set, getAll, getCode, setCode }

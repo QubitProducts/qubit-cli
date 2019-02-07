@@ -12,7 +12,7 @@ const getDiff = require('../lib/get-diff')
 const logDiff = require('../lib/log-diff')
 let CWD = process.cwd()
 
-module.exports = async function push (options) {
+module.exports = async function push (options = {}) {
   const pkg = await getPkg()
   const { propertyId, experienceId } = (pkg.meta || {})
   if (!propertyId || !experienceId) return log.info('Nothing to push')

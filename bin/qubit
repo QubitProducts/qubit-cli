@@ -2,7 +2,7 @@
 var pkg = require('../package.json')
 require('../src/lib/version-check')(pkg)
 
-var getUpdate = require('../src/lib/getUpdate')
+var getUpdate = require('../src/lib/get-update')
 var run = require('../src/cmd')
 
 getUpdate()

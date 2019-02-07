@@ -1,13 +1,10 @@
-const {getPropertyAndExperienceIds} = require('../lib/get-property-and-experience-ids')
+const { getPropertyAndExperienceIds } = require('../lib/get-resource-ids')
+const getPkg = require('../lib/get-pkg')
 const cloneExperience = require('../lib/clone-experience')
 const CWD = process.cwd()
-const log = require('../lib/log')
 
-module.exports = async function clone (urlOrPid, pidOrEid) {
-  const { propertyId, experienceId } = await getPropertyAndExperienceIds(urlOrPid, pidOrEid) || {}
-  if (!propertyId || !experienceId) {
-    log.info(`PropertyId not found, are you in an experience folder?`)
-    return
-  }
+module.exports = async function clone (propertyId, experienceId) {
+  const pkg = await getPkg()
+  ;({ propertyId, experienceId } = await getPropertyAndExperienceIds(propertyId, experienceId, pkg) || {})
   await cloneExperience(CWD, propertyId, experienceId)
 }
