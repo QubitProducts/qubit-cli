@@ -1,25 +1,20 @@
 const qubitThings = require('./qubit-things')
-const log = require('./log')
 const Promise = require('sync-p')
 
 module.exports = function getJolt () {
   return qubitThings('jolt') || mockJolt()
 }
 
-function mockJolt () {
+function mockJolt (logger) {
   let fakeJolt = {}
   ;['onEnrichment', 'onceEnrichment', 'onSuccess', 'onceSuccess'].forEach(method => {
     fakeJolt[method] = function () {
       let replay, dispose, call
       waitUntil(() => qubitThings('jolt')).then(() => {
         let jolt = qubitThings('jolt')
-        if (jolt) {
-          call = jolt[method].apply(jolt, arguments)
-          if (replay) call.replay()
-          if (dispose) call.dispose()
-        } else {
-          log.warn('Jolt was not found')
-        }
+        call = jolt[method].apply(jolt, arguments)
+        if (replay) call.replay()
+        if (dispose) call.dispose()
       })
       return {
         replay: () => {

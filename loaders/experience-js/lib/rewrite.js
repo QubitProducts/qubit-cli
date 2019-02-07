@@ -5,7 +5,7 @@ const {
   triggers: TRIGGERS
 } = require('@qubit/experience-defaults').custom
 
-module.exports = function rewrite (content, file, hasDeps) {
+module.exports = function rewrite (content, file) {
   const filename = path.basename(file)
 
   // Assume a blank file means default empty function
@@ -20,11 +20,7 @@ module.exports = function rewrite (content, file, hasDeps) {
 
   code = addModuleExports(code)
 
-  if (hasDeps) {
-    code = asyncAMD(code)
-  } else {
-    code = everythingAMD(code)
-  }
+  code = asyncAMD(code)
 
   return code
 }
@@ -33,13 +29,6 @@ function addModuleExports (code) {
   return isCommonjs(code)
     ? code
     : addExports(code)
-}
-
-function everythingAMD (code) {
-  return code.replace(/(^|[^.])require\s*\(([^)]*)/gm, (match, p1, p2) => {
-    if (p2.includes('./') && !p2.includes('[')) return match
-    return `${p1}window.__qubit.cli.amd.require(${p2}`
-  })
 }
 
 function asyncAMD (code) {

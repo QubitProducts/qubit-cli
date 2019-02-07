@@ -53,7 +53,16 @@ module.exports = async function serve (options) {
   const compile = new Promise(async resolve => {
     const compiler = webpack(Object.assign(createWebpackConfig(options)), (plumbus, stats) => {
       resolve()
-      if (stats.hasErrors() && !options.verbose) log.error(chalk.red(stats.toString('errors-only').trim()))
+      const token = `Can't resolve '`
+      const errors = stats.toString('errors-only').trim()
+      if (!options.verbose && stats.hasErrors()) {
+        if (errors && errors.includes(token)) {
+          const pkg = errors.substring(errors.indexOf(token) + token.length, errors.length).replace(/'(.|\n)*/gmi, '')
+          log.error(chalk.red(`Could not resolve ${chalk.white(pkg)}, try running ${chalk.white(`npm install --save ${pkg}`)}`))
+        } else {
+          log.error(errors)
+        }
+      }
     })
 
     compiler.plugin('done', (data) => emitter.emit('rebuild', data))
