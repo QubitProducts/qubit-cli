@@ -38,8 +38,8 @@ async function experience (propertyId) {
 
 async function iteration (experienceId) {
   const suggestions = await getAutoCompleteMap({
-    arr: await iterationService.getAll(experienceId),
-    title: 'name',
+    arr: formatIterationNames(await iterationService.getAll(experienceId)),
+    title: 'listName',
     value: 'id'
   })
   return createAutoComplete(msg('Select an iteration (start typing to filter the list)'), suggestions).response()
@@ -115,6 +115,18 @@ async function getAutoCompleteMap ({arr, title, value}) {
 
 function msg (str) {
   return `\n${formatLog(str, 'warn')}\n`
+}
+
+function formatIterationNames (iterations) {
+  iterations.forEach(i => {
+    i.listName = `${i.name} | ${i.state}`
+  })
+  let [draft, published] = _.take(iterations, 2)
+  draft.listName = `${draft.listName} (Draft)`
+  if (published) {
+    published.listName = `${published.listName} (Current)`
+  }
+  return iterations
 }
 
 module.exports = { property, experience, iteration, both }
