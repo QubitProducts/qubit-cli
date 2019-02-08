@@ -1,5 +1,7 @@
+const logger = require('./logger')
+
 module.exports = function experienceEngine (options, globalFn, triggerFn, variationFn, bypassTriggers) {
-  options.log.info('Running global')
+  logger.info('Running global')
   globalFn()
 
   if (bypassTriggers) return execute()
@@ -9,7 +11,7 @@ module.exports = function experienceEngine (options, globalFn, triggerFn, variat
   function activate (pass) {
     const shouldActivate = pass || typeof pass === 'undefined'
     if (!shouldActivate) {
-      options.log.info('Triggers returned false')
+      logger.info('Triggers returned false')
       return
     }
     execute()

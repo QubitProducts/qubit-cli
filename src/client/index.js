@@ -81,7 +81,8 @@ function init (bypassTriggers) {
 
   function withLog (opts, logName) {
     const logger = opts.log(logName)
-    return Object.assign({}, opts, {
+    return {
+      ...opts,
       log: logger,
       poll: function poll (targets, options) {
         return poller(targets, {
@@ -90,7 +91,7 @@ function init (bypassTriggers) {
           ...options
         })
       }
-    })
+    }
   }
 
   function destroy () {
