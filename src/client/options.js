@@ -59,7 +59,7 @@ module.exports = function transform (pkg, key) {
         set: set
       },
       log,
-      getVisitorState: () => resolve(_.assign({}, visitor)),
+      getVisitorState: () => resolve({ ...visitor }),
       getBrowserState: () => resolve(getBrowserState()),
       uv: {
         emit: uv.emit,

@@ -1,6 +1,4 @@
 /* globals __VARIATION__ __VARIATION_STYLE_EXTENSION__ __FILES__ */
-
-const _ = require('slapdash')
 const Promise = require('sync-p/extra')
 const poller = require('@qubit/poller')
 const engine = require('./engine')
@@ -19,16 +17,12 @@ onSecondPageView(restart, () => runAcrossViews)
 registerHotReloads(restart)
 
 function loadModules () {
-  try {
-    return {
-      pkg: require('package.json'),
-      variation: require(__VARIATION__),
-      styles: require(__VARIATION__ + __VARIATION_STYLE_EXTENSION__),
-      global: require('global'),
-      triggers: require('triggers')
-    }
-  } catch (err) {
-    console.log(err)
+  return {
+    pkg: require('package.json'),
+    variation: require(__VARIATION__),
+    styles: require(__VARIATION__ + __VARIATION_STYLE_EXTENSION__),
+    global: require('global'),
+    triggers: require('triggers')
   }
 }
 
@@ -90,10 +84,11 @@ function init (bypassTriggers) {
     return Object.assign({}, opts, {
       log: logger,
       poll: function poll (targets, options) {
-        return poller(targets, _.assign({
+        return poller(targets, {
           logger: logger,
-          stopOnError: true
-        }, options))
+          stopOnError: true,
+          ...options
+        })
       }
     })
   }

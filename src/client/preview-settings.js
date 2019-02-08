@@ -28,7 +28,7 @@ function getPreviewCookie (meta, include, exclude) {
 }
 
 function urlHasPreviewKeys (params) {
-  params = _.keys(params)
+  params = Object.keys(params)
   return _.some(PREVIEW_KEYS, function (key) {
     return params.includes(key)
   })
@@ -37,7 +37,7 @@ function urlHasPreviewKeys (params) {
 function getUrl (location, mustReload) {
   const parsed = yurl.parse(location)
   if (parsed.hash) parsed.hash = hashParser.parse(parsed.hash)
-  const params = _.assign({}, parsed.search, parsed.hash)
+  const params = { ...parsed.search, ...parsed.hash }
   if (urlHasPreviewKeys(params)) mustReload = true
   if (!mustReload) return
   if (parsed.search) parsed.search = omit(parsed.search, PREVIEW_KEYS)
