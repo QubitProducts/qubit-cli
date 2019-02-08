@@ -1,8 +1,8 @@
 /* globals __VARIATION__ __VARIATION_STYLE_EXTENSION__ __FILES__ */
 const Promise = require('sync-p/extra')
+const poller = require('@qubit/poller')
 const engine = require('./engine')
 const previewSettings = require('./preview-settings')
-const log = require('./log')
 const options = require('./options')
 const onSecondPageView = require('./pageview')
 const redirectTo = require('./redirect-to')
@@ -37,6 +37,7 @@ function init (bypassTriggers) {
 
   function triggerFn (opts, cb) {
     let options = withLog(opts, 'triggers')
+    options.log.info('Running triggers')
     let deferred = Promise.defer()
     let api
     try {
@@ -60,9 +61,9 @@ function init (bypassTriggers) {
     let api, removeStyles
     isActive = true
     let options = withLog(opts, 'variation')
+    options.log.info('Running variation')
     options.redirectTo = redirectTo
     modules = loadModules()
-    log.info('Running variation')
     try {
       removeStyles = applyStyles(STYLE_ID, modules.styles)
       cleanup.push(removeStyles)
@@ -79,7 +80,18 @@ function init (bypassTriggers) {
   }
 
   function withLog (opts, logName) {
-    return Object.assign({}, opts, { log: opts.log(logName) })
+    const logger = opts.log(logName)
+    return {
+      ...opts,
+      log: logger,
+      poll: function poll (targets, options) {
+        return poller(targets, {
+          logger: logger,
+          stopOnError: true,
+          ...options
+        })
+      }
+    }
   }
 
   function destroy () {

@@ -1,7 +1,6 @@
 const fs = require('fs-extra')
 const chalk = require('chalk')
 const webpack = require('webpack')
-const createEmitter = require('event-kitten')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
 const pickVariation = require('../../lib/pick-variation')
@@ -49,33 +48,35 @@ module.exports = async function serve (options) {
     warn: options.verbose
   }
 
-  const emitter = createEmitter()
-  const compile = new Promise(async resolve => {
-    const compiler = webpack(Object.assign(createWebpackConfig(options)), (plumbus, stats) => {
-      resolve()
-      if (stats.hasErrors() && !options.verbose) log.error(chalk.red(stats.toString('errors-only').trim()))
-    })
+  const compiler = webpack(createWebpackConfig(options))
 
-    compiler.plugin('done', (data) => emitter.emit('rebuild', data))
-
-    app.use(webpackDevMiddleware(compiler, Object.assign({
-      publicPath: webpackConf.output.publicPath
-    }, verboseOpts)))
-
-    app.use(webpackHotMiddleware(compiler, Object.assign({
-      reload: true,
-      path: '/__webpack_hmr',
-      heartbeat: 100
-    }, verboseOpts)))
+  compiler.plugin('done', stats => {
+    if (!options.verbose && stats.hasErrors()) {
+      const token = `Can't resolve '`
+      const errors = stats.toString('errors-only').trim()
+      if (errors && errors.includes(token)) {
+        const pkg = errors.substring(errors.indexOf(token) + token.length, errors.length).replace(/'(.|\n)*/gmi, '')
+        log.error(`Cannot resolve ${chalk.red(pkg)}, try running ${chalk.red(`npm install --save ${pkg}`)}`)
+      } else {
+        log.error(errors)
+      }
+    }
   })
 
-  // Wait for initial compilation
-  app.use((req, res, next) => compile.then(next))
+  app.use(webpackDevMiddleware(compiler, Object.assign({
+    publicPath: webpackConf.output.publicPath
+  }, verboseOpts)))
+
+  app.use(webpackHotMiddleware(compiler, Object.assign({
+    reload: true,
+    path: '/__webpack_hmr',
+    heartbeat: 100
+  }, verboseOpts)))
 
   return app.start().then(() => {
     log.info(`Using ${options.variationFileName}`)
     log.info(`Qubit-CLI listening on port ${config.port}`)
-    return { app, emitter }
+    return { app }
   })
 }
 

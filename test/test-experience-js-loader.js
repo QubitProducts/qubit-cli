@@ -7,12 +7,8 @@ describe('qubit-cli-loader', function () {
       expect(loader('function () {}', 'filename')).to.eql('module.exports = function () {}')
     })
 
-    it('should replace sync require with window.__qubit.cli.amd.require', function () {
-      expect(loader('require(', 'filename')).to.eql('module.exports = window.__qubit.cli.amd.require(')
-    })
-
-    it('should not replace sync require with window.__qubit.cli.amd.require if relative', function () {
-      expect(loader('module.exports = require("./relative"', 'filename')).to.eql('module.exports = require("./relative"')
+    it('should not replace sync require with window.__qubit.cli.amd.require', function () {
+      expect(loader('require(', 'filename')).to.eql('module.exports = require(')
     })
 
     it('should replace async require with window.__qubit.cli.amd.require', function () {

@@ -49,7 +49,7 @@ module.exports = {
       },
       { test: /global\.js$/, loader: 'raw-loader' },
       {
-        test: /index\.js$/,
+        test: /\.js$/,
         include: [ path.join(__dirname, 'src/client') ],
         loader: 'entry!buble-loader?{"objectAssign": "Object.assign", "transforms": { "dangerousForOf": true, "dangerousTaggedTemplateString": true } }'
       },
