@@ -12,9 +12,11 @@ function mockJolt (logger) {
       let replay, dispose, call
       waitUntil(() => qubitThings('jolt')).then(() => {
         let jolt = qubitThings('jolt')
-        call = jolt[method].apply(jolt, arguments)
-        if (replay) call.replay()
-        if (dispose) call.dispose()
+        if (jolt) {
+          call = jolt[method].apply(jolt, arguments)
+          if (replay) call.replay()
+          if (dispose) call.dispose()
+        }
       })
       return {
         replay: () => {
