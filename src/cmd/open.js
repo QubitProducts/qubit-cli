@@ -3,7 +3,7 @@ const getPkg = require('../lib/get-pkg')
 const log = require('../lib/log')
 let opn = require('opn')
 
-module.exports = async function previewLink (page, options) {
+module.exports = async function previewLink (page = 'editor', options) {
   const pkg = await getPkg()
   if (!_.get(pkg, 'meta')) return required()
   const { propertyId, experienceId } = pkg.meta
