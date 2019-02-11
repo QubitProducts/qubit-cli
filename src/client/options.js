@@ -2,7 +2,7 @@ const experienceState = {}
 const _ = require('slapdash')
 const getBrowserState = require('@qubit/jolt/lib/getBrowserState')
 const defaultVisitor = require('./visitor')
-const createLogger = require('./logger')
+const logger = require('./logger')
 const resolve = require('sync-p/resolve')
 const uv = require('./uv')()
 const jolt = require('./jolt')()
@@ -28,8 +28,6 @@ module.exports = function transform (pkg, key) {
     visitorId: visitor.visitorId
   }
 
-  const log = createLogger(experienceMeta)
-
   function set (key, data) {
     experienceState[key] = data
   }
@@ -51,14 +49,14 @@ module.exports = function transform (pkg, key) {
     exclude: _.get(pkg, `meta.exclude`),
     api: {
       data: meta.templateData,
-      emitCustomGoal: (id, options) => log.info('Custom goal emitted', { id, options }),
-      emitMetric: (type, productId, metadata) => log.info(`Emitting metric ${type}`, { productId, metadata }),
+      emitCustomGoal: (id, options) => logger.info('Custom goal emitted', { id, options }),
+      emitMetric: (type, productId, metadata) => logger.info(`Emitting metric ${type}`, { productId, metadata }),
       solution: meta.solutionOptions,
       state: {
         get: get,
         set: set
       },
-      log,
+      log: logger,
       getVisitorState: () => resolve({ ...visitor }),
       getBrowserState: () => resolve(getBrowserState()),
       uv: {
