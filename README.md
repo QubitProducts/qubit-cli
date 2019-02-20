@@ -11,8 +11,7 @@ A client to facilitate local development of experiences for the qubit platform
 
 Fast previewing
 - built in experience server for instant preview on any website
-- live hot reloading of css
-- ability to enable live hot reloading of js with a little bit of code
+- live hot reloading
 
 Local tools
 - use your local editor/IDE of choice to write experience code
