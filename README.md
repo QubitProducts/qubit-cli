@@ -17,7 +17,7 @@ A client to facilitate local development of experiences for the qubit platform
 - built in experience server for instant preview on any website
 - live hot reloading
 
-*Automate your workflow by interacting with the platform from the command line:
+*Automate your workflow by interacting with the platform from the command line:*
 - create new experiences or clone existing ones
 - push remote changes to the platform
 - pull remote changes from the platform
