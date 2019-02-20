@@ -22,6 +22,7 @@ Automate your workflow
 - push remote changes to the platform
 - pull remote changes from the platform
 - publish | pause | resume your experience
+- CI integration
 
 ## Installation
 
