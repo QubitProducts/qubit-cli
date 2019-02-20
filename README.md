@@ -13,12 +13,12 @@ Fast previewing
 - built in experience server for instant preview on any website
 - live hot reloading
 
-Local tools
+Use with your own preferred development environment
 - use your local editor/IDE of choice to write experience code
 - use your own workflow and versioning tools
 - write and run local unit tests
 
-Interact with the platform from the command line
+Automate your workflow
 - create new experiences or clone existing ones
 - push remote changes to the platform
 - pull remote changes from the platform
