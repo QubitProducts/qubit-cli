@@ -8,16 +8,16 @@
 A client to facilitate local development of experiences for the qubit platform
 
 ## Features
-Develop experiences using your preferred development environment
+*Develop experiences locally using your preferred development environment*
 - use your local editor/IDE of choice to write experience code
 - use your own workflow and versioning tools
 - write and run local unit tests
 
-Iterate quickly with fast feedback loops by using the built in live previewing and hot reloading server
+*Iterate quickly with fast feedback loops using the built in live previewing and hot reloading server*
 - built in experience server for instant preview on any website
 - live hot reloading
 
-Automate your workflow
+*Automate your workflow with the built in command line platform interface*
 - create new experiences or clone existing ones
 - push remote changes to the platform
 - pull remote changes from the platform
