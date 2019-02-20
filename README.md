@@ -21,6 +21,7 @@ Automate your workflow
 - create new experiences or clone existing ones
 - push remote changes to the platform
 - pull remote changes from the platform
+- revert or diff with previous iterations of the experience
 - publish | pause | resume your experience
 - CI integration
 
