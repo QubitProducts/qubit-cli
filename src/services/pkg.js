@@ -38,6 +38,7 @@ function getCode (experience, iteration, variations) {
       isTemplate: isTemplate,
       include: [],
       exclude: [],
+      segments: [],
       templates: _.get(experienceMeta, 'cli.templates') || []
     }
   }), null, 2)

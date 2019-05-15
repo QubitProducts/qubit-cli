@@ -10,6 +10,7 @@ const jolt = require('./jolt')()
 module.exports = function transform (pkg, key) {
   const variationOpts = _.get(pkg, `meta.variations.${key}`) || {}
   const meta = Object.assign({}, pkg.meta, variationOpts)
+  const segments = meta.segments || []
   const visitor = Object.assign({}, defaultVisitor(), _.get(pkg, 'meta.visitor'))
   const experienceMeta = {
     cookieDomain: meta.cookieDomain || window.location.host,
@@ -67,7 +68,12 @@ module.exports = function transform (pkg, key) {
         onEventSent: jolt.onSuccess,
         onceEventSent: jolt.onceSuccess
       },
-      meta: experienceMeta
+      meta: experienceMeta,
+      isMemberOf: (segment) => resolve(segments.includes(segment)),
+      getMemberships: () => resolve(segments),
+      // This is a no-op for now, can't think of a decent way to polyfill this
+      // behaviour. We can look into it more if users ask for it.
+      onMembershipsChanged: () => ({ dispose: () => {} })
     }
   }
 }
