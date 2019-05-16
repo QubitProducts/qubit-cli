@@ -2,7 +2,9 @@ const experienceState = {}
 const _ = require('slapdash')
 const getBrowserState = require('@qubit/jolt/lib/getBrowserState')
 const defaultVisitor = require('./visitor')
+const redirectTo = require('./redirect-to')
 const logger = require('./logger')
+const poller = require('@qubit/poller')
 const resolve = require('sync-p/resolve')
 const uv = require('./uv')()
 const jolt = require('./jolt')()
@@ -48,32 +50,46 @@ module.exports = function transform (pkg, key) {
   return {
     include: getInclude(),
     exclude: _.get(pkg, `meta.exclude`),
-    api: {
-      data: meta.templateData,
-      emitCustomGoal: (id, options) => logger.info('Custom goal emitted', { id, options }),
-      emitMetric: (type, productId, metadata) => logger.info(`Emitting metric ${type}`, { productId, metadata }),
-      solution: meta.solutionOptions,
-      state: {
-        get: get,
-        set: set
-      },
-      log: logger,
-      getVisitorState: () => resolve({ ...visitor }),
-      getBrowserState: () => resolve(getBrowserState()),
-      uv: {
-        emit: uv.emit,
-        events: jolt.events,
-        on: jolt.onEnrichment,
-        once: jolt.onceEnrichment,
-        onEventSent: jolt.onSuccess,
-        onceEventSent: jolt.onceSuccess
-      },
-      meta: experienceMeta,
-      isMemberOf: (segment) => resolve(segments.includes(segment)),
-      getMemberships: () => resolve(segments),
-      // This is a no-op for now, can't think of a decent way to polyfill this
-      // behaviour. We can look into it more if users ask for it.
-      onMembershipsChanged: () => ({ dispose: () => {} })
+    meta: experienceMeta,
+    createApi: function createApi (name) {
+      const log = logger(name)
+      return {
+        data: meta.templateData,
+        emitCustomGoal: (id, options) => log.info('Custom goal emitted', { id, options }),
+        emitMetric: (type, productId, metadata) => log.info(`Emitting metric ${type}`, { productId, metadata }),
+        solution: meta.solutionOptions,
+        state: {
+          get: get,
+          set: set
+        },
+        log: log,
+        getVisitorState: () => resolve({ ...visitor }),
+        getBrowserState: () => resolve(getBrowserState()),
+        uv: {
+          emit: uv.emit,
+          events: jolt.events,
+          on: jolt.onEnrichment,
+          once: jolt.onceEnrichment,
+          onEventSent: jolt.onSuccess,
+          onceEventSent: jolt.onceSuccess
+        },
+        meta: experienceMeta,
+        poll: function poll (targets, options) {
+          return poller(targets, {
+            logger: logger,
+            stopOnError: true,
+            ...options
+          })
+        },
+        redirectTo: redirectTo,
+        isMemberOf: (segment) => resolve(segments.includes(segment)),
+        getMemberships: () => resolve(segments),
+        // This is a no-op for now, can't think of a decent way to polyfill this
+        // behaviour. We can look into it more if users ask for it.
+        onMembershipsChanged: () => ({ dispose: () => {} }),
+        registerContentAreas: () => {},
+        unregisterContentAreas: () => {}
+      }
     }
   }
 }

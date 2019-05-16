@@ -1,19 +1,44 @@
 /* globals __VARIATION__ __VARIATION_STYLE_EXTENSION__ __FILES__ */
-const Promise = require('sync-p/extra')
-const poller = require('@qubit/poller')
 const engine = require('./engine')
-const previewSettings = require('./preview-settings')
-const options = require('./options')
+const applyPreviewSettings = require('./preview-settings')
+const evaluateTriggers = require('./evaluate-triggers')
+const evaluateVariation = require('./evaluate-variation')
+const createOptions = require('./options')
 const onSecondPageView = require('./pageview')
-const redirectTo = require('./redirect-to')
 const applyStyles = require('./styles')
 const globalFn = once(() => eval.call(window, require('global'))) // eslint-disable-line
 const STYLE_ID = 'qubit-cli-styles'
-
 require('./amd')()
-let {destroy, modules, variationIsSpent, triggersIsSpent, hasActivated, runAcrossViews} = init()
+
+// This file is trying to achieve a lot of things, but getting all the different
+// hot reloading cases right is tricky, and splitting stuff out into different files
+// affects how hot reloading works
+// Here are some of the things we are trying to achieve:
+// - If the variation returns a remove function, we can hot reload and re-execute it when it changes
+// - If the variation does not return a remove function, once executed we have to reload the page when it changes
+// - If the triggers returns a remove function, we can hot reload and re-execute it when it changes
+// - If the triggers do not return a remove function, once executed we have to reload the page when it changes
+
+// Imagine the user is developing a modal, it should never be the case that two modals appear on screen
+// We avoid this either by ensuring a remove or cleanup function is called before re-executing or by
+// reloading the whole page
+
+// Also if the triggers have passed and we are editing the variation
+// we don't want to keep having to reload the triggers (imagine forcing the user to have to
+// click on a CTA every time they change their variation code), so we keep track of whether
+// the variation has activated yet or not and only rerun triggers if it hasn't
+
+let {
+  destroy,
+  modules,
+  variationIsSpent,
+  triggersIsSpent,
+  hasActivated,
+  runAcrossViews
+} = init()
 
 onSecondPageView(restart, () => runAcrossViews)
+
 registerHotReloads(restart)
 
 function loadModules () {
@@ -30,68 +55,47 @@ function init (bypassTriggers) {
   let variationSpent, triggersSpent, isActive, runAcrossViews
   let modules = loadModules()
   const cleanup = []
-  const opts = options(modules.pkg, __VARIATION__)
+  const options = createOptions(modules.pkg, __VARIATION__)
 
-  previewSettings(opts.api.meta, opts.include, opts.exclude)
-  engine(opts.api, globalFn, triggerFn, variationFn, bypassTriggers)
+  applyPreviewSettings(options.meta, options.include, options.exclude)
 
-  function triggerFn (opts, cb) {
-    let options = withLog(opts, 'triggers')
-    options.log.info('Running triggers')
-    let deferred = Promise.defer()
-    let api
-    try {
-      api = modules.triggers(options, deferred.resolve)
-    } catch (err) {
-      options.log.error(err)
-    }
-    deferred.promise.then(() => {
-      if (api && api.onActivation) api.onActivation()
-      runAcrossViews = api && api.runAcrossViews === true
-      cb()
-    })
-    if (api && api.remove) {
-      cleanup.push(api.remove)
-    } else {
-      triggersSpent = true
-    }
+  engine(options, globalFn, triggerFn, variationFn, bypassTriggers)
+
+  function triggerFn (options) {
+    return evaluateTriggers(options, modules.triggers)
+      .then(({ onActivation, remove, execute }) => {
+        if (onActivation && execute) onActivation()
+        runAcrossViews = runAcrossViews === true
+        if (remove) {
+          cleanup.push(remove)
+        } else {
+          triggersSpent = true
+        }
+        return {
+          execute: execute
+        }
+      })
   }
 
-  function variationFn (opts) {
-    let api, removeStyles
+  function variationFn (options) {
     isActive = true
-    let options = withLog(opts, 'variation')
-    options.log.info('Running variation')
-    options.redirectTo = redirectTo
-    modules = loadModules()
-    try {
-      removeStyles = applyStyles(STYLE_ID, modules.styles)
-      cleanup.push(removeStyles)
-      api = modules.variation(options)
-    } catch (err) {
-      removeStyles()
-      options.log.error(err)
-    }
-    if (api && api.remove) {
-      cleanup.push(api.remove)
-    } else {
-      variationSpent = true
-    }
-  }
-
-  function withLog (opts, logName) {
-    const logger = opts.log(logName)
-    return {
-      ...opts,
-      log: logger,
-      poll: function poll (targets, options) {
-        return poller(targets, {
-          logger: logger,
-          stopOnError: true,
-          ...options
-        })
+    let removeStyles
+    return evaluateVariation(
+      options,
+      modules.variation,
+      () => {
+        removeStyles = applyStyles(STYLE_ID, modules.styles)
+        return removeStyles
       }
-    }
+    )
+      .then(({ remove }) => {
+        cleanup.push(removeStyles)
+        if (remove) {
+          cleanup.push(remove)
+        } else {
+          variationSpent = true
+        }
+      })
   }
 
   function destroy () {
@@ -111,7 +115,14 @@ function init (bypassTriggers) {
 function restart (bypassTriggers) {
   let originalRunAcrossViews = runAcrossViews
   destroy()
-  ;({destroy, modules, variationIsSpent, triggersIsSpent, hasActivated, runAcrossViews} = init(bypassTriggers))
+  ;({
+    destroy,
+    modules,
+    variationIsSpent,
+    triggersIsSpent,
+    hasActivated,
+    runAcrossViews
+  } = init(bypassTriggers))
   // if bypassTriggers is true runAcrossViews will be set to undefined in the above line
   // we need to retain its original value to keep the correct behaviour
   if (bypassTriggers) runAcrossViews = originalRunAcrossViews
