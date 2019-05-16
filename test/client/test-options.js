@@ -47,6 +47,25 @@ describe('transform', function () {
     })
   })
 
+  describe('segments methods', function () {
+    var api
+
+    beforeEach(function () {
+      pkg.meta.segments = ['foo']
+      const options = transform(pkg, variationName)
+      api = options.api
+    })
+
+    it('isMemberOf', async function () {
+      expect(await api.isMemberOf('foo')).to.equal(true)
+      expect(await api.isMemberOf('bar')).to.equal(false)
+    })
+
+    it('getMemberships', async function () {
+      expect(await api.getMemberships()).to.eql(['foo'])
+    })
+  })
+
   describe('uv object', function () {
     var clock, uv
 

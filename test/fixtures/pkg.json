@@ -34,6 +34,7 @@
     "isTemplate": false,
     "include": [],
     "exclude": [],
-    "templates": []
+    "templates": [],
+    "segments": []
   }
 }
