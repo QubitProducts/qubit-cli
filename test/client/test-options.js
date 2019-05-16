@@ -21,18 +21,18 @@ describe('transform', function () {
   })
 
   it('exports an object with a state attribute', function () {
-    expect(transform(pkg, variationName).api).to.have.property('state')
+    expect(transform(pkg, variationName).createApi('blah')).to.have.property('state')
   })
 
   it('exports an object with a meta attribute', function () {
-    expect(transform(pkg, variationName).api).to.have.property('meta')
+    expect(transform(pkg, variationName).createApi('blah')).to.have.property('meta')
   })
 
   describe('state object', function () {
     var state
 
     beforeEach(function () {
-      state = transform(pkg, variationName).api.state
+      state = transform(pkg, variationName).createApi('blah').state
     })
 
     it('has a get and set function that stores data against a key', function () {
@@ -53,7 +53,7 @@ describe('transform', function () {
     beforeEach(function () {
       pkg.meta.segments = ['foo']
       const options = transform(pkg, variationName)
-      api = options.api
+      api = options.createApi('blah')
     })
 
     it('isMemberOf', async function () {
@@ -71,7 +71,7 @@ describe('transform', function () {
 
     beforeEach(function () {
       clock = sinon.useFakeTimers()
-      uv = transform(pkg, variationName).api.uv
+      uv = transform(pkg, variationName).createApi('blah').uv
     })
 
     afterEach(() => {
@@ -146,7 +146,7 @@ describe('transform', function () {
   describe('meta object', function () {
     var meta
     beforeEach(function () {
-      meta = transform(pkg, variationName).api.meta
+      meta = transform(pkg, variationName).createApi('blah').meta
     })
 
     it('gets enriched with a cookieDomain attribute', function () {

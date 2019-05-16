@@ -5,7 +5,7 @@ const yurl = require('urlite/extra')
 const PREVIEW_KEYS = ['qb_opts', 'qb_experiences', 'qb_exclude', 'smartserve_preview']
 let cm = require('cookieman')
 
-module.exports = function previewSettings (meta, include, exclude) {
+module.exports = function applyPreviewSettings (meta, include, exclude) {
   const initialCookieVal = cm.val('qb_opts')
   cm.clearAll('qb_opts')
   const cookieOptions = getCookieOptions(meta.cookieDomain)
