@@ -62,19 +62,19 @@ function init (bypassTriggers) {
   engine(options, globalFn, triggerFn, variationFn, bypassTriggers)
 
   function triggerFn (options) {
-    return evaluateTriggers(options, modules.triggers)
-      .then(({ onActivation, remove, execute }) => {
-        if (onActivation && execute) onActivation()
-        runAcrossViews = runAcrossViews === true
-        if (remove) {
-          cleanup.push(remove)
-        } else {
-          triggersSpent = true
-        }
-        return {
-          execute: execute
-        }
-      })
+    return evaluateTriggers(options, modules.triggers).then(api => {
+      const { onActivation, remove, execute } = api
+      if (execute && onActivation) onActivation()
+      runAcrossViews = api && api.runAcrossViews === true
+      if (remove) {
+        cleanup.push(remove)
+      } else {
+        triggersSpent = true
+      }
+      return {
+        execute: execute
+      }
+    })
   }
 
   function variationFn (options) {
