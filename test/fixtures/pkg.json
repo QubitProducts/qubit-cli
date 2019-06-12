@@ -35,6 +35,8 @@
     "include": [],
     "exclude": [],
     "templates": [],
-    "segments": []
+    "segments": [],
+    "templateData": {},
+    "customGoals": []
   }
 }

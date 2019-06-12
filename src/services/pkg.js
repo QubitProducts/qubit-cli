@@ -1,7 +1,7 @@
 const _ = require('lodash')
-const {getFilename} = require('./variation')
+const { getFilename } = require('./variation')
 
-function getCode (experience, iteration, variations) {
+function getCode (experience, iteration, goals, variations) {
   const isTemplate = Boolean(experience.is_template)
   const type = isTemplate ? 'template' : 'experience'
   const files = {}
@@ -31,7 +31,14 @@ function getCode (experience, iteration, variations) {
         }
         return memo
       }, {}),
-      templateData: iteration.template_data,
+      customGoals: goals.map(g => {
+        return {
+          goalId: g.id,
+          key: g.key,
+          value: g.value
+        }
+      }).filter(g => g.key === 'pageviews.customvalues.uv.events.action'),
+      templateData: iteration.template_data || {},
       solutionOptions: iteration.solution_options,
       visitor: {},
       isPreview: true,

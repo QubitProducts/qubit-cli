@@ -9,10 +9,15 @@ module.exports = function mergePkg (localPkg, remotePkg) {
   const pkg = { ...localPkg, ...remotePkg }
   _.set(pkg, 'meta', { ...localPkg.meta, ...remotePkg.meta })
   _.set(pkg, 'meta.templates', _.uniq(getTemplates(localPkg).concat(getTemplates(remotePkg))))
-  if (_.isEmpty(_.get(remotePkg, 'meta.templateData') || {})) {
+  const remoteTemplateData = _.get(remotePkg, 'meta.templateData') || {}
+  const localTemplateData = _.get(localPkg, 'meta.templateData') || {}
+  if (_.isEmpty(remoteTemplateData)) {
     // Don't wipe local template data unless there is remote template data
-    _.set(pkg, 'meta.templateData', _.get(localPkg, 'meta.templateData'))
+    _.set(pkg, 'meta.templateData', localTemplateData)
+  } else {
+    _.set(pkg, 'meta.templateData', remoteTemplateData)
   }
+
   ;[
     'dependencies',
     'devDependencies',

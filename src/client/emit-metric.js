@@ -1,5 +1,6 @@
-module.exports = function createEmitMetric (uv, meta) {
+module.exports = function createEmitMetric (uv, meta, logger) {
   return function createEmitMetric (type, productId, metadata) {
+    logger.info('Emitting metric: ' + type)
     uv.emit('qubit.metric', {
       type: type,
       experienceId: meta.experimentId,
