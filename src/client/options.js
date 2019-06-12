@@ -6,6 +6,8 @@ const redirectTo = require('./redirect-to')
 const logger = require('./logger')
 const poller = require('@qubit/poller')
 const resolve = require('sync-p/resolve')
+const createEmitMetric = require('./emit-metric')
+const createEmitCustomGoal = require('./emit-custom-goal')
 const uv = require('./uv')()
 const jolt = require('./jolt')()
 
@@ -55,8 +57,8 @@ module.exports = function transform (pkg, key) {
       const log = logger(name)
       return {
         data: meta.templateData,
-        emitCustomGoal: (id, options) => log.info('Custom goal emitted', { id, options }),
-        emitMetric: (type, productId, metadata) => log.info(`Emitting metric ${type}`, { productId, metadata }),
+        emitCustomGoal: createEmitCustomGoal(uv, experienceMeta),
+        emitMetric: createEmitMetric(uv, experienceMeta),
         solution: meta.solutionOptions,
         state: {
           get: get,
