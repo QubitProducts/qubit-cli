@@ -57,8 +57,8 @@ module.exports = function transform (pkg, key) {
       const log = logger(name)
       return {
         data: meta.templateData,
-        emitCustomGoal: createEmitCustomGoal(uv, experienceMeta),
-        emitMetric: createEmitMetric(uv, experienceMeta),
+        emitCustomGoal: createEmitCustomGoal(uv, experienceMeta, _.get(pkg, 'meta.customGoals'), log),
+        emitMetric: createEmitMetric(uv, experienceMeta, log),
         solution: meta.solutionOptions,
         state: {
           get: get,

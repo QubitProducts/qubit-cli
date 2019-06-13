@@ -5,6 +5,8 @@ module.exports = function getJolt () {
   return qubitThings('jolt') || mockJolt()
 }
 
+// Mock jolt exposes jolt's api and stores calls to it until jolt is available
+// it then proxies the calls made to it to actual jolt
 function mockJolt (logger) {
   let fakeJolt = {}
   ;['onEnrichment', 'onceEnrichment', 'onSuccess', 'onceSuccess'].forEach(method => {

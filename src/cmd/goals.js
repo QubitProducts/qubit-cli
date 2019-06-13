@@ -11,21 +11,20 @@ module.exports = async function goals (cmd) {
   const pkg = await getPkg()
   if (!pkg.meta) return log.warn('Navigate to an experience directory and try again')
 
-  const { propertyId, experienceId } = pkg.meta
+  const { experienceId } = pkg.meta
   const { last_iteration_id: iterationId } = await experienceService.get(experienceId)
 
-  const meta = { propertyId, experienceId, iterationId }
-  const goals = await goalService.get(meta)
+  const goals = await goalService.get(iterationId)
 
   switch (cmd) {
-    case 'list': return listGoals(meta, goals)
-    case 'add': return addGoal(meta, goals).then(() => updatePkg(experienceId))
-    case 'remove': return removeGoal(meta, goals).then(() => updatePkg(experienceId))
-    case 'set-primary': return setPrimaryGoal(meta, goals).then(() => updatePkg(experienceId))
+    case 'list': return listGoals(iterationId, goals)
+    case 'add': return addGoal(iterationId, goals).then(() => updatePkg(experienceId))
+    case 'remove': return removeGoal(iterationId, goals).then(() => updatePkg(experienceId))
+    case 'set-primary': return setPrimaryGoal(iterationId, goals).then(() => updatePkg(experienceId))
   }
 }
 
-async function addGoal (meta, goals) {
+async function addGoal (iterationId, goals) {
   if (goals.length >= 5) return log.warn('Max goals reached, remove a goal first')
 
   // see if goal exists in chosen goals
@@ -59,30 +58,30 @@ async function addGoal (meta, goals) {
 
   const goalToAdd = { key, op, primary, type, value }
   const newGoals = goalsHelper.add(goals, goalToAdd)
-  const updatedGoals = await goalService.set(meta, newGoals)
+  const updatedGoals = await goalService.set(iterationId, newGoals)
 
   if (updatedGoals) log.info('Goal added')
 }
 
-async function removeGoal (meta, goals) {
+async function removeGoal (iterationId, goals) {
   const inputOptions = goalsHelper.read(goals)
   const goalToRemove = await input.select(formatLog(`   Remove goal:`), inputOptions)
   const newGoals = goalsHelper.remove(goals, goalToRemove)
-  const updatedGoals = await goalService.set(meta, newGoals)
+  const updatedGoals = await goalService.set(iterationId, newGoals)
 
   if (updatedGoals) log.info('Goal removed')
 }
 
-async function setPrimaryGoal (meta, goals) {
+async function setPrimaryGoal (iterationId, goals) {
   const inputOptions = goalsHelper.read(goals)
   const goalToMakePrimary = await input.select(formatLog(`   Set primary goal to:`), inputOptions)
   const newGoals = goalsHelper.setPrimary(goals, goalToMakePrimary)
-  const updatedGoals = await goalService.set(meta, newGoals)
+  const updatedGoals = await goalService.set(iterationId, newGoals)
 
   if (updatedGoals) log.info('Primary goal updated')
 }
 
-function listGoals (meta, goals) {
+function listGoals (iterationId, goals) {
   const inputOptions = goalsHelper.read(goals)
   inputOptions.forEach((goal) => log.info(goal.name))
 }
