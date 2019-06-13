@@ -1,9 +1,7 @@
-const path = require('path')
-const fs = require('fs-extra')
 const down = require('../services/down')
-let CWD = process.cwd()
+const writePkg = require('./write-pkg')
 
 module.exports = async function updatePkg (experienceId) {
   const { files } = await down(experienceId)
-  await fs.outputFile(path.join(CWD, 'package.json'), files['package.json'])
+  await writePkg(files['package.json'])
 }

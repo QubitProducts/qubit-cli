@@ -42,6 +42,26 @@ const yesOrNo = (prompt) => new Promise((resolve, reject) => {
 })
 
 /**
+ * Ask the user for a text input.
+ * @param {string} prompt
+ * @return {Promise.<string>}
+ */
+const inputField = (prompt) => new Promise((resolve, reject) => {
+  term(`${prompt}: `)
+  term.inputField({
+    cancelable: true,
+    echo: true
+  }, (err, text) => {
+    term.grabInput(false)
+    if (err) {
+      reject(err)
+    } else {
+      resolve(text)
+    }
+  })
+})
+
+/**
  * Start a new auto-complete picker that can be aborted and resumed.
  * @param {string} prompt
  * @param {Array.<{name: string, value: *}>} suggestions
@@ -184,5 +204,6 @@ module.exports = {
   getCursorLocation,
   yesOrNo,
   createAutoComplete,
-  term
+  term,
+  inputField
 }
