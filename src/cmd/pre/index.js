@@ -4,8 +4,13 @@ const log = require('../../lib/log')
 const program = new Command('pre')
 
 program
+  .command('clone [propertyId]')
+  .description('clone the remote draft pre script for a property into a new subdirectory')
+  .action(cmd('clone'))
+
+program
   .command('pull [propertyId] [live/draft]')
-  .description('pull the remote live/draft pre script for a property to your local environment')
+  .description('pull the remote live/draft pre script for a property into your current directory')
   .action(cmd('pull'))
 
 program
