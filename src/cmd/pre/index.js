@@ -10,7 +10,7 @@ program
 
 program
   .command('pull [propertyId] [live/draft]')
-  .description('pull the remote live/draft pre script for a property into your current directory')
+  .description('pull the remote live/draft (defaults to draft) pre script for a property into your current directory')
   .action(cmd('pull'))
 
 program
