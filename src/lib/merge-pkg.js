@@ -78,7 +78,7 @@ module.exports = function mergePkg (localPkg, remotePkg) {
     engines,
     engineStrict,
     ...pkg,
-    meta
+    meta: _.omitBy(meta, _.isUndefined)
   }, _.isUndefined)
 }
 
