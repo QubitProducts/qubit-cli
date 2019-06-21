@@ -29,6 +29,9 @@ module.exports = function evaluateTriggers (api, fn) {
           return resolve({ execute: returnValue })
         case 'undefined':
         case 'object':
+          returnValue = returnValue || {}
+          if (returnValue.remove) api.onRemove(returnValue.remove)
+          delete returnValue.remove
           return resolve(
             callback.promise.then(function (callbackArgument) {
               return _.assign({}, returnValue, {

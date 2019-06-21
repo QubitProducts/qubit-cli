@@ -54,34 +54,35 @@ function loadModules () {
 function init (bypassTriggers) {
   let variationSpent, triggersSpent, isActive, runAcrossViews
   let modules = loadModules()
-  const cleanup = []
   const options = createOptions(modules.pkg, __VARIATION__)
+  const triggersApi = options.createApi('triggers')
+  const variationApi = options.createApi('variation')
 
   applyPreviewSettings(options.meta, options.include, options.exclude)
 
-  engine(options, globalFn, triggerFn, variationFn, bypassTriggers)
+  engine(triggersApi, variationApi, globalFn, triggerFn, variationFn, bypassTriggers)
 
-  function triggerFn (options) {
-    return evaluateTriggers(options, modules.triggers).then(api => {
-      const { onActivation, remove, execute } = api
-      if (execute && onActivation) onActivation()
-      runAcrossViews = api && api.runAcrossViews === true
-      if (remove) {
-        cleanup.push(remove)
-      } else {
-        triggersSpent = true
+  function triggerFn (triggersApi) {
+    return evaluateTriggers(triggersApi, modules.triggers).then(returnValue => {
+      const { onActivation, remove, execute } = returnValue
+      if (execute && onActivation) {
+        options.addHooks('triggers', 'onActivation', onActivation)
       }
+      options.runHooks('triggers', 'onActivation', triggersApi.log)
+      runAcrossViews = returnValue && returnValue.runAcrossViews === true
+      if (remove) options.addHooks('triggers', 'remove', remove)
+      if (!options.hasHooks('triggers', 'remove')) triggersSpent = true
       return {
         execute: execute
       }
     })
   }
 
-  function variationFn (options) {
+  function variationFn (variationApi) {
     isActive = true
     let removeStyles
     return evaluateVariation(
-      options,
+      variationApi,
       modules.variation,
       () => {
         removeStyles = applyStyles(STYLE_ID, modules.styles)
@@ -89,17 +90,16 @@ function init (bypassTriggers) {
       }
     )
       .then(({ remove }) => {
-        cleanup.push(removeStyles)
         if (remove) {
-          cleanup.push(remove)
-        } else {
-          variationSpent = true
+          options.addHooks('variation', 'remove', removeStyles)
         }
+        if (!options.hasHooks('variation', 'remove')) variationSpent = true
       })
   }
 
   function destroy () {
-    while (cleanup.length) cleanup.pop()()
+    options.runHooks('triggers', 'remove', triggersApi.log)
+    options.runHooks('variation', 'remove', variationApi.log)
   }
 
   return {
