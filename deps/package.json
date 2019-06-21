@@ -7,6 +7,7 @@
     "@qubit/experience-defaults": "^1.2.4",
     "@qubit/jolt": "^7.33.0",
     "@qubit/poller": "^2.0.1",
-    "@qubit/uv-api": "*"
+    "@qubit/uv-api": "*",
+    "@qubit/http-api": "^1.6.1"
   }
 }

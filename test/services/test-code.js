@@ -5,14 +5,16 @@ const codeService = require('../../src/services/code')
 const experienceService = require('../../src/services/experience')
 const iterationService = require('../../src/services/iteration')
 const goalService = require('../../src/services/goal')
+const qfnService = require('../../src/services/qfn')
 const variationService = require('../../src/services/variation')
 const experienceFixture = require('../fixtures/experience.json')
 const goalsFixture = require('../fixtures/goals.json')
+const qfnsFixture = require('../fixtures/qfns.json')
 const variationsFixture = require('../fixtures/variations.json')
 const filesFixture = require('../fixtures/files')
 
 describe('codeService', function () {
-  let sandbox, propertyId, experienceId, iterationId, experience, iteration, goals, variations, files
+  let sandbox, propertyId, experienceId, iterationId, experience, iteration, goals, qfns, variations, files
 
   beforeEach(() => {
     propertyId = 123
@@ -22,6 +24,7 @@ describe('codeService', function () {
     iteration = _.cloneDeep(experienceFixture.recent_iterations.draft)
     variations = _.cloneDeep(variationsFixture)
     goals = _.cloneDeep(goalsFixture)
+    qfns = _.cloneDeep(qfnsFixture)
     files = _.cloneDeep(filesFixture)
     iteration.schema = JSON.parse(files['fields.json'])
     sandbox = sinon.sandbox.create()
@@ -31,6 +34,7 @@ describe('codeService', function () {
     sandbox.stub(iterationService, 'set').returns(Promise.resolve(iteration))
     sandbox.stub(goalService, 'get').returns(Promise.resolve(goals))
     sandbox.stub(goalService, 'set').returns(Promise.resolve(goals))
+    sandbox.stub(qfnService, 'get').returns(Promise.resolve(qfns))
     sandbox.stub(variationService, 'getAll').returns(Promise.resolve(variations))
     sandbox.stub(variationService, 'set').returns(Promise.resolve())
   })

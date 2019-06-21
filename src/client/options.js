@@ -11,6 +11,7 @@ const createEmitCustomGoal = require('./emit-custom-goal')
 const uv = require('./uv')()
 const jolt = require('./jolt')()
 const createHooks = require('./hooks')
+const createIntegrationApi = require('./integrations')
 
 module.exports = function transform (pkg, key) {
   const { addHooks, runHooks, hasHooks } = createHooks()
@@ -97,7 +98,8 @@ module.exports = function transform (pkg, key) {
         registerContentAreas: () => {},
         unregisterContentAreas: () => {},
         onRemove: fn => addHooks(name, 'remove', fn),
-        onActivation: fn => addHooks(name, 'onActivation', fn)
+        onActivation: fn => addHooks(name, 'onActivation', fn),
+        integration: createIntegrationApi(visitor.visitorId, experienceMeta, _.get(pkg, 'meta.qfns'), log)
       }
     }
   }
