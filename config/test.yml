@@ -1,2 +1,6 @@
 logger:
   level: error
+services:
+  app: https://app.qubit.com.test
+  registry: https://registry.qubit.com.test
+  auth: https://qubit.auth0.com.test

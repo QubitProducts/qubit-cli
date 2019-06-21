@@ -4,22 +4,24 @@ const pkgService = require('../../src/services/pkg')
 const pkgFixture = require('../fixtures/pkg.json')
 const experienceFixture = require('../fixtures/experience.json')
 const goalsFixture = require('../fixtures/goals.json')
+const qfnsFixture = require('../fixtures/qfns.json')
 const variationsFixture = require('../fixtures/variations.json')
 
 describe('pkgService', () => {
-  let experience, iteration, goals, variations, pkg
+  let experience, iteration, goals, qfns, variations, pkg
 
   beforeEach(() => {
     experience = _.cloneDeep(experienceFixture)
     iteration = _.cloneDeep(experienceFixture.recent_iterations.draft)
     goals = _.cloneDeep(goalsFixture)
+    qfns = _.cloneDeep(qfnsFixture)
     variations = _.cloneDeep(variationsFixture)
     pkg = _.cloneDeep(pkgFixture)
   })
 
   describe('getCode', function () {
     it('should build a package.json file from an experience and its variations', () => {
-      expect(JSON.parse(pkgService.getCode(experience, iteration, goals, variations)['package.json'])).to.eql(pkgFixture)
+      expect(JSON.parse(pkgService.getCode(experience, iteration, goals, qfns, variations)['package.json'])).to.eql(pkgFixture)
     })
   })
 

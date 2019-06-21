@@ -1,7 +1,8 @@
 const _ = require('lodash')
+const { btoa } = require('b2a')
 const { getFilename } = require('./variation')
 
-function getCode (experience, iteration, goals, variations) {
+function getCode (experience, iteration, goals, qfns, variations) {
   const isTemplate = Boolean(experience.is_template)
   const type = isTemplate ? 'template' : 'experience'
   const files = {}
@@ -38,6 +39,7 @@ function getCode (experience, iteration, goals, variations) {
           value: g.value
         }
       }).filter(g => g.key === 'pageviews.customvalues.uv.events.action'),
+      qfns: getQfns(experience.property_id, qfns),
       templateData: iteration.template_data || {},
       solutionOptions: iteration.solution_options,
       visitor: {},
@@ -67,6 +69,15 @@ function setCode (experience, iteration, files) {
   iteration.package_json = _.omit(pkg, 'meta')
   // We don't want to override template data which was set by the marketer
   return { experience, iteration }
+}
+
+function getQfns (propertyId, qfns) {
+  return _.reduce(qfns, (memo, qfn) => {
+    return {
+      ...memo,
+      [qfn.friendlyId]: btoa(`${propertyId}:${qfn.friendlyId}:${qfn.majorVersion}`)
+    }
+  }, {})
 }
 
 module.exports = { getCode, setCode }

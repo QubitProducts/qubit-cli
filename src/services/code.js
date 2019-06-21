@@ -2,6 +2,7 @@ const _ = require('lodash')
 const experienceService = require('./experience')
 const iterationService = require('./iteration')
 const goalsService = require('./goal')
+const qfnsService = require('./qfn')
 const variationService = require('./variation')
 const pkgService = require('./pkg')
 const withMetrics = require('../lib/with-metrics')
@@ -12,8 +13,9 @@ async function get (propertyId, experienceId, iterationId) {
   iterationId = iterationId || experience.last_iteration_id
   const iteration = await iterationService.get(iterationId)
   const goals = await goalsService.get(iterationId)
+  const qfns = await qfnsService.get(iterationId)
   const variations = await variationService.getAll(iterationId)
-  return getCode(experience, iteration, goals, variations)
+  return getCode(experience, iteration, goals, qfns, variations)
 }
 
 async function set (propertyId, experienceId, files) {
@@ -51,9 +53,9 @@ function eql (a, b) {
   return _.isEqual(a, b)
 }
 
-function getCode (experience, iteration, goals, variations, isTemplate) {
+function getCode (experience, iteration, goals, qfns, variations, isTemplate) {
   const files = {}
-  Object.assign(files, iterationService.getCode(iteration), pkgService.getCode(experience, iteration, goals, variations))
+  Object.assign(files, iterationService.getCode(iteration), pkgService.getCode(experience, iteration, goals, qfns, variations))
   variations.filter((v) => !v.is_control).map(variationService.getCode).forEach((v) => Object.assign(files, v))
   return files
 }

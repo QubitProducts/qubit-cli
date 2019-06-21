@@ -37,6 +37,9 @@
     "templates": [],
     "segments": [],
     "templateData": {},
-    "customGoals": []
+    "customGoals": [],
+    "qfns": {
+      "random-cat": "MTIzOnJhbmRvbS1jYXQ6MQ=="
+    }
   }
 }
