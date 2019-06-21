@@ -10,8 +10,10 @@ const createEmitMetric = require('./emit-metric')
 const createEmitCustomGoal = require('./emit-custom-goal')
 const uv = require('./uv')()
 const jolt = require('./jolt')()
+const createHooks = require('./hooks')
 
 module.exports = function transform (pkg, key) {
+  const { addHooks, runHooks, hasHooks } = createHooks()
   const variationOpts = _.get(pkg, `meta.variations.${key}`) || {}
   const meta = Object.assign({}, pkg.meta, variationOpts)
   const segments = meta.segments || []
@@ -50,6 +52,9 @@ module.exports = function transform (pkg, key) {
   }
 
   return {
+    addHooks,
+    runHooks,
+    hasHooks,
     include: getInclude(),
     exclude: _.get(pkg, `meta.exclude`),
     meta: experienceMeta,
@@ -90,7 +95,9 @@ module.exports = function transform (pkg, key) {
         // behaviour. We can look into it more if users ask for it.
         onMembershipsChanged: () => ({ dispose: () => {} }),
         registerContentAreas: () => {},
-        unregisterContentAreas: () => {}
+        unregisterContentAreas: () => {},
+        onRemove: fn => addHooks(name, 'remove', fn),
+        onActivation: fn => addHooks(name, 'onActivation', fn)
       }
     }
   }
