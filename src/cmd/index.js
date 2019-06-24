@@ -3,6 +3,7 @@ const chalk = require('chalk')
 const hasYarn = require('has-yarn')
 const log = require('../lib/log')
 const installQubitDeps = require('../lib/install-qubit-deps')
+const pre = require('./pre')
 
 module.exports = async function run (pkg) {
   await installQubitDeps()
@@ -237,6 +238,13 @@ module.exports = async function run (pkg) {
     .command('revoke')
     .description('revoke an auth token')
     .action(cmd('revoke'))
+
+  const preCommand = program
+    .command('pre')
+    .description('run `qubit pre --help` for more information')
+    .allowUnknownOption()
+    .action(pre.action)
+  preCommand.outputHelp = pre.outputHelp
 
   program
     .usage(`[options] <cmd>`)

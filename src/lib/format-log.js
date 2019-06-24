@@ -1,8 +1,14 @@
 const chalk = require('chalk')
 
-module.exports = function formatLog (message, level) {
+const ENV = process.env.NODE_ENV || 'development'
+
+module.exports = function formatLog (message, level, error) {
   let prefix = getPrefix(level)
-  return `${prefix}${chalk.grey(highlighter(message)).replace(/\n/g, '\n' + prefix)}`
+  let formatted = `${prefix}${chalk.grey(highlighter(message)).replace(/\n/g, '\n' + prefix)}`
+  if (ENV === 'development' && error && error.stack) {
+    formatted += '\n' + error.stack
+  }
+  return formatted
 }
 
 function highlighter (message) {

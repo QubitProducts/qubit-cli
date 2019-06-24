@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const config = require('../../config')
 const axios = require('axios')
 const log = require('./log')
@@ -27,7 +28,7 @@ function fetchWithAuth (method) {
       headers = { ...options.headers || {}, 'Authorization': `Bearer ${appToken}` }
       return await axios(url, { method, data, headers }).then(handler, errorHandler)
     } catch (err) {
-      if (options.isRetry) {
+      if (options.isRetry || !isRetryable(err)) {
         log.error(`Error trying to fetch ${url}`)
         log.error(err)
         throw err
@@ -47,7 +48,9 @@ function fetchWithAuth (method) {
     function errorHandler (error) {
       const resp = error.response
       checkErrors(resp)
-      throw new Error(error)
+      const newError = new Error(error)
+      newError.originalError = error
+      throw newError
     }
 
     function handler (resp) {
@@ -55,6 +58,14 @@ function fetchWithAuth (method) {
       return resp.data
     }
   }
+}
+
+function isRetryable (err) {
+  if (err.originalError) {
+    err = err.originalError
+  }
+  const status = _.get(err, 'response.status')
+  return status < 400 || status >= 500 || !status
 }
 
 function isLoggedOut (resp) {

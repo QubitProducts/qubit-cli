@@ -15,5 +15,5 @@ function spacing () {
 
 function logger (name, level, now, { message, error, metadata }) {
   spacer()
-  console.log(formatLog(message, level))
+  console.log(formatLog(message, level, error))
 }

@@ -10,9 +10,11 @@ const codeService = require('../services/code')
 const down = require('../services/down')
 const getDiff = require('../lib/get-diff')
 const logDiff = require('../lib/log-diff')
+const throwIf = require('../lib/throw-if')
 let CWD = process.cwd()
 
 module.exports = async function push (options = {}) {
+  await throwIf.pre('qubit pre push')
   const pkg = await getPkg()
   const { propertyId, experienceId } = (pkg.meta || {})
   if (!propertyId || !experienceId) return log.info('Nothing to push')
@@ -36,7 +38,7 @@ module.exports = async function push (options = {}) {
     let localUpdatedAts = [localExperienceUpdatedAt].concat(localVariantsUpdatedAt)
 
     if (remoteUpdatedAts.join('|') !== localUpdatedAts.join('|')) {
-      let diffs = await getDiff(CWD, propertyId, experienceId)
+      let diffs = await getDiff.experience(CWD, propertyId, experienceId)
       if (diffs.length) {
         log.error(chalk.bold.red('Remote has changed!'))
         return logDiff(diffs)

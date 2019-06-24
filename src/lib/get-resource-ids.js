@@ -35,12 +35,12 @@ async function getPropertyAndExperienceIds (propertyIdOrUrl, experienceId, pkg) 
   return { propertyId, experienceId }
 }
 
-async function getPropertyId (propertyIdOrUrl) {
-  let propertyId
+async function getPropertyId (propertyIdOrUrl, pkg) {
+  let propertyId = _.get(pkg, 'meta.propertyId')
 
   if (isId(propertyIdOrUrl)) {
     propertyId = Number(propertyIdOrUrl)
-  } else {
+  } else if (!propertyId) {
     propertyId = await suggest.property()
   }
 
