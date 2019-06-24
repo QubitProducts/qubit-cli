@@ -33,22 +33,29 @@ function getCode (iteration) {
   const commonCode = iteration.common_code
   const schema = JSON.stringify(iteration.schema, null, 2)
 
-  return {
-    'global.js': hasNoCode(globalCode) ? GLOBAL_CODE : globalCode,
+  const code = {
     'triggers.js': hasNoCode(triggers) ? TRIGGERS : triggers,
     'fields.json': hasNoCode(schema) ? SCHEMA : schema,
     'utils.js': hasNoCode(commonCode) ? COMMON_CODE : commonCode
   }
+
+  if (!hasNoCode(globalCode)) code['global.js'] = globalCode
+
+  return code
 }
 
 function setCode (iteration, files) {
-  return {
+  const code = {
     ...iteration,
     global_code: hasNoCode(files['global.js']) ? GLOBAL_CODE : files['global.js'],
     common_code: hasNoCode(files['utils.js']) ? COMMON_CODE : files['utils.js'],
     schema: JSON.parse(hasNoCode(files['fields.json']) ? SCHEMA : files['fields.json']),
     triggers: hasNoCode(files['triggers.js']) ? TRIGGERS : files['triggers.js']
   }
+
+  if (!hasNoCode(files['global.js'])) code.global_code = files['global.js']
+
+  return code
 }
 
 module.exports = { get, set, getAll, getCode, setCode }

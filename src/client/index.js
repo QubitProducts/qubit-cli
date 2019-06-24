@@ -6,7 +6,7 @@ const evaluateVariation = require('./evaluate-variation')
 const createOptions = require('./options')
 const onSecondPageView = require('./pageview')
 const applyStyles = require('./styles')
-const globalFn = once(() => eval.call(window, require('global'))) // eslint-disable-line
+const globalFn = once(evalGlobal)
 const STYLE_ID = 'qubit-cli-styles'
 require('./amd')()
 
@@ -46,7 +46,7 @@ function loadModules () {
     pkg: require('package.json'),
     variation: require(__VARIATION__),
     styles: require(__VARIATION__ + __VARIATION_STYLE_EXTENSION__),
-    global: require('global'),
+    global: requireGlobal(),
     triggers: require('triggers')
   }
 }
@@ -153,4 +153,18 @@ function once (fn) {
     called = true
     fn()
   }
+}
+
+function requireGlobal () {
+  try {
+    return require('global')
+  } catch (err) {
+    return ''
+  }
+}
+
+function evalGlobal () {
+  try {
+    eval.call(window, requireGlobal()) // eslint-disable-line
+  } catch (err) {}
 }

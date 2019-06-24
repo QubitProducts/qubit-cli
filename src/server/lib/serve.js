@@ -8,6 +8,7 @@ const webpackConf = require('../../../webpack.conf')
 const config = require('../../../config')
 const log = require('../../lib/log')
 const createApp = require('../app')
+const globalCodeWarning = require('../../lib/global-code-warning')
 const commonCodeWarning = require('../../lib/common-code-warning')
 const cssCodeWarning = require('../../lib/css-code-warning')
 const installQubitDeps = require('../../lib/install-qubit-deps')
@@ -26,6 +27,7 @@ module.exports = async function serve (options) {
     log.info('Hint: you should be watching the entry point for your experience, i.e. your variation file!')
   }
 
+  await globalCodeWarning(CWD)
   await commonCodeWarning(CWD)
   await cssCodeWarning(CWD)
 
