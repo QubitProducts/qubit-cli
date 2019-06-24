@@ -4,6 +4,7 @@ const log = require('../lib/log')
 const getPkg = require('../lib/get-pkg')
 const updatePkg = require('../lib/update-pkg')
 const readFiles = require('../lib/read-files')
+const globalCodeWarning = require('../lib/global-code-warning')
 const commonCodeWarning = require('../lib/common-code-warning')
 const cssCodeWarning = require('../lib/css-code-warning')
 const codeService = require('../services/code')
@@ -19,6 +20,7 @@ module.exports = async function push (options = {}) {
   const { propertyId, experienceId } = (pkg.meta || {})
   if (!propertyId || !experienceId) return log.info('Nothing to push')
 
+  await globalCodeWarning(CWD)
   await commonCodeWarning(CWD)
   await cssCodeWarning(CWD)
 

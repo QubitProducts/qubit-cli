@@ -3,6 +3,6 @@ const pickVariation = require('../src/lib/pick-variation')
 
 describe('previewLink', function () {
   it('should return the last one', function () {
-    expect(pickVariation(['1.js', '2.js'])).to.eql('2.js')
+    expect(pickVariation(['variation-1.js', 'variation-2.js'])).to.eql('variation-2.js')
   })
 })
