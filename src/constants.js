@@ -19,6 +19,7 @@ const APP_TOKEN = 'APP_TOKEN'
 const REGISTRY_TOKEN = 'REGISTRY_TOKEN'
 const REGISTRY_SCOPES = 'REGISTRY_SCOPES'
 const STYLE_EXTENSION = '.less'
+const CLIENT_PATH = path.join(__dirname, 'client')
 
 module.exports = {
   HOME,
@@ -33,5 +34,6 @@ module.exports = {
   APP_TOKEN,
   REGISTRY_TOKEN,
   REGISTRY_SCOPES,
-  STYLE_EXTENSION
+  STYLE_EXTENSION,
+  CLIENT_PATH
 }
