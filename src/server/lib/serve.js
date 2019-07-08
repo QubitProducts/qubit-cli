@@ -1,3 +1,5 @@
+const path = require('path')
+const _ = require('lodash')
 const fs = require('fs-extra')
 const chalk = require('chalk')
 const webpack = require('webpack')
@@ -12,8 +14,9 @@ const globalCodeWarning = require('../../lib/global-code-warning')
 const commonCodeWarning = require('../../lib/common-code-warning')
 const cssCodeWarning = require('../../lib/css-code-warning')
 const installQubitDeps = require('../../lib/install-qubit-deps')
+const getPkg = require('../../lib/get-pkg')
 const cors = require('cors')
-const { STYLE_EXTENSION } = require('../../constants')
+const { STYLE_EXTENSION, CLIENT_PATH } = require('../../constants')
 let CWD = process.cwd()
 
 module.exports = async function serve (options) {
@@ -23,24 +26,30 @@ module.exports = async function serve (options) {
   app.use(cors())
   options.verbose = options.verbose || false
 
-  if (/(triggers|global|\.less|\.css$)/.test(options.variationFileName)) {
+  if (/(triggers|global|\.less|\.css$)/.test(options.fileName)) {
     log.info('Hint: you should be watching the entry point for your experience, i.e. your variation file!')
   }
 
-  await globalCodeWarning(CWD)
-  await commonCodeWarning(CWD)
-  await cssCodeWarning(CWD)
+  options.isPreScript = _.get(await getPkg(), 'meta.isPreScript')
 
-  if (!options.variationFileName) {
-    options.variationFileName = await pickVariation(await fs.readdir(CWD))
+  if (options.isPreScript) {
+    options.fileName = 'pre'
+  } else {
+    await globalCodeWarning(CWD)
+    await commonCodeWarning(CWD)
+    await cssCodeWarning(CWD)
 
-    if (!options.variationFileName) {
-      return log.warn('Ensure you are within an experience directory and try again')
+    if (!options.fileName) {
+      options.fileName = await pickVariation(await fs.readdir(CWD))
+
+      if (!options.fileName) {
+        return log.warn('Ensure you are within an experience directory and try again')
+      }
     }
-  }
 
-  // make .js optional
-  options.variationFileName = options.variationFileName.replace(/\.js$/, '')
+    // make .js optional
+    options.fileName = options.fileName.replace(/\.js$/, '')
+  }
 
   const verboseOpts = {
     log: options.verbose ? console.log : false,
@@ -76,21 +85,22 @@ module.exports = async function serve (options) {
   }, verboseOpts)))
 
   return app.start().then(() => {
-    log.info(`Using ${options.variationFileName}`)
+    log.info(`Using ${options.fileName}`)
     log.info(`Qubit-CLI listening on port ${config.port}`)
     return { app }
   })
 }
 
 function createWebpackConfig (options) {
-  const plugins = webpackConf.plugins.slice(0)
-  plugins.push(new webpack.DefinePlugin({
-    __VARIATION__: `'${options.variationFileName}'`,
-    __VARIATION_STYLE_EXTENSION__: `'${STYLE_EXTENSION}'`
-  }))
-  const entry = webpackConf.entry.slice(0)
   return Object.assign({}, webpackConf, {
-    entry: entry,
-    plugins: plugins
+    entry: [
+      path.join(CLIENT_PATH, options.isPreScript ? 'serve-pre' : 'serve-experience')
+    ].concat(webpackConf.entry),
+    plugins: webpackConf.plugins.concat([
+      new webpack.DefinePlugin({
+        __VARIATION__: `'${options.fileName}'`,
+        __VARIATION_STYLE_EXTENSION__: `'${STYLE_EXTENSION}'`
+      })
+    ])
   })
 }

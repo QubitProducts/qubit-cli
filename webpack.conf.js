@@ -6,7 +6,6 @@ const CWD = process.cwd()
 
 module.exports = {
   entry: [
-    path.join(__dirname, 'src/client/index'),
     'webpack-hot-middleware/client?path=https://localhost:41337/__webpack_hmr&timeout=20000&reload=true&&noInfo=true&&quiet=true'
   ],
   output: {
