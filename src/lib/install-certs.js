@@ -4,17 +4,42 @@ const execa = require('execa')
 const fs = require('fs-extra')
 const windosu = require('windosu')
 const confirm = require('confirmer')
+const which = require('which')
+const semverbs = require('semverbs')
 const childProcess = require('child_process')
 const log = require('./log')
-const { CERT_DIR, CERT_PATH, KEY_PATH, KEY_OPTIONS, OPENSSL_PATH } = require('../constants')
+const {
+  CERT_DIR,
+  CERT_PATH,
+  KEY_PATH,
+  KEY_OPTIONS
+} = require('../constants')
 
-if (process.platform === 'win32') pem.config({ pathOpenSSL: OPENSSL_PATH })
-
-module.exports = function setup () {
+module.exports = async function setup () {
   log.info("We'll now generate a TSL certificate and install it into your OS as a trusted certificate")
   log.info("This is to make sure that browsers don't block Qubit-CLI from serving to https sites")
   log.info('You will be asked for your sudo password')
-  log.info("If you'd like to inspect/remove the installed certificate, you can find it in your keychain")
+  if (process.platform === 'win32') {
+    const result = await new Promise(resolve => {
+      which(process.env.OPENSSL_BIN || 'openssl', (err, path) => resolve(!err))
+    })
+
+    if (!result) {
+      log.error(`openssl not found on your system at this path: "${process.env.OPENSSL_BIN || 'openssl'}".`)
+      log.error(`Please download and install a recent version from https://slproweb.com/products/Win32OpenSSL.html and add it to your system path`)
+      throw new Error('openssl not found')
+    } else {
+      const { stdout } = await execa('openssl', ['version'])
+      const [version] = (stdout || '').match(/\d+\.\d+\.\d+/) || []
+      if (!version) {
+        log.warn(`Could not determine openssl version`)
+        log.warn(`If this command fails try running qubit-cli from a cgywin terminal`)
+      } else if (semverbs.lt(version, '1.1.1')) {
+        log.warn(`You have an old version of openssl installed: ${version}.`)
+        log.warn(`Please download and install a recent version from https://slproweb.com/products/Win32OpenSSL.html and add it to your system path`)
+      }
+    }
+  }
 
   return fs.mkdirp(CERT_DIR)
     .then(createCerts)

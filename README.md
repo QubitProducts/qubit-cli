@@ -4,7 +4,6 @@
 # ![logo](https://user-images.githubusercontent.com/640611/32888373-fbdc7134-cabe-11e7-9b0e-027a49cef8bf.png)
 
 ## Qubit-CLI
-
 A client to facilitate local development of experiences for the qubit platform
 
 ## Features
@@ -28,6 +27,14 @@ A client to facilitate local development of experiences for the qubit platform
 ## Installation
 
 `npm install -g qubit-cli`
+
+
+## Windows
+Please ensure you have a recent version of `openssl` installed (e.g. 1.1.1)
+
+You can find and install `openssl` using the `cygwin` installer or from https://slproweb.com/products/Win32OpenSSL.htmls
+
+Please also ensure that the `openssl` executable is available on the system path
 
 ## Setup
 
