@@ -93,8 +93,8 @@ function serveExperience () {
         }
       )
         .then(({ remove }) => {
-          options.addHooks('variation', 'remove', removeStyles)
           if (!options.hasHooks('variation', 'remove')) variationSpent = true
+          options.addHooks('variation', 'remove', removeStyles)
         })
     }
 
