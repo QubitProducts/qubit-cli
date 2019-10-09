@@ -7,8 +7,8 @@ const HOOK = '__qubit.cli.pre'
 servePre()
 
 function servePre () {
-  if (!cm.val('qb_cli_pre')) {
-    cm.set('qb_cli_pre', 1, {
+  if (!cm.val('qb_pre')) {
+    cm.set('qb_pre', 1, {
       path: '/', expires: now.plus(15, 'minutes')
     })
     return window.location.reload()
