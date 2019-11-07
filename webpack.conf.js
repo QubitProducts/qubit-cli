@@ -2,7 +2,16 @@
 
 const path = require('path')
 const webpack = require('webpack')
+
 const CWD = process.cwd()
+const QUBIT_NODE_MODULES = [
+  path.join(CWD, 'node_modules', '@qubit'),
+  path.join(__dirname, 'node_modules', '@qubit')
+]
+const NODE_MODULES = [
+  path.join(CWD, 'node_modules'),
+  path.join(__dirname, 'node_modules')
+]
 
 module.exports = {
   entry: [
@@ -35,15 +44,12 @@ module.exports = {
     loaders: [
       {
         test: /\.js$/,
-        include: [
-          path.join(CWD, 'node_modules', '@qubit'),
-          path.join(__dirname, 'node_modules', '@qubit')
-        ],
+        include: QUBIT_NODE_MODULES,
         loader: 'experience-css'
       },
       {
         test: /\.(css|less)$/,
-        include: [path.join(__dirname, 'node_modules', '@qubit')],
+        include: QUBIT_NODE_MODULES,
         loader: 'style-loader!raw-loader!less-loader'
       },
       { test: /global\.js$/, loader: 'raw-loader' },
@@ -61,7 +67,7 @@ module.exports = {
       {
         test: /\.(css|less)$/,
         loader: 'raw-loader!less-loader',
-        exclude: [ path.join(__dirname, 'node_modules') ]
+        exclude: NODE_MODULES
       },
       { test: /\.json$/, loader: 'json-loader' }
     ]
