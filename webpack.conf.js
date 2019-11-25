@@ -45,31 +45,58 @@ module.exports = {
       {
         test: /\.js$/,
         include: QUBIT_NODE_MODULES,
-        loader: 'experience-css'
+        use: ['experience-css']
       },
       {
         test: /\.(css|less)$/,
         include: QUBIT_NODE_MODULES,
-        loader: 'style-loader!raw-loader!less-loader'
+        use: ['style-loader', 'raw-loader', 'less-loader']
       },
-      { test: /global\.js$/, loader: 'raw-loader' },
+      { test: /global\.js$/, use: ['raw-loader'] },
       {
         test: /\.js$/,
         include: [ path.join(__dirname, 'src/client') ],
-        loader: 'entry!buble-loader?{"objectAssign": "Object.assign", "transforms": { "dangerousForOf": true, "dangerousTaggedTemplateString": true } }'
+        use: [
+          'entry',
+          {
+            loader: '@qubit/buble-loader',
+            options: {
+              objectAssign: 'Object.assign',
+              transforms: {
+                dangerousForOf: true,
+                dangerousTaggedTemplateString: true
+              }
+            }
+          }
+        ]
       },
       {
         test: /\.js$/,
         include: [ CWD ],
         exclude: [ /global\.js/, /node_modules/ ],
-        loader: 'experience-js!buble-loader?{"objectAssign": "Object.assign", "transforms": { "dangerousForOf": true, "dangerousTaggedTemplateString": true } }'
+        use: [
+          'experience-js',
+          {
+            loader: '@qubit/buble-loader',
+            options: {
+              objectAssign: 'Object.assign',
+              transforms: {
+                dangerousForOf: true,
+                dangerousTaggedTemplateString: true
+              }
+            }
+          }
+        ]
       },
       {
         test: /\.(css|less)$/,
-        loader: 'raw-loader!less-loader',
+        use: [
+          'raw-loader',
+          'less-loader'
+        ],
         exclude: NODE_MODULES
       },
-      { test: /\.json$/, loader: 'json-loader' }
+      { test: /\.json$/, use: ['json-loader'] }
     ]
   },
   plugins: [
