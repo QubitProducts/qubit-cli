@@ -59,7 +59,7 @@ module.exports = {
         use: [
           'entry',
           {
-            loader: 'buble-loader',
+            loader: '@qubit/buble-loader',
             options: {
               objectAssign: 'Object.assign',
               transforms: {
@@ -77,7 +77,7 @@ module.exports = {
         use: [
           'experience-js',
           {
-            loader: 'buble-loader',
+            loader: '@qubit/buble-loader',
             options: {
               objectAssign: 'Object.assign',
               transforms: {
