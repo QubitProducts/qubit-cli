@@ -3,6 +3,7 @@
 const path = require('path')
 const webpack = require('webpack')
 
+const SRC = path.join(__dirname, 'src/client')
 const CWD = process.cwd()
 const QUBIT_NODE_MODULES = [
   path.join(CWD, 'node_modules', '@qubit'),
@@ -12,6 +13,16 @@ const NODE_MODULES = [
   path.join(CWD, 'node_modules'),
   path.join(__dirname, 'node_modules')
 ]
+const BUBLE_LOADER = {
+  loader: '@qubit/buble-loader',
+  options: {
+    objectAssign: 'Object.assign',
+    transforms: {
+      dangerousForOf: true,
+      dangerousTaggedTemplateString: true
+    }
+  }
+}
 
 module.exports = {
   entry: [
@@ -42,61 +53,46 @@ module.exports = {
   },
   module: {
     loaders: [
+      // global.js
+      {
+        test: /global\.js$/,
+        use: ['raw-loader']
+      },
+      // qubit-cli internal clientside code.js
       {
         test: /\.js$/,
-        include: QUBIT_NODE_MODULES,
-        use: ['experience-css']
+        include: [ SRC ],
+        use: [ 'entry', BUBLE_LOADER ]
       },
-      {
-        test: /\.(css|less)$/,
-        include: QUBIT_NODE_MODULES,
-        use: ['style-loader', 'raw-loader', 'less-loader']
-      },
-      { test: /global\.js$/, use: ['raw-loader'] },
-      {
-        test: /\.js$/,
-        include: [ path.join(__dirname, 'src/client') ],
-        use: [
-          'entry',
-          {
-            loader: '@qubit/buble-loader',
-            options: {
-              objectAssign: 'Object.assign',
-              transforms: {
-                dangerousForOf: true,
-                dangerousTaggedTemplateString: true
-              }
-            }
-          }
-        ]
-      },
+      // experience code
       {
         test: /\.js$/,
         include: [ CWD ],
         exclude: [ /global\.js/, /node_modules/ ],
-        use: [
-          'experience-js',
-          {
-            loader: '@qubit/buble-loader',
-            options: {
-              objectAssign: 'Object.assign',
-              transforms: {
-                dangerousForOf: true,
-                dangerousTaggedTemplateString: true
-              }
-            }
-          }
-        ]
+        use: [ 'experience-js', BUBLE_LOADER ]
+      },
+      // experience css
+      {
+        test: /\.(css|less)$/,
+        use: [ 'style-loader', 'raw-loader', 'less-loader' ],
+        exclude: NODE_MODULES
+      },
+      // package.json
+      {
+        test: /\.json$/,
+        use: ['json-loader']
+      },
+      // @qubit packages
+      {
+        test: /\.js$/,
+        include: QUBIT_NODE_MODULES,
+        use: [ 'experience-css', BUBLE_LOADER ]
       },
       {
         test: /\.(css|less)$/,
-        use: [
-          'raw-loader',
-          'less-loader'
-        ],
-        exclude: NODE_MODULES
-      },
-      { test: /\.json$/, use: ['json-loader'] }
+        include: QUBIT_NODE_MODULES,
+        use: [ 'style-loader', 'raw-loader', 'less-loader' ]
+      }
     ]
   },
   plugins: [
