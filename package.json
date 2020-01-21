@@ -63,6 +63,7 @@
     "preact": "^8.2.6",
     "promise-defer": "^1.0.0",
     "qs": "^6.5.1",
+    "qubit-react": "^1.4.0",
     "raw-loader": "^0.5.1",
     "semverbs": "^1.1.1",
     "serve-favicon": "^2.5.0",
