@@ -69,7 +69,7 @@ describe('transform', function () {
   describe('react api', function () {
     describe('triggers', function () {
       var api, options
-  
+
       beforeEach(function () {
         pkg.meta.segments = ['foo']
         options = transform(pkg, variationName)
