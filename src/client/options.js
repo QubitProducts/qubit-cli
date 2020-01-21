@@ -1,6 +1,7 @@
 const experienceState = {}
 const _ = require('slapdash')
 const getBrowserState = require('@qubit/jolt/lib/getBrowserState')
+const qubitReact = require('qubit-react/experience')
 const defaultVisitor = require('./visitor')
 const redirectTo = require('./redirect-to')
 const logger = require('./logger')
@@ -35,6 +36,9 @@ module.exports = function transform (pkg, key) {
     variationIsControl: meta.variationIsControl,
     visitorId: visitor.visitorId
   }
+  const react = qubitReact({
+    owner: experienceMeta.experimentId
+  })
 
   function set (key, data) {
     experienceState[key] = data
@@ -61,6 +65,7 @@ module.exports = function transform (pkg, key) {
     meta: experienceMeta,
     createApi: function createApi (name) {
       const log = logger(name)
+      addHooks(name, 'remove', react.release)
       return {
         data: meta.templateData,
         emitCustomGoal: createEmitCustomGoal(uv, experienceMeta, _.get(pkg, 'meta.customGoals'), log),
@@ -70,6 +75,7 @@ module.exports = function transform (pkg, key) {
           get: get,
           set: set
         },
+        react: _.pick(react, name === 'triggers' ? ['register', 'release'] : ['getReact', 'render', 'release']),
         log: log,
         getVisitorState: () => resolve({ ...visitor }),
         getBrowserState: () => resolve(getBrowserState()),

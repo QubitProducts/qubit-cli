@@ -21,18 +21,18 @@ describe('transform', function () {
   })
 
   it('exports an object with a state attribute', function () {
-    expect(transform(pkg, variationName).createApi('blah')).to.have.property('state')
+    expect(transform(pkg, variationName).createApi('triggers')).to.have.property('state')
   })
 
   it('exports an object with a meta attribute', function () {
-    expect(transform(pkg, variationName).createApi('blah')).to.have.property('meta')
+    expect(transform(pkg, variationName).createApi('triggers')).to.have.property('meta')
   })
 
   describe('state object', function () {
     var state
 
     beforeEach(function () {
-      state = transform(pkg, variationName).createApi('blah').state
+      state = transform(pkg, variationName).createApi('triggers').state
     })
 
     it('has a get and set function that stores data against a key', function () {
@@ -53,7 +53,7 @@ describe('transform', function () {
     beforeEach(function () {
       pkg.meta.segments = ['foo']
       const options = transform(pkg, variationName)
-      api = options.createApi('blah')
+      api = options.createApi('triggers')
     })
 
     it('isMemberOf', async function () {
@@ -66,12 +66,51 @@ describe('transform', function () {
     })
   })
 
+  describe('react api', function () {
+    describe('triggers', function () {
+      var api, options
+  
+      beforeEach(function () {
+        pkg.meta.segments = ['foo']
+        options = transform(pkg, variationName)
+        api = options.createApi('triggers')
+      })
+
+      it('has register + release methods', function () {
+        expect(api.react.register).to.be.a('function')
+        expect(api.react.release).to.be.a('function')
+      })
+
+      it('adds a hook', function () {
+        expect(options.hasHooks('triggers', 'remove')).to.equal(true)
+      })
+    })
+    describe('variation', function () {
+      var api, options
+
+      beforeEach(function () {
+        pkg.meta.segments = ['foo']
+        options = transform(pkg, variationName)
+        api = options.createApi('variation')
+      })
+
+      it('has getReact + render + release methods', function () {
+        expect(api.react.getReact).to.be.a('function')
+        expect(api.react.render).to.be.a('function')
+        expect(api.react.release).to.be.a('function')
+      })
+      it('adds a hook', function () {
+        expect(options.hasHooks('variation', 'remove')).to.equal(true)
+      })
+    })
+  })
+
   describe('uv object', function () {
     var clock, uv
 
     beforeEach(function () {
       clock = sinon.useFakeTimers()
-      uv = transform(pkg, variationName).createApi('blah').uv
+      uv = transform(pkg, variationName).createApi('triggers').uv
     })
 
     afterEach(() => {
@@ -146,7 +185,7 @@ describe('transform', function () {
   describe('meta object', function () {
     var meta
     beforeEach(function () {
-      meta = transform(pkg, variationName).createApi('blah').meta
+      meta = transform(pkg, variationName).createApi('triggers').meta
     })
 
     it('gets enriched with a cookieDomain attribute', function () {
