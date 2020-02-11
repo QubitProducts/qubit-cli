@@ -2,9 +2,9 @@ const now = require('now-plus')
 
 module.exports = () => ({
   area: 'By the bike shed',
-  areaCode: 90210,
+  areaCode: '90210',
   city: 'Craggy Island',
-  cityCode: 61206,
+  cityCode: '61206',
   conversionCycleNumber: 1,
   conversionNumber: 0,
   cookiePersists: true,
@@ -21,7 +21,7 @@ module.exports = () => ({
   longitude: 20,
   pageViewNumber: 1,
   region: 'Slough',
-  regionCode: 90210,
+  regionCode: '90210',
   sample: 61328,
   sessionNumber: 4,
   sessionTs: +now.minus(1, 'hour'),
