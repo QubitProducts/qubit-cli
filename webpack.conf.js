@@ -74,7 +74,7 @@ module.exports = {
       // experience css
       {
         test: /\.(css|less)$/,
-        use: [ 'style-loader', 'raw-loader', 'less-loader' ],
+        use: [ 'raw-loader', 'less-loader' ],
         exclude: NODE_MODULES
       },
       // package.json
