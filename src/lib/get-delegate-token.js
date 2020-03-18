@@ -53,7 +53,7 @@ async function getTokenOpts () {
   if (process.env.QUBIT_TOKEN) return { refresh_token: process.env.QUBIT_TOKEN }
   let token = await qubitrc.get(ID_TOKEN)
   if (tokenHasExpired(token, Date.now(), ms('1 day'))) {
-    const token = await getToken(
+    token = await getToken(
       'id_token',
       'openid profile offline_access',
       'You are logged in! You can now close this tab.'
