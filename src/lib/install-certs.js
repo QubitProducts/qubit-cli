@@ -1,6 +1,7 @@
 const pem = require('pem')
 const opn = require('opn')
 const execa = require('execa')
+const sudo = require('sudo-prompt')
 const fs = require('fs-extra')
 const windosu = require('windosu')
 const confirm = require('confirmer')
@@ -46,6 +47,11 @@ module.exports = async function setup () {
     .then(saveCerts)
     .then(chmodCerts)
     .then(installCerts)
+    .catch(async err => {
+      log.error(err)
+      await fs.remove(CERT_DIR)
+      throw err
+    })
 }
 
 function createCerts () {
@@ -79,6 +85,7 @@ async function installCerts () {
     log.info('All done!')
     log.info('The certificate has been created in ' + CERT_DIR + 'and has been added to your system as a trusted certificate.')
   } catch (err) {
+    log.error(err)
     log.error('Could not install certificates automatically')
     const result = await confirm(`Would you like to install them manually?`)
     if (result) {
@@ -96,7 +103,12 @@ async function installCerts () {
 }
 
 async function installCertsOSX () {
-  return execa.shell(`sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "${CERT_PATH}"`)
+  return new Promise((resolve, reject) => {
+    sudo.exec(`security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "${CERT_PATH}"`, {}, (error) => {
+      if (error) return reject(error)
+      resolve()
+    })
+  })
 }
 
 async function installCertsLinux () {
@@ -112,7 +124,12 @@ async function installCertsLinux () {
   }
   await fs.ensureDir(certDir)
   await fs.copy(CERT_PATH, certDir)
-  return execa.shell(`sudo ${updateCmd}`)
+  return new Promise((resolve, reject) => {
+    sudo.exec(updateCmd, {}, (error) => {
+      if (error) return reject(error)
+      resolve()
+    })
+  })
 }
 
 function installCertsWin () {
