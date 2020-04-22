@@ -67,10 +67,16 @@ module.exports = async function run (pkg) {
     })
 
   program
-    .command('create [propertyId]')
+    .command('create [propertyId] [name] [split]')
     .usage(chalk.gray(`
     Create using propertyId:
     qubit create 1010
+
+    Crete using propertyId and new experience name:
+    qubit create 1010 myExperiece
+
+    Create using propertyId and new experience name and traffic split:
+    qubit create 1010 myExperiece 0.5
 
     Create using autocomplete or by navigating to your experience in the browser:
     qubit clone`))
