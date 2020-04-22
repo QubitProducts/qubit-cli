@@ -67,7 +67,7 @@ module.exports = async function run (pkg) {
     })
 
   program
-    .command('create [propertyId] [name] [split]')
+    .command('create [propertyId] [name] [split] [template]')
     .usage(chalk.gray(`
     Create using propertyId:
     qubit create 1010

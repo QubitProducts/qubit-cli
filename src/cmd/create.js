@@ -7,13 +7,13 @@ const CWD = process.cwd()
 const { getPropertyId } = require('../lib/get-resource-ids')
 const { getPublishedTemplates } = require('../lib/get-templates')
 
-module.exports = async function create (pid, xpName, traffic) {
+module.exports = async function create (pid, xpName, traffic, selectedTemplate = null) {
   const propertyId = await getPropertyId(pid)
 
+  const isProgrammatic = pid && xpName && traffic && !selectedTemplate
   const templates = await getPublishedTemplates(propertyId)
-  let selectedTemplate = null
 
-  if (templates.length) {
+  if (templates.length && !isProgrammatic) {
     selectedTemplate = await input.select(
       formatLog(`   Please select a template you'd like to create this experience from:`),
       formatTemplates(templates),
