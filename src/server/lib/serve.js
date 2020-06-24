@@ -6,7 +6,7 @@ const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware')
 const webpackHotMiddleware = require('webpack-hot-middleware')
 const pickVariation = require('../../lib/pick-variation')
-const webpackConf = require('../../../webpack.conf')
+const getWebpackConfig = require('../../../webpack')
 const config = require('../../../config')
 const log = require('../../lib/log')
 const createApp = require('../app')
@@ -22,6 +22,7 @@ let CWD = process.cwd()
 module.exports = async function serve (options) {
   await installQubitDeps()
   const app = await createApp()
+  const pkg = await getPkg()
 
   app.use(cors())
   options.verbose = options.verbose || false
@@ -30,7 +31,7 @@ module.exports = async function serve (options) {
     log.info('Hint: you should be watching the entry point for your experience, i.e. your variation file!')
   }
 
-  options.isPreScript = _.get(await getPkg(), 'meta.isPreScript')
+  options.isPreScript = _.get(pkg, 'meta.isPreScript')
 
   if (options.isPreScript) {
     options.fileName = 'pre'
@@ -58,8 +59,9 @@ module.exports = async function serve (options) {
     stats: options.verbose ? 'normal' : false,
     warn: options.verbose
   }
+  const webpackConf = createWebpackConfig(options, pkg)
 
-  const compiler = webpack(createWebpackConfig(options))
+  const compiler = webpack(webpackConf)
 
   compiler.plugin('done', stats => {
     if (!options.verbose && stats.hasErrors()) {
@@ -91,16 +93,24 @@ module.exports = async function serve (options) {
   })
 }
 
-function createWebpackConfig (options) {
-  return Object.assign({}, webpackConf, {
-    entry: [
-      path.join(CLIENT_PATH, options.isPreScript ? 'serve-pre' : 'serve-experience')
-    ].concat(webpackConf.entry),
-    plugins: webpackConf.plugins.concat([
-      new webpack.DefinePlugin({
-        __VARIATION__: `'${options.fileName}'`,
-        __VARIATION_STYLE_EXTENSION__: `'${STYLE_EXTENSION}'`
-      })
-    ])
+function createWebpackConfig (options, pkg) {
+  const config = getWebpackConfig()
+  config.entry.push(
+    path.join(CLIENT_PATH, options.isPreScript ? 'serve-pre' : 'serve-experience')
+  )
+  config.plugins.push(new webpack.DefinePlugin({
+    __VARIATION__: `'${options.fileName}'`,
+    __VARIATION_STYLE_EXTENSION__: `'${STYLE_EXTENSION}'`
+  }))
+  config.module.loaders.forEach(rule => {
+    rule.use.forEach(loader => {
+      if (_.get(loader, ['options', 'variationMasterId'])) {
+        loader.options.variationMasterId = Number(options.fileName.replace(/[^0-9]/gi, ''))
+      }
+      if (_.get(loader, ['options', 'experienceId'])) {
+        loader.options.experienceId = _.get(pkg, ['meta', 'experienceId'], 1)
+      }
+    })
   })
+  return config
 }
