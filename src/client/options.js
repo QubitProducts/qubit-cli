@@ -9,6 +9,7 @@ const poller = require('@qubit/poller')
 const resolve = require('sync-p/resolve')
 const createEmitMetric = require('./emit-metric')
 const createEmitCustomGoal = require('./emit-custom-goal')
+const createCookieApi = require('./create-cookie-api')
 const uv = require('./uv')()
 const jolt = require('./jolt')()
 const createHooks = require('./hooks')
@@ -75,6 +76,7 @@ module.exports = function transform (pkg, key) {
           get: get,
           set: set
         },
+        cookies: createCookieApi(experienceMeta.cookieDomain),
         react: _.pick(react, name === 'triggers' ? ['register', 'release'] : ['getReact', 'render', 'release']),
         log: log,
         getVisitorState: () => resolve({ ...visitor }),
