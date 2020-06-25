@@ -2,11 +2,13 @@ const _ = require('lodash')
 const { expect } = require('chai')
 const sinon = require('sinon')
 const codeService = require('../../src/services/code')
+const propertyService = require('../../src/services/property')
 const experienceService = require('../../src/services/experience')
 const iterationService = require('../../src/services/iteration')
 const goalService = require('../../src/services/goal')
 const qfnService = require('../../src/services/qfn')
 const variationService = require('../../src/services/variation')
+const propertyFixture = require('../fixtures/property.json')
 const experienceFixture = require('../fixtures/experience.json')
 const goalsFixture = require('../fixtures/goals.json')
 const qfnsFixture = require('../fixtures/qfns.json')
@@ -14,12 +16,13 @@ const variationsFixture = require('../fixtures/variations.json')
 const filesFixture = require('../fixtures/files')
 
 describe('codeService', function () {
-  let sandbox, propertyId, experienceId, iterationId, experience, iteration, goals, qfns, variations, files
+  let sandbox, propertyId, experienceId, iterationId, property, experience, iteration, goals, qfns, variations, files
 
   beforeEach(() => {
     propertyId = 123
     experienceId = 456
     iterationId = 101112
+    property = _.cloneDeep(propertyFixture)
     experience = _.cloneDeep(experienceFixture)
     iteration = _.cloneDeep(experienceFixture.recent_iterations.draft)
     variations = _.cloneDeep(variationsFixture)
@@ -28,6 +31,7 @@ describe('codeService', function () {
     files = _.cloneDeep(filesFixture)
     iteration.schema = JSON.parse(files['fields.json'])
     sandbox = sinon.sandbox.create()
+    sandbox.stub(propertyService, 'get').returns(Promise.resolve(property))
     sandbox.stub(experienceService, 'get').returns(Promise.resolve(experience))
     sandbox.stub(experienceService, 'set').returns(Promise.resolve())
     sandbox.stub(iterationService, 'get').returns(Promise.resolve(iteration))

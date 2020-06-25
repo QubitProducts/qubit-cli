@@ -2,7 +2,7 @@ const _ = require('lodash')
 const { btoa } = require('b2a')
 const { getFilename } = require('./variation')
 
-function getCode (experience, iteration, goals, qfns, variations) {
+function getCode (property, experience, iteration, goals, qfns, variations) {
   const isTemplate = Boolean(experience.is_template)
   const type = isTemplate ? 'template' : 'experience'
   const files = {}
@@ -19,6 +19,7 @@ function getCode (experience, iteration, goals, qfns, variations) {
     meta: {
       name: experience.name,
       propertyId: experience.property_id,
+      vertical: property.vertical,
       experienceId: experience.id,
       iterationId: iteration.id,
       previewUrl: iteration.url,

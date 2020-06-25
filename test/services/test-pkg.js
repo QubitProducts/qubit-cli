@@ -2,15 +2,17 @@ const _ = require('lodash')
 const { expect } = require('chai')
 const pkgService = require('../../src/services/pkg')
 const pkgFixture = require('../fixtures/pkg.json')
+const propertyFixture = require('../fixtures/property.json')
 const experienceFixture = require('../fixtures/experience.json')
 const goalsFixture = require('../fixtures/goals.json')
 const qfnsFixture = require('../fixtures/qfns.json')
 const variationsFixture = require('../fixtures/variations.json')
 
 describe('pkgService', () => {
-  let experience, iteration, goals, qfns, variations, pkg
+  let property, experience, iteration, goals, qfns, variations, pkg
 
   beforeEach(() => {
+    property = _.cloneDeep(propertyFixture)
     experience = _.cloneDeep(experienceFixture)
     iteration = _.cloneDeep(experienceFixture.recent_iterations.draft)
     goals = _.cloneDeep(goalsFixture)
@@ -21,7 +23,7 @@ describe('pkgService', () => {
 
   describe('getCode', function () {
     it('should build a package.json file from an experience and its variations', () => {
-      expect(JSON.parse(pkgService.getCode(experience, iteration, goals, qfns, variations)['package.json'])).to.eql(pkgFixture)
+      expect(JSON.parse(pkgService.getCode(property, experience, iteration, goals, qfns, variations)['package.json'])).to.eql(pkgFixture)
     })
   })
 

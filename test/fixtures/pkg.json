@@ -5,6 +5,7 @@
   "meta": {
     "name": "New styles",
     "propertyId": 123,
+    "vertical": "horizontal",
     "experienceId": 456,
     "iterationId": 101112,
     "previewUrl": "http://trumpdonald.org",
