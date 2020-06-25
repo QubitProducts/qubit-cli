@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const propertyService = require('./property')
 const experienceService = require('./experience')
 const iterationService = require('./iteration')
 const goalsService = require('./goal')
@@ -9,13 +10,14 @@ const withMetrics = require('../lib/with-metrics')
 const getUser = require('../lib/get-user')
 
 async function get (propertyId, experienceId, iterationId) {
+  const property = await propertyService.get(propertyId)
   const experience = await experienceService.get(experienceId)
   iterationId = iterationId || experience.last_iteration_id
   const iteration = await iterationService.get(iterationId)
   const goals = await goalsService.get(iterationId)
   const qfns = await qfnsService.get(iterationId)
   const variations = await variationService.getAll(iterationId)
-  return getCode(experience, iteration, goals, qfns, variations)
+  return getCode(property, experience, iteration, goals, qfns, variations)
 }
 
 async function set (propertyId, experienceId, files) {
@@ -53,9 +55,9 @@ function eql (a, b) {
   return _.isEqual(a, b)
 }
 
-function getCode (experience, iteration, goals, qfns, variations, isTemplate) {
+function getCode (property, experience, iteration, goals, qfns, variations, isTemplate) {
   const files = {}
-  Object.assign(files, iterationService.getCode(iteration), pkgService.getCode(experience, iteration, goals, qfns, variations))
+  Object.assign(files, iterationService.getCode(iteration), pkgService.getCode(property, experience, iteration, goals, qfns, variations))
   variations.filter((v) => !v.is_control).map(variationService.getCode).forEach((v) => Object.assign(files, v))
   return files
 }
