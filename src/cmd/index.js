@@ -72,7 +72,7 @@ module.exports = async function run (pkg) {
     Create using propertyId:
     qubit create 1010
 
-    Crete using propertyId and new experience name:
+    Create using propertyId and new experience name:
     qubit create 1010 myExperiece
 
     Create using propertyId and new experience name and traffic split:
