@@ -51,7 +51,7 @@
     "jsonwebtoken": "^8.1.1",
     "less": "^3.0.0",
     "less-loader": "^5.0.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.20",
     "micro-amd": "^1.2.3",
     "ms": "^2.0.0",
     "now-plus": "^1.0.3",
