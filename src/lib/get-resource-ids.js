@@ -55,8 +55,41 @@ async function getIterationId (experienceId) {
   return iterationId
 }
 
+async function getPlacementId (propertyId, placementId, pkg) {
+  if (placementId) return placementId
+  placementId = _.get(pkg, 'meta.placementId')
+  if (!placementId) {
+    placementId = await suggest.placement(propertyId)
+  }
+  if (!placementId) throw new Error('This command requires a placement')
+  return placementId
+}
+
+async function getLocationId (propertyId, locationId, pkg) {
+  if (locationId) return locationId
+  locationId = _.get(pkg, 'meta.locationId')
+  if (!locationId) {
+    locationId = await suggest.location(propertyId)
+  }
+  if (!locationId) throw new Error('This command requires a location')
+  return locationId
+}
+
+async function getPersonalisationType (personalisationType, pkg) {
+  if (personalisationType) return personalisationType
+  personalisationType = _.get(pkg, 'meta.personalisationType')
+  if (!personalisationType) {
+    personalisationType = await suggest.personalisationType()
+  }
+  if (!personalisationType) throw new Error('This command requires a personalisation type')
+  return personalisationType
+}
+
 module.exports = {
   getPropertyAndExperienceIds,
   getPropertyId,
-  getIterationId
+  getIterationId,
+  getPlacementId,
+  getLocationId,
+  getPersonalisationType
 }
