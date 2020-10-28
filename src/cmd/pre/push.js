@@ -11,7 +11,7 @@ const writePkg = require('../../lib/write-pkg')
 const CWD = process.cwd()
 
 module.exports = async function push (options = {}) {
-  await throwIf.experience('qubit push')
+  await throwIf.pre('push')
   const pkg = await getPkg()
   const { propertyId } = (pkg.meta || {})
   if (!propertyId) {

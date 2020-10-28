@@ -8,7 +8,7 @@ const throwIf = require('../lib/throw-if')
 let CWD = process.cwd()
 
 module.exports = async function diff (propertyId, experienceId, iterationId) {
-  await throwIf.pre('qubit pre diff')
+  await throwIf.experience('diff')
   const pkg = await getPkg()
   ;({ propertyId, experienceId } = await getPropertyAndExperienceIds(propertyId, experienceId, pkg) || {})
 

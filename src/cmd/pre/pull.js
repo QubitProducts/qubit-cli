@@ -3,6 +3,7 @@ const { getPropertyId } = require('../../lib/get-resource-ids')
 const getPkg = require('../../lib/get-pkg')
 const scaffold = require('../../lib/scaffold')
 const throwIf = require('../../lib/throw-if')
+const isOneOf = require('../../lib/is-one-of')(['live', 'draft'])
 const log = require('../../lib/log')
 
 const CWD = process.cwd()
@@ -13,12 +14,10 @@ module.exports = async function pull (propertyId, revisionType = 'draft') {
     propertyId = null
     revisionType = propertyId
   }
-  if (!VALID_REVISIONS.includes(revisionType)) {
-    throw new Error(`'${revisionType}' is not a valid revision`)
-  }
+  await throwIf.pre('pull')
+  isOneOf(revisionType)
   const pkg = await getPkg()
   propertyId = await getPropertyId(propertyId, pkg)
-  await throwIf.experience('qubit pull')
   const revision = await preService.get(propertyId, revisionType)
   const files = {
     'package.json': JSON.stringify(revision.packageJson, null, 2),

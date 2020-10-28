@@ -6,7 +6,7 @@ const throwIf = require('../lib/throw-if')
 
 module.exports = async function experienceAction (cmd) {
   if (cmd === 'publish') {
-    await throwIf.pre('qubit pre publish')
+    await throwIf.experience('publish')
   }
   const pkg = await getPkg()
   if (!pkg.meta) return log.warn('Navigate to an experience directory and try again')

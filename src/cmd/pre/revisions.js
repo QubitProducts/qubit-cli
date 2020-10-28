@@ -6,7 +6,7 @@ const log = require('../../lib/log')
 const { getPropertyId } = require('../../lib/get-resource-ids')
 
 module.exports = async function revisions (propertyId) {
-  await throwIf.experience('qubit status')
+  await throwIf.pre('status')
   const pkg = await getPkg()
   propertyId = await getPropertyId(propertyId, pkg)
   const revisions = await preService.revisions(propertyId)

@@ -6,12 +6,9 @@ const terminal = require('../../lib/terminal')
 const log = require('../../lib/log')
 
 module.exports = async function publish (options = {}) {
-  await throwIf.experience('qubit publish')
+  await throwIf.pre('publish')
   const pkg = await getPkg()
   const { propertyId } = pkg.meta || {}
-  if (!propertyId) {
-    throw new Error('This command only works in a pre script directory')
-  }
 
   if (!options.force) {
     const revision = await preService.get(propertyId, 'draft')

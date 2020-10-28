@@ -5,7 +5,7 @@ const throwIf = require('../lib/throw-if')
 const CWD = process.cwd()
 
 module.exports = async function clone (propertyId, experienceId) {
-  await throwIf.pre('qubit pre clone')
+  await throwIf.none('clone')
   const pkg = await getPkg()
   ;({ propertyId, experienceId } = await getPropertyAndExperienceIds(propertyId, experienceId, pkg) || {})
   await cloneExperience(CWD, propertyId, experienceId)
