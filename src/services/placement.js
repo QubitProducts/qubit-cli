@@ -39,7 +39,7 @@ async function get (propertyId, placementId, implementationType = 'draft') {
 }
 
 async function set (propertyId, placementId, files) {
-  const code = fromFiles(files)
+  const spec = fromFiles(files)
   const data = await query(`
     mutation UpdatePlacement($placementSpec: PlacementUpdate!) {
       updatePlacement(placementUpdate: $placementSpec) {
@@ -48,9 +48,7 @@ async function set (propertyId, placementId, files) {
     }`, {
     placementSpec: {
       id: placementId,
-      code: {
-        ...code
-      }
+      ...spec
     }
   })
   return normaisePlacement(propertyId, _.get(data, 'updatePlacement'))
@@ -131,7 +129,8 @@ async function status (propertyId, placementId) {
 module.exports = { getAll, get, set, publish, unpublish, status, create, locations }
 
 function normaisePlacement (propertyId, placement, implementationType = 'draft') {
-  const implementation = _.get(placement, `${implementationType}Implementation`)
+  const implementation = placement[`${implementationType}Implementation`]
+  if (!implementation) return null
 
   const code = implementation.code
   const packageJson = typeof code.packageJson === 'string'
@@ -158,7 +157,7 @@ function normaisePlacement (propertyId, placement, implementationType = 'draft')
   }
 
   return code
-    ? toFiles(code)
+    ? toFiles(code, placement.schema.samplePayload)
     : null
 }
 

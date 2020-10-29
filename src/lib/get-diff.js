@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const codeService = require('../services/code')
 const preService = require('../services/pre')
 const placementService = require('../services/placement')
@@ -28,9 +29,10 @@ async function pre (cwd, propertyId, revisionType = 'draft') {
 }
 
 async function placement (cwd, propertyId, placementId, implementationType = 'draft') {
+  const omitPayload = f => _.omit(f, 'payload.json')
   const remoteFiles = await placementService.get(propertyId, placementId, implementationType)
   const localFiles = await readFiles(cwd)
-  return jsDiffCheck(localFiles, remoteFiles)
+  return jsDiffCheck(omitPayload(localFiles), omitPayload(remoteFiles))
 }
 
 function jsDiffCheck (localFiles, files) {
