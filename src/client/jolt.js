@@ -9,7 +9,12 @@ module.exports = function getJolt () {
 // it then proxies the calls made to it to actual jolt
 function mockJolt (logger) {
   let fakeJolt = {}
-  ;['onEnrichment', 'onceEnrichment', 'onSuccess', 'onceSuccess'].forEach(method => {
+  ;[
+    'onEnrichment',
+    'onceEnrichment',
+    'onSuccess',
+    'onceSuccess'
+  ].forEach(method => {
     fakeJolt[method] = function () {
       let replay, dispose, call
       waitUntil(() => qubitThings('jolt')).then(() => {
@@ -36,6 +41,15 @@ function mockJolt (logger) {
     get: function get () {
       let jolt = qubitThings('jolt')
       return jolt ? jolt.events : []
+    }
+  })
+
+  ;['getBrowserState', 'getVisitorState'].forEach(method => {
+    fakeJolt[method] = function (...args) {
+      return waitUntil(() => qubitThings('jolt')).then(() => {
+        let jolt = qubitThings('jolt')
+        return jolt[method](...args)
+      })
     }
   })
   return fakeJolt

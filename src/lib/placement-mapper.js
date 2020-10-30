@@ -4,7 +4,7 @@ function toFiles (code, samplePayload) {
   return {
     'payload.json': JSON.stringify(samplePayload, null, 2),
     'placement.js': code.js,
-    'placement.css': code.css,
+    'placement.less': code.css,
     'package.json': JSON.stringify(code.packageJson, null, 2)
   }
 }
@@ -16,7 +16,7 @@ function fromFiles (files) {
     },
     code: {
       js: files['placement.js'],
-      css: files['placement.css'],
+      css: files['placement.less'],
       packageJson: JSON.parse(files['package.json'])
     }
   }
