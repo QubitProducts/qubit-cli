@@ -5,6 +5,7 @@ const getJolt = require('./jolt')
 const getUv = require('./uv')
 const logger = require('./logger')
 const getCookieDomain = require('./get-cookie-domain')
+const applyPreviewSettings = require('./preview-settings')
 const disposables = []
 
 servePlacement()
@@ -26,12 +27,26 @@ module.hot.accept([
   if (disposables.length === 1) {
     return window.location.reload()
   }
-  flush(disposables)
+  while (disposables.length) disposables.pop()()
   servePlacement()
 })
 
 function servePlacement () {
   const packageJson = require('package.json')
+  const {
+    placementId,
+    propertyId,
+    trackingId,
+    namespace,
+    vertical,
+    visitorId = 'visitorId',
+    cookieDomain = getCookieDomain(packageJson.meta.domains)
+  } = packageJson.meta || {}
+
+  applyPreviewSettings(cookieDomain, {
+    exclude: [placementId]
+  })
+
   const code = {
     js: require('placement.js'),
     css: function () {
@@ -45,18 +60,9 @@ function servePlacement () {
   }
   const payload = require('payload.json')
 
-  const {
-    placementId,
-    propertyId,
-    trackingId,
-    namespace,
-    vertical,
-    visitorId = 'visitorId'
-  } = packageJson.meta || {}
-
   const config = {
     propertyId,
-    cookieDomain: getCookieDomain(packageJson.meta.domains),
+    cookieDomain,
     qpNamespace: namespace,
     trackingId,
     propertyVertical: vertical
@@ -89,8 +95,4 @@ function servePlacement () {
     onImpression: () => api.log.trace('onImpression called'),
     onClickthrough: () => api.log.trace('onClickthrough called')
   })
-}
-
-function flush (disposables) {
-  while (disposables.length) disposables.pop()()
 }
