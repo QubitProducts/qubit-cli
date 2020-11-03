@@ -5,26 +5,14 @@ const yurl = require('urlite/extra')
 const PREVIEW_KEYS = ['qb_opts', 'qb_experiences', 'qb_exclude', 'smartserve_preview']
 let cm = require('cookieman')
 
-module.exports = function applyPreviewSettings (meta, include, exclude) {
+module.exports = function applyPreviewSettings (cookieDomain, previewOptions) {
   const initialCookieVal = cm.val('qb_opts')
   cm.clearAll('qb_opts')
-  const cookieOptions = getCookieOptions(meta.cookieDomain)
-  const cookieVal = getPreviewCookie(meta, include, exclude)
-  cm.set('qb_opts', cookieVal, cookieOptions)
+  const cookieVal = encodeURIComponent(JSON.stringify(previewOptions))
+  cm.set('qb_opts', cookieVal, { path: '/', domain: cookieDomain, expires: now.plus(15, 'minutes') })
   // if the current value is different we need to reload, as smartserve may already have fired
   const url = getUrl(location(), initialCookieVal && (initialCookieVal !== cookieVal))
   if (url) reload(url)
-}
-
-function getCookieOptions (cookieDomain) {
-  return { path: '/', domain: cookieDomain, expires: now.plus(15, 'minutes') }
-}
-
-function getPreviewCookie (meta, include, exclude) {
-  exclude = exclude || []
-  const previewOptions = { preview: meta.isPreview, exclude: exclude.concat(meta.experienceId).sort() }
-  if (include) previewOptions.experiences = include.sort()
-  return encodeURIComponent(JSON.stringify(previewOptions))
 }
 
 function urlHasPreviewKeys (params) {

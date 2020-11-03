@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const propertyService = require('./property')
 const { query } = require('../lib/graphql')
 const { fromFiles, toFiles } = require('../lib/placement-mapper')
 
@@ -35,11 +36,11 @@ async function get (propertyId, placementId, implementationType = 'draft') {
   }`, { propertyId, placementId })
 
   const placement = _.get(data, 'property.atom.placement')
-  return normaisePlacement(propertyId, placement, implementationType)
+  return normalisePlacement(propertyId, placement, implementationType)
 }
 
 async function set (propertyId, placementId, files) {
-  const code = fromFiles(files)
+  const spec = fromFiles(files)
   const data = await query(`
     mutation UpdatePlacement($placementSpec: PlacementUpdate!) {
       updatePlacement(placementUpdate: $placementSpec) {
@@ -48,12 +49,10 @@ async function set (propertyId, placementId, files) {
     }`, {
     placementSpec: {
       id: placementId,
-      code: {
-        ...code
-      }
+      ...spec
     }
   })
-  return normaisePlacement(propertyId, _.get(data, 'updatePlacement'))
+  return normalisePlacement(propertyId, _.get(data, 'updatePlacement'))
 }
 
 async function publish (propertyId, placementId) {
@@ -66,7 +65,7 @@ async function publish (propertyId, placementId) {
     `, {
     id: placementId
   })
-  return normaisePlacement(propertyId, _.get(data, 'publishPlacement'))
+  return normalisePlacement(propertyId, _.get(data, 'publishPlacement'))
 }
 
 async function unpublish (propertyId, placementId) {
@@ -79,7 +78,7 @@ async function unpublish (propertyId, placementId) {
     `, {
     id: placementId
   })
-  return normaisePlacement(propertyId, _.get(data, 'unpublishPlacement'))
+  return normalisePlacement(propertyId, _.get(data, 'unpublishPlacement'))
 }
 
 async function create (propertyId, placementSpec) {
@@ -92,7 +91,7 @@ async function create (propertyId, placementSpec) {
     `, {
     placementSpec
   })
-  return normaisePlacement(propertyId, _.get(data, 'createPlacement'))
+  return normalisePlacement(propertyId, _.get(data, 'createPlacement'))
 }
 
 async function locations (propertyId) {
@@ -130,8 +129,10 @@ async function status (propertyId, placementId) {
 
 module.exports = { getAll, get, set, publish, unpublish, status, create, locations }
 
-function normaisePlacement (propertyId, placement, implementationType = 'draft') {
-  const implementation = _.get(placement, `${implementationType}Implementation`)
+async function normalisePlacement (propertyId, placement, implementationType = 'draft') {
+  const property = await propertyService.get(propertyId)
+  const implementation = placement[`${implementationType}Implementation`]
+  if (!implementation) return null
 
   const code = implementation.code
   const packageJson = typeof code.packageJson === 'string'
@@ -151,6 +152,10 @@ function normaisePlacement (propertyId, placement, implementationType = 'draft')
         implementationId: implementation.id,
         locationId: placement.location.id,
         personalisationType: placement.personalisationType,
+        vertical: property.vertical,
+        domains: property.domains,
+        namespace: property.qp_namespace,
+        trackingId: property.trackingId,
         remoteUpdatedAt: implementation.updatedAt
       },
       dependencies: { ...code.packageJson.dependencies }
@@ -158,7 +163,7 @@ function normaisePlacement (propertyId, placement, implementationType = 'draft')
   }
 
   return code
-    ? toFiles(code)
+    ? toFiles(code, placement.schema.samplePayload)
     : null
 }
 

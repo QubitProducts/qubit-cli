@@ -10,6 +10,7 @@ const resolve = require('sync-p/resolve')
 const createEmitMetric = require('./emit-metric')
 const createEmitCustomGoal = require('./emit-custom-goal')
 const createCookieApi = require('./create-cookie-api')
+const getCookieDomain = require('./get-cookie-domain')
 const uv = require('./uv')()
 const jolt = require('./jolt')()
 const createHooks = require('./hooks')
@@ -22,7 +23,7 @@ module.exports = function transform (pkg, key) {
   const segments = meta.segments || []
   const visitor = Object.assign({}, defaultVisitor(), _.get(pkg, 'meta.visitor'))
   const experienceMeta = {
-    cookieDomain: meta.cookieDomain || window.location.host,
+    cookieDomain: meta.cookieDomain || meta.domains ? getCookieDomain(meta.domains) : window.location.host,
     trackingId: meta.trackingId || 'tracking_id',
     // preferred
     experienceId: meta.experimentId || meta.experienceId,

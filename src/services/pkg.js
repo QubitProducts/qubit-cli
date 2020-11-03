@@ -20,6 +20,8 @@ function getCode (property, experience, iteration, goals, qfns, variations) {
       name: experience.name,
       propertyId: experience.property_id,
       vertical: property.vertical,
+      namespace: property.qp_namespace,
+      domains: property.domains,
       experienceId: experience.id,
       iterationId: iteration.id,
       previewUrl: iteration.url,

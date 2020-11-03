@@ -32,9 +32,12 @@ module.exports = async function serve (options) {
   }
 
   options.isPreScript = _.get(pkg, 'meta.isPreScript')
+  options.isPlacement = _.get(pkg, 'meta.placementId')
 
   if (options.isPreScript) {
     options.fileName = 'pre'
+  } else if (options.isPlacement) {
+    options.fileName = 'placement'
   } else {
     await globalCodeWarning(CWD)
     await commonCodeWarning(CWD)
@@ -44,7 +47,7 @@ module.exports = async function serve (options) {
       options.fileName = await pickVariation(await fs.readdir(CWD))
 
       if (!options.fileName) {
-        return log.warn('Ensure you are within an experience directory and try again')
+        return log.warn('Please ensure you are within a directory with something to serve and try again!')
       }
     }
 
@@ -95,8 +98,14 @@ module.exports = async function serve (options) {
 
 function createWebpackConfig (options, pkg) {
   const config = getWebpackConfig()
+  let entry
+
+  if (options.isPreScript) entry = 'serve-pre'
+  if (options.isPlacement) entry = 'serve-placement'
+  if (!entry) entry = 'serve-experience'
+
   config.entry.push(
-    path.join(CLIENT_PATH, options.isPreScript ? 'serve-pre' : 'serve-experience')
+    path.join(CLIENT_PATH, entry)
   )
   config.plugins.push(new webpack.DefinePlugin({
     __VARIATION__: `'${options.fileName}'`,
@@ -104,11 +113,13 @@ function createWebpackConfig (options, pkg) {
   }))
   config.module.loaders.forEach(rule => {
     rule.use.forEach(loader => {
-      if (_.get(loader, ['options', 'variationMasterId'])) {
-        loader.options.variationMasterId = Number(options.fileName.replace(/[^0-9]/gi, ''))
-      }
-      if (_.get(loader, ['options', 'experienceId'])) {
-        loader.options.experienceId = _.get(pkg, ['meta', 'experienceId'], 1)
+      if (options.fileName.includes('variation')) {
+        if (_.get(loader, ['options', 'variationMasterId'])) {
+          loader.options.variationMasterId = Number(options.fileName.replace(/[^0-9]/gi, ''))
+        }
+        if (_.get(loader, ['options', 'experienceId'])) {
+          loader.options.experienceId = _.get(pkg, ['meta', 'experienceId'], 1)
+        }
       }
     })
   })
