@@ -5,7 +5,7 @@ const throwIf = require('../lib/throw-if')
 const CWD = process.cwd()
 
 module.exports = async function pull (propertyId, experienceId) {
-  await throwIf.pre('qubit pre pull')
+  await throwIf.experience('pull')
   const pkg = await getPkg()
   ;({ propertyId, experienceId } = await getPropertyAndExperienceIds(propertyId, experienceId, pkg) || {})
 

@@ -15,7 +15,7 @@ const throwIf = require('../lib/throw-if')
 let CWD = process.cwd()
 
 module.exports = async function push (options = {}) {
-  await throwIf.pre('qubit pre push')
+  await throwIf.experience('push')
   const pkg = await getPkg()
   const { propertyId, experienceId } = (pkg.meta || {})
   if (!propertyId || !experienceId) return log.info('Nothing to push')

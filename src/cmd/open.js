@@ -1,3 +1,4 @@
+const config = require('config')
 const _ = require('lodash')
 const getPkg = require('../lib/get-pkg')
 const log = require('../lib/log')
@@ -10,7 +11,7 @@ module.exports = async function previewLink (page = 'editor', options) {
 
   if (!propertyId || !experienceId) return required()
 
-  const experienceUrl = `https://app.qubit.com/p/${propertyId}/experiences/${experienceId}`
+  const experienceUrl = `${config.services.app}/p/${propertyId}/experiences/${experienceId}`
 
   if (/^editor|settings|overview$/.test(page)) {
     return opn(`${experienceUrl}/${page === 'overview' ? '' : page}`)

@@ -4,6 +4,7 @@ const hasYarn = require('has-yarn')
 const log = require('../lib/log')
 const installQubitDeps = require('../lib/install-qubit-deps')
 const pre = require('./pre')
+const placement = require('./placement')
 
 module.exports = async function run (pkg) {
   await installQubitDeps()
@@ -238,6 +239,13 @@ module.exports = async function run (pkg) {
     .command('revoke')
     .description('revoke an auth token')
     .action(cmd('revoke'))
+
+  const placementCommand = program
+    .command('placement')
+    .description('run `qubit placement --help` for more information')
+    .allowUnknownOption()
+    .action(placement.action)
+  placementCommand.outputHelp = pre.outputHelp
 
   const preCommand = program
     .command('pre')

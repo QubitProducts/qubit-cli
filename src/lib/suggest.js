@@ -2,6 +2,7 @@ const _ = require('lodash')
 const propertyService = require('../services/property')
 const experienceService = require('../services/experience')
 const iterationService = require('../services/iteration')
+const placementService = require('../services/placement')
 const log = require('./log')
 const formatLog = require('./format-log')
 const parseUrl = require('./parse-url')
@@ -12,6 +13,7 @@ const {
   yesOrNo,
   createAutoComplete
 } = require('./terminal')
+const { CAMPAIGN_TYPES } = require('../constants')
 
 async function property (message) {
   const suggestions = await getAutoCompleteMap({
@@ -34,6 +36,33 @@ async function experience (propertyId) {
     value: 'id'
   })
   return createAutoComplete(msg('Select an experience (start typing to filter the list)'), suggestions).response()
+}
+
+async function placement (propertyId) {
+  const suggestions = await getAutoCompleteMap({
+    arr: await placementService.getAll(propertyId),
+    title: 'name',
+    value: 'id'
+  })
+  return createAutoComplete(msg('Select a placement (start typing to filter the list)'), suggestions).response()
+}
+
+async function location (propertyId) {
+  const suggestions = await getAutoCompleteMap({
+    arr: await placementService.locations(propertyId),
+    title: 'name',
+    value: 'id'
+  })
+  return createAutoComplete(msg('Select a location (start typing to filter the list)'), suggestions).response()
+}
+
+async function personalisationType () {
+  const suggestions = await getAutoCompleteMap({
+    arr: _.map(CAMPAIGN_TYPES, type => ({ name: type.toLowerCase(), id: type })),
+    title: 'name',
+    value: 'id'
+  })
+  return createAutoComplete(msg('Select a location (start typing to filter the list)'), suggestions).response()
 }
 
 async function iteration (experienceId) {
@@ -129,4 +158,4 @@ function formatIterationNames (iterations) {
   return iterations
 }
 
-module.exports = { property, experience, iteration, both }
+module.exports = { property, experience, iteration, placement, location, personalisationType, both }

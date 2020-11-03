@@ -61,7 +61,7 @@ function serveExperience () {
     const triggersApi = options.createApi('triggers')
     const variationApi = options.createApi('variation')
 
-    applyPreviewSettings(options.meta, options.include, options.exclude)
+    applyExperiencePreviewSettings(options.meta, options.include, options.exclude)
 
     engine(triggersApi, variationApi, globalFn, triggerFn, variationFn, bypassTriggers)
 
@@ -146,6 +146,15 @@ function serveExperience () {
       if (hasActivated()) restart(true)
       // if hasn't activated yet no need to restart, as variation is loaded dynamically
     })
+  }
+
+  function applyExperiencePreviewSettings (meta, include, exclude) {
+    const previewOptions = {
+      exclude: (exclude || []).concat(meta.experienceId).sort(),
+      preview: meta.isPreview || false
+    }
+    if (include) previewOptions.experiences = include.sort()
+    return applyPreviewSettings(meta.cookieDomain, previewOptions)
   }
 
   function once (fn) {

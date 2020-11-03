@@ -9,9 +9,9 @@ const log = require('../../lib/log')
 const CWD = process.cwd()
 
 module.exports = async function clone (propertyId) {
+  await throwIf.none('clone')
   const pkg = await getPkg()
   propertyId = await getPropertyId(propertyId, pkg)
-  await throwIf.experience('qubit clone')
   const revision = await preService.get(propertyId, 'draft')
   const files = {
     'package.json': JSON.stringify(revision.packageJson, null, 2),
