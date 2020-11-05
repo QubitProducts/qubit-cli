@@ -1,7 +1,7 @@
 {
   "name": "qubit-cli",
   "version": "1.65.1",
-  "description": "a utility for previewing experiences built using the qubit experience platform",
+  "description": "Qubit command line interface",
   "main": "src/index.js",
   "bin": {
     "qubit": "bin/qubit"
@@ -10,7 +10,7 @@
     "test": "test"
   },
   "docpress": {
-    "github": "qubitdigital/xp-cli",
+    "github": "qubitdigital/qubit-cli",
     "dist": "docs"
   },
   "scripts": {

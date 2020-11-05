@@ -10,6 +10,8 @@ const log = require('../../lib/log')
 const REDIRECT_URI = `https://localhost:${config.port}/callback`
 
 module.exports = async function getPrimaryToken (name, scope, message) {
+  if (process.env.QUBIT_TOKEN) return process.env.QUBIT_TOKEN
+
   let token
   const app = await createApp()
   await app.start()
