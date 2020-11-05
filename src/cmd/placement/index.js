@@ -4,14 +4,14 @@ const log = require('../../lib/log')
 const program = new Command('placement')
 
 program
-  .command('clone [propertyId] [placementId] [active/draft]')
-  .description('clone a placement into a new directory')
-  .action(cmd('clone'))
-
-program
   .command('create [propertyId] [locationId] [personalisationType] [name]')
   .description('create a new placement')
   .action(cmd('create'))
+
+program
+  .command('clone [propertyId] [placementId] [active/draft]')
+  .description('clone a placement into a new directory')
+  .action(cmd('clone'))
 
 program
   .command('pull [propertyId] [placementId] [active/draft]')
@@ -25,17 +25,6 @@ program
   .action(cmd('push'))
 
 program
-  .command('open')
-  .arguments('[page]')
-  .description(`shortcut to open the placement editor`)
-  .action(cmd('open'))
-
-program
-  .command('diff [active/draft]')
-  .description('diff your local placement against the remote active/draft')
-  .action(cmd('diff'))
-
-program
   .command('publish')
   .description('publish your changes')
   .option('--force', 'force publish the remote draft even though your local draft is out of sync')
@@ -46,6 +35,16 @@ program
   .description('unpublish your changes')
   .option('--force', 'force publish the remote draft even though your local draft is out of sync')
   .action(cmd('unpublish'))
+
+program
+  .command('diff [active/draft]')
+  .description('diff your local placement against the remote active/draft')
+  .action(cmd('diff'))
+
+program
+  .command('open')
+  .description(`open the placement editor in your browser`)
+  .action(cmd('open'))
 
 const argv = process.argv.filter(arg => arg !== 'placement')
 

@@ -245,7 +245,7 @@ module.exports = async function run (pkg) {
     .description('run `qubit placement --help` for more information')
     .allowUnknownOption()
     .action(placement.action)
-  placementCommand.outputHelp = pre.outputHelp
+  placementCommand.outputHelp = placement.outputHelp
 
   const preCommand = program
     .command('pre')
