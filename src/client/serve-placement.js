@@ -40,7 +40,8 @@ function servePlacement () {
     namespace,
     vertical,
     visitorId = 'visitorId',
-    cookieDomain = getCookieDomain(packageJson.meta.domains)
+    cookieDomain = getCookieDomain(packageJson.meta.domains),
+    triggers
   } = packageJson.meta || {}
 
   applyPreviewSettings(cookieDomain, {
@@ -56,7 +57,8 @@ function servePlacement () {
       }
       add()
       return { add, remove }
-    }
+    },
+    triggers
   }
   const payload = require('payload.json')
 
