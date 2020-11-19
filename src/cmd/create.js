@@ -7,26 +7,28 @@ const CWD = process.cwd()
 const { getPropertyId } = require('../lib/get-resource-ids')
 const { getPublishedTemplates } = require('../lib/get-templates')
 
-module.exports = async function create (pid) {
+module.exports = async function create (pid, name, traffic, templateId = null) {
   const propertyId = await getPropertyId(pid)
 
+  const isProgrammatic = pid && name && traffic && !templateId
   const templates = await getPublishedTemplates(propertyId)
-  let selectedTemplate = null
 
-  if (templates.length) {
-    selectedTemplate = await input.select(
+  if (templates.length && !isProgrammatic) {
+    templateId = await input.select(
       formatLog(`   Please select a template you'd like to create this experience from:`),
       formatTemplates(templates),
       { default: null }
     )
   }
 
-  const name = clean(await input.text(
-    formatLog('   What would you like to call your experience?'),
-    { default: 'Created by Qubit-CLI' }
-  ))
-  const controlDecimal = await input.select(formatLog('   Select control size'), validControlSizes, { default: 0.5 })
-  await createExperience(CWD, propertyId, name, controlDecimal, selectedTemplate)
+  if (!name) {
+    name = clean(await input.text(
+      formatLog('   What would you like to call your experience?'),
+      { default: 'Created by Qubit-CLI' }
+    ))
+  }
+  const controlDecimal = traffic || await input.select(formatLog('   Select control size'), validControlSizes, { default: 0.5 })
+  await createExperience(CWD, propertyId, name, controlDecimal, templateId)
 }
 
 function clean (str) {
