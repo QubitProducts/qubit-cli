@@ -11,6 +11,6 @@
     "@qubit/poller": "^2.0.1",
     "@qubit/uv-api": "*",
     "@qubit/http-api": "^1.6.1",
-    "@qubit/placement-engine": "^1.4.2"
+    "@qubit/placement-engine": "^1.7.0"
   }
 }

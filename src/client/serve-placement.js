@@ -1,4 +1,5 @@
 const { createExecutioner } = require('@qubit/placement-engine/lib/executioner')
+const evaluateTriggers = require('@qubit/placement-engine/lib/evaluateTriggers')
 const API = require('@qubit/placement-engine/lib/API')
 const applyStyles = require('./styles')
 const getJolt = require('./jolt')
@@ -7,6 +8,7 @@ const logger = require('./logger')
 const getCookieDomain = require('./get-cookie-domain')
 const applyPreviewSettings = require('./preview-settings')
 const disposables = []
+const { VIEW_REGEX } = require('@qubit/placement-engine/lib/constants')
 
 servePlacement()
 
@@ -92,9 +94,28 @@ function servePlacement () {
     })
   }
 
-  return createExecutioner(code, api)({
-    content: payload,
-    onImpression: () => api.log.trace('onImpression called'),
-    onClickthrough: () => api.log.trace('onClickthrough called')
+  return Promise.all([
+    api.getBrowserState(),
+    getEvent(api, VIEW_REGEX)
+  ]).then(([{ ua }, viewEvent]) => {
+    const pass = evaluateTriggers(code.triggers, api, {
+      ua,
+      viewEvent,
+      url: window.location.href
+    })
+    if (!pass) return
+
+    return createExecutioner(code, api)({
+      content: payload,
+      onImpression: () => api.log.trace('onImpression called'),
+      onClickthrough: () => api.log.trace('onClickthrough called')
+    })
+  })
+}
+
+function getEvent (api, regex) {
+  return new Promise(resolve => {
+    const { replay } = api.uv.once(regex, resolve)
+    replay()
   })
 }
