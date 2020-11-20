@@ -156,7 +156,8 @@ async function normalisePlacement (propertyId, placement, implementationType = '
         domains: property.domains,
         namespace: property.qp_namespace,
         trackingId: property.trackingId,
-        remoteUpdatedAt: implementation.updatedAt
+        remoteUpdatedAt: implementation.updatedAt,
+        triggers: implementation.triggers
       },
       dependencies: { ...code.packageJson.dependencies }
     }
@@ -185,6 +186,7 @@ activeImplementation {
     css
     packageJson
   }
+  triggers
   updatedAt
 }
 draftImplementation {
@@ -195,5 +197,6 @@ draftImplementation {
     css
     packageJson
   }
+  triggers
   updatedAt
 }`
