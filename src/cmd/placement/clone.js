@@ -9,7 +9,11 @@ const log = require('../../lib/log')
 
 const CWD = process.cwd()
 
-module.exports = async function clone (propertyId, placementId, implementationType = 'draft') {
+module.exports = async function clone (
+  propertyId,
+  placementId,
+  implementationType = 'draft'
+) {
   await throwIf.none('clone')
   isOneOf(implementationType)
   const pkg = await getPkg()

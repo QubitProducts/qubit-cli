@@ -1,6 +1,6 @@
 const os = require('os')
 const path = require('path')
-const HOME = process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME']
+const HOME = process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME']
 const CERT_DIR = path.join(HOME, '.qubit-ssl')
 const CERT_PATH = path.join(CERT_DIR, 'qubit-serve.crt')
 const KEY_PATH = path.join(CERT_DIR, 'qubit-serve.key')
@@ -24,6 +24,14 @@ const CAMPAIGN_TYPES = {
   RECOMMENDATIONS: 'RECOMMENDATIONS',
   PERSONALISED_CONTENT: 'PERSONALISED_CONTENT'
 }
+const PLACEMENT_JS = `module.exports = function renderPlacement ({ content, onImpression, onClickthrough }) {
+  if (content) {
+
+  } else {
+    // The content may be null under certain circumstances but in these cases the onImpression and
+    //   onClickthrough should still be implemented, see docs.qubit.com/[..something..] for more information
+  }
+}`
 
 module.exports = {
   HOME,
@@ -39,5 +47,6 @@ module.exports = {
   REGISTRY_SCOPES,
   STYLE_EXTENSION,
   CLIENT_PATH,
-  CAMPAIGN_TYPES
+  CAMPAIGN_TYPES,
+  PLACEMENT_JS
 }
