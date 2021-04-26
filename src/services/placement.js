@@ -173,7 +173,6 @@ async function normalisePlacement (
   const property = await propertyService.get(propertyId)
   const implementation = placement[`${implementationType}Implementation`]
   if (!implementation) return null
-
   const code = {
     js: PLACEMENT_JS,
     css: '',
@@ -198,7 +197,7 @@ async function normalisePlacement (
       vertical: property.vertical,
       domains: property.domains,
       namespace: property.qp_namespace,
-      trackingId: property.trackingId,
+      trackingId: property.tracking_id,
       remoteUpdatedAt: implementation.updatedAt,
       triggers: implementation.triggers
     },
