@@ -5,9 +5,17 @@ const experienceFilename = require('./experience-filename')
 const scaffold = require('./scaffold')
 const log = require('./log')
 
-module.exports = async function createTemplate (CWD, propertyId, name, description) {
+module.exports = async function createTemplate (
+  CWD,
+  propertyId,
+  name,
+  description
+) {
   log.info('Creating template')
-  const template = await templatesService.create(propertyId, { name, description })
+  const template = await templatesService.create(propertyId, {
+    name,
+    description
+  })
   const files = await codeService.get(propertyId, template.id, true)
   const filename = experienceFilename(template)
   const dest = path.join(CWD, filename)

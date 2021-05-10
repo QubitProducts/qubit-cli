@@ -1,22 +1,27 @@
 {
-  "groups": [{
-    "id": "message",
-    "title": "Message",
-    "subtitle": "Choose the image and link for your message"
-  }],
-  "fields": [{
-    "type": "Image",
-    "label": "Image",
-    "description": "The banner image",
-    "required": true,
-    "key": "imageUrl",
-    "groupId": "message"
-  }, {
-    "type": "URL",
-    "label": "Link URL",
-    "description": "Where the banner should link to",
-    "required": true,
-    "key": "href",
-    "groupId": "message"
-  }]
+  "groups": [
+    {
+      "id": "message",
+      "title": "Message",
+      "subtitle": "Choose the image and link for your message"
+    }
+  ],
+  "fields": [
+    {
+      "type": "Image",
+      "label": "Image",
+      "description": "The banner image",
+      "required": true,
+      "key": "imageUrl",
+      "groupId": "message"
+    },
+    {
+      "type": "URL",
+      "label": "Link URL",
+      "description": "Where the banner should link to",
+      "required": true,
+      "key": "href",
+      "groupId": "message"
+    }
+  ]
 }

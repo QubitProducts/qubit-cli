@@ -34,7 +34,9 @@ ${chalk.bold(`Revision #${number}`)} - ${chalk.bold.magenta('draft')}
 
 function printPublished (revision, number, isLive) {
   console.log(`
-${chalk.bold(`Revision #${number}`)}${isLive ? ' - ' + chalk.bold.red('live') : ''}
+${chalk.bold(`Revision #${number}`)}${
+    isLive ? ' - ' + chalk.bold.red('live') : ''
+  }
   ${chalk.bold.gray('Published at:')} ${revision.publishedAt}
   ${chalk.bold.gray('Published by:')} ${revision.publishedBy.email}
   ${chalk.bold.gray('Changelog:')} ${revision.changelog || '-'}

@@ -26,7 +26,10 @@ async function property (message) {
   } else if (message) {
     log.info(message)
   }
-  return createAutoComplete(msg(`Select a property (start typing to filter the list)`), suggestions).response()
+  return createAutoComplete(
+    msg('Select a property (start typing to filter the list)'),
+    suggestions
+  ).response()
 }
 
 async function experience (propertyId) {
@@ -35,7 +38,10 @@ async function experience (propertyId) {
     title: 'name',
     value: 'id'
   })
-  return createAutoComplete(msg('Select an experience (start typing to filter the list)'), suggestions).response()
+  return createAutoComplete(
+    msg('Select an experience (start typing to filter the list)'),
+    suggestions
+  ).response()
 }
 
 async function placement (propertyId) {
@@ -44,7 +50,10 @@ async function placement (propertyId) {
     title: 'name',
     value: 'id'
   })
-  return createAutoComplete(msg('Select a placement (start typing to filter the list)'), suggestions).response()
+  return createAutoComplete(
+    msg('Select a placement (start typing to filter the list)'),
+    suggestions
+  ).response()
 }
 
 async function location (propertyId) {
@@ -53,16 +62,25 @@ async function location (propertyId) {
     title: 'name',
     value: 'id'
   })
-  return createAutoComplete(msg('Select a location (start typing to filter the list)'), suggestions).response()
+  return createAutoComplete(
+    msg('Select a location (start typing to filter the list)'),
+    suggestions
+  ).response()
 }
 
 async function personalisationType () {
   const suggestions = await getAutoCompleteMap({
-    arr: _.map(CAMPAIGN_TYPES, type => ({ name: type.toLowerCase(), id: type })),
+    arr: _.map(CAMPAIGN_TYPES, type => ({
+      name: type.toLowerCase(),
+      id: type
+    })),
     title: 'name',
     value: 'id'
   })
-  return createAutoComplete(msg('Select a location (start typing to filter the list)'), suggestions).response()
+  return createAutoComplete(
+    msg('Select a location (start typing to filter the list)'),
+    suggestions
+  ).response()
 }
 
 async function iteration (experienceId) {
@@ -71,7 +89,10 @@ async function iteration (experienceId) {
     title: 'listName',
     value: 'id'
   })
-  return createAutoComplete(msg('Select an iteration (start typing to filter the list)'), suggestions).response()
+  return createAutoComplete(
+    msg('Select an iteration (start typing to filter the list)'),
+    suggestions
+  ).response()
 }
 
 async function both () {
@@ -82,14 +103,16 @@ async function both () {
   })
 
   // main prompt
-  const prompt = msg('Select a property or navigate to an experience in your browser (start typing to filter the list)')
+  const prompt = msg(
+    'Select a property or navigate to an experience in your browser (start typing to filter the list)'
+  )
 
   // start app to monitor browser navigation
   const app = await createApp()
   await app.start()
 
   // get ids from either the auto-complete picker or from browser navigation
-  let result = await new Promise(async (resolve, reject) => {
+  let result = await new Promise((resolve, reject) => {
     // start auto-complete picker
     const ac = createAutoComplete(prompt, propertySuggestions)
     ac.response().then(resolve)
@@ -98,7 +121,11 @@ async function both () {
     app.post('/connect', async (req, res) => {
       // wrap up and abort auto-complete
       res.end()
-      if (!req.body.url) reject(new Error('Request to /connect endpoint received with no params'))
+      if (!req.body.url) {
+        reject(
+          new Error('Request to /connect endpoint received with no params')
+        )
+      }
       ac.abort()
 
       // offer choice to use navigated url
@@ -107,7 +134,9 @@ async function both () {
       term.up(4).column(prompt.length + 999)
       term.eraseDisplayBelow()
       term('\n')
-      const yesNoPrompt = formatLog(`\n     You just navigated to: ^_${url}^ \n     Do you want to select that experience?`)
+      const yesNoPrompt = formatLog(
+        `\n     You just navigated to: ^_${url}^ \n     Do you want to select that experience?`
+      )
       if (await yesOrNo(yesNoPrompt)) {
         // use navigated url
         resolve(parseUrl(req.body.url))
@@ -135,8 +164,8 @@ async function both () {
   return result
 }
 
-async function getAutoCompleteMap ({arr, title, value}) {
-  return arr.map((iteree) => ({
+async function getAutoCompleteMap ({ arr, title, value }) {
+  return arr.map(iteree => ({
     title: ' ' + formatLog(iteree[title]),
     value: iteree[value]
   }))
@@ -150,7 +179,7 @@ function formatIterationNames (iterations) {
   iterations.forEach(i => {
     i.listName = `${i.name} | ${i.state}`
   })
-  let [draft, published] = _.take(iterations, 2)
+  const [draft, published] = _.take(iterations, 2)
   draft.listName = `${draft.listName} (Draft)`
   if (published) {
     published.listName = `${published.listName} (Current)`
@@ -158,4 +187,12 @@ function formatIterationNames (iterations) {
   return iterations
 }
 
-module.exports = { property, experience, iteration, placement, location, personalisationType, both }
+module.exports = {
+  property,
+  experience,
+  iteration,
+  placement,
+  location,
+  personalisationType,
+  both
+}

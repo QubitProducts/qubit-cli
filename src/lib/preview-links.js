@@ -1,11 +1,15 @@
 const _ = require('lodash')
 const url = require('urlite')
-let propertyService = require('../services/property')
+const propertyService = require('../services/property')
 
-module.exports = async function getPreviewLinks ({ propertyId, variations, previewUrl }) {
+module.exports = async function getPreviewLinks ({
+  propertyId,
+  variations,
+  previewUrl
+}) {
   const propertyMeta = await propertyService.get(propertyId)
   return _.values(variations)
-    .filter((v) => !v.variationIsControl)
+    .filter(v => !v.variationIsControl)
     .map(getLink)
 
   function getLink ({ variationMasterId }) {
@@ -16,7 +20,7 @@ module.exports = async function getPreviewLinks ({ propertyId, variations, previ
         ? `${previewUrl}&${previewParams}`
         : `${previewUrl}#${previewParams}`
     } else {
-      let parsed = url.parse(previewUrl)
+      const parsed = url.parse(previewUrl)
       parsed.search = parsed.search
         ? `${parsed.search}&${previewParams}`
         : `?${previewParams}`

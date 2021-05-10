@@ -1,5 +1,5 @@
 const path = require('path')
-const {expect} = require('chai')
+const { expect } = require('chai')
 const sinon = require('sinon')
 const fs = require('fs-extra')
 const rewire = require('rewire')
@@ -28,12 +28,16 @@ describe('shouldWrite', function () {
 
   it('should write if file does not exist', async () => {
     fileExistsStub.returns(Promise.resolve(false))
-    expect(await shouldWrite(fixtures, 'b', 'c', shouldConfirm, shouldOverwrite)).to.eql(true)
+    expect(
+      await shouldWrite(fixtures, 'b', 'c', shouldConfirm, shouldOverwrite)
+    ).to.eql(true)
   })
 
   it('should not write if the files are identical', async () => {
     fileExistsStub.returns(Promise.resolve(true))
-    expect(await shouldWrite(fixtures, 'a', 'a', shouldConfirm, shouldOverwrite)).to.eql(false)
+    expect(
+      await shouldWrite(fixtures, 'a', 'a', shouldConfirm, shouldOverwrite)
+    ).to.eql(false)
   })
 
   it('should confirm if the file exists and is different and shouldConfirm is true', async function () {
@@ -57,22 +61,38 @@ describe('shouldWrite', function () {
     shouldOverwrite = false
     fileExistsStub.returns(Promise.resolve(true))
     confirmStub.returns(Promise.resolve(true))
-    let result = await shouldWrite(fixtures, 'a', 'b', shouldConfirm, shouldOverwrite)
+    let result = await shouldWrite(
+      fixtures,
+      'a',
+      'b',
+      shouldConfirm,
+      shouldOverwrite
+    )
     expect(result).to.eql(shouldOverwrite)
     shouldOverwrite = true
-    result = await shouldWrite(fixtures, 'a', 'b', shouldConfirm, shouldOverwrite)
+    result = await shouldWrite(
+      fixtures,
+      'a',
+      'b',
+      shouldConfirm,
+      shouldOverwrite
+    )
     expect(result).to.eql(shouldOverwrite)
   })
 
   it('should overwrite if user says yes', async function () {
     fileExistsStub.returns(Promise.resolve(true))
     confirmStub.returns(Promise.resolve(true))
-    expect(await shouldWrite(fixtures, 'a', 'b', shouldConfirm, shouldOverwrite)).to.eql(true)
+    expect(
+      await shouldWrite(fixtures, 'a', 'b', shouldConfirm, shouldOverwrite)
+    ).to.eql(true)
   })
 
   it('should not overwrite if user says no', async function () {
     fileExistsStub.returns(Promise.resolve(true))
     confirmStub.returns(Promise.resolve(false))
-    expect(await shouldWrite(fixtures, 'a', 'b', shouldConfirm, shouldOverwrite)).to.eql(false)
+    expect(
+      await shouldWrite(fixtures, 'a', 'b', shouldConfirm, shouldOverwrite)
+    ).to.eql(false)
   })
 })

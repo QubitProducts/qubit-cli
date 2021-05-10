@@ -22,16 +22,14 @@ describe('experienceService', function () {
     it('should correctly call fetch', function () {
       experienceService.get(experienceId)
       expect(fetch.get.calledOnce).to.eql(true)
-      expect(fetch.get.getCall(0).args).to.eql([
-        '/api/experiences/456'
-      ])
+      expect(fetch.get.getCall(0).args).to.eql(['/api/experiences/456'])
     })
   })
 
   describe('set', function () {
     it('should correctly call fetch', function () {
       experienceService.set(experienceId, experience)
-      let args = fetch.put.getCall(0).args
+      const args = fetch.put.getCall(0).args
       expect(fetch.put.calledOnce).to.eql(true)
       expect(args[0]).to.eql('/api/experiences/456')
       expect(args[1]).to.eql({ experiment: experience })

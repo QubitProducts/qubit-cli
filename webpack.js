@@ -40,7 +40,7 @@ module.exports = function createWebpackConfig () {
         path.join(CWD, 'node_modules'),
         path.join(__dirname, 'node_modules')
       ],
-      mainFields: [ 'browser', 'main' ],
+      mainFields: ['browser', 'main'],
       alias: { jquery: '@qubit/jquery' }
     },
     resolveLoader: {
@@ -59,26 +59,30 @@ module.exports = function createWebpackConfig () {
         // qubit-cli internal clientside code.js
         {
           test: /\.js$/,
-          include: [ SRC ],
-          use: [ 'entry', BUBLE_LOADER ]
+          include: [SRC],
+          use: ['entry', BUBLE_LOADER]
         },
         // experience code
         {
           test: /\.js$/,
-          include: [ CWD ],
-          exclude: [ /global\.js/, /node_modules/ ],
-          use: [ 'experience-js', BUBLE_LOADER ]
+          include: [CWD],
+          exclude: [/global\.js/, /node_modules/],
+          use: ['experience-js', BUBLE_LOADER]
         },
         // experience css
         {
           test: /\.(css|less)$/,
-          use: [ 'raw-loader', 'less-loader', {
-            loader: 'experience-less',
-            options: {
-              variationMasterId: true,
-              experienceId: true
+          use: [
+            'raw-loader',
+            'less-loader',
+            {
+              loader: 'experience-less',
+              options: {
+                variationMasterId: true,
+                experienceId: true
+              }
             }
-          }],
+          ],
           exclude: NODE_MODULES
         },
         // package.json
@@ -90,12 +94,12 @@ module.exports = function createWebpackConfig () {
         {
           test: /\.js$/,
           include: QUBIT_NODE_MODULES,
-          use: [ 'experience-css', BUBLE_LOADER ]
+          use: ['experience-css', BUBLE_LOADER]
         },
         {
           test: /\.(css|less)$/,
           include: QUBIT_NODE_MODULES,
-          use: [ 'style-loader', 'raw-loader', 'less-loader' ]
+          use: ['style-loader', 'raw-loader', 'less-loader']
         }
       ]
     },

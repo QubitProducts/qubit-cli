@@ -17,7 +17,18 @@ module.exports = async function down (experienceId, iterationId) {
   const goals = await goalsService.get(iterationId)
   const qfns = await qfnService.get(iterationId)
   const variations = await variationService.getAll(iterationId)
-  const files = codeService.getCode(property, experience, iteration, goals, qfns, variations)
-  files['package.json'] = JSON.stringify(mergePkg(pkg || {}, files['package.json']), null, 2)
+  const files = codeService.getCode(
+    property,
+    experience,
+    iteration,
+    goals,
+    qfns,
+    variations
+  )
+  files['package.json'] = JSON.stringify(
+    mergePkg(pkg || {}, files['package.json']),
+    null,
+    2
+  )
   return { experience, iteration, variations, files }
 }

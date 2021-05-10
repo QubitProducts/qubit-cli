@@ -45,7 +45,7 @@ describe('variationService', function () {
       expect(fetch.put.calledOnce).to.eql(true)
       expect(fetch.put.getCall(0).args).to.eql([
         `/api/variations/${variationId}`,
-        {variation: variations[0]}
+        { variation: variations[0] }
       ])
     })
   })
@@ -61,12 +61,18 @@ describe('variationService', function () {
 
   describe('setCode', () => {
     it('should modify a variation object appropriately given a files object', () => {
-      let newVariation = variationService.setCode(variations[2], {
+      const newVariation = variationService.setCode(variations[2], {
         'variation-6.js': 'function () { console.log("variation 1") }',
         'variation-6.less': 'a {\n color: purple; \n}'
       })
-      expect(newVariation).to.have.deep.property('execution_code', 'function () { console.log("variation 1") }')
-      expect(newVariation).to.have.deep.property('custom_styles', 'a {\n color: purple; \n}')
+      expect(newVariation).to.have.deep.property(
+        'execution_code',
+        'function () { console.log("variation 1") }'
+      )
+      expect(newVariation).to.have.deep.property(
+        'custom_styles',
+        'a {\n color: purple; \n}'
+      )
     })
   })
 })

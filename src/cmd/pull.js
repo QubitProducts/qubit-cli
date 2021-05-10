@@ -7,7 +7,8 @@ const CWD = process.cwd()
 module.exports = async function pull (propertyId, experienceId) {
   await throwIf.experience('pull')
   const pkg = await getPkg()
-  ;({ propertyId, experienceId } = await getPropertyAndExperienceIds(propertyId, experienceId, pkg) || {})
+  ;({ propertyId, experienceId } =
+    (await getPropertyAndExperienceIds(propertyId, experienceId, pkg)) || {})
 
   return pullExperience(CWD, propertyId, experienceId)
 }

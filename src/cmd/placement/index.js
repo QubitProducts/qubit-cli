@@ -21,19 +21,28 @@ program
 program
   .command('push')
   .description('push your local changes')
-  .option('--force', 'force push local changes even though there have been remote changes')
+  .option(
+    '--force',
+    'force push local changes even though there have been remote changes'
+  )
   .action(cmd('push'))
 
 program
   .command('publish')
   .description('publish your changes')
-  .option('--force', 'force publish the remote draft even though your local draft is out of sync')
+  .option(
+    '--force',
+    'force publish the remote draft even though your local draft is out of sync'
+  )
   .action(cmd('publish'))
 
 program
   .command('unpublish')
   .description('unpublish your changes')
-  .option('--force', 'force publish the remote draft even though your local draft is out of sync')
+  .option(
+    '--force',
+    'force publish the remote draft even though your local draft is out of sync'
+  )
   .action(cmd('unpublish'))
 
 program
@@ -43,7 +52,7 @@ program
 
 program
   .command('open')
-  .description(`open the placement editor in your browser`)
+  .description('open the placement editor in your browser')
   .action(cmd('open'))
 
 const argv = process.argv.filter(arg => arg !== 'placement')

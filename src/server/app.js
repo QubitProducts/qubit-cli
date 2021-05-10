@@ -14,13 +14,14 @@ module.exports = async function app () {
   app.server = server
   app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
   app.use(bodyParser.json())
-  app.start = () => new Promise((resolve, reject) => {
-    enableDestroy(server)
-    server.listen(config.port, (err) => {
-      if (err) return reject(err)
-      resolve()
+  app.start = () =>
+    new Promise((resolve, reject) => {
+      enableDestroy(server)
+      server.listen(config.port, err => {
+        if (err) return reject(err)
+        resolve()
+      })
     })
-  })
-  app.stop = () => new Promise((resolve) => server.destroy(resolve))
+  app.stop = () => new Promise(resolve => server.destroy(resolve))
   return app
 }

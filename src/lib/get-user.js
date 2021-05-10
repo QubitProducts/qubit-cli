@@ -3,7 +3,7 @@ const jsonwebtoken = require('jsonwebtoken')
 const { ID_TOKEN } = require('../constants')
 
 module.exports = async function getId () {
-  let token = await qubitrc.get(ID_TOKEN)
+  const token = await qubitrc.get(ID_TOKEN)
   if (!token) return
   try {
     const decoded = jsonwebtoken.decode(token) || {}

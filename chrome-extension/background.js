@@ -7,11 +7,10 @@ render()
 
 chrome.browserAction.onClicked.addListener(() => {
   chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-    let tabId = tabs.length && tabs[0].id
+    const tabId = tabs.length && tabs[0].id
     if (tabId) {
-      getState(
-        tabId,
-        state => setState(tabId, { enabled: !state.enabled }, render)
+      getState(tabId, state =>
+        setState(tabId, { enabled: !state.enabled }, render)
       )
     }
   })
@@ -41,7 +40,7 @@ function render () {
   chrome.windows.getLastFocused(null, window => {
     chrome.tabs.getSelected(null, tab => {
       chrome.browserAction.setIcon({ path: ICONS.off })
-      chrome.browserAction.setTitle({ title: `Qubit CLI - OFF` })
+      chrome.browserAction.setTitle({ title: 'Qubit CLI - OFF' })
     })
   })
   chrome.tabs.query({}, tabs => {

@@ -1,7 +1,7 @@
 const pkg = require('../../package.json')
 
 module.exports = function withMetrics (experience, extra) {
-  let meta = experience.meta ? JSON.parse(experience.meta) : {}
+  const meta = experience.meta ? JSON.parse(experience.meta) : {}
   meta.cli = {
     pushes: 0,
     ...meta.xp,

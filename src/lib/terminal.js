@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const term = require('terminal-kit').terminal
 const defer = require('promise-defer')
-const {min, max} = Math
+const { min, max } = Math
 
 /**
  * Undo most of terminal-kit's changes to the terminal.
@@ -15,51 +15,57 @@ function cleanTerminal () {
 /**
  * A `Promise`-based version of terminal-kit's `getCursorLocation`
  */
-const getCursorLocation = () => new Promise((resolve, reject) => {
-  term.getCursorLocation((err, x, y) => {
-    if (err) reject(err)
-    else resolve({x, y})
+const getCursorLocation = () =>
+  new Promise((resolve, reject) => {
+    term.getCursorLocation((err, x, y) => {
+      if (err) reject(err)
+      else resolve({ x, y })
+    })
   })
-})
 
 /**
  * Ask the user a yes-or-no question.
  * @param  {string} prompt
  * @return {Promise.<boolean>}
  */
-const yesOrNo = (prompt) => new Promise((resolve, reject) => {
-  term(`${prompt} ^b^+(y/n)^: `)
-  term.yesOrNo((err, answer) => {
-    if (err) {
-      reject(err)
-    } else {
-      term.up(1).column(0)
-      term.eraseDisplayBelow()
-      term(`${prompt} ^b^+(y/n)^: ^b^+${answer ? 'yes' : 'no'}^:\n`)
-      resolve(answer)
-    }
+const yesOrNo = prompt =>
+  new Promise((resolve, reject) => {
+    term(`${prompt} ^b^+(y/n)^: `)
+    term.yesOrNo((err, answer) => {
+      if (err) {
+        reject(err)
+      } else {
+        term.up(1).column(0)
+        term.eraseDisplayBelow()
+        term(`${prompt} ^b^+(y/n)^: ^b^+${answer ? 'yes' : 'no'}^:\n`)
+        resolve(answer)
+      }
+    })
   })
-})
 
 /**
  * Ask the user for a text input.
  * @param {string} prompt
  * @return {Promise.<string>}
  */
-const inputField = (prompt) => new Promise((resolve, reject) => {
-  term(`${prompt}: `)
-  term.inputField({
-    cancelable: true,
-    echo: true
-  }, (err, text) => {
-    term.grabInput(false)
-    if (err) {
-      reject(err)
-    } else {
-      resolve(text)
-    }
+const inputField = prompt =>
+  new Promise((resolve, reject) => {
+    term(`${prompt}: `)
+    term.inputField(
+      {
+        cancelable: true,
+        echo: true
+      },
+      (err, text) => {
+        term.grabInput(false)
+        if (err) {
+          reject(err)
+        } else {
+          resolve(text)
+        }
+      }
+    )
   })
-})
 
 /**
  * Start a new auto-complete picker that can be aborted and resumed.
@@ -86,26 +92,35 @@ const createAutoComplete = (prompt, suggestions) => {
     const titles = candidates.map(c => c.title)
     const itemStyle = {
       forceStyleOnReset: {
-        noFormat: (str) => {
-          term(str.replace(new RegExp(`(${_.escapeRegExp(subStr)})`, 'i'), `^_$1^:`))
+        noFormat: str => {
+          term(
+            str.replace(
+              new RegExp(`(${_.escapeRegExp(subStr)})`, 'i'),
+              '^_$1^:'
+            )
+          )
         }
       }
     }
-    term.grabInput({mouse: 'motion'})
+    term.grabInput({ mouse: 'motion' })
     return new Promise((resolve, reject) => {
-      const menu = term.singleColumnMenu(titles, {
-        style: itemStyle,
-        selectedStyle: itemStyle,
-        selectedLeftPadding: '  ^b▶^ ',
-        leftPadding: '    ',
-        submittedLeftPadding: '    '
-      }, (err, {submitted, selectedIndex}) => {
-        if (err) {
-          reject(err)
-        } else if (submitted) {
-          resolve(candidates[selectedIndex])
+      const menu = term.singleColumnMenu(
+        titles,
+        {
+          style: itemStyle,
+          selectedStyle: itemStyle,
+          selectedLeftPadding: '  ^b▶^ ',
+          leftPadding: '    ',
+          submittedLeftPadding: '    '
+        },
+        (err, { submitted, selectedIndex }) => {
+          if (err) {
+            reject(err)
+          } else if (submitted) {
+            resolve(candidates[selectedIndex])
+          }
         }
-      })
+      )
       const onKey = (name, matches, data) => {
         if (data.isCharacter) {
           subStr += name
@@ -159,7 +174,9 @@ const createAutoComplete = (prompt, suggestions) => {
 
         // filter and limit the candidates
         const candidates = suggestions
-          .filter(({title}) => new RegExp(_.escapeRegExp(subStr), 'i').test(title))
+          .filter(({ title }) =>
+            new RegExp(_.escapeRegExp(subStr), 'i').test(title)
+          )
           .slice(0, menuHeight)
 
         // don't allow an empty candidate list

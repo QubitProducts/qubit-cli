@@ -8,14 +8,22 @@ const log = require('../../lib/log')
 
 const CWD = process.cwd()
 
-module.exports = async function pull (propertyId, placementId, implementationType = 'draft') {
+module.exports = async function pull (
+  propertyId,
+  placementId,
+  implementationType = 'draft'
+) {
   await throwIf.placement('pull')
   isOneOf(implementationType)
   const pkg = await getPkg()
   propertyId = await getPropertyId(propertyId, pkg)
   placementId = await getPlacementId(propertyId, placementId, pkg)
-  const files = await placementService.get(propertyId, placementId, implementationType)
+  const files = await placementService.get(
+    propertyId,
+    placementId,
+    implementationType
+  )
   if (!files) throw new Error(`Placement '${placementId}' not found`)
   await scaffold(CWD, files, { removeExtraneous: true })
-  log.info(`placement pulled`)
+  log.info('placement pulled')
 }

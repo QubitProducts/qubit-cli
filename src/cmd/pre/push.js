@@ -13,7 +13,7 @@ const CWD = process.cwd()
 module.exports = async function push (options = {}) {
   await throwIf.pre('push')
   const pkg = await getPkg()
-  const { propertyId } = (pkg.meta || {})
+  const { propertyId } = pkg.meta || {}
   if (!propertyId) {
     return log.info('Nothing to push')
   }

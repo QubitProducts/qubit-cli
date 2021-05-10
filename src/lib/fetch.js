@@ -16,17 +16,25 @@ function fetchWithAuth (method) {
   return async function fetch (path, data, options = {}) {
     const notifier = getUpdate()
     if (notifier.update) {
-      log.error(`Please ensure you are on the latest version in order to interact with qubit's APIs`)
+      log.error(
+        "Please ensure you are on the latest version in order to interact with qubit's APIs"
+      )
       notifier.notify({ defer: false, isGlobal: true })
       return process.exit(1)
     }
     const url = config.services.app + path
     log.debug(`${method} ${url}`)
-    let headers, appToken
-    appToken = await getAppToken()
+    let headers
+    const appToken = await getAppToken()
     try {
-      headers = { ...options.headers || {}, 'Authorization': `Bearer ${appToken}` }
-      return await axios(url, { method, data, headers }).then(handler, errorHandler)
+      headers = {
+        ...(options.headers || {}),
+        Authorization: `Bearer ${appToken}`
+      }
+      return await axios(url, { method, data, headers }).then(
+        handler,
+        errorHandler
+      )
     } catch (err) {
       if (options.isRetry || !isRetryable(err)) {
         log.error(`Error trying to fetch ${url}`)
@@ -40,7 +48,9 @@ function fetchWithAuth (method) {
     }
 
     function checkErrors (resp) {
-      if (resp.status === 422) throw new Error(`Unprocessable entity at url ${url}`)
+      if (resp.status === 422) {
+        throw new Error(`Unprocessable entity at url ${url}`)
+      }
       if (resp.status === 404) throw new Error(`Nothing found at url ${url}`)
       if (isLoggedOut(resp)) throw new Error('Credentials rejected')
     }
@@ -69,5 +79,8 @@ function isRetryable (err) {
 }
 
 function isLoggedOut (resp) {
-  return resp.data === 'Unauthorized' || (typeof resp.data === 'string' && resp.data.includes('login.css'))
+  return (
+    resp.data === 'Unauthorized' ||
+    (typeof resp.data === 'string' && resp.data.includes('login.css'))
+  )
 }

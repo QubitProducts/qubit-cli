@@ -7,11 +7,9 @@ module.exports = async function cssCodeWarning (dest) {
   const variations = _.get(pkg, 'meta.variations')
   if (variations) {
     return Promise.all(
-      Object
-        .keys(variations)
-        .map(
-          async name => renameFileWarning(dest, `${name}.css`, `${name}.less`)
-        )
+      Object.keys(variations).map(async name =>
+        renameFileWarning(dest, `${name}.css`, `${name}.less`)
+      )
     )
   }
 }

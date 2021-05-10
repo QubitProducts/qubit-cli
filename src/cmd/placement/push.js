@@ -20,20 +20,29 @@ module.exports = async function push (options = {}) {
   const localFiles = await readFiles(CWD)
   const remoteFiles = await placementService.get(propertyId, placementId)
   if (!_.isEqual(payloadKeys(localFiles), payloadKeys(remoteFiles))) {
-    log.error(chalk.bold.red(`You can only modify the values of payload.json
+    log.error(
+      chalk.bold.red(`You can only modify the values of payload.json
 Please use the online editor to change the structure
 run "qubit placement open" to access the schema editor
-and then "qubit placement pull" to pull down the changes`
-    ))
+and then "qubit placement pull" to pull down the changes`)
+    )
     return
   }
 
   if (!options.force) {
-    const remoteUpdatedAt = _.get(JSON.parse(remoteFiles['package.json']), 'meta.remoteUpdatedAt')
+    const remoteUpdatedAt = _.get(
+      JSON.parse(remoteFiles['package.json']),
+      'meta.remoteUpdatedAt'
+    )
     const localUpdatedAt = pkg.meta.remoteUpdatedAt
 
     if (remoteUpdatedAt !== localUpdatedAt) {
-      const diffs = await getDiff.placement(CWD, propertyId, placementId, 'draft')
+      const diffs = await getDiff.placement(
+        CWD,
+        propertyId,
+        placementId,
+        'draft'
+      )
       if (diffs.length) {
         log.error(chalk.bold.red('Remote has changed!'))
         return logDiff(diffs)

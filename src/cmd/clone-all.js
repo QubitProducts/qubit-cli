@@ -8,6 +8,8 @@ const CWD = process.cwd()
 module.exports = async function cloneAll (propertyId) {
   if (!propertyId) propertyId = await property()
   const all = await getAll(propertyId)
-  await pMap(all, ({ id }) => cloneExperience(CWD, propertyId, id, { concurrency: 1 }))
-  log.info(`All done!`)
+  await pMap(all, ({ id }) =>
+    cloneExperience(CWD, propertyId, id, { concurrency: 1 })
+  )
+  log.info('All done!')
 }

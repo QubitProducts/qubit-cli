@@ -10,16 +10,16 @@
     "128": "icons/on128.png"
   },
   "background": {
-    "scripts": [
-      "background.js"
-    ],
+    "scripts": ["background.js"],
     "persistent": false
   },
-  "content_scripts": [{
-    "matches": ["<all_urls>"],
-    "js": ["index.js"],
-    "run_at": "document_start"
-  }],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["index.js"],
+      "run_at": "document_start"
+    }
+  ],
   "permissions": [
     "storage",
     "cookies",

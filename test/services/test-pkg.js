@@ -23,7 +23,18 @@ describe('pkgService', () => {
 
   describe('getCode', function () {
     it('should build a package.json file from an experience and its variations', () => {
-      expect(JSON.parse(pkgService.getCode(property, experience, iteration, goals, qfns, variations)['package.json'])).to.eql(pkgFixture)
+      expect(
+        JSON.parse(
+          pkgService.getCode(
+            property,
+            experience,
+            iteration,
+            goals,
+            qfns,
+            variations
+          )['package.json']
+        )
+      ).to.eql(pkgFixture)
     })
   })
 

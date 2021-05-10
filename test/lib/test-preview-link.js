@@ -19,7 +19,9 @@ describe('previewLink', function () {
     })
     afterEach(() => restore())
     it('should return an array of preview links, one for each variant', async function () {
-      expect(await previewLinks(_.cloneDeep(pkgFixture).meta)).to.eql(linkFixture)
+      expect(await previewLinks(_.cloneDeep(pkgFixture).meta)).to.eql(
+        linkFixture
+      )
     })
   })
 
@@ -33,7 +35,9 @@ describe('previewLink', function () {
     })
     afterEach(() => restore())
     it('should return an array of preview links, one for each variant', async function () {
-      expect(await previewLinks(_.cloneDeep(pkgFixture).meta)).to.eql(linkFixture.map(l => l.replace('#', '?')))
+      expect(await previewLinks(_.cloneDeep(pkgFixture).meta)).to.eql(
+        linkFixture.map(l => l.replace('#', '?'))
+      )
     })
   })
 })

@@ -1,5 +1,5 @@
-var Promise = require('sync-p')
-var _ = require('slapdash')
+const Promise = require('sync-p')
+const _ = require('slapdash')
 
 module.exports = function evaluateVariation (api, fn, addStyles) {
   let removeStyles
@@ -11,14 +11,16 @@ module.exports = function evaluateVariation (api, fn, addStyles) {
       error.userCodeError = true
       reject(error)
     }
-  })
-    .then(function success (returnValue) {
+  }).then(
+    function success (returnValue) {
       return {
         remove: _.get(returnValue, 'remove')
       }
-    }, function failure (error) {
+    },
+    function failure (error) {
       if (removeStyles) removeStyles()
       error.userCodeError = true
       throw error
-    })
+    }
+  )
 }

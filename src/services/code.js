@@ -28,7 +28,10 @@ async function set (propertyId, experienceId, files) {
 
   const pkg = (files['package.json'] && JSON.parse(files['package.json'])) || {}
   const user = await getUser()
-  const newExperience = withMetrics(oldExperience, { ...user, templates: _.get(pkg, 'meta.templates') || [] })
+  const newExperience = withMetrics(oldExperience, {
+    ...user,
+    templates: _.get(pkg, 'meta.templates') || []
+  })
   const newIteration = iterationService.setCode(oldIteration, files)
   const pkgCode = pkgService.setCode(newExperience, newIteration, files)
 
@@ -40,13 +43,15 @@ async function set (propertyId, experienceId, files) {
     ? oldIteration
     : await iterationService.set(iterationId, pkgCode.iteration)
 
-  const variations = await Promise.all(oldVariations.map(async oldVariation => {
-    if (oldVariation.is_control) return oldVariation
-    const newVariation = variationService.setCode(oldVariation, files)
-    return eql(oldVariation, newVariation)
-      ? oldVariation
-      : variationService.set(oldVariation.id, newVariation)
-  }))
+  const variations = await Promise.all(
+    oldVariations.map(async oldVariation => {
+      if (oldVariation.is_control) return oldVariation
+      const newVariation = variationService.setCode(oldVariation, files)
+      return eql(oldVariation, newVariation)
+        ? oldVariation
+        : variationService.set(oldVariation.id, newVariation)
+    })
+  )
 
   return { experience, iteration, variations }
 }
@@ -55,10 +60,25 @@ function eql (a, b) {
   return _.isEqual(a, b)
 }
 
-function getCode (property, experience, iteration, goals, qfns, variations, isTemplate) {
+function getCode (
+  property,
+  experience,
+  iteration,
+  goals,
+  qfns,
+  variations,
+  isTemplate
+) {
   const files = {}
-  Object.assign(files, iterationService.getCode(iteration), pkgService.getCode(property, experience, iteration, goals, qfns, variations))
-  variations.filter((v) => !v.is_control).map(variationService.getCode).forEach((v) => Object.assign(files, v))
+  Object.assign(
+    files,
+    iterationService.getCode(iteration),
+    pkgService.getCode(property, experience, iteration, goals, qfns, variations)
+  )
+  variations
+    .filter(v => !v.is_control)
+    .map(variationService.getCode)
+    .forEach(v => Object.assign(files, v))
   return files
 }
 

@@ -10,6 +10,8 @@ module.exports = async function tokenCmd () {
   )
   log.info('Your token:')
   log.info(chalk.green(token))
-  log.info(`Please keep this token secure.`)
-  log.info(`It can be revoked at any point using 'qubit revoke {token}' command.`)
+  log.info('Please keep this token secure.')
+  log.info(
+    "It can be revoked at any point using 'qubit revoke {token}' command."
+  )
 }

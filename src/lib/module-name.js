@@ -1,7 +1,5 @@
-const {isPath} = require('./is-type')
+const { isPath } = require('./is-type')
 
 module.exports = function moduleName (str) {
-  return isPath(str)
-    ? str
-    : str.match(/^(?:@[^/]+\/)?[^/]+/)[0]
+  return isPath(str) ? str : str.match(/^(?:@[^/]+\/)?[^/]+/)[0]
 }

@@ -1,36 +1,40 @@
-[{
-  "id": 1,
-  "master_id": 2,
-  "name": "Control",
-  "is_control": true,
-  "iteration_id": 101112,
-  "execution_code": "function () {}",
-  "custom_styles": null,
-  "created_at": "2014-06-03T12:51:30.000Z",
-  "updated_at": "2014-06-03T12:51:30.000Z",
-  "deleted": false
-}, {
-  "id": 3,
-  "master_id": 4,
-  "name": "Variation 1",
-  "is_control": false,
-  "iteration_id": 101112,
-  "advanced_mode": true,
-  "execution_code": "function () { console.log(\"variation 1\") }",
-  "custom_styles": "a {\n color: purple; \n}",
-  "created_at": "2014-06-03T12:51:30.000Z",
-  "updated_at": "2016-08-10T14:32:17.000Z",
-  "deleted": false
-}, {
-  "id": 5,
-  "master_id": 6,
-  "name": "Variation 2",
-  "is_control": false,
-  "iteration_id": 101112,
-  "advanced_mode": true,
-  "execution_code": "function () { console.log(\"variation 2\") }",
-  "custom_styles": "a {\n color: green \n}",
-  "created_at": "2016-05-23T09:14:40.000Z",
-  "updated_at": "2016-05-23T09:14:40.000Z",
-  "deleted": false
-}]
+[
+  {
+    "id": 1,
+    "master_id": 2,
+    "name": "Control",
+    "is_control": true,
+    "iteration_id": 101112,
+    "execution_code": "function () {}",
+    "custom_styles": null,
+    "created_at": "2014-06-03T12:51:30.000Z",
+    "updated_at": "2014-06-03T12:51:30.000Z",
+    "deleted": false
+  },
+  {
+    "id": 3,
+    "master_id": 4,
+    "name": "Variation 1",
+    "is_control": false,
+    "iteration_id": 101112,
+    "advanced_mode": true,
+    "execution_code": "function () { console.log(\"variation 1\") }",
+    "custom_styles": "a {\n color: purple; \n}",
+    "created_at": "2014-06-03T12:51:30.000Z",
+    "updated_at": "2016-08-10T14:32:17.000Z",
+    "deleted": false
+  },
+  {
+    "id": 5,
+    "master_id": 6,
+    "name": "Variation 2",
+    "is_control": false,
+    "iteration_id": 101112,
+    "advanced_mode": true,
+    "execution_code": "function () { console.log(\"variation 2\") }",
+    "custom_styles": "a {\n color: green \n}",
+    "created_at": "2016-05-23T09:14:40.000Z",
+    "updated_at": "2016-05-23T09:14:40.000Z",
+    "deleted": false
+  }
+]

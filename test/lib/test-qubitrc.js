@@ -18,12 +18,12 @@ describe('qubitrc', function () {
 
   describe('get', function () {
     it('should return {} if the file does not exist', async () => {
-      expect(await qubitrc.get('blah')).to.eql(void 0)
+      expect(await qubitrc.get('blah')).to.eql(undefined)
     })
 
     it('should return undefined if the file is corrupted', async () => {
       await fs.writeFile(QUBITRC, 'a\n\t1: 2')
-      expect(await qubitrc.get('Things')).to.eql(void 0)
+      expect(await qubitrc.get('Things')).to.eql(undefined)
     })
   })
 
@@ -53,9 +53,9 @@ describe('qubitrc', function () {
         process.env.NODE_ENV = NODE_ENV
       })
 
-      it(`should be namespaced by environment`, async () => {
+      it('should be namespaced by environment', async () => {
         process.env.NODE_ENV = 'blah'
-        expect(await qubitrc.get(type)).to.eql(void 0)
+        expect(await qubitrc.get(type)).to.eql(undefined)
         process.env.NODE_ENV = NODE_ENV
         expect(await qubitrc.get(type)).to.eql(token)
       })
@@ -71,8 +71,8 @@ describe('qubitrc', function () {
       await qubitrc.unset(type)
     })
 
-    it(`should unset the variable`, async () => {
-      expect(await qubitrc.get(type)).to.eql(void 0)
+    it('should unset the variable', async () => {
+      expect(await qubitrc.get(type)).to.eql(undefined)
     })
   })
 
@@ -93,9 +93,9 @@ describe('qubitrc', function () {
       process.env.NODE_ENV = NODE_ENV
     })
 
-    it(`should unset the variable`, async () => {
+    it('should unset the variable', async () => {
       await qubitrc.unsetEnv()
-      expect(await qubitrc.get(type)).to.eql(void 0)
+      expect(await qubitrc.get(type)).to.eql(undefined)
       process.env.NODE_ENV = NODE_ENV
       expect(await qubitrc.get(type)).to.eql(token)
       console.log(await qubitrc.get(type))

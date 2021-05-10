@@ -28,21 +28,32 @@ async function pre (cwd, propertyId, revisionType = 'draft') {
   })
 }
 
-async function placement (cwd, propertyId, placementId, implementationType = 'draft') {
+async function placement (
+  cwd,
+  propertyId,
+  placementId,
+  implementationType = 'draft'
+) {
   const omitPayload = f => _.omit(f, 'payload.json')
-  const remoteFiles = await placementService.get(propertyId, placementId, implementationType)
+  const remoteFiles = await placementService.get(
+    propertyId,
+    placementId,
+    implementationType
+  )
   const localFiles = await readFiles(cwd)
   return jsDiffCheck(omitPayload(localFiles), omitPayload(remoteFiles))
 }
 
 function jsDiffCheck (localFiles, files) {
-  let diffs = []
-  for (let name in files) {
+  const diffs = []
+  for (const name in files) {
     const remoteVal = (files[name] || '').trim()
     const localVal = (localFiles[name] || '').trim()
     if (remoteVal !== localVal) {
-      let diff = jsdiff.diffWords(remoteVal, localVal, { ignoreWhitespace: true })
-      let hasDiff = diff.find(d => d.added || d.removed)
+      const diff = jsdiff.diffWords(remoteVal, localVal, {
+        ignoreWhitespace: true
+      })
+      const hasDiff = diff.find(d => d.added || d.removed)
       if (!hasDiff) return diffs
       if (diff.length) {
         diffs.push({ fileName: name, diff: diff })

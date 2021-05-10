@@ -16,7 +16,17 @@ const variationsFixture = require('../fixtures/variations.json')
 const filesFixture = require('../fixtures/files')
 
 describe('codeService', function () {
-  let sandbox, propertyId, experienceId, iterationId, property, experience, iteration, goals, qfns, variations, files
+  let sandbox,
+    propertyId,
+    experienceId,
+    iterationId,
+    property,
+    experience,
+    iteration,
+    goals,
+    qfns,
+    variations,
+    files
 
   beforeEach(() => {
     propertyId = 123
@@ -39,7 +49,9 @@ describe('codeService', function () {
     sandbox.stub(goalService, 'get').returns(Promise.resolve(goals))
     sandbox.stub(goalService, 'set').returns(Promise.resolve(goals))
     sandbox.stub(qfnService, 'get').returns(Promise.resolve(qfns))
-    sandbox.stub(variationService, 'getAll').returns(Promise.resolve(variations))
+    sandbox
+      .stub(variationService, 'getAll')
+      .returns(Promise.resolve(variations))
     sandbox.stub(variationService, 'set').returns(Promise.resolve())
   })
 
@@ -48,9 +60,15 @@ describe('codeService', function () {
   describe('get', function () {
     it('should fetch experience, variations and translate to a files object', async function () {
       const result = await codeService.get(propertyId, experienceId)
-      expect(_.omit(result, ['package.json', 'fields.json'])).to.eql(_.omit(files, ['package.json', 'fields.json']))
-      expect(JSON.parse(result['package.json'])).to.eql(JSON.parse(files['package.json']))
-      expect(JSON.parse(result['fields.json'])).to.eql(JSON.parse(files['fields.json']))
+      expect(_.omit(result, ['package.json', 'fields.json'])).to.eql(
+        _.omit(files, ['package.json', 'fields.json'])
+      )
+      expect(JSON.parse(result['package.json'])).to.eql(
+        JSON.parse(files['package.json'])
+      )
+      expect(JSON.parse(result['fields.json'])).to.eql(
+        JSON.parse(files['fields.json'])
+      )
     })
   })
 
@@ -70,11 +88,19 @@ describe('codeService', function () {
         return val + 1
       })
       await codeService.set(propertyId, experienceId, files)
-      let [updatedExperienceId, updatedExperience] = experienceService.set.getCall(0).args
+      const [
+        updatedExperienceId,
+        updatedExperience
+      ] = experienceService.set.getCall(0).args
 
       expect(updatedExperienceId).to.eql(experienceId)
-      expect(_.omit(updatedExperience, 'meta')).to.eql({ ...experience, name: experience.name + 1 })
-      expect(_.omit(updatedExperience.meta, ['cli.lastPush', 'cli.version'])).to.eql({
+      expect(_.omit(updatedExperience, 'meta')).to.eql({
+        ...experience,
+        name: experience.name + 1
+      })
+      expect(
+        _.omit(updatedExperience.meta, ['cli.lastPush', 'cli.version'])
+      ).to.eql({
         cli: {
           pushes: 1,
           templates: []
@@ -100,7 +126,7 @@ describe('codeService', function () {
 
       await codeService.set(propertyId, experienceId, files)
 
-      let expectedIteration = {
+      const expectedIteration = {
         ...iteration,
         global_code: files['global.js'],
         common_code: files['utils.js'],
@@ -108,7 +134,10 @@ describe('codeService', function () {
         schema: JSON.parse(files['fields.json']),
         package_json: _.omit(JSON.parse(files['package.json']), 'meta')
       }
-      const [updatedIterationId, updatedIteration] = iterationService.set.getCall(0).args
+      const [
+        updatedIterationId,
+        updatedIteration
+      ] = iterationService.set.getCall(0).args
       expect(updatedIterationId).to.eql(iterationId)
       expect(updatedIteration).to.eql(expectedIteration)
     })

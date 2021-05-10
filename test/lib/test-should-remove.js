@@ -1,4 +1,4 @@
-const {expect} = require('chai')
+const { expect } = require('chai')
 const sinon = require('sinon')
 const rewire = require('rewire')
 const shouldRemove = rewire('../../src/lib/should-remove')

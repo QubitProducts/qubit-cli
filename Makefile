@@ -4,7 +4,7 @@ BIN = node_modules/.bin
 
 bootstrap:
 	npm install
-	npm install ./deps --no-save --production
+	npm install ./deps --no-save
 
 test: lint
 	npm test

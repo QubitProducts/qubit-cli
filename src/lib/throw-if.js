@@ -24,16 +24,21 @@ function prefixCommand (type, cmd) {
 }
 
 function throwIf (requiredType) {
-  return async (suggestedCommand) => {
+  return async suggestedCommand => {
     const type = await getType()
     if (type !== requiredType) {
       let message
       if (type && !requiredType) {
         message = `You cannot run this command from a ${an(type)} directory`
       } else {
-        message = `This command requires that you are in ${an(requiredType)} directory`
+        message = `This command requires that you are in ${an(
+          requiredType
+        )} directory`
         if (type && suggestedCommand) {
-          message += `. You probably meant to use \`${prefixCommand(type, suggestedCommand)}\``
+          message += `. You probably meant to use \`${prefixCommand(
+            type,
+            suggestedCommand
+          )}\``
         }
       }
       if (message) {
