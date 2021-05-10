@@ -101,27 +101,28 @@ async function unpublish (propertyId, placementId) {
 async function create (propertyId, placementSpec) {
   const data = await query(
     `
-    mutation CreatePlacement($placementSpec: PlacementSpec!) {
-      createPlacement(placementSpec: $placementSpec) {
+    mutation CreatePlacement($propertyId: Int!, $placementSpec: PlacementSpec!) {
+      createPlacement(propertyId: $propertyId, placementSpec: $placementSpec) {
         ${fields}
       }
     }
     `,
     {
-      placementSpec
+      placementSpec,
+      propertyId
     }
   )
   return normalisePlacement(propertyId, _.get(data, 'createPlacement'))
 }
 
-async function locations (propertyId) {
+async function tags (propertyId) {
   const data = await query(
     `
   query($propertyId: Int!) {
     property(propertyId: $propertyId) {
       propertyId
       atom {
-        locations {
+        tags {
           id
           name
         }
@@ -130,7 +131,7 @@ async function locations (propertyId) {
   }`,
     { propertyId }
   )
-  return _.get(data, 'property.atom.locations', [])
+  return _.get(data, 'property.atom.tags', [])
 }
 
 async function status (propertyId, placementId) {
@@ -162,7 +163,7 @@ module.exports = {
   unpublish,
   status,
   create,
-  locations
+  tags
 }
 
 async function normalisePlacement (
@@ -192,7 +193,7 @@ async function normalisePlacement (
       propertyId,
       placementId: placement.id,
       implementationId: implementation.id,
-      locationId: placement.location.id,
+      tags: placement.tags,
       personalisationType: placement.personalisationType,
       vertical: property.vertical,
       domains: property.domains,
@@ -211,7 +212,7 @@ const fields = `
 id
 name
 personalisationType
-location {
+tags {
   id
 }
 schema {

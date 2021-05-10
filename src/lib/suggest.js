@@ -56,14 +56,14 @@ async function placement (propertyId) {
   ).response()
 }
 
-async function location (propertyId) {
+async function tags (propertyId) {
   const suggestions = await getAutoCompleteMap({
-    arr: await placementService.locations(propertyId),
+    arr: await placementService.tags(propertyId),
     title: 'name',
     value: 'id'
   })
   return createAutoComplete(
-    msg('Select a location (start typing to filter the list)'),
+    msg('Select a tag (start typing to filter the list)'),
     suggestions
   ).response()
 }
@@ -78,7 +78,7 @@ async function personalisationType () {
     value: 'id'
   })
   return createAutoComplete(
-    msg('Select a location (start typing to filter the list)'),
+    msg('Select a placement type (start typing to filter the list)'),
     suggestions
   ).response()
 }
@@ -192,7 +192,7 @@ module.exports = {
   experience,
   iteration,
   placement,
-  location,
+  tags,
   personalisationType,
   both
 }

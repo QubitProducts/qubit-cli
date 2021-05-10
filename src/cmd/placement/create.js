@@ -2,7 +2,7 @@ const input = require('input')
 const placementService = require('../../services/placement')
 const {
   getPropertyId,
-  getLocationId,
+  getTagId,
   getPersonalisationType
 } = require('../../lib/get-resource-ids')
 const formatLog = require('../../lib/format-log')
@@ -11,13 +11,13 @@ const clone = require('./clone')
 
 module.exports = async function create (
   propertyId,
-  locationId,
+  tagId,
   personalisationType,
   name
 ) {
   await throwIf.none('create')
   propertyId = await getPropertyId(propertyId, {})
-  locationId = await getLocationId(propertyId, locationId, {})
+  tagId = await getTagId(propertyId, tagId, {})
   personalisationType = await getPersonalisationType(personalisationType, {})
 
   name =
@@ -31,7 +31,7 @@ module.exports = async function create (
 
   const placementSpec = initialPlacement(
     propertyId,
-    locationId,
+    tagId,
     name,
     personalisationType
   )
@@ -91,14 +91,9 @@ const schemaTypes = {
   }
 }
 
-const initialPlacement = (
-  propertyId,
-  locationId,
+const initialPlacement = (propertyId, tagId, name, personalisationType) => ({
   name,
-  personalisationType
-) => ({
-  name,
-  locationId,
+  tags: [tagId],
   personalisationType,
   schema: {
     definition: schemaTypes[personalisationType],
