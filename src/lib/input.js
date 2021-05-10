@@ -1,6 +1,6 @@
 const input = require('input')
 
-for (var method in input) {
+for (const method in input) {
   if (typeof input[method] === 'function') {
     module.exports[method] = proxy(method)
   }

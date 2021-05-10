@@ -9,7 +9,8 @@ const {
 } = require('@qubit/experience-defaults').custom
 
 const iterationsUrl = iterationId => `/api/iterations/${iterationId}`
-const experienceIterationsUrl = experienceId => `/api/experiences/${experienceId}/iterations`
+const experienceIterationsUrl = experienceId =>
+  `/api/experiences/${experienceId}/iterations`
 
 function get (iterationId) {
   return fetch.get(iterationsUrl(iterationId))
@@ -21,14 +22,20 @@ function getAll (experienceId) {
 
 function set (iterationId, iteration) {
   delete iteration.update_sequence_id
-  if (_.isString(iteration.schema)) iteration.schema = JSON.parse(iteration.schema)
+  if (_.isString(iteration.schema)) { iteration.schema = JSON.parse(iteration.schema) }
   return fetch.put(iterationsUrl(iterationId), { iteration: iteration })
 }
 
 function getCode (iteration) {
   const rules = iteration.activation_rules
   // TODO: remove this conditional once API returns triggers
-  const triggers = iteration.triggers || (rules && _.get(rules.find(rule => rule.key === 'custom_javascript'), 'value'))
+  const triggers =
+    iteration.triggers ||
+    (rules &&
+      _.get(
+        rules.find(rule => rule.key === 'custom_javascript'),
+        'value'
+      ))
   const globalCode = iteration.global_code
   const commonCode = iteration.common_code
   const schema = JSON.stringify(iteration.schema, null, 2)
@@ -47,9 +54,13 @@ function getCode (iteration) {
 function setCode (iteration, files) {
   const code = {
     ...iteration,
-    global_code: hasNoCode(files['global.js']) ? GLOBAL_CODE : files['global.js'],
+    global_code: hasNoCode(files['global.js'])
+      ? GLOBAL_CODE
+      : files['global.js'],
     common_code: hasNoCode(files['utils.js']) ? COMMON_CODE : files['utils.js'],
-    schema: JSON.parse(hasNoCode(files['fields.json']) ? SCHEMA : files['fields.json']),
+    schema: JSON.parse(
+      hasNoCode(files['fields.json']) ? SCHEMA : files['fields.json']
+    ),
     triggers: hasNoCode(files['triggers.js']) ? TRIGGERS : files['triggers.js']
   }
 

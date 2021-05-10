@@ -9,11 +9,12 @@ servePre()
 function servePre () {
   if (!cm.val('qb_cli_pre')) {
     cm.set('qb_cli_pre', 1, {
-      path: '/', expires: now.plus(15, 'minutes')
+      path: '/',
+      expires: now.plus(15, 'minutes')
     })
     return window.location.reload()
   }
-  var pre = _.get(window, HOOK)
+  let pre = _.get(window, HOOK)
   if (!pre) {
     pre = Promise.defer()
     _.set(window, HOOK, pre)

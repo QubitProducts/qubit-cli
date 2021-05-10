@@ -9,7 +9,9 @@ module.exports = function createEmitMetric (uv, meta, logger) {
       variationMasterId: meta.variationMasterId,
       productId: productId,
       metadata: metadata
-        ? (typeof metadata === 'string' ? metadata : JSON.stringify(metadata))
+        ? typeof metadata === 'string'
+            ? metadata
+            : JSON.stringify(metadata)
         : metadata
     })
   }

@@ -3,7 +3,11 @@ const suggest = require('./suggest')
 const parseUrl = require('./parse-url')
 const { isUrl, isId } = require('./is-type')
 
-async function getPropertyAndExperienceIds (propertyIdOrUrl, experienceId, pkg) {
+async function getPropertyAndExperienceIds (
+  propertyIdOrUrl,
+  experienceId,
+  pkg
+) {
   // Try to parse command line arguments first
   if (isUrl(propertyIdOrUrl)) return parseUrl(propertyIdOrUrl)
 
@@ -27,10 +31,10 @@ async function getPropertyAndExperienceIds (propertyIdOrUrl, experienceId, pkg) 
 
   // Prompt user
   if (!propertyId || !experienceId) {
-    ;({ propertyId, experienceId } = (await suggest.both() || {}))
+    ;({ propertyId, experienceId } = (await suggest.both()) || {})
   }
 
-  if (!propertyId || !experienceId) throw new Error('This command requires a property and an experience')
+  if (!propertyId || !experienceId) { throw new Error('This command requires a property and an experience') }
 
   return { propertyId, experienceId }
 }
@@ -50,7 +54,7 @@ async function getPropertyId (propertyIdOrUrl, pkg) {
 }
 
 async function getIterationId (experienceId) {
-  let iterationId = await suggest.iteration(experienceId)
+  const iterationId = await suggest.iteration(experienceId)
   if (!iterationId) throw new Error('This command requires an iteration')
   return iterationId
 }
@@ -81,7 +85,7 @@ async function getPersonalisationType (personalisationType, pkg) {
   if (!personalisationType) {
     personalisationType = await suggest.personalisationType()
   }
-  if (!personalisationType) throw new Error('This command requires a personalisation type')
+  if (!personalisationType) { throw new Error('This command requires a personalisation type') }
   return personalisationType
 }
 

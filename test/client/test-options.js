@@ -21,15 +21,19 @@ describe('transform', function () {
   })
 
   it('exports an object with a state attribute', function () {
-    expect(transform(pkg, variationName).createApi('triggers')).to.have.property('state')
+    expect(
+      transform(pkg, variationName).createApi('triggers')
+    ).to.have.property('state')
   })
 
   it('exports an object with a meta attribute', function () {
-    expect(transform(pkg, variationName).createApi('triggers')).to.have.property('meta')
+    expect(
+      transform(pkg, variationName).createApi('triggers')
+    ).to.have.property('meta')
   })
 
   describe('state object', function () {
-    var state
+    let state
 
     beforeEach(function () {
       state = transform(pkg, variationName).createApi('triggers').state
@@ -48,7 +52,7 @@ describe('transform', function () {
   })
 
   describe('segments methods', function () {
-    var api
+    let api
 
     beforeEach(function () {
       pkg.meta.segments = ['foo']
@@ -68,7 +72,7 @@ describe('transform', function () {
 
   describe('react api', function () {
     describe('triggers', function () {
-      var api, options
+      let api, options
 
       beforeEach(function () {
         pkg.meta.segments = ['foo']
@@ -86,7 +90,7 @@ describe('transform', function () {
       })
     })
     describe('variation', function () {
-      var api, options
+      let api, options
 
       beforeEach(function () {
         pkg.meta.segments = ['foo']
@@ -106,7 +110,7 @@ describe('transform', function () {
   })
 
   describe('uv object', function () {
-    var clock, uv
+    let clock, uv
 
     beforeEach(function () {
       clock = sinon.useFakeTimers()
@@ -120,50 +124,56 @@ describe('transform', function () {
 
     it('proxies event methods to jolt', function () {
       setupJolt()
-      for (let method of METHODS) {
-        expect(global.window.__qubit.jolt[method].calledWith(1, 2, 3)).to.eql(false)
+      for (const method of METHODS) {
+        expect(global.window.__qubit.jolt[method].calledWith(1, 2, 3)).to.eql(
+          false
+        )
       }
-      for (let method of API) {
+      for (const method of API) {
         uv[method](1, 2, 3)
       }
-      for (let method of METHODS) {
-        expect(global.window.__qubit.jolt[method].calledWith(1, 2, 3)).to.eql(true)
+      for (const method of METHODS) {
+        expect(global.window.__qubit.jolt[method].calledWith(1, 2, 3)).to.eql(
+          true
+        )
       }
     })
 
     it('proxies replay', function () {
       setupJolt()
-      for (let method of API) {
+      for (const method of API) {
         uv[method](1, 2, 3).replay()
       }
-      for (let method of METHODS) {
+      for (const method of METHODS) {
         expect(global[method].replay.calledOnce).to.eql(true)
       }
     })
 
     it('proxies dispose', function () {
       setupJolt()
-      for (let method of API) {
+      for (const method of API) {
         uv[method](1, 2, 3).dispose()
       }
-      for (let method of METHODS) {
+      for (const method of METHODS) {
         expect(global[method].dispose.calledOnce).to.eql(true)
       }
     })
 
     it('defers event methods and then proxies to jolt', function () {
-      for (let method of API) {
+      for (const method of API) {
         uv[method](1, 2, 3)
       }
       setupJolt()
       clock.tick(100)
-      for (let method of METHODS) {
-        expect(global.window.__qubit.jolt[method].calledWith(1, 2, 3)).to.eql(true)
+      for (const method of METHODS) {
+        expect(global.window.__qubit.jolt[method].calledWith(1, 2, 3)).to.eql(
+          true
+        )
       }
     })
 
     function setupJolt () {
-      for (let method of METHODS) {
+      for (const method of METHODS) {
         global[method] = {
           replay: sinon.stub(),
           dispose: sinon.stub()
@@ -183,7 +193,7 @@ describe('transform', function () {
   })
 
   describe('meta object', function () {
-    var meta
+    let meta
     beforeEach(function () {
       meta = transform(pkg, variationName).createApi('triggers').meta
     })

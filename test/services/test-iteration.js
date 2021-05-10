@@ -22,9 +22,7 @@ describe('iterationService', function () {
     it('should correctly call fetch', function () {
       iterationService.get(iterationId)
       expect(fetch.get.calledOnce).to.eql(true)
-      expect(fetch.get.getCall(0).args).to.eql([
-        '/api/iterations/101112'
-      ])
+      expect(fetch.get.getCall(0).args).to.eql(['/api/iterations/101112'])
     })
   })
 
@@ -56,8 +54,12 @@ describe('iterationService', function () {
         'utils.js': 'console.log("some other common code")',
         'triggers.js': 'console.log("some other triggers")'
       })
-      expect(newIteration.global_code).to.eql('console.log("some other global code")')
-      expect(newIteration.common_code).to.eql('console.log("some other common code")')
+      expect(newIteration.global_code).to.eql(
+        'console.log("some other global code")'
+      )
+      expect(newIteration.common_code).to.eql(
+        'console.log("some other common code")'
+      )
       expect(newIteration.triggers).to.eql('console.log("some other triggers")')
     })
   })

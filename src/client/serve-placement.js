@@ -12,26 +12,23 @@ const { VIEW_REGEX } = require('@qubit/placement-engine/lib/constants')
 
 servePlacement()
 
-module.hot.accept([
-  'placement.less'
-], () => {
+module.hot.accept(['placement.less'], () => {
   applyStyles('qubit-cli-placement-styles', require('placement.less'))
 })
 
-module.hot.accept([
-  'placement.js',
-  'payload.json',
-  'package.json'
-], (...args) => {
-  // If the only disposable is the styles
-  // there is no code to remove any side effects
-  // so we have to reload the page
-  if (disposables.length === 1) {
-    return window.location.reload()
+module.hot.accept(
+  ['placement.js', 'payload.json', 'package.json'],
+  (...args) => {
+    // If the only disposable is the styles
+    // there is no code to remove any side effects
+    // so we have to reload the page
+    if (disposables.length === 1) {
+      return window.location.reload()
+    }
+    while (disposables.length) disposables.pop()()
+    servePlacement()
   }
-  while (disposables.length) disposables.pop()()
-  servePlacement()
-})
+)
 
 function servePlacement () {
   const packageJson = require('package.json')
@@ -54,8 +51,11 @@ function servePlacement () {
     js: require('placement.js'),
     css: function () {
       let remove
-      let add = () => {
-        remove = applyStyles('qubit-cli-placement-styles', require('placement.less'))
+      const add = () => {
+        remove = applyStyles(
+          'qubit-cli-placement-styles',
+          require('placement.less')
+        )
       }
       add()
       return { add, remove }
@@ -94,23 +94,25 @@ function servePlacement () {
     })
   }
 
-  return Promise.all([
-    api.getBrowserState(),
-    getEvent(api, VIEW_REGEX)
-  ]).then(([{ ua }, viewEvent]) => {
-    const pass = evaluateTriggers(code.triggers, api, {
-      ua,
-      viewEvent,
-      url: window.location.href
-    })
-    if (!pass) return
+  return Promise.all([api.getBrowserState(), getEvent(api, VIEW_REGEX)]).then(
+    ([{ ua }, viewEvent]) => {
+      const pass = evaluateTriggers(code.triggers, api, {
+        ua,
+        viewEvent,
+        url: window.location.href
+      })
+      if (!pass) return
 
-    return createExecutioner(code, api)({
-      content: payload,
-      onImpression: () => api.log.trace('onImpression called'),
-      onClickthrough: () => api.log.trace('onClickthrough called')
-    })
-  })
+      return createExecutioner(
+        code,
+        api
+      )({
+        content: payload,
+        onImpression: () => api.log.trace('onImpression called'),
+        onClickthrough: () => api.log.trace('onClickthrough called')
+      })
+    }
+  )
 }
 
 function getEvent (api, regex) {

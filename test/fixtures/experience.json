@@ -24,11 +24,13 @@
       "url": "http://trumpdonald.org",
       "global_code": "console.log(\"global code\")",
       "common_code": "console.log(\"common code\")",
-      "activation_rules": [{
-        "key": "custom_javascript",
-        "type": "code",
-        "value": "console.log(\"triggers\")"
-      }]
+      "activation_rules": [
+        {
+          "key": "custom_javascript",
+          "type": "code",
+          "value": "console.log(\"triggers\")"
+        }
+      ]
     }
   }
 }

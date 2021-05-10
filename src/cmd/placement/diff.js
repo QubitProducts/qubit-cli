@@ -12,10 +12,15 @@ module.exports = async function diff (implementationType = 'draft') {
   isOneOf(implementationType)
   const pkg = await getPkg()
   const { propertyId, placementId } = pkg.meta
-  const diffs = await getDiff.placement(CWD, propertyId, placementId, implementationType)
+  const diffs = await getDiff.placement(
+    CWD,
+    propertyId,
+    placementId,
+    implementationType
+  )
   if (diffs.length) {
     logDiff(diffs)
   } else {
-    log.info(`No code has changed between your local environment and remote`)
+    log.info('No code has changed between your local environment and remote')
   }
 }

@@ -17,7 +17,7 @@ const installQubitDeps = require('../../lib/install-qubit-deps')
 const getPkg = require('../../lib/get-pkg')
 const cors = require('cors')
 const { STYLE_EXTENSION, CLIENT_PATH } = require('../../constants')
-let CWD = process.cwd()
+const CWD = process.cwd()
 
 module.exports = async function serve (options) {
   await installQubitDeps()
@@ -28,7 +28,9 @@ module.exports = async function serve (options) {
   options.verbose = options.verbose || false
 
   if (/(triggers|global|\.less|\.css$)/.test(options.fileName)) {
-    log.info('Hint: you should be watching the entry point for your experience, i.e. your variation file!')
+    log.info(
+      'Hint: you should be watching the entry point for your experience, i.e. your variation file!'
+    )
   }
 
   options.isPreScript = _.get(pkg, 'meta.isPreScript')
@@ -47,7 +49,9 @@ module.exports = async function serve (options) {
       options.fileName = await pickVariation(await fs.readdir(CWD))
 
       if (!options.fileName) {
-        return log.warn('Please ensure you are within a directory with something to serve and try again!')
+        return log.warn(
+          'Please ensure you are within a directory with something to serve and try again!'
+        )
       }
     }
 
@@ -68,26 +72,48 @@ module.exports = async function serve (options) {
 
   compiler.plugin('done', stats => {
     if (!options.verbose && stats.hasErrors()) {
-      const token = `Can't resolve '`
+      const token = "Can't resolve '"
       const errors = stats.toString('errors-only').trim()
       if (errors && errors.includes(token)) {
-        const pkg = errors.substring(errors.indexOf(token) + token.length, errors.length).replace(/'(.|\n)*/gmi, '')
-        log.error(`Cannot resolve ${chalk.red(pkg)}, try running ${chalk.red(`npm install --save ${pkg}`)}`)
+        const pkg = errors
+          .substring(errors.indexOf(token) + token.length, errors.length)
+          .replace(/'(.|\n)*/gim, '')
+        log.error(
+          `Cannot resolve ${chalk.red(pkg)}, try running ${chalk.red(
+            `npm install --save ${pkg}`
+          )}`
+        )
       } else {
         log.error(errors)
       }
     }
   })
 
-  app.use(webpackDevMiddleware(compiler, Object.assign({
-    publicPath: webpackConf.output.publicPath
-  }, verboseOpts)))
+  app.use(
+    webpackDevMiddleware(
+      compiler,
+      Object.assign(
+        {
+          publicPath: webpackConf.output.publicPath
+        },
+        verboseOpts
+      )
+    )
+  )
 
-  app.use(webpackHotMiddleware(compiler, Object.assign({
-    reload: true,
-    path: '/__webpack_hmr',
-    heartbeat: 100
-  }, verboseOpts)))
+  app.use(
+    webpackHotMiddleware(
+      compiler,
+      Object.assign(
+        {
+          reload: true,
+          path: '/__webpack_hmr',
+          heartbeat: 100
+        },
+        verboseOpts
+      )
+    )
+  )
 
   return app.start().then(() => {
     log.info(`Using ${options.fileName}`)
@@ -104,18 +130,20 @@ function createWebpackConfig (options, pkg) {
   if (options.isPlacement) entry = 'serve-placement'
   if (!entry) entry = 'serve-experience'
 
-  config.entry.push(
-    path.join(CLIENT_PATH, entry)
+  config.entry.push(path.join(CLIENT_PATH, entry))
+  config.plugins.push(
+    new webpack.DefinePlugin({
+      __VARIATION__: `'${options.fileName}'`,
+      __VARIATION_STYLE_EXTENSION__: `'${STYLE_EXTENSION}'`
+    })
   )
-  config.plugins.push(new webpack.DefinePlugin({
-    __VARIATION__: `'${options.fileName}'`,
-    __VARIATION_STYLE_EXTENSION__: `'${STYLE_EXTENSION}'`
-  }))
   config.module.loaders.forEach(rule => {
     rule.use.forEach(loader => {
       if (options.fileName.includes('variation')) {
         if (_.get(loader, ['options', 'variationMasterId'])) {
-          loader.options.variationMasterId = Number(options.fileName.replace(/[^0-9]/gi, ''))
+          loader.options.variationMasterId = Number(
+            options.fileName.replace(/[^0-9]/gi, '')
+          )
         }
         if (_.get(loader, ['options', 'experienceId'])) {
           loader.options.experienceId = _.get(pkg, ['meta', 'experienceId'], 1)

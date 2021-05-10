@@ -12,12 +12,12 @@ const down = require('../services/down')
 const getDiff = require('../lib/get-diff')
 const logDiff = require('../lib/log-diff')
 const throwIf = require('../lib/throw-if')
-let CWD = process.cwd()
+const CWD = process.cwd()
 
 module.exports = async function push (options = {}) {
   await throwIf.experience('push')
   const pkg = await getPkg()
-  const { propertyId, experienceId } = (pkg.meta || {})
+  const { propertyId, experienceId } = pkg.meta || {}
   if (!propertyId || !experienceId) return log.info('Nothing to push')
 
   await globalCodeWarning(CWD)
@@ -25,22 +25,32 @@ module.exports = async function push (options = {}) {
   await cssCodeWarning(CWD)
 
   if (!options.force) {
-    let { files, experience } = await down(experienceId)
+    const { files, experience } = await down(experienceId)
     if (experience.solution_id === 7) {
       throw new Error('qubit-cli does not support simple message experiences')
     }
 
-    let remotePkg = JSON.parse(files['package.json'])
-    let remoteExperienceUpdatedAt = remotePkg.meta.remoteUpdatedAt
-    let remoteVariantsUpdatedAt = _.map(remotePkg.meta.variations, v => v.remoteUpdatedAt)
-    let remoteUpdatedAts = [remoteExperienceUpdatedAt].concat(remoteVariantsUpdatedAt)
+    const remotePkg = JSON.parse(files['package.json'])
+    const remoteExperienceUpdatedAt = remotePkg.meta.remoteUpdatedAt
+    const remoteVariantsUpdatedAt = _.map(
+      remotePkg.meta.variations,
+      v => v.remoteUpdatedAt
+    )
+    const remoteUpdatedAts = [remoteExperienceUpdatedAt].concat(
+      remoteVariantsUpdatedAt
+    )
 
-    let localExperienceUpdatedAt = pkg.meta.remoteUpdatedAt
-    let localVariantsUpdatedAt = _.map(pkg.meta.variations, v => v.remoteUpdatedAt)
-    let localUpdatedAts = [localExperienceUpdatedAt].concat(localVariantsUpdatedAt)
+    const localExperienceUpdatedAt = pkg.meta.remoteUpdatedAt
+    const localVariantsUpdatedAt = _.map(
+      pkg.meta.variations,
+      v => v.remoteUpdatedAt
+    )
+    const localUpdatedAts = [localExperienceUpdatedAt].concat(
+      localVariantsUpdatedAt
+    )
 
     if (remoteUpdatedAts.join('|') !== localUpdatedAts.join('|')) {
-      let diffs = await getDiff.experience(CWD, propertyId, experienceId)
+      const diffs = await getDiff.experience(CWD, propertyId, experienceId)
       if (diffs.length) {
         log.error(chalk.bold.red('Remote has changed!'))
         return logDiff(diffs)

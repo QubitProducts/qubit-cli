@@ -8,12 +8,14 @@ describe('preview-settings', function () {
   beforeEach(function () {
     db = {}
     cm = {
-      get: sinon.spy((key) => [db[key]]),
-      val: sinon.spy((key) => db[key]),
+      get: sinon.spy(key => [db[key]]),
+      val: sinon.spy(key => db[key]),
       set: sinon.spy((key, val) => (db[key] = val)),
-      clearAll: sinon.spy((key) => (delete db[key]))
+      clearAll: sinon.spy(key => delete db[key])
     }
-    location = sinon.stub().returns('https://imgs.xkcd.com/comics/night_sky_2x.png')
+    location = sinon
+      .stub()
+      .returns('https://imgs.xkcd.com/comics/night_sky_2x.png')
     reload = sinon.stub()
     restore = previewSettings.__set__({ cm, location, reload })
   })
@@ -30,15 +32,26 @@ describe('preview-settings', function () {
     describe('encoding', function () {
       it('should encode values', function () {
         previewSettings('cookieDomain', { exclude: [1], isPreview: true })
-        expect(cm.val('qb_opts')).to.eql(encode({ exclude: [1], isPreview: true }))
+        expect(cm.val('qb_opts')).to.eql(
+          encode({ exclude: [1], isPreview: true })
+        )
       })
     })
     describe('options', function () {
       it('should drop a cookie with the new preview options', function () {
         previewSettings('cookieDomain', { exclude: [1], isPreview: true })
-        expect(decode(cm.val('qb_opts'))).to.eql({ exclude: [1], isPreview: true })
-        previewSettings('cookieDomain', { exclude: [3, 2, 1], isPreview: false })
-        expect(decode(cm.val('qb_opts'))).to.eql({ exclude: [3, 2, 1], isPreview: false })
+        expect(decode(cm.val('qb_opts'))).to.eql({
+          exclude: [1],
+          isPreview: true
+        })
+        previewSettings('cookieDomain', {
+          exclude: [3, 2, 1],
+          isPreview: false
+        })
+        expect(decode(cm.val('qb_opts'))).to.eql({
+          exclude: [3, 2, 1],
+          isPreview: false
+        })
       })
     })
   })
@@ -52,22 +65,31 @@ describe('preview-settings', function () {
 
     it('should reload if the initial cookie value is different', function () {
       cm.set('qb_opts', encode({ exclude: [3, 2, 1], isPreview: false }))
-      previewSettings('cookieDomain', { exclude: [4, 3, 2, 1], isPreview: false })
+      previewSettings('cookieDomain', {
+        exclude: [4, 3, 2, 1],
+        isPreview: false
+      })
       expect(reload.called).to.eql(true)
     })
 
     it('should reload if the url contains preview params', function () {
-      location.returns('https://imgs.xkcd.com/comics/night_sky_2x.png?qb_experiences=1')
+      location.returns(
+        'https://imgs.xkcd.com/comics/night_sky_2x.png?qb_experiences=1'
+      )
       cm.set('qb_opts', encode({ exclude: [3, 2, 1], isPreview: false }))
       previewSettings('cookieDomain', { exclude: [3, 2, 1], isPreview: false })
       expect(reload.called).to.eql(true)
     })
 
     it('should remove preview params from url', function () {
-      location.returns('https://imgs.xkcd.com/comics/night_sky_2x.png?qb_experiences=1')
+      location.returns(
+        'https://imgs.xkcd.com/comics/night_sky_2x.png?qb_experiences=1'
+      )
       cm.set('qb_opts', encode({ exclude: [3, 2, 1], isPreview: false }))
       previewSettings('cookieDomain', { exclude: [3, 2, 1], isPreview: false })
-      expect(reload.calledWith('https://imgs.xkcd.com/comics/night_sky_2x.png')).to.eql(true)
+      expect(
+        reload.calledWith('https://imgs.xkcd.com/comics/night_sky_2x.png')
+      ).to.eql(true)
     })
   })
 })

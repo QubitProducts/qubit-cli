@@ -26,11 +26,15 @@ async function status (templateId) {
 }
 
 async function createExperienceFromTemplate (templateId, experiment) {
-  return fetch.post(`/api/templates/${templateId}/create-experience`, { experiment })
+  return fetch.post(`/api/templates/${templateId}/create-experience`, {
+    experiment
+  })
 }
 
 async function createTemplateFromExperience (experienceId, template) {
-  return fetch.post(`/api/experiences/${experienceId}/create-template`, { template })
+  return fetch.post(`/api/experiences/${experienceId}/create-template`, {
+    template
+  })
 }
 
 module.exports = {

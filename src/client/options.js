@@ -21,9 +21,16 @@ module.exports = function transform (pkg, key) {
   const variationOpts = _.get(pkg, `meta.variations.${key}`) || {}
   const meta = Object.assign({}, pkg.meta, variationOpts)
   const segments = meta.segments || []
-  const visitor = Object.assign({}, defaultVisitor(), _.get(pkg, 'meta.visitor'))
+  const visitor = Object.assign(
+    {},
+    defaultVisitor(),
+    _.get(pkg, 'meta.visitor')
+  )
   const experienceMeta = {
-    cookieDomain: meta.cookieDomain || meta.domains ? getCookieDomain(meta.domains) : window.location.host,
+    cookieDomain:
+      meta.cookieDomain || meta.domains
+        ? getCookieDomain(meta.domains)
+        : window.location.host,
     trackingId: meta.trackingId || 'tracking_id',
     // preferred
     experienceId: meta.experimentId || meta.experienceId,
@@ -51,9 +58,9 @@ module.exports = function transform (pkg, key) {
   }
 
   function getInclude () {
-    let include = _.get(pkg, `meta.include`)
+    let include = _.get(pkg, 'meta.include')
     if (typeof include !== 'undefined') return include
-    include = _.get(pkg, `meta.also`)
+    include = _.get(pkg, 'meta.also')
     if (typeof include !== 'undefined') return include
     return []
   }
@@ -63,14 +70,19 @@ module.exports = function transform (pkg, key) {
     runHooks,
     hasHooks,
     include: getInclude(),
-    exclude: _.get(pkg, `meta.exclude`),
+    exclude: _.get(pkg, 'meta.exclude'),
     meta: experienceMeta,
     createApi: function createApi (name) {
       const log = logger(name)
       addHooks(name, 'remove', react.release)
       return {
         data: meta.templateData,
-        emitCustomGoal: createEmitCustomGoal(uv, experienceMeta, _.get(pkg, 'meta.customGoals'), log),
+        emitCustomGoal: createEmitCustomGoal(
+          uv,
+          experienceMeta,
+          _.get(pkg, 'meta.customGoals'),
+          log
+        ),
         emitMetric: createEmitMetric(uv, experienceMeta, log),
         solution: meta.solutionOptions,
         state: {
@@ -78,7 +90,12 @@ module.exports = function transform (pkg, key) {
           set: set
         },
         cookies: createCookieApi(experienceMeta.cookieDomain),
-        react: _.pick(react, name === 'triggers' ? ['register', 'release'] : ['getReact', 'render', 'release']),
+        react: _.pick(
+          react,
+          name === 'triggers'
+            ? ['register', 'release']
+            : ['getReact', 'render', 'release']
+        ),
         log: log,
         getVisitorState: () => resolve({ ...visitor }),
         getBrowserState: () => resolve(getBrowserState()),
@@ -99,7 +116,7 @@ module.exports = function transform (pkg, key) {
           })
         },
         redirectTo: redirectTo,
-        isMemberOf: (segment) => resolve(segments.includes(segment)),
+        isMemberOf: segment => resolve(segments.includes(segment)),
         getMemberships: () => resolve(segments),
         // This is a no-op for now, can't think of a decent way to polyfill this
         // behaviour. We can look into it more if users ask for it.
@@ -108,7 +125,12 @@ module.exports = function transform (pkg, key) {
         unregisterContentAreas: () => {},
         onRemove: fn => addHooks(name, 'remove', fn),
         onActivation: fn => addHooks(name, 'onActivation', fn),
-        integration: createIntegrationApi(visitor.visitorId, experienceMeta, _.get(pkg, 'meta.qfns'), log)
+        integration: createIntegrationApi(
+          visitor.visitorId,
+          experienceMeta,
+          _.get(pkg, 'meta.qfns'),
+          log
+        )
       }
     }
   }

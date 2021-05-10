@@ -9,8 +9,8 @@ module.exports = async function experienceAction (cmd) {
     await throwIf.experience('publish')
   }
   const pkg = await getPkg()
-  if (!pkg.meta) return log.warn('Navigate to an experience directory and try again')
-  const {propertyId, experienceId} = pkg.meta
+  if (!pkg.meta) { return log.warn('Navigate to an experience directory and try again') }
+  const { propertyId, experienceId } = pkg.meta
   await action(propertyId, experienceId, cmd._name)
   return updatePkg(experienceId)
 }

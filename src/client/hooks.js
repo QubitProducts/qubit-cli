@@ -25,8 +25,9 @@ module.exports = function createHooks () {
     return Promise.all(_.map(hooks[name][hookName], runHook))
 
     function runHook (hook) {
-      return new Promise(resolve => resolve(hook()))
-        .catch(err => logger.error(err))
+      return new Promise(resolve => resolve(hook())).catch(err =>
+        logger.error(err)
+      )
     }
   }
 }

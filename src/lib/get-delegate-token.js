@@ -24,7 +24,7 @@ async function getDelegateToken (tokenOpts, targetClientId) {
 async function getAppToken (force) {
   let appToken = await qubitrc.get(APP_TOKEN)
   if (force || tokenHasExpired(appToken, Date.now(), ms('5 minutes'))) {
-    if (!force && appToken) log.warn('Your app token has expired, fetching a new one')
+    if (!force && appToken) { log.warn('Your app token has expired, fetching a new one') }
     log.debug('Fetching app token')
     const tokenOpts = await getTokenOpts()
     appToken = await getDelegateToken(tokenOpts, config.auth.apertureClientId)
@@ -35,14 +35,31 @@ async function getAppToken (force) {
 
 async function getRegistryToken (force) {
   let registryToken = await qubitrc.get(REGISTRY_TOKEN)
-  if (force || tokenHasExpired(registryToken, Date.now(), ms('6 hours')) || !await exists(NPMRC)) {
-    if (!force && registryToken) log.debug('Your registry token is missing or about to expire, fetching a new one')
+  if (
+    force ||
+    tokenHasExpired(registryToken, Date.now(), ms('6 hours')) ||
+    !(await exists(NPMRC))
+  ) {
+    if (!force && registryToken) {
+      log.debug(
+        'Your registry token is missing or about to expire, fetching a new one'
+      )
+    }
     log.debug('Fetching registry token')
     const tokenOpts = await getTokenOpts()
-    registryToken = await getDelegateToken(tokenOpts, config.auth.registryClientId)
-    let { accessToken, scopes } = (await axios.post(config.services.registry + '/-/token', {}, {
-      headers: { Authorization: `Bearer ${registryToken}` }
-    })).data
+    registryToken = await getDelegateToken(
+      tokenOpts,
+      config.auth.registryClientId
+    )
+    const { accessToken, scopes } = (
+      await axios.post(
+        config.services.registry + '/-/token',
+        {},
+        {
+          headers: { Authorization: `Bearer ${registryToken}` }
+        }
+      )
+    ).data
     registryToken = accessToken
     await qubitrc.login(registryToken, _.uniq(scopes))
   }

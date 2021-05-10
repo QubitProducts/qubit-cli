@@ -5,10 +5,10 @@ const { getRegistryToken } = require('./get-delegate-token')
 
 module.exports = async function installQubitDeps () {
   try {
-    let deps = require('qubit-cli-deps')
+    const deps = require('qubit-cli-deps')
     if (!deps.hasQubitDeps) throw new Error('oh noes!')
   } catch (err) {
-    log.info(`Setting up Qubit-CLI, this may take a few mins`)
+    log.info('Setting up Qubit-CLI, this may take a few mins')
     await getRegistryToken()
     log.info('Installing some additional dependencies...')
     await execa('npm', ['install', './deps', '--production', '--no-save'], {

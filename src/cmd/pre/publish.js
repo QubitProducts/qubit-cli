@@ -16,11 +16,15 @@ module.exports = async function publish (options = {}) {
     const localUpdatedAt = pkg.meta.remoteUpdatedAt
 
     if (remoteUpdatedAt !== localUpdatedAt) {
-      throw new Error('Your local draft is out of sync with the remote revision. Use `qubit pre diff` to see the difference, and `qubit pre publish --force` if you wish to force publish the remote draft to live.')
+      throw new Error(
+        'Your local draft is out of sync with the remote revision. Use `qubit pre diff` to see the difference, and `qubit pre publish --force` if you wish to force publish the remote draft to live.'
+      )
     }
   }
 
-  const changelog = await terminal.inputField('Describe the changes you are publishing')
+  const changelog = await terminal.inputField(
+    'Describe the changes you are publishing'
+  )
   if (!changelog) {
     // Otherwise the error appears on the same line
     console.log('')

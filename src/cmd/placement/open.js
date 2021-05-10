@@ -2,7 +2,7 @@ const config = require('config')
 const throwIf = require('../../lib/throw-if')
 const getPkg = require('../../lib/get-pkg')
 const log = require('../../lib/log')
-let opn = require('opn')
+const opn = require('opn')
 
 module.exports = async function open (page = 'editor', options) {
   await throwIf.placement('open')

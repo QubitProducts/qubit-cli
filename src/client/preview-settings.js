@@ -2,16 +2,28 @@ const _ = require('slapdash')
 const now = require('now-plus')
 const hashParser = require('urlite/lib/querystring')('#')
 const yurl = require('urlite/extra')
-const PREVIEW_KEYS = ['qb_opts', 'qb_experiences', 'qb_exclude', 'smartserve_preview']
-let cm = require('cookieman')
+const PREVIEW_KEYS = [
+  'qb_opts',
+  'qb_experiences',
+  'qb_exclude',
+  'smartserve_preview'
+]
+const cm = require('cookieman')
 
 module.exports = function applyPreviewSettings (cookieDomain, previewOptions) {
   const initialCookieVal = cm.val('qb_opts')
   cm.clearAll('qb_opts')
   const cookieVal = encodeURIComponent(JSON.stringify(previewOptions))
-  cm.set('qb_opts', cookieVal, { path: '/', domain: cookieDomain, expires: now.plus(15, 'minutes') })
+  cm.set('qb_opts', cookieVal, {
+    path: '/',
+    domain: cookieDomain,
+    expires: now.plus(15, 'minutes')
+  })
   // if the current value is different we need to reload, as smartserve may already have fired
-  const url = getUrl(location(), initialCookieVal && (initialCookieVal !== cookieVal))
+  const url = getUrl(
+    location(),
+    initialCookieVal && initialCookieVal !== cookieVal
+  )
   if (url) reload(url)
 }
 
@@ -29,7 +41,7 @@ function getUrl (location, mustReload) {
   if (urlHasPreviewKeys(params)) mustReload = true
   if (!mustReload) return
   if (parsed.search) parsed.search = omit(parsed.search, PREVIEW_KEYS)
-  if (parsed.hash) parsed.hash = hashParser.format(omit(parsed.hash, PREVIEW_KEYS))
+  if (parsed.hash) { parsed.hash = hashParser.format(omit(parsed.hash, PREVIEW_KEYS)) }
   return yurl.format(parsed)
 }
 
@@ -53,8 +65,8 @@ function reload (url) {
 }
 
 function omit (obj, keys) {
-  var result = {}
-  for (let key in obj) {
+  const result = {}
+  for (const key in obj) {
     if (!keys.includes(key)) obj[key] = result[key]
   }
   return result

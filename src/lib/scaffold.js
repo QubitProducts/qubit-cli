@@ -2,8 +2,8 @@ const path = require('path')
 const fs = require('fs-extra')
 const log = require('./log')
 const exists = require('./exists')
-let shouldWrite = require('./should-write')
-let shouldRemove = require('./should-remove')
+const shouldWrite = require('./should-write')
+const shouldRemove = require('./should-remove')
 
 module.exports = async function scaffold (dest, files, options) {
   const {
@@ -11,8 +11,8 @@ module.exports = async function scaffold (dest, files, options) {
     shouldOverwrite = false,
     removeExtraneous = false
   } = options
-  for (let name in files) {
-    if (files.hasOwnProperty(name)) {
+  for (const name in files) {
+    if (Object.prototype.hasOwnProperty.call(files, name)) {
       const value = files[name]
       if (typeof value === 'string') {
         await scaffoldFile(name)
@@ -23,18 +23,28 @@ module.exports = async function scaffold (dest, files, options) {
     }
   }
 
-  if (removeExtraneous && await exists(dest)) {
+  if (removeExtraneous && (await exists(dest))) {
     const actual = await fs.readdir(dest)
     const extraneous = actual.filter(file => !Object.keys(files).includes(file))
-    await Promise.all(extraneous.map(async file => {
-      if (!/\.(css|js)$/.test(file)) return
-      if (!shouldConfirm || await shouldRemove(file)) return fs.remove(path.join(dest, file))
-    }))
+    await Promise.all(
+      extraneous.map(async file => {
+        if (!/\.(css|js)$/.test(file)) return
+        if (!shouldConfirm || (await shouldRemove(file))) {
+          return fs.remove(path.join(dest, file))
+        }
+      })
+    )
   }
 
   async function scaffoldFile (name) {
     const value = files[name]
-    let result = await shouldWrite(dest, name, value, shouldConfirm, shouldOverwrite)
+    const result = await shouldWrite(
+      dest,
+      name,
+      value,
+      shouldConfirm,
+      shouldOverwrite
+    )
     if (result) {
       //  isTemplate
       if (log) log.info(`Writing to local ${name} file...`)

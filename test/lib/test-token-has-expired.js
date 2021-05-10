@@ -6,10 +6,13 @@ describe('token-has-expired', function () {
   let token, now
   beforeEach(() => {
     now = Math.floor(Date.now() / 1000) * 1000
-    token = jwt.sign({
-      exp: now / 1000,
-      data: 'foobar'
-    }, 'secret')
+    token = jwt.sign(
+      {
+        exp: now / 1000,
+        data: 'foobar'
+      },
+      'secret'
+    )
   })
 
   it('should be expired if it expires exactly now', async function () {

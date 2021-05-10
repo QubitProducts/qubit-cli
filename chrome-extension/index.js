@@ -15,7 +15,7 @@ if (isEditor()) {
 }
 
 function isEditor () {
-  var pattern = /^https?:\/\/(app\.qubit\.com|staging-dashboard\.qubitproducts\.com|localhost:3000)\/p\/\d+\/experiences\/\d+/
+  const pattern = /^https?:\/\/(app\.qubit\.com|staging-dashboard\.qubitproducts\.com|localhost:3000)\/p\/\d+\/experiences\/\d+/
   return pattern.test(window.location.href)
 }
 
@@ -40,7 +40,7 @@ function runCli (state) {
 }
 
 function appendScript () {
-  var script = document.createElement('script')
+  const script = document.createElement('script')
   script.src = 'https://localhost:41337/bundle.js'
   document.body.appendChild(script)
 }

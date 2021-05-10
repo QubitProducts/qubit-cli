@@ -10,7 +10,11 @@ module.exports = async function pullAll () {
   for (const dirname of directories) {
     const experienceDir = path.join(CWD, dirname)
     const pkg = await getPkg(experienceDir)
-    if (pkg && _.get(pkg, 'meta.experienceId') && _.get(pkg, 'meta.propertyId')) {
+    if (
+      pkg &&
+      _.get(pkg, 'meta.experienceId') &&
+      _.get(pkg, 'meta.propertyId')
+    ) {
       const { experienceId, propertyId } = pkg.meta
       await pullExperience(experienceDir, propertyId, experienceId)
     }

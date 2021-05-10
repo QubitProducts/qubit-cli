@@ -2,17 +2,21 @@ const _ = require('lodash')
 const fetch = require('../lib/fetch')
 const withMetrics = require('../lib/with-metrics')
 const getUser = require('../lib/get-user')
-const { execution_code: EXECUTION_CODE } = require('@qubit/experience-defaults').custom
+const {
+  execution_code: EXECUTION_CODE
+} = require('@qubit/experience-defaults').custom
 const DEFAULT_EXPERIENCE = {
   name: 'Created by Qubit-CLI',
   propertyId: null,
   editor_version: 3,
   recent_iterations: {
     draft: {
-      variations: [{
-        advanced_mode: 1,
-        execution_code: EXECUTION_CODE
-      }]
+      variations: [
+        {
+          advanced_mode: 1,
+          execution_code: EXECUTION_CODE
+        }
+      ]
     }
   },
   solution_id: 6
@@ -28,13 +32,21 @@ function getAll (propertyId) {
 
 function set (experienceId, experience) {
   delete experience.update_sequence_id
-  return fetch.put(`/api/experiences/${experienceId}`, { experiment: experience })
+  return fetch.put(`/api/experiences/${experienceId}`, {
+    experiment: experience
+  })
 }
 
 async function create (experience) {
   const user = await getUser()
-  const experiment = _.merge({}, withMetrics(DEFAULT_EXPERIENCE, { ...user, created: true }), experience)
-  return fetch.post(`/api/p/${experience.propertyId}/experiences`, { experiment })
+  const experiment = _.merge(
+    {},
+    withMetrics(DEFAULT_EXPERIENCE, { ...user, created: true }),
+    experience
+  )
+  return fetch.post(`/api/p/${experience.propertyId}/experiences`, {
+    experiment
+  })
 }
 
 function publish (propertyId, experienceId) {
@@ -61,4 +73,15 @@ function remove (propertyId, experienceId) {
   return fetch.delete(`/api/experiences/${experienceId}`)
 }
 
-module.exports = { get, getAll, set, create, publish, pause, resume, duplicate, status, remove }
+module.exports = {
+  get,
+  getAll,
+  set,
+  create,
+  publish,
+  pause,
+  resume,
+  duplicate,
+  status,
+  remove
+}

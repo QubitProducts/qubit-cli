@@ -1,5 +1,5 @@
-var _ = require('slapdash')
-var microAmd = require('micro-amd')
+const _ = require('slapdash')
+const microAmd = require('micro-amd')
 
 module.exports = function createAMD () {
   const amd = microAmd({ base: '//d22rutvoghj3db.cloudfront.net/' })

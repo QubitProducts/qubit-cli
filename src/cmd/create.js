@@ -15,19 +15,29 @@ module.exports = async function create (pid, name, traffic, templateId = null) {
 
   if (templates.length && !isProgrammatic) {
     templateId = await input.select(
-      formatLog(`   Please select a template you'd like to create this experience from:`),
+      formatLog(
+        "   Please select a template you'd like to create this experience from:"
+      ),
       formatTemplates(templates),
       { default: null }
     )
   }
 
   if (!name) {
-    name = clean(await input.text(
-      formatLog('   What would you like to call your experience?'),
-      { default: 'Created by Qubit-CLI' }
-    ))
+    name = clean(
+      await input.text(
+        formatLog('   What would you like to call your experience?'),
+        { default: 'Created by Qubit-CLI' }
+      )
+    )
   }
-  const controlDecimal = traffic || await input.select(formatLog('   Select control size'), validControlSizes, { default: 0.5 })
+  const controlDecimal =
+    traffic ||
+    (await input.select(
+      formatLog('   Select control size'),
+      validControlSizes,
+      { default: 0.5 }
+    ))
   await createExperience(CWD, propertyId, name, controlDecimal, templateId)
 }
 

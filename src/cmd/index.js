@@ -13,7 +13,7 @@ module.exports = async function run (pkg) {
     .description('login to the qubit platform')
     .action(function runLogin (options) {
       if (/^(development|staging|production)$/.test(options)) {
-        log.warn(`qubit release no longer accepts an environment option`)
+        log.warn('qubit release no longer accepts an environment option')
         this.outputHelp(chalk.red)
         return
       }
@@ -33,7 +33,8 @@ module.exports = async function run (pkg) {
   program
     .command('release')
     .arguments('[version]')
-    .usage(`
+    .usage(
+      `
 
   qubit release <version>
 
@@ -42,17 +43,18 @@ module.exports = async function run (pkg) {
   $ qubit release
   $ qubit release patch
   $ qubit release 1.0.2
-  $ qubit release 1.0.2-beta.3 --tag=beta`)
+  $ qubit release 1.0.2-beta.3 --tag=beta`
+    )
     .description('release a new version of your package')
     .option('--any-branch', 'allow publishing from any branch')
     .option('--no-cleanup', 'Skips cleanup of node_modules')
     .option('--yolo', 'Skips cleanup and testing')
     .option('--no-publish', 'Skips publishing')
     .option('--tag', 'Publish under a given dist-tag')
-    .option('--no-yarn', `Don't use Yarn`)
+    .option('--no-yarn', "Don't use Yarn")
     .action(function runRelease (version, options) {
       if (/^(development|staging|production)$/.test(version)) {
-        log.warn(`qubit release no longer accepts an environment option`)
+        log.warn('qubit release no longer accepts an environment option')
         this.outputHelp(chalk.red)
         return
       }
@@ -69,7 +71,8 @@ module.exports = async function run (pkg) {
 
   program
     .command('create [propertyId] [name] [split] [template]')
-    .usage(chalk.gray(`
+    .usage(
+      chalk.gray(`
     Create using propertyId:
     qubit create 1010
 
@@ -80,22 +83,26 @@ module.exports = async function run (pkg) {
     qubit create 1010 myExperiece 0.5
 
     Create using autocomplete or by navigating to your experience in the browser:
-    qubit clone`))
+    qubit clone`)
+    )
     .description('create an experience (arguments optional)')
     .action(cmd('create'))
 
   program
     .command('create-template [propertyId]')
-    .usage(chalk.gray(`
+    .usage(
+      chalk.gray(`
     Create a template using propertyId:
     qubit create-template 1010
-    `))
+    `)
+    )
     .description('create a template (arguments optional)')
     .action(cmd('create-template'))
 
   program
     .command('clone [url] [propertyId] [experienceId]')
-    .usage(chalk.gray(`
+    .usage(
+      chalk.gray(`
 
     Clone from url:
     qubit clone http://app.qubit.com/p/1010/experiences/10101/editor
@@ -104,18 +111,21 @@ module.exports = async function run (pkg) {
     qubit clone 1010 10101
 
     Clone using autocomplete or by navigating to your experience in the browser:
-    qubit clone`))
-    .description(`clone an experience (arguments optional)`)
+    qubit clone`)
+    )
+    .description('clone an experience (arguments optional)')
     .action(cmd('clone'))
 
   program
     .command('clone-all [propertyId]')
-    .description(`clone all experiences from a given property`)
+    .description('clone all experiences from a given property')
     .action(cmd('clone-all'))
 
   program
     .command('pull-all')
-    .description(`pull remote changes for all experience folders in the current directory`)
+    .description(
+      'pull remote changes for all experience folders in the current directory'
+    )
     .action(cmd('pull-all'))
 
   program
@@ -136,7 +146,8 @@ module.exports = async function run (pkg) {
   program
     .command('templatize [url] [propertyId] [experienceId]')
     .description('templatize an experience')
-    .usage(chalk.gray(`
+    .usage(
+      chalk.gray(`
       Templatize from url:
       qubit templatize http://app.qubit.com/p/1010/experiences/10101/
 
@@ -145,22 +156,30 @@ module.exports = async function run (pkg) {
 
       Templatize using autocomplete or by navigating to your experience in the browser:
       qubit templatize
-    `))
+    `)
+    )
     .action(cmd('templatize'))
 
   program
     .command('pull [name]')
-    .description(`pull remote changes into your local experience (arguments optional)`)
+    .description(
+      'pull remote changes into your local experience (arguments optional)'
+    )
     .action(cmd('pull'))
 
   program
     .command('iterations')
-    .description(`pull a previous version of your experience into your local folder`)
+    .description(
+      'pull a previous version of your experience into your local folder'
+    )
     .action(cmd('iterations'))
 
   program
     .command('push')
-    .option('--force', 'force push local changes even though there have been remote changes')
+    .option(
+      '--force',
+      'force push local changes even though there have been remote changes'
+    )
     .description('push local changes to the platform')
     .action(cmd('push'))
 
@@ -182,7 +201,8 @@ module.exports = async function run (pkg) {
 
   program
     .command('goals <cmd>')
-    .usage(chalk.grey(`
+    .usage(
+      chalk.grey(`
       List goals:
       qubit goals list
 
@@ -222,18 +242,24 @@ module.exports = async function run (pkg) {
   program
     .command('open')
     .arguments('[page]')
-    .description(`shortcut to open the 'overview', 'settings' or 'editor' page for the current experience`)
+    .description(
+      "shortcut to open the 'overview', 'settings' or 'editor' page for the current experience"
+    )
     .action(cmd('open'))
 
   program
     .command('link')
     .arguments('[page]')
-    .description(`shortcut to get a link to the 'overview', 'settings', 'editor' or 'preview' page for the current experience`)
+    .description(
+      "shortcut to get a link to the 'overview', 'settings', 'editor' or 'preview' page for the current experience"
+    )
     .action(cmd('link'))
 
   program
     .command('extension')
-    .description('open folder containing the Qubit-CLI chrome extension, drag into chrome extensions pane to install')
+    .description(
+      'open folder containing the Qubit-CLI chrome extension, drag into chrome extensions pane to install'
+    )
     .action(cmd('extension'))
 
   program
@@ -261,12 +287,12 @@ module.exports = async function run (pkg) {
   preCommand.outputHelp = pre.outputHelp
 
   program
-    .usage(`[options] <cmd>`)
+    .usage('[options] <cmd>')
     .version(pkg.version)
     .arguments('[variationFilename]')
     .option('-v, --verbose', 'log verbose output', false)
     .action((variationFileName, opts) => {
-      if (!variationFileName.includes('variation')) return log.error(`${variationFileName} command does not exist`)
+      if (!variationFileName.includes('variation')) { return log.error(`${variationFileName} command does not exist`) }
       return require('./serve')(variationFileName, opts)
     })
 

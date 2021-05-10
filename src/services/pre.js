@@ -1,15 +1,10 @@
 const { query } = require('../lib/graphql')
 
-const REVISION_FIELDS = [
-  'id',
-  'revisionId',
-  'code',
-  'packageJson',
-  'updatedAt'
-]
+const REVISION_FIELDS = ['id', 'revisionId', 'code', 'packageJson', 'updatedAt']
 
 async function get (propertyId, revisionType = 'draft') {
-  const data = await query(`
+  const data = await query(
+    `
   query getPreScript ($propertyId: Int) {
     property(propertyId: $propertyId) {
       preScript {
@@ -18,7 +13,9 @@ async function get (propertyId, revisionType = 'draft') {
         }
       }
     }
-  }`, { propertyId })
+  }`,
+    { propertyId }
+  )
   const revision = data.property.preScript[`${revisionType}Revision`]
   if (!revision) {
     throw new Error('This feature is not enabled for this property')
@@ -32,7 +29,8 @@ async function set (propertyId, files) {
     code: files['pre.js'],
     packageJson: files['package.json']
   }
-  const data = await query(`
+  const data = await query(
+    `
   mutation updatePreScript ($propertyId: Int!, $code: String!, $packageJson: JSON!) {
     updatePropertyPreScript(
       propertyId: $propertyId
@@ -41,12 +39,15 @@ async function set (propertyId, files) {
     ) {
       ${REVISION_FIELDS.join('\n')}
     }
-  }`, variables)
+  }`,
+    variables
+  )
   return normalizePkg(propertyId, data.updatePropertyPreScript)
 }
 
 async function publish (propertyId, changelog) {
-  const data = await query(`
+  const data = await query(
+    `
   mutation publishPreScript ($propertyId: Int!, $changelog: String!) {
     publishPropertyPreScript(
       propertyId: $propertyId
@@ -54,12 +55,15 @@ async function publish (propertyId, changelog) {
     ) {
       ${REVISION_FIELDS.join('\n')}
     }
-  }`, { propertyId, changelog })
+  }`,
+    { propertyId, changelog }
+  )
   return normalizePkg(propertyId, data.publishPropertyPreScript)
 }
 
 async function revisions (propertyId) {
-  const data = await query(`
+  const data = await query(
+    `
   query getPreScriptRevisions ($propertyId: Int) {
     property(propertyId: $propertyId) {
       preScript {
@@ -77,10 +81,12 @@ async function revisions (propertyId) {
         }
       }
     }
-  }`, { propertyId })
-  return data.property.preScript.revisions.map(revision => (
+  }`,
+    { propertyId }
+  )
+  return data.property.preScript.revisions.map(revision =>
     normalizePkg(propertyId, revision)
-  ))
+  )
 }
 
 module.exports = { get, set, publish, revisions }
@@ -91,7 +97,8 @@ function normalizePkg (propertyId, revision) {
     dependencies: {},
     ...revision.packageJson,
     name: `qubit-pre-${propertyId}`,
-    description: 'This script runs before all experiences and data collection. For more info see <docs site>.',
+    description:
+      'This script runs before all experiences and data collection. For more info see <docs site>.',
     meta: {
       ...revision.packageJson.meta,
       isPreScript: true,

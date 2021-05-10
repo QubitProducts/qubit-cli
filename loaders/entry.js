@@ -4,7 +4,7 @@ const slash = require('slash')
 const CWD = process.cwd()
 
 module.exports = function loader (content, { file }) {
-  let callback = this.async()
+  const callback = this.async()
   getFiles().then(files => {
     content = content.replace(/.+\*\//, '')
     content = content.replace('__FILES__', `[${files.join(',')}]`)

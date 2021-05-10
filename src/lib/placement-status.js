@@ -1,6 +1,6 @@
 const log = require('../lib/log')
 const placementService = require('../services/placement')
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 module.exports = async function placementStatus (propertyId, placementId) {
   let status

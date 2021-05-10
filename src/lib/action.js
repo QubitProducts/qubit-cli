@@ -13,7 +13,10 @@ module.exports = async function action (propertyId, experienceId, action) {
         throw new Error(`You cannot ${action} a template`)
       }
     } else {
-      const updatedExperience = await experienceService[action](propertyId, experienceId)
+      const updatedExperience = await experienceService[action](
+        propertyId,
+        experienceId
+      )
       if (updatedExperience) {
         await experienceStatus(propertyId, experienceId)
       }

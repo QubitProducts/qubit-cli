@@ -1,5 +1,5 @@
 const path = require('path')
-const {expect} = require('chai')
+const { expect } = require('chai')
 const fs = require('fs-extra')
 const fixtures = path.join(__dirname, 'fixtures/tmp/exists')
 const FileA = path.join(fixtures, 'a')

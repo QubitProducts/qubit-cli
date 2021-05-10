@@ -1,22 +1,40 @@
 const input = require('input')
 const placementService = require('../../services/placement')
-const { getPropertyId, getLocationId, getPersonalisationType } = require('../../lib/get-resource-ids')
+const {
+  getPropertyId,
+  getLocationId,
+  getPersonalisationType
+} = require('../../lib/get-resource-ids')
 const formatLog = require('../../lib/format-log')
 const throwIf = require('../../lib/throw-if')
 const clone = require('./clone')
 
-module.exports = async function create (propertyId, locationId, personalisationType, name) {
+module.exports = async function create (
+  propertyId,
+  locationId,
+  personalisationType,
+  name
+) {
   await throwIf.none('create')
   propertyId = await getPropertyId(propertyId, {})
   locationId = await getLocationId(propertyId, locationId, {})
   personalisationType = await getPersonalisationType(personalisationType, {})
 
-  name = name || (await input.text(
-    formatLog('   What would you like to call your placement?'),
-    { default: 'My new placement' }
-  )).trim()
+  name =
+    name ||
+    (
+      await input.text(
+        formatLog('   What would you like to call your placement?'),
+        { default: 'My new placement' }
+      )
+    ).trim()
 
-  const placementSpec = initialPlacement(propertyId, locationId, name, personalisationType)
+  const placementSpec = initialPlacement(
+    propertyId,
+    locationId,
+    name,
+    personalisationType
+  )
   const files = await placementService.create(propertyId, placementSpec)
   const placementId = JSON.parse(files['package.json']).meta.placementId
   await clone(propertyId, placementId)
@@ -73,7 +91,12 @@ const schemaTypes = {
   }
 }
 
-const initialPlacement = (propertyId, locationId, name, personalisationType) => ({
+const initialPlacement = (
+  propertyId,
+  locationId,
+  name,
+  personalisationType
+) => ({
   name,
   locationId,
   personalisationType,

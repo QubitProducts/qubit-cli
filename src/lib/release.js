@@ -14,12 +14,10 @@ const chalk = require('chalk')
 const exec = (cmd, args) => {
   const cp = execa(cmd, args)
 
-  return Observable
-    .merge(
-      streamToObservable(cp.stdout.pipe(split()), { await: cp }),
-      streamToObservable(cp.stderr.pipe(split()), { await: cp })
-    )
-    .filter(Boolean)
+  return Observable.merge(
+    streamToObservable(cp.stdout.pipe(split()), { await: cp }),
+    streamToObservable(cp.stderr.pipe(split()), { await: cp })
+  ).filter(Boolean)
 }
 
 module.exports = (input, opts) => {
@@ -41,7 +39,7 @@ module.exports = (input, opts) => {
   const runPublish = opts.publish
   const pkg = readPkg()
 
-  const tasks = new Listr([ { title: 'Git', task: () => gitTasks(opts) } ], {
+  const tasks = new Listr([{ title: 'Git', task: () => gitTasks(opts) }], {
     showSubtasks: false
   })
 
@@ -71,25 +69,25 @@ module.exports = (input, opts) => {
         title: 'Installing dependencies using npm',
         enabled: () => opts.yarn === false,
         task: () =>
-          exec('npm', [ 'install', '--no-package-lock', '--no-production' ])
+          exec('npm', ['install', '--no-package-lock', '--no-production'])
       }
     ])
   }
 
   if (runTests) {
-    tasks.add({ title: 'Running tests', task: () => exec('npm', [ 'test' ]) })
+    tasks.add({ title: 'Running tests', task: () => exec('npm', ['test']) })
   }
 
   tasks.add([
     {
       title: 'Bumping version using Yarn',
       enabled: () => opts.yarn === true,
-      task: () => exec('yarn', [ 'version', '--new-version', input ])
+      task: () => exec('yarn', ['version', '--new-version', input])
     },
     {
       title: 'Bumping version using npm',
       enabled: () => opts.yarn === false,
-      task: () => exec('npm', [ 'version', input ])
+      task: () => exec('npm', ['version', input])
     }
   ])
 
@@ -104,7 +102,7 @@ module.exports = (input, opts) => {
           }
         },
         task: () => {
-          const args = [ 'publish', '--new-version', input ]
+          const args = ['publish', '--new-version', input]
 
           if (opts.tag) {
             args.push('--tag', opts.tag)
@@ -130,7 +128,7 @@ module.exports = (input, opts) => {
 
   tasks.add({
     title: 'Pushing tags',
-    task: () => exec('git', [ 'push', '--follow-tags' ])
+    task: () => exec('git', ['push', '--follow-tags'])
   })
 
   return tasks
@@ -145,7 +143,7 @@ function gitTasks (opts) {
       title: 'Check current branch',
       task: () =>
         execa
-          .stdout('git', [ 'symbolic-ref', '--short', 'HEAD' ])
+          .stdout('git', ['symbolic-ref', '--short', 'HEAD'])
           .then(branch => {
             if (branch !== 'master') {
               throw new Error(
@@ -157,7 +155,7 @@ function gitTasks (opts) {
     {
       title: 'Check local working tree',
       task: () =>
-        execa.stdout('git', [ 'status', '--porcelain' ]).then(status => {
+        execa.stdout('git', ['status', '--porcelain']).then(status => {
           if (status !== '') {
             throw new Error(
               'Unclean working tree. Commit or stash changes first.'
@@ -169,12 +167,7 @@ function gitTasks (opts) {
       title: 'Check remote history',
       task: () =>
         execa
-          .stdout('git', [
-            'rev-list',
-            '--count',
-            '--left-only',
-            '@{u}...HEAD'
-          ])
+          .stdout('git', ['rev-list', '--count', '--left-only', '@{u}...HEAD'])
           .then(result => {
             if (result !== '0') {
               throw new Error('Remote history differs. Please pull changes.')
@@ -195,7 +188,7 @@ function readPkg () {
 
   if (!pkg) {
     throw new Error(
-      `No package.json found. Make sure you're in the correct project.`
+      "No package.json found. Make sure you're in the correct project."
     )
   }
 
@@ -203,7 +196,7 @@ function readPkg () {
 }
 
 function npmPublish (opts) {
-  const args = [ 'publish' ]
+  const args = ['publish']
 
   if (opts.tag) {
     args.push('--tag', opts.tag)
@@ -227,8 +220,8 @@ function handleError (task, err, tag, message) {
 
         return npmPublish({ tag, otp })
       }
-    }).catch(
-      err => handleError(task, err, tag, 'OTP was incorrect, try again:')
+    }).catch(err =>
+      handleError(task, err, tag, 'OTP was incorrect, try again:')
     )
   }
 
@@ -236,7 +229,7 @@ function handleError (task, err, tag, message) {
 }
 
 function publish (task, tag) {
-  return Observable
-    .fromPromise(npmPublish({ tag }))
-    .catch(err => handleError(task, err, tag))
+  return Observable.fromPromise(npmPublish({ tag })).catch(err =>
+    handleError(task, err, tag)
+  )
 }

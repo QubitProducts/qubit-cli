@@ -1,5 +1,5 @@
-var Promise = require('sync-p/extra')
-var _ = require('slapdash')
+const Promise = require('sync-p/extra')
+const _ = require('slapdash')
 
 module.exports = function evaluateTriggers (api, fn) {
   if (!fn) return Promise.resolve({ execute: true })
@@ -9,10 +9,10 @@ module.exports = function evaluateTriggers (api, fn) {
       return resolve({ execute: !!fn })
     }
 
-    var callback = Promise.defer()
+    const callback = Promise.defer()
     _.assign(callback.resolve, api)
+    let returnValue
     try {
-      var returnValue
       if (fn.length <= 1) {
         returnValue = fn(callback.resolve)
       } else if (fn.length === 2) {
@@ -55,12 +55,15 @@ module.exports = function evaluateTriggers (api, fn) {
         )
       })
     )
-  }).then(function finished (result) {
-    return result
-  }, function catchAsyncUserErrror (error) {
-    error.userCodeError = true
-    throw error
-  })
+  }).then(
+    function finished (result) {
+      return result
+    },
+    function catchAsyncUserErrror (error) {
+      error.userCodeError = true
+      throw error
+    }
+  )
 }
 
 function evaluateReturnValue (returnValue) {

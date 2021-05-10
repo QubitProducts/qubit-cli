@@ -26,9 +26,7 @@ module.exports = function rewrite (content, file) {
 }
 
 function addModuleExports (code) {
-  return isCommonjs(code)
-    ? code
-    : addExports(code)
+  return isCommonjs(code) ? code : addExports(code)
 }
 
 function asyncAMD (code) {

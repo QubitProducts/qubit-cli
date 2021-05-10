@@ -16,6 +16,8 @@ module.exports = async function diff (revisionType = 'draft') {
   if (diffs.length) {
     logDiff(diffs)
   } else {
-    log.info(`No code has changed between your local environment and the remote ${revisionType} revision`)
+    log.info(
+      `No code has changed between your local environment and the remote ${revisionType} revision`
+    )
   }
 }

@@ -5,6 +5,10 @@ const { REGISTRY_SCOPES } = require('../constants')
 
 module.exports = async function scopesCmd (id) {
   await getRegistryToken()
-  let scopes = await qubitrc.get(REGISTRY_SCOPES)
-  log.info(`You have access to the following scopes: ${scopes.join(', ').replace(/([^,]+),([^,]+)$/, '$1 and$2')}`)
+  const scopes = await qubitrc.get(REGISTRY_SCOPES)
+  log.info(
+    `You have access to the following scopes: ${scopes
+      .join(', ')
+      .replace(/([^,]+),([^,]+)$/, '$1 and$2')}`
+  )
 }
