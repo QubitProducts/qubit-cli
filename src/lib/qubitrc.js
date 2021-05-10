@@ -92,13 +92,17 @@ async function setNPMRC (registryToken, scopes) {
   const commands = []
   const authKey = config.services.registry.replace(/^https?:/, '')
   // always ensure that @qubit and @qutics scopes are configured
-  commands.push(`npm config set ${authKey}/:_authToken ${registryToken}`)
+  commands.push([
+    'npm',
+    ['config', 'set', `${authKey}/:_authToken`, `${registryToken}`]
+  ])
   for (const scope of scopes) {
-    commands.push(
-      `npm config set ${scope}:registry ${config.services.registry}/`
-    )
+    commands.push([
+      'npm',
+      ['config', 'set', `${scope}:registry`, `${config.services.registry}/`]
+    ])
   }
-  return execa.shell(commands.join(' && '))
+  return execAll(commands)
 }
 
 async function unsetNPMRC () {
@@ -107,16 +111,28 @@ async function unsetNPMRC () {
   const commands = []
   const authKey = config.services.registry.replace(/^https?:/, '')
   // always ensure that @qubit and @qutics scopes are configured
-  commands.push(`npm config delete ${authKey}/:_authToken`)
+  commands.push(['npm', ['config', 'delete', `${authKey}/:_authToken`]])
   log.debug(`Scopes: ${scopes && scopes.join(', ')}`)
   if (scopes) {
     for (const scope of scopes) {
-      commands.push(
-        `npm config delete ${scope}:registry ${config.services.registry}/`
-      )
+      commands.push([
+        'npm',
+        [
+          'config',
+          'delete',
+          `${scope}:registry`,
+          `${config.services.registry}/`
+        ]
+      ])
     }
   }
-  return execa.shell(commands.join(' && '))
+  return execAll(commands)
+}
+
+async function execAll (commands) {
+  for (const command of commands) {
+    await execa(...command)
+  }
 }
 
 async function login (registryToken, scopes) {
