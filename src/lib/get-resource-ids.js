@@ -34,7 +34,9 @@ async function getPropertyAndExperienceIds (
     ;({ propertyId, experienceId } = (await suggest.both()) || {})
   }
 
-  if (!propertyId || !experienceId) { throw new Error('This command requires a property and an experience') }
+  if (!propertyId || !experienceId) {
+    throw new Error('This command requires a property and an experience')
+  }
 
   return { propertyId, experienceId }
 }
@@ -69,14 +71,14 @@ async function getPlacementId (propertyId, placementId, pkg) {
   return placementId
 }
 
-async function getLocationId (propertyId, locationId, pkg) {
-  if (locationId) return locationId
-  locationId = _.get(pkg, 'meta.locationId')
-  if (!locationId) {
-    locationId = await suggest.location(propertyId)
+async function getTagId (propertyId, tagId, pkg) {
+  if (tagId) return tagId
+  tagId = _.get(pkg, 'meta.tagId')
+  if (!tagId) {
+    tagId = await suggest.tags(propertyId)
   }
-  if (!locationId) throw new Error('This command requires a location')
-  return locationId
+  if (!tagId) throw new Error('This command requires a tag')
+  return tagId
 }
 
 async function getPersonalisationType (personalisationType, pkg) {
@@ -85,7 +87,9 @@ async function getPersonalisationType (personalisationType, pkg) {
   if (!personalisationType) {
     personalisationType = await suggest.personalisationType()
   }
-  if (!personalisationType) { throw new Error('This command requires a personalisation type') }
+  if (!personalisationType) {
+    throw new Error('This command requires a campaign type')
+  }
   return personalisationType
 }
 
@@ -94,6 +98,6 @@ module.exports = {
   getPropertyId,
   getIterationId,
   getPlacementId,
-  getLocationId,
+  getTagId,
   getPersonalisationType
 }
