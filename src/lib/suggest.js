@@ -78,7 +78,7 @@ async function personalisationType () {
     value: 'id'
   })
   return createAutoComplete(
-    msg('Select a placement type (start typing to filter the list)'),
+    msg('Select a campaign type (start typing to filter the list)'),
     suggestions
   ).response()
 }

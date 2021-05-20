@@ -88,7 +88,7 @@ async function getPersonalisationType (personalisationType, pkg) {
     personalisationType = await suggest.personalisationType()
   }
   if (!personalisationType) {
-    throw new Error('This command requires a personalisation type')
+    throw new Error('This command requires a campaign type')
   }
   return personalisationType
 }
