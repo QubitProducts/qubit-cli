@@ -102,12 +102,14 @@ const initialPlacement = (propertyId, tagId, name, personalisationType) => ({
   implementationType: 'CODE_INJECTION',
   code: {
     js: `module.exports = function renderPlacement ({ content, onImpression, onClickthrough }) {
-if (content) {
+      if (content) {
 
-} else {
-  // The content may be null under certain circumstances but in these cases the onImpression and
-  //   onClickthrough should still be implemented, see docs.qubit.com/[..something..] for more information
-}
+      } else {
+        // The content may be null under certain circumstances but in these cases the onImpression and
+        //   onClickthrough should still be implemented
+      }
+    }
+
 `,
     packageJson: '{\n  "dependencies": {}\n}'
   }
