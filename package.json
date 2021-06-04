@@ -1,6 +1,6 @@
 {
   "name": "qubit-cli",
-  "version": "1.67.0",
+  "version": "1.67.1",
   "description": "Qubit command line interface",
   "main": "src/index.js",
   "bin": {
