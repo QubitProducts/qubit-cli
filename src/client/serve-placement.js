@@ -108,8 +108,8 @@ function servePlacement () {
         api
       )({
         content: payload,
-        onImpression: () => api.log.trace('onImpression called'),
-        onClickthrough: () => api.log.trace('onClickthrough called')
+        onImpression: () => api.log.info('onImpression called'),
+        onClickthrough: () => api.log.info('onClickthrough called')
       })
     }
   )
