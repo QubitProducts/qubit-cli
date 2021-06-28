@@ -94,30 +94,26 @@ function servePlacement () {
     })
   }
 
-  return Promise.all([api.getBrowserState(), getEvent(api, VIEW_REGEX)]).then(
-    ([{ ua }, viewEvent]) => {
-      const pass = evaluateTriggers(code.triggers, api, {
-        ua,
-        viewEvent,
-        url: window.location.href
-      })
-      if (!pass) return
-
-      return createExecutioner(
-        code,
-        api
-      )({
-        content: payload,
-        onImpression: () => api.log.info('onImpression called'),
-        onClickthrough: () => api.log.info('onClickthrough called')
-      })
-    }
-  )
-}
-
-function getEvent (api, regex) {
-  return new Promise(resolve => {
-    const { replay } = api.uv.once(regex, resolve)
+  return api.getBrowserState().then(({ ua }) => {
+    const { replay, dispose } = context.uv.on(VIEW_REGEX, viewEvent => {
+      while (disposables.length) disposables.pop()()
+      placementEngine({ ua, viewEvent, url: window.location.href })
+    })
     replay()
+    return dispose
   })
+
+  function placementEngine (context) {
+    const pass = evaluateTriggers(code.triggers, api, context)
+    if (!pass) return
+
+    return createExecutioner(
+      code,
+      api
+    )({
+      content: payload,
+      onImpression: () => api.log.info('onImpression called'),
+      onClickthrough: () => api.log.info('onClickthrough called')
+    })
+  }
 }
