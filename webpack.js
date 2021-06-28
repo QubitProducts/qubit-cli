@@ -2,16 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 
 module.exports = function createWebpackConfig () {
-  const SRC = path.join(__dirname, 'src/client')
   const CWD = process.cwd()
-  const QUBIT_NODE_MODULES = [
-    path.join(CWD, 'node_modules', '@qubit'),
-    path.join(__dirname, 'node_modules', '@qubit')
-  ]
-  const NODE_MODULES = [
-    path.join(CWD, 'node_modules'),
-    path.join(__dirname, 'node_modules')
-  ]
   const BUBLE_LOADER = {
     loader: '@qubit/buble-loader',
     options: {
@@ -56,50 +47,33 @@ module.exports = function createWebpackConfig () {
           test: /global\.js$/,
           use: ['raw-loader']
         },
-        // qubit-cli internal clientside code.js
+        // package.json
         {
-          test: /\.js$/,
-          include: [SRC],
-          use: ['entry', BUBLE_LOADER]
+          test: /\.json$/,
+          use: ['json-loader']
         },
-        // experience code
-        {
-          test: /\.js$/,
-          include: [CWD],
-          exclude: [/global\.js/, /node_modules/],
-          use: ['experience-js', BUBLE_LOADER]
-        },
-        // experience css
+        // Add variables to .less files
         {
           test: /\.(css|less)$/,
           use: [
+            'style-loader',
             'raw-loader',
-            'less-loader',
             {
               loader: 'experience-less',
               options: {
                 variationMasterId: true,
                 experienceId: true
               }
-            }
-          ],
-          exclude: NODE_MODULES
+            },
+            'less-loader'
+          ]
         },
-        // package.json
-        {
-          test: /\.json$/,
-          use: ['json-loader']
-        },
-        // @qubit packages
+
+        // Compile javascript to buble and fix legacy css imports
         {
           test: /\.js$/,
-          include: QUBIT_NODE_MODULES,
+          exclude: [/global\.js/],
           use: ['experience-css', BUBLE_LOADER]
-        },
-        {
-          test: /\.(css|less)$/,
-          include: QUBIT_NODE_MODULES,
-          use: ['style-loader', 'raw-loader', 'less-loader']
         }
       ]
     },
