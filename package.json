@@ -59,7 +59,7 @@
     "np": "^2.18.3",
     "opn": "^5.1.0",
     "p-map": "^1.2.0",
-    "p-memoize": "^3.0.0",
+    "p-memoize": "^4.0.1",
     "pem": "^1.13.2",
     "preact": "^8.2.6",
     "promise-defer": "^1.0.0",
@@ -93,12 +93,12 @@
     ]
   },
   "devDependencies": {
-    "chai": "^4.1.2",
-    "mocha": "^5.1.1",
+    "chai": "^4.2.0",
+    "mocha": "^6.0.0",
     "nyc": "^14.1.1",
-    "prettier-standard": "^16.4.1",
+    "prettier-standard": "^15.0.0",
     "rewire": "^4.0.1",
-    "sinon": "^4.5.0",
+    "sinon": "^9.0.3",
     "standard": "^16.0.3"
   },
   "bugs": {

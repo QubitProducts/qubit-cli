@@ -11,7 +11,7 @@ describe('experienceService', function () {
   beforeEach(() => {
     experienceId = 456
     experience = _.cloneDeep(experienceFixture)
-    sandbox = sinon.sandbox.create()
+    sandbox = sinon.createSandbox()
     sandbox.stub(fetch, 'get')
     sandbox.stub(fetch, 'put')
   })

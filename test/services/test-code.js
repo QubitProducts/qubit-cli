@@ -40,7 +40,7 @@ describe('codeService', function () {
     qfns = _.cloneDeep(qfnsFixture)
     files = _.cloneDeep(filesFixture)
     iteration.schema = JSON.parse(files['fields.json'])
-    sandbox = sinon.sandbox.create()
+    sandbox = sinon.createSandbox()
     sandbox.stub(propertyService, 'get').returns(Promise.resolve(property))
     sandbox.stub(experienceService, 'get').returns(Promise.resolve(experience))
     sandbox.stub(experienceService, 'set').returns(Promise.resolve())

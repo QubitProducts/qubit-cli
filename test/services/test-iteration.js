@@ -11,7 +11,7 @@ describe('iterationService', function () {
   beforeEach(() => {
     iterationId = 101112
     iteration = _.cloneDeep(experienceFixture.recent_iterations.draft)
-    sandbox = sinon.sandbox.create()
+    sandbox = sinon.createSandbox()
     sandbox.stub(fetch, 'get')
     sandbox.stub(fetch, 'put')
   })
