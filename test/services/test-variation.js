@@ -12,7 +12,7 @@ describe('variationService', function () {
     iterationId = 456
     variationId = 789
     variations = _.cloneDeep(variationsFixture)
-    sandbox = sinon.sandbox.create()
+    sandbox = sinon.createSandbox()
     sandbox.stub(fetch, 'get')
     sandbox.stub(fetch, 'put')
   })

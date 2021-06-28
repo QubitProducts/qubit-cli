@@ -31,7 +31,7 @@ spec:
                 name: ci-secrets
                 key: ssh-private-key
       container:
-        image: 'eu.gcr.io/qubit-registry/tools/node12chrome:latest'
+        image: 'node:16'
         args:
           - 'sh'
           - '-c'

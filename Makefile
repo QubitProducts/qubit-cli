@@ -3,6 +3,7 @@
 BIN = node_modules/.bin
 
 bootstrap:
+	rm -rf node_modules
 	npm install
 	npm install ./deps --no-save
 
