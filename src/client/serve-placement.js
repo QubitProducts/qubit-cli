@@ -9,6 +9,7 @@ const getCookieDomain = require('./get-cookie-domain')
 const applyPreviewSettings = require('./preview-settings')
 const disposables = []
 const { VIEW_REGEX } = require('@qubit/placement-engine/lib/constants')
+let disposeViewListener = () => {}
 
 servePlacement()
 
@@ -19,6 +20,7 @@ module.hot.accept(['placement.less'], () => {
 module.hot.accept(
   ['placement.js', 'payload.json', 'package.json'],
   (...args) => {
+    disposeViewListener()
     // If the only disposable is the styles
     // there is no code to remove any side effects
     // so we have to reload the page
@@ -99,6 +101,7 @@ function servePlacement () {
       while (disposables.length) disposables.pop()()
       placementEngine({ ua, viewEvent, url: window.location.href })
     })
+    disposeViewListener = dispose
     replay()
     return dispose
   })
