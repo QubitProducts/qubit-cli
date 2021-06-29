@@ -9,6 +9,7 @@ const getCookieDomain = require('./get-cookie-domain')
 const applyPreviewSettings = require('./preview-settings')
 const disposables = []
 const { VIEW_REGEX } = require('@qubit/placement-engine/lib/constants')
+let disposeViewListener = () => {}
 
 servePlacement()
 
@@ -19,6 +20,7 @@ module.hot.accept(['placement.less'], () => {
 module.hot.accept(
   ['placement.js', 'payload.json', 'package.json'],
   (...args) => {
+    disposeViewListener()
     // If the only disposable is the styles
     // there is no code to remove any side effects
     // so we have to reload the page
@@ -94,30 +96,27 @@ function servePlacement () {
     })
   }
 
-  return Promise.all([api.getBrowserState(), getEvent(api, VIEW_REGEX)]).then(
-    ([{ ua }, viewEvent]) => {
-      const pass = evaluateTriggers(code.triggers, api, {
-        ua,
-        viewEvent,
-        url: window.location.href
-      })
-      if (!pass) return
-
-      return createExecutioner(
-        code,
-        api
-      )({
-        content: payload,
-        onImpression: () => api.log.info('onImpression called'),
-        onClickthrough: () => api.log.info('onClickthrough called')
-      })
-    }
-  )
-}
-
-function getEvent (api, regex) {
-  return new Promise(resolve => {
-    const { replay } = api.uv.once(regex, resolve)
+  return api.getBrowserState().then(({ ua }) => {
+    const { replay, dispose } = context.uv.on(VIEW_REGEX, viewEvent => {
+      while (disposables.length) disposables.pop()()
+      placementEngine({ ua, viewEvent, url: window.location.href })
+    })
+    disposeViewListener = dispose
     replay()
+    return dispose
   })
+
+  function placementEngine (context) {
+    const pass = evaluateTriggers(code.triggers, api, context)
+    if (!pass) return
+
+    return createExecutioner(
+      code,
+      api
+    )({
+      content: payload,
+      onImpression: () => api.log.info('onImpression called'),
+      onClickthrough: () => api.log.info('onClickthrough called')
+    })
+  }
 }
