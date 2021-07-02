@@ -24,4 +24,5 @@ module.exports = async function clone (
   const destination = path.join(CWD, `placement-${propertyId}-${placementId}`)
   await scaffold(destination, files, { removeExtraneous: true })
   log.info(`placement cloned into ${destination}`)
+  return destination
 }

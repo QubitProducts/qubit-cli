@@ -2,7 +2,7 @@ const _ = require('lodash')
 const propertyService = require('./property')
 const { query } = require('../lib/graphql')
 const { fromFiles, toFiles } = require('../lib/placement-mapper')
-const { PLACEMENT_JS } = require('../constants')
+const { PLACEMENT_JS, PLACEMENT_TEST_JS } = require('../constants')
 
 async function getAll (propertyId) {
   const data = await query(
@@ -177,6 +177,7 @@ async function normalisePlacement (
   const code = {
     js: PLACEMENT_JS,
     css: '',
+    test: PLACEMENT_TEST_JS,
     ...implementation.code
   }
   const packageJson =
@@ -202,7 +203,8 @@ async function normalisePlacement (
       remoteUpdatedAt: implementation.updatedAt,
       triggers: implementation.triggers
     },
-    dependencies: { ..._.get(packageJson, 'dependencies', {}) }
+    dependencies: { ..._.get(packageJson, 'dependencies', {}) },
+    devDependencies: { ..._.get(packageJson, 'devDependencies', {}) }
   }
 
   return code ? toFiles(code, placement.schema.samplePayload) : null
