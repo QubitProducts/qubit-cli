@@ -1,4 +1,6 @@
 const _ = require('lodash')
+const fs = require('fs-extra')
+const path = require('path')
 const propertyService = require('./property')
 const { query } = require('../lib/graphql')
 const { fromFiles, toFiles } = require('../lib/placement-mapper')
@@ -177,7 +179,9 @@ async function normalisePlacement (
   const code = {
     js: PLACEMENT_JS,
     css: '',
-    test: PLACEMENT_TEST_JS,
+    test: String(
+      await fs.readFile(path.join(__dirname, '../placementTestTemplate.js'))
+    ),
     ...implementation.code
   }
   const packageJson =
