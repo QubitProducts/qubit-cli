@@ -8,7 +8,8 @@ module.exports = async function shouldWrite (
   name,
   newValue,
   shouldConfirm,
-  shouldOverwrite
+  shouldOverwrite,
+  ignoreOverride
 ) {
   const msg = `Do you want Qubit-CLI to overwrite your local ${name} file? (y/n)`
   const file = path.join(dest, name)
@@ -16,6 +17,8 @@ module.exports = async function shouldWrite (
 
   // file does not exist
   if (!exists) return true
+
+  if (ignoreOverride) return false
 
   const currentValue = String(await fs.readFile(file))
 

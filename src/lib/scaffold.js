@@ -5,17 +5,18 @@ const exists = require('./exists')
 const shouldWrite = require('./should-write')
 const shouldRemove = require('./should-remove')
 
-module.exports = async function scaffold (dest, files, options) {
+module.exports = async function scaffold (dest, files, options = {}) {
   const {
     shouldConfirm = true,
     shouldOverwrite = false,
-    removeExtraneous = false
+    removeExtraneous = false,
+    filesToIgnoreOverride = []
   } = options
   for (const name in files) {
     if (Object.prototype.hasOwnProperty.call(files, name)) {
       const value = files[name]
       if (typeof value === 'string') {
-        await scaffoldFile(name)
+        await scaffoldFile(name, filesToIgnoreOverride.includes(name))
       } else {
         await fs.mkdirp(path.join(dest, name))
         await scaffold(path.join(dest, name), value, options)
@@ -36,17 +37,17 @@ module.exports = async function scaffold (dest, files, options) {
     )
   }
 
-  async function scaffoldFile (name) {
+  async function scaffoldFile (name, ignoreOverride) {
     const value = files[name]
     const result = await shouldWrite(
       dest,
       name,
       value,
       shouldConfirm,
-      shouldOverwrite
+      shouldOverwrite,
+      ignoreOverride
     )
     if (result) {
-      //  isTemplate
       if (log) log.info(`Writing to local ${name} file...`)
       return fs.outputFile(path.join(dest, name), value)
     }
