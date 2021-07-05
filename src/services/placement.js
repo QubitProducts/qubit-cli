@@ -114,7 +114,8 @@ async function create (propertyId, placementSpec) {
       propertyId
     }
   )
-  return normalisePlacement(propertyId, _.get(data, 'createPlacement'))
+
+  return _.get(data, 'createPlacement.id')
 }
 
 async function tags (propertyId) {
@@ -165,7 +166,8 @@ module.exports = {
   unpublish,
   status,
   create,
-  tags
+  tags,
+  addHelpers
 }
 
 async function normalisePlacement (
@@ -179,9 +181,6 @@ async function normalisePlacement (
   const code = {
     js: PLACEMENT_JS,
     css: '',
-    test: String(
-      await fs.readFile(path.join(__dirname, '../placementTestTemplate.js'))
-    ),
     ...implementation.code
   }
   const packageJson =
@@ -212,6 +211,15 @@ async function normalisePlacement (
   }
 
   return code ? toFiles(code, placement.schema.samplePayload) : null
+}
+
+async function addHelpers (files) {
+  return {
+    ...files,
+    'placement.test.js': String(
+      await fs.readFile(path.join(__dirname, '../placementTestTemplate.js'))
+    )
+  }
 }
 
 const fields = `

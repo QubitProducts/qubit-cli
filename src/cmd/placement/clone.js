@@ -19,7 +19,9 @@ module.exports = async function clone (
   const pkg = await getPkg()
   propertyId = await getPropertyId(propertyId, pkg)
   placementId = await getPlacementId(propertyId, placementId, pkg)
-  const files = await placementService.get(propertyId, placementId)
+  const files = await placementService.addHelpers(
+    await placementService.get(propertyId, placementId)
+  )
   if (!files) throw new Error(`Placement '${placementId}' not found`)
   const destination = path.join(CWD, `placement-${propertyId}-${placementId}`)
   await scaffold(destination, files, { removeExtraneous: true })

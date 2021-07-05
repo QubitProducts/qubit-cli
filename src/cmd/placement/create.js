@@ -37,8 +37,8 @@ module.exports = async function create (
     name,
     personalisationType
   )
-  const files = await placementService.create(propertyId, placementSpec)
-  const placementId = JSON.parse(files['package.json']).meta.placementId
+
+  const placementId = await placementService.create(propertyId, placementSpec)
   const destination = await clone(propertyId, placementId)
 
   log.info('Installing dependencies...')

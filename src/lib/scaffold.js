@@ -9,14 +9,13 @@ module.exports = async function scaffold (dest, files, options = {}) {
   const {
     shouldConfirm = true,
     shouldOverwrite = false,
-    removeExtraneous = false,
-    filesToIgnoreOverride = []
+    removeExtraneous = false
   } = options
   for (const name in files) {
     if (Object.prototype.hasOwnProperty.call(files, name)) {
       const value = files[name]
       if (typeof value === 'string') {
-        await scaffoldFile(name, filesToIgnoreOverride.includes(name))
+        await scaffoldFile(name)
       } else {
         await fs.mkdirp(path.join(dest, name))
         await scaffold(path.join(dest, name), value, options)
