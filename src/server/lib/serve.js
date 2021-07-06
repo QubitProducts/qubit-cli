@@ -46,12 +46,18 @@ module.exports = async function serve (options) {
     await cssCodeWarning(CWD)
 
     if (!options.fileName) {
-      options.fileName = await pickVariation(await fs.readdir(CWD))
+      const files = await fs.readdir(CWD)
+      options.fileName = await pickVariation(files)
 
       if (!options.fileName) {
-        return log.warn(
-          'Please ensure you are within a directory with something to serve and try again!'
-        )
+        if (files.includes('placement.js')) {
+          options.fileName = 'placement'
+          options.isPlacement = true
+        } else {
+          return log.warn(
+            'Please ensure you are within a directory with something to serve and try again!'
+          )
+        }
       }
     }
 

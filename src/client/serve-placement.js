@@ -41,9 +41,11 @@ function servePlacement () {
     namespace,
     vertical,
     visitorId = 'visitorId',
-    cookieDomain = getCookieDomain(packageJson.meta.domains),
+    domains,
     triggers
   } = packageJson.meta || {}
+
+  const cookieDomain = getCookieDomain(domains)
 
   applyPreviewSettings(cookieDomain, {
     exclude: [placementId]
