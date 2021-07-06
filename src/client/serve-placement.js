@@ -14,7 +14,10 @@ let disposeViewListener = () => {}
 servePlacement()
 
 module.hot.accept(['placement.less'], () => {
-  applyStyles('qubit-cli-placement-styles', require('placement.less'))
+  const styleElement = document.getElementById('qubit-cli-placement-styles')
+  if (styleElement) {
+    styleElement.innerHTML = require('placement.less')
+  }
 })
 
 module.hot.accept(
@@ -112,10 +115,7 @@ function servePlacement () {
     const pass = evaluateTriggers(code.triggers, api, context)
     if (!pass) return
 
-    return createExecutioner(
-      code,
-      api
-    )({
+    return createExecutioner(code, api)({
       content: payload,
       onImpression: () => api.log.info('onImpression called'),
       onClickthrough: () => api.log.info('onClickthrough called')
