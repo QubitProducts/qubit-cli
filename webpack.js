@@ -56,7 +56,6 @@ module.exports = function createWebpackConfig () {
         {
           test: /\.(css|less)$/,
           use: [
-            'style-loader',
             'raw-loader',
             {
               loader: 'experience-less',
