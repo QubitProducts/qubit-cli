@@ -9,12 +9,18 @@ const getCookieDomain = require('./get-cookie-domain')
 const applyPreviewSettings = require('./preview-settings')
 const disposables = []
 const { VIEW_REGEX } = require('@qubit/placement-engine/lib/constants')
+
+const PLACEMENT_STYLE_ELEMENT_ID = 'qubit-cli-placement-styles'
+
 let disposeViewListener = () => {}
 
 servePlacement()
 
 module.hot.accept(['placement.less'], () => {
-  applyStyles('qubit-cli-placement-styles', require('placement.less'))
+  const styleElement = document.getElementById(PLACEMENT_STYLE_ELEMENT_ID)
+  if (styleElement) {
+    styleElement.innerHTML = require('placement.less')
+  }
 })
 
 module.hot.accept(
@@ -57,7 +63,7 @@ function servePlacement () {
       let remove
       const add = () => {
         remove = applyStyles(
-          'qubit-cli-placement-styles',
+          PLACEMENT_STYLE_ELEMENT_ID,
           require('placement.less')
         )
       }
@@ -112,10 +118,7 @@ function servePlacement () {
     const pass = evaluateTriggers(code.triggers, api, context)
     if (!pass) return
 
-    return createExecutioner(
-      code,
-      api
-    )({
+    return createExecutioner(code, api)({
       content: payload,
       onImpression: () => api.log.info('onImpression called'),
       onClickthrough: () => api.log.info('onClickthrough called')
