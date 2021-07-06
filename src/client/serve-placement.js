@@ -9,12 +9,15 @@ const getCookieDomain = require('./get-cookie-domain')
 const applyPreviewSettings = require('./preview-settings')
 const disposables = []
 const { VIEW_REGEX } = require('@qubit/placement-engine/lib/constants')
+
+const PLACEMENT_STYLE_ELEMENT_ID = 'qubit-cli-placement-styles'
+
 let disposeViewListener = () => {}
 
 servePlacement()
 
 module.hot.accept(['placement.less'], () => {
-  const styleElement = document.getElementById('qubit-cli-placement-styles')
+  const styleElement = document.getElementById(PLACEMENT_STYLE_ELEMENT_ID)
   if (styleElement) {
     styleElement.innerHTML = require('placement.less')
   }
@@ -60,7 +63,7 @@ function servePlacement () {
       let remove
       const add = () => {
         remove = applyStyles(
-          'qubit-cli-placement-styles',
+          PLACEMENT_STYLE_ELEMENT_ID,
           require('placement.less')
         )
       }
