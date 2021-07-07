@@ -125,6 +125,6 @@ function servePlacement () {
       content: payload,
       onImpression: () => api.log.info('onImpression called'),
       onClickthrough: () => api.log.info('onClickthrough called')
-    }).catch(api.log.error)
+    }).catch(api.log.error) // Log error to the console in development
   }
 }
