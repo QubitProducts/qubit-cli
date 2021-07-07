@@ -1,3 +1,5 @@
+/* globals beforeEach afterEach test describe expect */
+
 const renderPlacement = require('./placement')
 const setup = require('@qubit/jest/setup')
 
