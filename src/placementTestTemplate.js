@@ -36,7 +36,7 @@ describe('placement.js', () => {
       const el = document.querySelector('.hero').parentElement
       expect(el.parentElement).toBeDefined()
       expect(fixture.api.elements[0].parentElement).toBeNull()
-      teardown()
+      fixture.teardown()
       expect(el.parentElement).toBeNull()
       expect(fixture.api.elements[0].parentElement).toBeDefined()
     })
