@@ -1,4 +1,6 @@
 const _ = require('lodash')
+const fs = require('fs-extra')
+const path = require('path')
 const propertyService = require('./property')
 const { query } = require('../lib/graphql')
 const { fromFiles, toFiles } = require('../lib/placement-mapper')
@@ -112,7 +114,8 @@ async function create (propertyId, placementSpec) {
       propertyId
     }
   )
-  return normalisePlacement(propertyId, _.get(data, 'createPlacement'))
+
+  return _.get(data, 'createPlacement.id')
 }
 
 async function tags (propertyId) {
@@ -163,7 +166,8 @@ module.exports = {
   unpublish,
   status,
   create,
-  tags
+  tags,
+  addHelpers
 }
 
 async function normalisePlacement (
@@ -202,10 +206,20 @@ async function normalisePlacement (
       remoteUpdatedAt: implementation.updatedAt,
       triggers: implementation.triggers
     },
-    dependencies: { ..._.get(packageJson, 'dependencies', {}) }
+    dependencies: { ..._.get(packageJson, 'dependencies', {}) },
+    devDependencies: { ..._.get(packageJson, 'devDependencies', {}) }
   }
 
   return code ? toFiles(code, placement.schema.samplePayload) : null
+}
+
+async function addHelpers (files) {
+  return {
+    ...files,
+    'placement.test.js': String(
+      await fs.readFile(path.join(__dirname, '../placementTestTemplate.js'))
+    )
+  }
 }
 
 const fields = `

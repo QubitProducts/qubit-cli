@@ -5,9 +5,11 @@ const {
   getTagId,
   getPersonalisationType
 } = require('../../lib/get-resource-ids')
+const exec = require('execa')
 const formatLog = require('../../lib/format-log')
 const throwIf = require('../../lib/throw-if')
 const clone = require('./clone')
+const log = require('../../lib/log')
 
 module.exports = async function create (
   propertyId,
@@ -35,9 +37,18 @@ module.exports = async function create (
     name,
     personalisationType
   )
-  const files = await placementService.create(propertyId, placementSpec)
-  const placementId = JSON.parse(files['package.json']).meta.placementId
-  await clone(propertyId, placementId)
+
+  const placementId = await placementService.create(propertyId, placementSpec)
+  const destination = await clone(propertyId, placementId)
+
+  log.info('Installing dependencies...')
+
+  await exec('npm', ['install'], {
+    cwd: destination,
+    stdio: 'inherit'
+  })
+
+  log.info('Done ✨')
 }
 
 const schemaTypes = {
@@ -111,6 +122,38 @@ const initialPlacement = (propertyId, tagId, name, personalisationType) => ({
     }
 
 `,
-    packageJson: '{\n  "dependencies": {}\n}'
+    packageJson: `{\n
+      "dependencies": {},\n
+      "devDependencies": {
+        "@qubit/jest": "^1.4.0",
+        "healthier": "^4.0.0",
+        "jest": "^26.6.3",
+        "prettier-standard": "^16.4.1"
+      },
+      "healthier": {
+        "globals": [
+          "jest",
+          "expect",
+          "test",
+          "describe",
+          "beforeEach",
+          "beforeAll",
+          "afterEach",
+          "afterAll",
+          "Element"
+        ]
+      },
+      "jest": {
+        "transform": {
+          ".*(.js|.css|.less)$": "@qubit/jest"
+        }
+      },
+      "scripts": {
+        "format": "prettier-standard --fix",
+        "lint": "healthier",
+        "test": "jest --coverage"
+      }
+    }
+    `
   }
 })

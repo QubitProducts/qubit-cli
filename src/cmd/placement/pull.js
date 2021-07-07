@@ -24,6 +24,6 @@ module.exports = async function pull (
     implementationType
   )
   if (!files) throw new Error(`Placement '${placementId}' not found`)
-  await scaffold(CWD, files, { removeExtraneous: true })
+  await scaffold(CWD, files)
   log.info('placement pulled')
 }
