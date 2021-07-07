@@ -2,62 +2,63 @@
 
 const renderPlacement = require('./placement')
 const setup = require('@qubit/jest/setup')
+const content = require('./payload.json')
 
 describe('placement.js', () => {
-  let content, api, teardown
-
-  beforeEach(() => {
-    ;({ api, teardown } = setup({ elements: [createElement()] }))
-  })
+  let fixture
 
   afterEach(() => {
-    teardown()
+    fixture.teardown()
     document.body.innerHTML = ''
   })
 
   describe('with content', () => {
-    test('calls onImpression', () => {
-      renderPlacement({ ...api, content })
+    beforeEach(() => {
+      fixture = setup({ elements: [createElement()], content })
+    })
 
-      expect(api.onImpression.mock.calls.length).toBe(1)
+    test('calls onImpression', () => {
+      renderPlacement(fixture.api)
+
+      expect(fixture.api.onImpression.mock.calls.length).toBe(1)
     })
 
     test('calls onClickthrough', () => {
-      renderPlacement({ ...api, content })
+      renderPlacement(fixture.api)
 
       // click
-      expect(api.onClickthrough.mock.calls.length).toBe(1)
+      expect(fixture.api.onClickthrough.mock.calls.length).toBe(1)
     })
 
     test('cleans up after itself', () => {
-      renderPlacement({ ...api, content })
+      renderPlacement(fixture.api)
 
       const el = document.querySelector('.hero').parentElement
       expect(el.parentElement).toBeDefined()
-      expect(api.elements[0].parentElement).toBeNull()
-      teardown()
+      expect(fixture.api.elements[0].parentElement).toBeNull()
+      fixture.teardown()
       expect(el.parentElement).toBeNull()
-      expect(api.elements[0].parentElement).toBeDefined()
+      expect(fixture.api.elements[0].parentElement).toBeDefined()
     })
   })
 
   describe('with null content', () => {
     beforeEach(() => {
-      content = null
+      fixture = setup({ elements: [createElement()], content: null })
     })
 
     test('calls onImpression', () => {
-      renderPlacement({ ...api, content })
+      renderPlacement(fixture.api)
 
-      expect(api.onImpression.mock.calls.length).toBe(1)
+      expect(fixture.api.onImpression.mock.calls.length).toBe(1)
     })
 
     test('calls onClickthrough', () => {
-      renderPlacement({ ...api, content })
+      renderPlacement(fixture.api)
 
       // click
 
-      expect(api.onClickthrough.mock.calls.length).toBe(1)
+      expect(fixture.api.onClickthrough.mock.calls.length).toBe(1)
     })
   })
 })
