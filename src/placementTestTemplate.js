@@ -1,8 +1,8 @@
-/* globals beforeEach afterEach test describe expect */
-
-const renderPlacement = require('./placement')
+/* globals beforeEach afterEach it describe expect */
 const setup = require('@qubit/jest/setup')
 const content = require('./payload.json')
+const renderPlacement = require('./placement')
+const getPlacementElement = () => document.querySelector('.QubitPlacement')
 
 describe('placement.js', () => {
   let fixture
@@ -14,55 +14,50 @@ describe('placement.js', () => {
 
   describe('with content', () => {
     beforeEach(() => {
-      fixture = setup({ elements: [createElement()], content })
+      fixture = setup({ content, elements: [createDom()] })
+      return renderPlacement(fixture.api)
     })
 
-    test('calls onImpression', () => {
-      renderPlacement(fixture.api)
-
+    it('calls onImpression', () => {
       expect(fixture.api.onImpression.mock.calls.length).toBe(1)
     })
 
-    test('calls onClickthrough', () => {
-      renderPlacement(fixture.api)
-
-      // click
+    it('calls onClickthrough', () => {
+      expect(fixture.api.onClickthrough.mock.calls.length).toBe(0)
+      getPlacementElement().click()
       expect(fixture.api.onClickthrough.mock.calls.length).toBe(1)
     })
 
-    test('cleans up after itself', () => {
-      renderPlacement(fixture.api)
-
-      const el = document.querySelector('.hero').parentElement
-      expect(el.parentElement).toBeDefined()
-      expect(fixture.api.elements[0].parentElement).toBeNull()
+    it('cleans up after itself', () => {
+      const el = getPlacementElement()
+      expect(document.body.contains(el)).toBe(true)
       fixture.teardown()
-      expect(el.parentElement).toBeNull()
-      expect(fixture.api.elements[0].parentElement).toBeDefined()
+      expect(document.body.contains(el)).toBe(false)
     })
   })
 
   describe('with null content', () => {
     beforeEach(() => {
-      fixture = setup({ elements: [createElement()], content: null })
+      fixture = setup({ content: null, elements: [createDom()] })
+      return renderPlacement(fixture.api)
     })
 
-    test('calls onImpression', () => {
-      renderPlacement(fixture.api)
-
+    it('calls onImpression', () => {
       expect(fixture.api.onImpression.mock.calls.length).toBe(1)
     })
 
-    test('calls onClickthrough', () => {
-      renderPlacement(fixture.api)
-
-      // click
-
+    it('calls onClickthrough', () => {
+      expect(fixture.api.onClickthrough.mock.calls.length).toBe(0)
+      fixture.api.elements[0].click()
       expect(fixture.api.onClickthrough.mock.calls.length).toBe(1)
     })
   })
 })
 
-function createElement () {
-  // create the elements that will be on the page when your placement runs
+// create the elements that will be on the page when your placement runs
+function createDom () {
+  const el = document.createElement('div')
+  el.innerHTML = '<a/>'
+  document.body.append(el)
+  return el
 }
