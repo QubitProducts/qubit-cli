@@ -32,6 +32,11 @@ const PLACEMENT_PKG_JSON = readFile(
   __dirname,
   'templates/placement.package.json'
 )
+const GITIGNORE = `
+.DS_STORE
+node_modules
+coverage
+`
 
 module.exports = {
   HOME,
@@ -50,5 +55,6 @@ module.exports = {
   CAMPAIGN_TYPES,
   PLACEMENT_JS,
   PLACEMENT_TEST_JS,
-  PLACEMENT_PKG_JSON
+  PLACEMENT_PKG_JSON,
+  GITIGNORE
 }
