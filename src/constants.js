@@ -1,5 +1,7 @@
 const os = require('os')
+const fs = require('fs')
 const path = require('path')
+const readFile = (...paths) => String(fs.readFileSync(path.join(...paths)))
 const HOME = process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME']
 const CERT_DIR = path.join(HOME, '.qubit-ssl')
 const CERT_PATH = path.join(CERT_DIR, 'qubit-serve.crt')
@@ -24,14 +26,12 @@ const CAMPAIGN_TYPES = {
   RECOMMENDATIONS: 'RECOMMENDATIONS',
   PERSONALISED_CONTENT: 'PERSONALISED_CONTENT'
 }
-const PLACEMENT_JS = `module.exports = function renderPlacement ({ content, onImpression, onClickthrough }) {
-  if (content) {
-
-  } else {
-    // The content may be null under certain circumstances but in these cases the onImpression and
-    //   onClickthrough should still be implemented, see docs.qubit.com/[..something..] for more information
-  }
-}`
+const PLACEMENT_JS = readFile(__dirname, 'templates/placement.js')
+const PLACEMENT_TEST_JS = readFile(__dirname, 'templates/placement.test.js')
+const PLACEMENT_PKG_JSON = readFile(
+  __dirname,
+  'templates/placement.package.json'
+)
 
 module.exports = {
   HOME,
@@ -48,5 +48,7 @@ module.exports = {
   STYLE_EXTENSION,
   CLIENT_PATH,
   CAMPAIGN_TYPES,
-  PLACEMENT_JS
+  PLACEMENT_JS,
+  PLACEMENT_TEST_JS,
+  PLACEMENT_PKG_JSON
 }

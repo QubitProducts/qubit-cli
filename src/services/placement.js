@@ -1,10 +1,8 @@
 const _ = require('lodash')
-const fs = require('fs-extra')
-const path = require('path')
 const propertyService = require('./property')
 const { query } = require('../lib/graphql')
 const { fromFiles, toFiles } = require('../lib/placement-mapper')
-const { PLACEMENT_JS } = require('../constants')
+const { PLACEMENT_JS, PLACEMENT_TEST_JS } = require('../constants')
 
 async function getAll (propertyId) {
   const data = await query(
@@ -216,9 +214,7 @@ async function normalisePlacement (
 async function addHelpers (files) {
   return {
     ...files,
-    'placement.test.js': String(
-      await fs.readFile(path.join(__dirname, '../placementTestTemplate.js'))
-    )
+    'placement.test.js': PLACEMENT_TEST_JS
   }
 }
 

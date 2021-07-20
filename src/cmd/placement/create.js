@@ -10,6 +10,7 @@ const formatLog = require('../../lib/format-log')
 const throwIf = require('../../lib/throw-if')
 const clone = require('./clone')
 const log = require('../../lib/log')
+const { PLACEMENT_JS, PLACEMENT_PKG_JSON } = require('../../constants')
 
 module.exports = async function create (
   propertyId,
@@ -112,48 +113,7 @@ const initialPlacement = (propertyId, tagId, name, personalisationType) => ({
   },
   implementationType: 'CODE_INJECTION',
   code: {
-    js: `module.exports = function renderPlacement ({ content, onImpression, onClickthrough }) {
-      if (content) {
-
-      } else {
-        // The content may be null under certain circumstances but in these cases the onImpression and
-        //   onClickthrough should still be implemented
-      }
-    }
-
-`,
-    packageJson: `{\n
-      "dependencies": {},\n
-      "devDependencies": {
-        "@qubit/jest": "^1.4.0",
-        "healthier": "^4.0.0",
-        "jest": "^26.6.3",
-        "prettier-standard": "^16.4.1"
-      },
-      "healthier": {
-        "globals": [
-          "jest",
-          "expect",
-          "test",
-          "describe",
-          "beforeEach",
-          "beforeAll",
-          "afterEach",
-          "afterAll",
-          "Element"
-        ]
-      },
-      "jest": {
-        "transform": {
-          ".*(.js|.css|.less)$": "@qubit/jest"
-        }
-      },
-      "scripts": {
-        "format": "prettier-standard --fix",
-        "lint": "healthier",
-        "test": "jest --coverage"
-      }
-    }
-    `
+    js: PLACEMENT_JS,
+    packageJson: PLACEMENT_PKG_JSON
   }
 })
