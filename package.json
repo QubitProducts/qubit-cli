@@ -83,6 +83,7 @@
     "windosu": "^0.3.0"
   },
   "standard": {
+    "ignore": ["/src/templates/placement.js"],
     "globals": [
       "describe",
       "it",
