@@ -58,13 +58,15 @@ function render () {
     })
   })
 }
-
+let cache = {}
 function getState (id, callback) {
   chrome.storage.local.get(NAMESPACE, result => {
     let state = result[NAMESPACE] || {}
+    cache = state
     state = state[id] || {}
     if (callback) callback(state)
   })
+  return cache[id]
 }
 
 function setState (id, state, callback) {
@@ -73,8 +75,26 @@ function setState (id, state, callback) {
     obj[NAMESPACE] = obj[NAMESPACE] || {}
     obj[NAMESPACE][id] = state
     if (!state.enabled) delete obj[NAMESPACE][id]
+    cache = obj
     chrome.storage.local.set(obj, () => {
       if (callback) callback(state)
     })
   })
+}
+
+chrome.webRequest.onHeadersReceived.addListener(
+  responseListener,
+  { urls: ['<all_urls>'] },
+  ['blocking', 'responseHeaders']
+)
+
+function responseListener (details) {
+  let responseHeaders = details.responseHeaders
+  const state = getState(details.tabId)
+  if (state.enabled) {
+    responseHeaders = responseHeaders.filter(
+      elem => elem.name.toLowerCase() !== 'content-security-policy'
+    )
+  }
+  return { responseHeaders }
 }
