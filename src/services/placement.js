@@ -194,6 +194,7 @@ async function normalisePlacement (
       ..._.get(packageJson, 'meta', {}),
       propertyId,
       placementId: placement.id,
+      name: placement.name,
       implementationId: implementation.id,
       tags: placement.tags,
       personalisationType: placement.personalisationType,
@@ -215,8 +216,16 @@ async function addHelpers (files) {
   return {
     ...files,
     '.gitignore': GITIGNORE,
-    'placement.test.js': PLACEMENT_TEST_JS
+    'placement.test.js': PLACEMENT_TEST_JS,
+    'readme.md': createReadme(files["package.json"])
   }
+}
+
+function createReadme (packageJson) {
+  if (!packageJson) return ''
+  const pkg = JSON.parse(packageJson)
+  const name = _.get(pkg, ['meta', 'name'])
+  return name ? `# ${name}` : ``
 }
 
 const fields = `
