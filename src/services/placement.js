@@ -2,7 +2,12 @@ const _ = require('lodash')
 const propertyService = require('./property')
 const { query } = require('../lib/graphql')
 const { fromFiles, toFiles } = require('../lib/placement-mapper')
-const { PLACEMENT_JS, PLACEMENT_TEST_JS, GITIGNORE } = require('../constants')
+const {
+  PLACEMENT_JS,
+  PLACEMENT_TEST_JS,
+  GITIGNORE,
+  FILENAME_PACKAGE_JSON
+} = require('../constants')
 
 async function getAll (propertyId) {
   const data = await query(
@@ -194,6 +199,7 @@ async function normalisePlacement (
       ..._.get(packageJson, 'meta', {}),
       propertyId,
       placementId: placement.id,
+      name: placement.name,
       implementationId: implementation.id,
       tags: placement.tags,
       personalisationType: placement.personalisationType,
@@ -215,8 +221,16 @@ async function addHelpers (files) {
   return {
     ...files,
     '.gitignore': GITIGNORE,
-    'placement.test.js': PLACEMENT_TEST_JS
+    'placement.test.js': PLACEMENT_TEST_JS,
+    'readme.md': createReadme(files[FILENAME_PACKAGE_JSON])
   }
+}
+
+function createReadme (packageJson) {
+  if (!packageJson) return ''
+  const pkg = JSON.parse(packageJson)
+  const name = _.get(pkg, ['meta', 'name'])
+  return name ? `# ${name}` : ''
 }
 
 const fields = `
