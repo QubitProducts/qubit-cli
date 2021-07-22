@@ -2,7 +2,12 @@ const _ = require('lodash')
 const propertyService = require('./property')
 const { query } = require('../lib/graphql')
 const { fromFiles, toFiles } = require('../lib/placement-mapper')
-const { PLACEMENT_JS, PLACEMENT_TEST_JS, GITIGNORE } = require('../constants')
+const {
+  PLACEMENT_JS,
+  PLACEMENT_TEST_JS,
+  GITIGNORE,
+  FILENAME_PACKAGE_JSON
+} = require('../constants')
 
 async function getAll (propertyId) {
   const data = await query(
@@ -217,7 +222,7 @@ async function addHelpers (files) {
     ...files,
     '.gitignore': GITIGNORE,
     'placement.test.js': PLACEMENT_TEST_JS,
-    'readme.md': createReadme(files['package.json'])
+    'readme.md': createReadme(files[FILENAME_PACKAGE_JSON])
   }
 }
 
