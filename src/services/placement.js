@@ -217,7 +217,7 @@ async function addHelpers (files) {
     ...files,
     '.gitignore': GITIGNORE,
     'placement.test.js': PLACEMENT_TEST_JS,
-    'readme.md': createReadme(files["package.json"])
+    'readme.md': createReadme(files['package.json'])
   }
 }
 
@@ -225,7 +225,7 @@ function createReadme (packageJson) {
   if (!packageJson) return ''
   const pkg = JSON.parse(packageJson)
   const name = _.get(pkg, ['meta', 'name'])
-  return name ? `# ${name}` : ``
+  return name ? `# ${name}` : ''
 }
 
 const fields = `
