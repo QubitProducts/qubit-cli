@@ -1,27 +1,30 @@
+const {
+  FILENAME_PAYLOAD_JSON,
+  FILENAME_PLACEMENT_JS,
+  FILENAME_PLACEMENT_LESS,
+  FILENAME_PACKAGE_JSON
+} = require('../constants')
+
 module.exports = { toFiles, fromFiles }
-const PAYLOAD_JSON = 'payload.json'
-const PLACEMENT_JS = 'placement.js'
-const PLACEMENT_LESS = 'placement.less'
-const PACKAGE_JSON = 'package.json'
 
 function toFiles (code, samplePayload) {
   return {
-    [PAYLOAD_JSON]: JSON.stringify(samplePayload, null, 2),
-    [PLACEMENT_JS]: code.js,
-    [PLACEMENT_LESS]: code.css,
-    [PACKAGE_JSON]: JSON.stringify(code.packageJson, null, 2)
+    [FILENAME_PAYLOAD_JSON]: JSON.stringify(samplePayload, null, 2),
+    [FILENAME_PLACEMENT_JS]: code.js,
+    [FILENAME_PLACEMENT_LESS]: code.css,
+    [FILENAME_PACKAGE_JSON]: JSON.stringify(code.packageJson, null, 2)
   }
 }
 
 function fromFiles (files) {
   return {
     schema: {
-      samplePayload: JSON.parse(files[PAYLOAD_JSON])
+      samplePayload: JSON.parse(files[FILENAME_PAYLOAD_JSON])
     },
     code: {
-      js: files[PLACEMENT_JS],
-      css: files[PLACEMENT_LESS],
-      packageJson: JSON.parse(files[PACKAGE_JSON])
+      js: files[FILENAME_PLACEMENT_JS],
+      css: files[FILENAME_PLACEMENT_LESS],
+      packageJson: JSON.parse(files[FILENAME_PACKAGE_JSON])
     }
   }
 }

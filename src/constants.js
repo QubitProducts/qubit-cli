@@ -37,6 +37,10 @@ const GITIGNORE = `
 node_modules
 coverage
 `
+const FILENAME_PAYLOAD_JSON = 'payload.json'
+const FILENAME_PLACEMENT_JS = 'placement.js'
+const FILENAME_PLACEMENT_LESS = 'placement.less'
+const FILENAME_PACKAGE_JSON = 'package.json'
 
 module.exports = {
   HOME,
@@ -56,5 +60,9 @@ module.exports = {
   PLACEMENT_JS,
   PLACEMENT_TEST_JS,
   PLACEMENT_PKG_JSON,
-  GITIGNORE
+  GITIGNORE,
+  FILENAME_PAYLOAD_JSON,
+  FILENAME_PLACEMENT_JS,
+  FILENAME_PLACEMENT_LESS,
+  FILENAME_PACKAGE_JSON
 }
