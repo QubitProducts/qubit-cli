@@ -67,7 +67,10 @@ module.exports = function createWebpackConfig () {
             'less-loader'
           ]
         },
-
+        {
+          include: [path.join(__dirname, 'src/client/serve-experience.js')],
+          use: ['entry', 'experience-css', BUBLE_LOADER]
+        },
         // Compile javascript to buble and fix legacy css imports
         {
           test: /\.js$/,

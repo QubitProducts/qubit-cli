@@ -1,5 +1,5 @@
 const rewrite = require('./lib/rewrite')
 
-module.exports = function loader (content, { file }) {
-  return rewrite(content, file)
+module.exports = function loader (content) {
+  return rewrite(content, this.resource)
 }
