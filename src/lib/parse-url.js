@@ -1,7 +1,7 @@
 module.exports = { parseExperienceUrl, parsePlacementUrl }
 
-function parseExperienceUrl (url) {
-  const match = url.match(/\/p\/([^/]+)\/experiences\/([^/]+)/i)
+function parseExperienceUrl (url = '') {
+  const match = String(url).match(/\/p\/([^/]+)\/experiences\/([^/]+)/i)
   if (!match) return null
   const [, propertyId, experienceId] = match
 
@@ -11,8 +11,8 @@ function parseExperienceUrl (url) {
   }
 }
 
-function parsePlacementUrl (url) {
-  const match = url.match(/\/p\/([^/]+)\/atom\/placements\/([^/]+)/i)
+function parsePlacementUrl (url = '') {
+  const match = String(url).match(/\/p\/([^/]+)\/atom\/placements\/([^/]+)/i)
   if (!match) return null
   const [, propertyId, placementId] = match
   return {
