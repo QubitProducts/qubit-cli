@@ -1,13 +1,22 @@
-module.exports = function parseUrl (uri) {
-  const ids = uri
-    .replace(/.*?\//, '')
-    .match(/\/\d+/g)
-    .map(s => s.substr(1))
-    .map(Number)
-  if (ids.length < 2) { throw new Error('expected url to have propertyId and experienceId') }
-  const [propertyId, experienceId] = ids
+module.exports = { parseExperienceUrl, parsePlacementUrl }
+
+function parseExperienceUrl (url) {
+  const match = url.match(/\/p\/([^/]+)\/experiences\/([^/]+)/i)
+  if (!match) return null
+  const [, propertyId, experienceId] = match
+
   return {
     propertyId: Number(propertyId),
     experienceId: Number(experienceId)
+  }
+}
+
+function parsePlacementUrl (url) {
+  const match = url.match(/\/p\/([^/]+)\/atom\/placements\/([^/]+)/i)
+  if (!match) return null
+  const [, propertyId, placementId] = match
+  return {
+    propertyId: Number(propertyId),
+    placementId
   }
 }
