@@ -14,7 +14,8 @@
     "dist": "docs"
   },
   "scripts": {
-    "test": "node test/setup && NODE_ENV=test nyc --reporter=lcov --reporter=text-summary mocha --recursive",
+    "pretest": "NODE_ENV=test node test/setup",
+    "test": "NODE_ENV=test nyc --reporter=lcov --reporter=text-summary mocha --recursive",
     "lint": "standard",
     "format": "prettier-standard"
   },
