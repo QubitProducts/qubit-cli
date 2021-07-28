@@ -32,7 +32,6 @@ module.exports = function createWebpackConfig () {
         path.join(CWD, 'node_modules'),
         path.join(__dirname, 'node_modules')
       ],
-      mainFields: ['browser', 'main'],
       alias: { jquery: '@qubit/jquery' }
     },
     resolveLoader: {
