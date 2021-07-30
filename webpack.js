@@ -13,6 +13,7 @@ module.exports = function createWebpackConfig () {
       }
     }
   }
+  const MANAGED_STYLES = /(placement|variation)[0-9-]*\.(css|less)$/
   return {
     entry: [
       'webpack-hot-middleware/client?path=https://localhost:41337/__webpack_hmr&timeout=20000&reload=true&&noInfo=true&&quiet=true'
@@ -31,7 +32,6 @@ module.exports = function createWebpackConfig () {
         path.join(CWD, 'node_modules'),
         path.join(__dirname, 'node_modules')
       ],
-      mainFields: ['browser', 'main'],
       alias: { jquery: '@qubit/jquery' }
     },
     resolveLoader: {
@@ -52,12 +52,14 @@ module.exports = function createWebpackConfig () {
           test: /\.json$/,
           use: ['json-loader']
         },
-        // Add variables to .less files
+
+        // Import placement and variation styles without injecting
         {
-          test: /\.(css|less)$/,
+          test: MANAGED_STYLES,
           use: [
             'raw-loader',
             {
+              // Add variables to .less files
               loader: 'experience-less',
               options: {
                 variationMasterId: true,
@@ -68,6 +70,16 @@ module.exports = function createWebpackConfig () {
           ]
         },
 
+        // Auto inject package styles
+        {
+          test: /\.(css|less)$/,
+          exclude: [MANAGED_STYLES],
+          use: ['style-loader', 'raw-loader', 'less-loader']
+        },
+        {
+          include: [path.join(__dirname, 'src/client/serve-experience.js')],
+          use: ['entry']
+        },
         // Compile javascript to buble and fix legacy css imports
         {
           test: /\.js$/,

@@ -1,6 +1,6 @@
 {
   "name": "qubit-cli",
-  "version": "1.71.0",
+  "version": "1.73.1",
   "description": "Qubit command line interface",
   "main": "src/index.js",
   "bin": {
@@ -14,7 +14,8 @@
     "dist": "docs"
   },
   "scripts": {
-    "test": "node test/setup && NODE_ENV=test nyc --reporter=lcov --reporter=text-summary mocha --recursive",
+    "pretest": "NODE_ENV=test node test/setup",
+    "test": "NODE_ENV=test nyc --reporter=lcov --reporter=text-summary mocha --recursive",
     "lint": "standard",
     "format": "prettier-standard"
   },
@@ -83,6 +84,9 @@
     "windosu": "^0.3.0"
   },
   "standard": {
+    "ignore": [
+      "/src/templates/placement.js"
+    ],
     "globals": [
       "describe",
       "it",

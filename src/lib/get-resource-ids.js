@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const suggest = require('./suggest')
-const parseUrl = require('./parse-url')
-const { isUrl, isId } = require('./is-type')
+const { parseExperienceUrl, parsePlacementUrl } = require('./parse-url')
+const { isId } = require('./is-type')
 
 async function getPropertyAndExperienceIds (
   propertyIdOrUrl,
@@ -9,7 +9,8 @@ async function getPropertyAndExperienceIds (
   pkg
 ) {
   // Try to parse command line arguments first
-  if (isUrl(propertyIdOrUrl)) return parseUrl(propertyIdOrUrl)
+  const fromUrl = parseExperienceUrl(propertyIdOrUrl)
+  if (fromUrl) return fromUrl
 
   let propertyId
 
@@ -45,8 +46,14 @@ async function getPropertyId (propertyIdOrUrl, pkg) {
   let propertyId = _.get(pkg, 'meta.propertyId')
 
   if (isId(propertyIdOrUrl)) {
-    propertyId = Number(propertyIdOrUrl)
-  } else if (!propertyId) {
+    return Number(propertyIdOrUrl)
+  }
+
+  const fromUrl =
+    parsePlacementUrl(propertyIdOrUrl) || parseExperienceUrl(propertyIdOrUrl)
+  if (fromUrl) return fromUrl.propertyId
+
+  if (!propertyId) {
     propertyId = await suggest.property()
   }
 
@@ -61,11 +68,15 @@ async function getIterationId (experienceId) {
   return iterationId
 }
 
-async function getPlacementId (propertyId, placementId, pkg) {
+async function getPlacementId (propertyIdOrUrl, placementId, pkg) {
   if (placementId) return placementId
+
+  const fromUrl = parsePlacementUrl(propertyIdOrUrl)
+  if (fromUrl) return fromUrl.placementId
+
   placementId = _.get(pkg, 'meta.placementId')
   if (!placementId) {
-    placementId = await suggest.placement(propertyId)
+    placementId = await suggest.placement(propertyIdOrUrl)
   }
   if (!placementId) throw new Error('This command requires a placement')
   return placementId
