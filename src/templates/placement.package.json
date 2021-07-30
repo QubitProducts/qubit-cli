@@ -22,7 +22,8 @@
   "jest": {
     "transform": {
       ".*(.js|.css|.less)$": "@qubit/jest"
-    }
+    },
+    "transformIgnorePatterns": []
   },
   "scripts": {
     "format": "prettier-standard --fix",
