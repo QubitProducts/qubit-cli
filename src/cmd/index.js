@@ -31,6 +31,11 @@ module.exports = async function run (pkg) {
     .action(cmd('scopes'))
 
   program
+    .command('scope [propertyId]')
+    .description('show the scope of the property if you have access to it')
+    .action(cmd('scope'))
+
+  program
     .command('release')
     .arguments('[version]')
     .usage(
