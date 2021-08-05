@@ -26,7 +26,7 @@ module.exports = async function run (pkg) {
     .action(cmd('logout'))
 
   program
-    .command('scopes')
+    .command('scopes [propertyId]')
     .description('show what scopes you have access to')
     .action(cmd('scopes'))
 

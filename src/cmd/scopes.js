@@ -1,14 +1,23 @@
-const log = require('../lib/log')
-const qubitrc = require('../lib/qubitrc')
-const { getRegistryToken } = require('../lib/get-delegate-token')
-const { REGISTRY_SCOPES } = require('../constants')
+const { uniq } = require('lodash')
 
-module.exports = async function scopesCmd (id) {
-  await getRegistryToken()
-  const scopes = await qubitrc.get(REGISTRY_SCOPES)
-  log.info(
-    `You have access to the following scopes: ${scopes
-      .join(', ')
-      .replace(/([^,]+),([^,]+)$/, '$1 and$2')}`
-  )
+const log = require('../lib/log')
+const propertyService = require('../services/property')
+const { getPropertyId } = require('../lib/get-resource-ids')
+
+module.exports = async function scopesCmd (pid) {
+  if (pid) {
+    const propertyId = await getPropertyId(pid)
+    const property = await propertyService.get(propertyId)
+
+    if (!property) {
+      return log.error(`Property ${propertyId} does not exist or you do not have access to it.`)
+    }
+
+    return log.info(property.scope)
+  }
+
+  const properties = await propertyService.getAll()
+  const scopes = uniq(properties.map(({ scope }) => scope)).sort()
+
+  log.info(scopes.join('\n'))
 }
