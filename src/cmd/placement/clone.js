@@ -18,7 +18,7 @@ module.exports = async function clone (
   isOneOf(implementationType)
   const pkg = await getPkg()
   const propertyId = await getPropertyId(propertyIdorUrl, pkg)
-  placementId = await getPlacementId(propertyIdorUrl, placementId, pkg)
+  placementId = await getPlacementId(propertyId, placementId, pkg)
   const files = await placementService.addHelpers(
     await placementService.get(propertyId, placementId)
   )
