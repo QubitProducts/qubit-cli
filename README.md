@@ -31,7 +31,14 @@ _Automate your workflow by interacting with the platform from the command line:_
 
 ## Installation
 
-`npm install -g qubit-cli`
+On Wed 8 Sept 2021, we identified that the CLI must be install with npm =< v7.20.2 for `qubit` command to function properly
+
+```
+npm install -g npm@7.20.2
+npm install -g qubit-cli
+```
+
+once install you are free to use the latest version of npm `npm install -g npm@latest`
 
 ## Windows
 
