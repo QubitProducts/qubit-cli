@@ -17,7 +17,9 @@ module.exports = async function links (page, options) {
   }
 
   if (page === 'preview') {
-    if (!_.get(pkg, 'meta.variations') || !_.get(pkg, 'meta.previewUrl')) { return required() }
+    if (!_.get(pkg, 'meta.variations') || !_.get(pkg, 'meta.previewUrl')) {
+      return required()
+    }
     const links = await getPreviewLinks(pkg.meta)
     return link(links.join('\n'))
   }

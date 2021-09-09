@@ -15,7 +15,9 @@ module.exports = function experienceEngine (
   }
 
   return triggerFn(triggersApi).then(function activate (result) {
-    if (!bypassTriggers) { triggersApi.log.info('Triggers returned ' + result.execute) }
+    if (!bypassTriggers) {
+      triggersApi.log.info('Triggers returned ' + result.execute)
+    }
 
     if (!result.execute) return
 

@@ -10,7 +10,9 @@ module.exports = async function scopesCmd (pid) {
     const property = await propertyService.get(propertyId)
 
     if (!property) {
-      return log.error(`Property ${propertyId} does not exist or you do not have access to it.`)
+      return log.error(
+        `Property ${propertyId} does not exist or you do not have access to it.`
+      )
     }
 
     return log.info(property.scope)

@@ -148,9 +148,13 @@ function serveExperience () {
       modules = newModules
 
       const styleEl = document.getElementById(STYLE_ID)
-      if (styleEl && styleEl.innerHTML !== newModules.styles) { return applyStyles(STYLE_ID, newModules.styles) }
+      if (styleEl && styleEl.innerHTML !== newModules.styles) {
+        return applyStyles(STYLE_ID, newModules.styles)
+      }
       if (variationIsSpent()) return window.location.reload() // variation is a cold executed variation
-      if (triggersIsSpent() && edited === 'triggers') { return window.location.reload() }
+      if (triggersIsSpent() && edited === 'triggers') {
+        return window.location.reload()
+      }
       if (edited === 'triggers') restart()
       // if not editing triggers, bypass activation
       if (hasActivated()) restart(true)

@@ -24,8 +24,8 @@
     "storage",
     "cookies",
     "tabs",
-		"webRequest",
-		"webRequestBlocking",
-		"<all_urls>"
+    "webRequest",
+    "webRequestBlocking",
+    "<all_urls>"
   ]
 }
