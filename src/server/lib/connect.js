@@ -16,7 +16,9 @@ module.exports = async function connect () {
     )
     app.post('/connect', async (req, res) => {
       res.end()
-      if (!req.body.url) { return log.error('Request to /connect endpoint received with no params') }
+      if (!req.body.url) {
+        return log.error('Request to /connect endpoint received with no params')
+      }
       const { propertyId, experienceId } = parseUrl(req.body.url)
       const msg =
         `You recently navigated to ${req.body.url}\n` +

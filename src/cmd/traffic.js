@@ -9,7 +9,9 @@ const log = require('../lib/log')
 
 module.exports = async function traffic (options) {
   const pkg = await getPkg()
-  if (!pkg.meta) { return log.warn('Navigate to an experience directory and try again') }
+  if (!pkg.meta) {
+    return log.warn('Navigate to an experience directory and try again')
+  }
 
   const { experienceId } = pkg.meta
   const { last_iteration_id: iterationId } = await experienceService.get(
@@ -24,7 +26,9 @@ module.exports = async function traffic (options) {
     const currentControlDecimal = iteration.control_size
     const currentControlPercentage = getControlPercentage(currentControlDecimal)
 
-    if (options.view) { return log.info(`Current control size is ${currentControlPercentage}`) }
+    if (options.view) {
+      return log.info(`Current control size is ${currentControlPercentage}`)
+    }
     const newControlDecimal = await input.select(
       formatLog(
         `   Select control size (current ${currentControlPercentage.trim()})`

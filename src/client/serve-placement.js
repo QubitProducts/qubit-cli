@@ -105,10 +105,13 @@ function servePlacement () {
   }
 
   return api.getBrowserState().then(({ ua }) => {
-    const { replay, dispose } = context.jolt.onEnrichment(VIEW_REGEX, viewEvent => {
-      while (disposables.length) disposables.pop()()
-      placementEngine({ ua, viewEvent, url: window.location.href })
-    })
+    const { replay, dispose } = context.jolt.onEnrichment(
+      VIEW_REGEX,
+      viewEvent => {
+        while (disposables.length) disposables.pop()()
+        placementEngine({ ua, viewEvent, url: window.location.href })
+      }
+    )
     disposeViewListener = dispose
     replay()
     return dispose
