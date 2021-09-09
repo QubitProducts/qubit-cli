@@ -14,12 +14,14 @@ const dependencies = {
   '@qubit/placement-engine': '^1.9.0'
 }
 
-module.exports = async function installQubitDeps () {
+module.exports = async function installQubitDeps (login = true) {
   try {
     require('@qubit/buble-loader')
   } catch (err) {
     log.info('Setting up Qubit-CLI, this may take a few mins')
-    await getRegistryToken()
+    if (login) {
+      await getRegistryToken()
+    }
     log.info('Installing some additional dependencies...')
     await execa(
       'npm',

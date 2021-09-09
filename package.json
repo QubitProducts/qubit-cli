@@ -4,7 +4,7 @@
   "description": "Qubit command line interface",
   "main": "src/index.js",
   "bin": {
-    "qubit": "bin/qubit"
+    "qubit": "bin/qubit.js"
   },
   "directories": {
     "test": "test"
