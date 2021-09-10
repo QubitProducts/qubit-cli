@@ -15,9 +15,7 @@ const dependencies = {
 }
 
 module.exports = async function installQubitDeps (login = true) {
-  try {
-    require('@qubit/buble-loader')
-  } catch (err) {
+  if (!hasDeps()) {
     log.info('Setting up Qubit-CLI, this may take a few mins')
     if (login) {
       await getRegistryToken()
@@ -35,4 +33,19 @@ module.exports = async function installQubitDeps (login = true) {
     )
     log.info('Additional installation steps complete!')
   }
+}
+
+function hasDeps () {
+  const missing = _.keys(dependencies)
+    .filter(name => !['@qubit/jolt', '@qubit/placement-engine'].includes(name))
+    .map(name => {
+      try {
+        require(name)
+        return null
+      } catch (err) {
+        return err
+      }
+    })
+    .filter(err => err && err.code === 'MODULE_NOT_FOUND')
+  return !missing.length
 }
