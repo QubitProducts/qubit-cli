@@ -47,7 +47,7 @@ async function experience (propertyId) {
 async function placement (propertyId) {
   const placements = await placementService.getAll(propertyId)
   if (!placements.length) {
-    throw `This property has no placements`
+    throw new Error('This property has no placements')
   }
   const suggestions = await getAutoCompleteMap({
     arr: placements,
