@@ -1,3 +1,9 @@
+const config = require('config')
+const throwIf = require('../../lib/throw-if')
+const getPkg = require('../../lib/get-pkg')
+const log = require('../../lib/log')
+const opn = require('opn')
+
 module.exports = async function open (
   page = 'editor',
   options = { wait: false }
