@@ -1,1 +1,1 @@
-require('../src/lib/install-qubit-deps')()
+require('../src/lib/install-qubit-deps')(false)

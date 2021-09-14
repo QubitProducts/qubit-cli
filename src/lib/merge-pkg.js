@@ -36,7 +36,9 @@ module.exports = function mergePkg (localPkg, remotePkg) {
       _.set(pkg, key, { ...localPkg[key], ...remotePkg[key] })
   )
 
-  if (_.get(remotePkg, 'meta.variations')) { pkg.meta.variations = remotePkg.meta.variations }
+  if (_.get(remotePkg, 'meta.variations')) {
+    pkg.meta.variations = remotePkg.meta.variations
+  }
   const {
     name,
     version,

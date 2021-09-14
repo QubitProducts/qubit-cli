@@ -22,7 +22,9 @@ function getAll (experienceId) {
 
 function set (iterationId, iteration) {
   delete iteration.update_sequence_id
-  if (_.isString(iteration.schema)) { iteration.schema = JSON.parse(iteration.schema) }
+  if (_.isString(iteration.schema)) {
+    iteration.schema = JSON.parse(iteration.schema)
+  }
   return fetch.put(iterationsUrl(iterationId), { iteration: iteration })
 }
 
@@ -32,10 +34,7 @@ function getCode (iteration) {
   const triggers =
     iteration.triggers ||
     (rules &&
-      _.get(
-        rules.find(rule => rule.key === 'custom_javascript'),
-        'value'
-      ))
+      _.get(rules.find(rule => rule.key === 'custom_javascript'), 'value'))
   const globalCode = iteration.global_code
   const commonCode = iteration.common_code
   const schema = JSON.stringify(iteration.schema, null, 2)

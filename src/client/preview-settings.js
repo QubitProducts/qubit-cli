@@ -41,7 +41,9 @@ function getUrl (location, mustReload) {
   if (urlHasPreviewKeys(params)) mustReload = true
   if (!mustReload) return
   if (parsed.search) parsed.search = omit(parsed.search, PREVIEW_KEYS)
-  if (parsed.hash) { parsed.hash = hashParser.format(omit(parsed.hash, PREVIEW_KEYS)) }
+  if (parsed.hash) {
+    parsed.hash = hashParser.format(omit(parsed.hash, PREVIEW_KEYS))
+  }
   return yurl.format(parsed)
 }
 

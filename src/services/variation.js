@@ -35,7 +35,9 @@ function getCode (variation) {
   const code = {}
   const filename = getFilename(variation)
   // Automatically update old default js to new default js
-  if (variation.execution_code === 'function (options) {}') { delete variation.execution_code }
+  if (variation.execution_code === 'function (options) {}') {
+    delete variation.execution_code
+  }
   code[`${filename}.js`] = hasNoCode(variation.execution_code)
     ? EXECUTION_CODE
     : variation.execution_code

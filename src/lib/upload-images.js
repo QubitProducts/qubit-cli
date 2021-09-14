@@ -6,7 +6,9 @@ const FormData = require('form-data')
 const fs = require('fs')
 
 module.exports = async function uploadImages (files) {
-  if (!Array.isArray(files)) { throw new Error('uploadImages expects at least one image to be passed') }
+  if (!Array.isArray(files)) {
+    throw new Error('uploadImages expects at least one image to be passed')
+  }
   const pkg = await getPkg()
   let propertyId = _.get(pkg, 'meta.propertyId')
   if (!propertyId) propertyId = await suggest.property()

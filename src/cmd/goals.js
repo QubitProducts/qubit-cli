@@ -9,7 +9,9 @@ const formatLog = require('../lib/format-log')
 
 module.exports = async function goals (cmd) {
   const pkg = await getPkg()
-  if (!pkg.meta) { return log.warn('Navigate to an experience directory and try again') }
+  if (!pkg.meta) {
+    return log.warn('Navigate to an experience directory and try again')
+  }
 
   const { experienceId } = pkg.meta
   const { last_iteration_id: iterationId } = await experienceService.get(
@@ -33,7 +35,9 @@ module.exports = async function goals (cmd) {
 }
 
 async function addGoal (iterationId, goals) {
-  if (goals.length >= 5) { return log.warn('Max goals reached, remove a goal first') }
+  if (goals.length >= 5) {
+    return log.warn('Max goals reached, remove a goal first')
+  }
 
   // see if goal exists in chosen goals
   // if it does, filter out that goal if it's an exclusive goal type (cvr, rpv, rpc)
@@ -70,9 +74,9 @@ async function addGoal (iterationId, goals) {
   if (isUrlGoal || isEventGoal) {
     const additionalPrompt =
       op === 'in' ? "(space separate for OR'ing of values)" : ''
-    value = (
-      await input.text(formatLog(`   Set value ${additionalPrompt}:`))
-    ).split(' ')
+    value = (await input.text(
+      formatLog(`   Set value ${additionalPrompt}:`)
+    )).split(' ')
     type = 'string'
   }
 

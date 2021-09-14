@@ -10,15 +10,15 @@ const log = require('../../lib/log')
 const CWD = process.cwd()
 
 module.exports = async function clone (
-  propertyIdorUrl,
+  propertyIdOrUrl,
   placementId,
   implementationType = 'draft'
 ) {
   await throwIf.none('clone')
   isOneOf(implementationType)
   const pkg = await getPkg()
-  const propertyId = await getPropertyId(propertyIdorUrl, pkg)
-  placementId = await getPlacementId(propertyIdorUrl, placementId, pkg)
+  const propertyId = await getPropertyId(propertyIdOrUrl, pkg)
+  placementId = await getPlacementId(propertyIdOrUrl, placementId, pkg)
   const files = await placementService.addHelpers(
     await placementService.get(propertyId, placementId)
   )

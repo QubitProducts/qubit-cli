@@ -7,7 +7,9 @@ module.exports = async function loader (content) {
     options.variationMasterId &&
     /variation-[0-9]+\.(less|css)$/.test(this.resource)
   ) {
-    return `@experienceId: ${options.experienceId};@variationMasterId: ${options.variationMasterId};\n${content}`
+    return `@experienceId: ${options.experienceId};@variationMasterId: ${
+      options.variationMasterId
+    };\n${content}`
   } else {
     return content
   }

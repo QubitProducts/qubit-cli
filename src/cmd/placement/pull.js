@@ -9,15 +9,15 @@ const log = require('../../lib/log')
 const CWD = process.cwd()
 
 module.exports = async function pull (
-  propertyIdorUrl,
+  propertyIdOrUrl,
   placementId,
   implementationType = 'draft'
 ) {
   await throwIf.placement('pull')
   isOneOf(implementationType)
   const pkg = await getPkg()
-  const propertyId = await getPropertyId(propertyIdorUrl, pkg)
-  placementId = await getPlacementId(propertyIdorUrl, placementId, pkg)
+  const propertyId = await getPropertyId(propertyIdOrUrl, pkg)
+  placementId = await getPlacementId(propertyIdOrUrl, placementId, pkg)
   const files = await placementService.get(
     propertyId,
     placementId,

@@ -26,7 +26,7 @@ module.exports = async function run (pkg) {
     .action(cmd('logout'))
 
   program
-    .command('scopes')
+    .command('scopes [propertyId]')
     .description('show what scopes you have access to')
     .action(cmd('scopes'))
 
@@ -292,7 +292,9 @@ module.exports = async function run (pkg) {
     .arguments('[variationFilename]')
     .option('-v, --verbose', 'log verbose output', false)
     .action((variationFileName, opts) => {
-      if (!variationFileName.includes('variation')) { return log.error(`${variationFileName} command does not exist`) }
+      if (!variationFileName.includes('variation')) {
+        return log.error(`${variationFileName} command does not exist`)
+      }
       return require('./serve')(variationFileName, opts)
     })
 
