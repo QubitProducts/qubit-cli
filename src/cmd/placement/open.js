@@ -11,5 +11,5 @@ module.exports = async function open (page = 'editor', options = {}) {
 
   const url = `${config.services.app}/p/${propertyId}/atom/placements/${placementId}/create?step=${page}&view=schema`
   log.info(`opening ${url}`)
-  return opn(url, { ...options, wait: false })
+  return opn(url, { wait: false })
 }
