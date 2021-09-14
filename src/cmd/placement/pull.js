@@ -17,7 +17,7 @@ module.exports = async function pull (
   isOneOf(implementationType)
   const pkg = await getPkg()
   const propertyId = await getPropertyId(propertyIdOrUrl, pkg)
-  placementId = await getPlacementId(propertyIdOrUrl, placementId, pkg)
+  placementId = await getPlacementId(propertyIdOrUrl || propertyId, placementId, pkg)
   const files = await placementService.get(
     propertyId,
     placementId,
