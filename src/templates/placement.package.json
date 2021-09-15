@@ -1,5 +1,8 @@
 {
-  "dependencies": {},
+  "dependencies": {
+    "@qubit/utils": "^1.6.0",
+    "preact": "^10.5.14"
+  },
   "devDependencies": {
     "@qubit/jest": "^1.4.0",
     "healthier": "^4.0.0",

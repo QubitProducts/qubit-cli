@@ -1,3 +1,6 @@
+const { restoreAll, onEvent, onEnterViewport } = require('@qubit/utils')()
+const React = require('preact')
+
 module.exports = function renderPlacement ({
   content,
   elements,
@@ -5,6 +8,7 @@ module.exports = function renderPlacement ({
   onClickthrough,
   onRemove
 }) {
+  onRemove(restoreAll)
   if (content) {
   } else {
   }
