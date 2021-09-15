@@ -32,29 +32,10 @@ module.exports = async function create (
       )
     ).trim()
 
-  const preact = await input.select(
-    formatLog('   What would you like to include preact in your dependencies?'),
-    [
-      { value: true, name: formatLog('   Yes') },
-      { value: false, name: formatLog('   No') }
-    ]
-  )
-  const { stdout } = await exec('npm', ['show', '@qubit/utils', '--json'], {})
-  const { version } = JSON.parse(stdout)
-
   const placementSpec = initialPlacement({
     tagId,
     name,
-    personalisationType,
-    replacements: {
-      packageJson: {
-        '{{qubitUtilsVersion}}': version,
-        '{{conditionalDeps}}': await getConditionalDeps({ preact })
-      },
-      js: {
-        '//conditionalDeps': getConditionalImports({ preact })
-      }
-    }
+    personalisationType
   })
 
   const placementId = await placementService.create(propertyId, placementSpec)
@@ -68,27 +49,6 @@ module.exports = async function create (
   })
 
   log.info('Done ✨')
-}
-
-function getConditionalImports ({ preact }) {
-  if (preact) {
-    return `const React = require('preact')
-    `
-  }
-  return ''
-}
-
-async function getConditionalDeps ({ preact }) {
-  if (preact) {
-    const { stdout } = await exec('npm', ['show', 'preact', '--json'], {})
-    const { version } = JSON.parse(stdout)
-    // we start with a " to end the last dependency's string
-    return `",
-      "preact": "^${version}`
-    // then we don't need a closing " because there already is one in the file
-  }
-
-  return ''
 }
 
 const schemaTypes = {
@@ -142,12 +102,7 @@ const schemaTypes = {
   }
 }
 
-const initialPlacement = ({
-  tagId,
-  name,
-  personalisationType,
-  replacements
-}) => ({
+const initialPlacement = ({ tagId, name, personalisationType }) => ({
   name,
   tags: [tagId],
   personalisationType,
@@ -157,18 +112,7 @@ const initialPlacement = ({
   },
   implementationType: 'CODE_INJECTION',
   code: {
-    js: updateDependencies(PLACEMENT_JS, replacements.js),
-    packageJson: updateDependencies(
-      PLACEMENT_PKG_JSON,
-      replacements.packageJson
-    )
+    js: PLACEMENT_JS,
+    packageJson: JSON.parse(PLACEMENT_PKG_JSON)
   }
 })
-
-function updateDependencies (pkgJson, replacements) {
-  let updated = pkgJson
-  Object.entries(replacements).forEach(([key, value]) => {
-    updated = updated.replace(key, value)
-  })
-  return updated
-}
