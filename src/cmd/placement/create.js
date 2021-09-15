@@ -25,17 +25,37 @@ module.exports = async function create (
 
   name =
     name ||
-    (await input.text(
-      formatLog('   What would you like to call your placement?'),
-      { default: 'My new placement' }
-    )).trim()
+    (
+      await input.text(
+        formatLog('   What would you like to call your placement?'),
+        { default: 'My new placement' }
+      )
+    ).trim()
 
-  const placementSpec = initialPlacement(
-    propertyId,
+  const preact = await input.select(
+    formatLog('   What would you like to include preact in your dependencies?'),
+    [
+      { value: true, name: formatLog('   Yes') },
+      { value: false, name: formatLog('   No') }
+    ]
+  )
+  const { stdout } = await exec('npm', ['show', '@qubit/utils', '--json'], {})
+  const { version } = JSON.parse(stdout)
+
+  const placementSpec = initialPlacement({
     tagId,
     name,
-    personalisationType
-  )
+    personalisationType,
+    replacements: {
+      packageJson: {
+        '{{qubitUtilsVersion}}': version,
+        '{{conditionalDeps}}': await getConditionalDeps({ preact })
+      },
+      js: {
+        '//conditionalDeps': getConditionalImports({ preact })
+      }
+    }
+  })
 
   const placementId = await placementService.create(propertyId, placementSpec)
   const destination = await clone(propertyId, placementId)
@@ -48,6 +68,27 @@ module.exports = async function create (
   })
 
   log.info('Done ✨')
+}
+
+function getConditionalImports ({ preact }) {
+  if (preact) {
+    return `const React = require('preact')
+    `
+  }
+  return ''
+}
+
+async function getConditionalDeps ({ preact }) {
+  if (preact) {
+    const { stdout } = await exec('npm', ['show', 'preact', '--json'], {})
+    const { version } = JSON.parse(stdout)
+    // we start with a " to end the last dependency's string
+    return `",
+      "preact": "^${version}`
+    // then we don't need a closing " because there already is one in the file
+  }
+
+  return ''
 }
 
 const schemaTypes = {
@@ -101,7 +142,12 @@ const schemaTypes = {
   }
 }
 
-const initialPlacement = (propertyId, tagId, name, personalisationType) => ({
+const initialPlacement = ({
+  tagId,
+  name,
+  personalisationType,
+  replacements
+}) => ({
   name,
   tags: [tagId],
   personalisationType,
@@ -111,7 +157,18 @@ const initialPlacement = (propertyId, tagId, name, personalisationType) => ({
   },
   implementationType: 'CODE_INJECTION',
   code: {
-    js: PLACEMENT_JS,
-    packageJson: PLACEMENT_PKG_JSON
+    js: updateDependencies(PLACEMENT_JS, replacements.js),
+    packageJson: updateDependencies(
+      PLACEMENT_PKG_JSON,
+      replacements.packageJson
+    )
   }
 })
+
+function updateDependencies (pkgJson, replacements) {
+  let updated = pkgJson
+  Object.entries(replacements).forEach(([key, value]) => {
+    updated = updated.replace(key, value)
+  })
+  return updated
+}

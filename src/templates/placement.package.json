@@ -4,7 +4,8 @@
     "@qubit/jest": "^1.4.0",
     "healthier": "^4.0.0",
     "jest": "^26.6.3",
-    "prettier-standard": "^16.4.1"
+    "prettier-standard": "^16.4.1",
+    "@qubit/utils": "^{{qubitUtilsVersion}}{{conditionalDeps}}"
   },
   "healthier": {
     "globals": [
