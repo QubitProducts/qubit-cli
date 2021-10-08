@@ -32,6 +32,7 @@ module.exports = async function installQubitDeps (login = true) {
       }
     )
     log.info('Additional installation steps complete!')
+    return true
   }
 }
 
