@@ -7,7 +7,10 @@ const pre = require('./pre')
 const placement = require('./placement')
 
 module.exports = async function run (pkg) {
-  await installQubitDeps()
+  const reload = await installQubitDeps()
+  if (reload) {
+    return log.info('Please re-run your comand!')
+  }
   program
     .command('login')
     .description('login to the qubit platform')
