@@ -7,10 +7,11 @@ const pre = require('./pre')
 const placement = require('./placement')
 
 module.exports = async function run (pkg) {
-  const reload = await installQubitDeps()
-  if (reload) {
-    return log.info('Please re-run your comand!')
-  }
+  const depsWereInstalled = await installQubitDeps()
+  // Installing additional deps at runtime doesn't seem to work with latest node
+  // So we need to exit here
+  if (depsWereInstalled) return
+
   program
     .command('login')
     .description('login to the qubit platform')

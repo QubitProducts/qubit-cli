@@ -16,11 +16,13 @@ const dependencies = {
 
 module.exports = async function installQubitDeps (login = true) {
   if (!hasDeps()) {
-    log.info('Setting up Qubit-CLI, this may take a few mins')
+    log.info(
+      'Qubit-CLI needs to complete its installation, this may take a minute'
+    )
     if (login) {
       await getRegistryToken()
     }
-    log.info('Installing some additional dependencies...')
+    log.info('Installing additional dependencies...')
     await execa(
       'npm',
       ['install', '--no-save'].concat(
