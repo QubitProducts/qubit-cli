@@ -25,6 +25,7 @@ function getCode (property, experience, iteration, goals, qfns, variations) {
         meta: {
           name: experience.name,
           propertyId: experience.property_id,
+          trackingId: property.tracking_id,
           vertical: property.vertical,
           namespace: property.qp_namespace,
           domains: property.domains,
