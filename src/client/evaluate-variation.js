@@ -6,7 +6,12 @@ module.exports = function evaluateVariation (api, fn, addStyles) {
   return new Promise(function (resolve, reject) {
     try {
       removeStyles = addStyles()
-      resolve(fn(api))
+      if (fn.__esModule) {
+        // Detect and run ES Module default export
+        resolve(fn.default(api))
+      } else {
+        resolve(fn(api))
+      }
     } catch (error) {
       error.userCodeError = true
       reject(error)
