@@ -57,8 +57,16 @@ function servePlacement () {
     exclude: [placementId]
   })
 
+  const placement = require('placement.js')
+  // Detect and run ES Module default export
+  if (placement.__esModule) {
+    fn = placement.default
+  } else {
+    fn = placement
+  }
+
   const code = {
-    js: require('placement.js'),
+    js: fn,
     css: function () {
       let remove
       const add = () => {
