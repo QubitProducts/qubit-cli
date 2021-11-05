@@ -29,7 +29,8 @@ module.exports = function createWebpackConfig () {
     resolve: {
       modules: [
         CWD,
-        path.join(CWD, 'node_modules'),
+        // Search symlinks node_modules as well - https://webpack-v3.jsx.app/configuration/resolve/#resolve-modules
+        './node_modules',
         path.join(__dirname, 'node_modules')
       ],
       alias: { jquery: '@qubit/jquery' }
