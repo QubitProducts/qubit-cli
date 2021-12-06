@@ -22,7 +22,7 @@ describe('package.json', () => {
     }
   })
 
-  it.only('should have an up to date private package lock', async () => {
+  it('should have an up to date private package lock', async () => {
     const msg = `
       We detected that some recent changes were made to your package-lock.json file without
       updating your private-package-lock.json
@@ -44,7 +44,7 @@ describe('package.json', () => {
       gitTime('M', './private-package.json'),
       gitTime('M', './private-package-lock.json')
     ])
-    expect(privateTS).to.be.above(publicTS, msg)
-    expect(privateLockTS).to.be.above(publicLockTS, msg)
+    expect(privateTS).to.be.greaterThanOrEqual(publicTS, msg)
+    expect(privateLockTS).to.be.greaterThanOrEqual(publicLockTS, msg)
   })
 })
