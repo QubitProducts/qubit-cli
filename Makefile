@@ -51,4 +51,4 @@ create-install-private-packages: uninstall-private-packages
 update-private-packages-version:
 	node bin/sync-versions
 	git add private*
-	git commit -m "Sync private package.json version"
+	git commit -m "Sync package.json versions"
