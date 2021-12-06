@@ -22,7 +22,7 @@ describe('package.json', () => {
     }
   })
 
-  it('should have an up to date private package lock', async () => {
+  it.only('should have an up to date private package lock', async () => {
     const msg = `
       We detected that some recent changes were made to your package-lock.json file without
       updating your private-package-lock.json
@@ -33,11 +33,18 @@ describe('package.json', () => {
 
 
     `
-    const [publicTS, privateTS] = await Promise.all([
+    const [
+      publicTS,
+      publicLockTS,
+      privateTS,
+      privateLockTS
+    ] = await Promise.all([
+      gitTime('M', './package.json'),
       gitTime('M', './package-lock.json'),
+      gitTime('M', './private-package.json'),
       gitTime('M', './private-package-lock.json')
     ])
-
     expect(privateTS).to.be.above(publicTS, msg)
+    expect(privateLockTS).to.be.above(publicLockTS, msg)
   })
 })
