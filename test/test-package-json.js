@@ -24,8 +24,8 @@ describe('package.json', () => {
 
   it('should have an up to date private package lock', async () => {
     const msg = `
-      We detected that some recent changes were made to your package-lock.json file without
-      updating your private-package-lock.json
+      We detected that some recent changes were made to your package.json or package-lock.json file without
+      updating your private-package.json or private-package-lock.json
 
       Please run the following command and commit your changes:
       
