@@ -5,7 +5,10 @@ const privatePkg = require('../private-package.json')
 const privatePkgLock = require('../private-package-lock.json')
 const pkg = require('../package.json')
 const writeJson = (location, data) =>
-  fs.writeFile(path.join(__dirname, location), JSON.stringify(data, null, 2))
+  fs.writeFile(
+    path.join(__dirname, location),
+    JSON.stringify(data, null, 2) + '\n'
+  )
 
 async function syncVersions () {
   privatePkg.version = pkg.version
