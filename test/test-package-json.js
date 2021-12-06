@@ -1,4 +1,5 @@
 const { expect } = require('chai')
+const gitTime = require('@inkohx/git-time').default
 const pkg = require('../package.json')
 
 describe('package.json', () => {
@@ -19,5 +20,24 @@ describe('package.json', () => {
       expect(dep.startsWith('@qubit')).to.eql(false, msg)
       expect(dep.startsWith('@qutics')).to.eql(false, msg)
     }
+  })
+
+  it('should have an up to date private package lock', async () => {
+    const msg = `
+      We detected that some recent changes were made to your package-lock.json file without
+      updating your private-package-lock.json
+
+      Please run the following command:
+      
+      make create-install-private-packages
+
+
+    `
+    const [publicTS, privateTS] = await Promise.all([
+      gitTime('M', './package-lock.json'),
+      gitTime('M', './private-package-lock.json')
+    ])
+
+    expect(privateTS).to.be.above(publicTS, msg)
   })
 })
