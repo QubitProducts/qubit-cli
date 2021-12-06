@@ -27,7 +27,7 @@ describe('package.json', () => {
       We detected that some recent changes were made to your package-lock.json file without
       updating your private-package-lock.json
 
-      Please run the following command:
+      Please run the following command and commit your changes:
       
       make create-install-private-packages
 

@@ -47,3 +47,8 @@ create-install-private-packages: uninstall-private-packages
 	cp public-package-lock.json package-lock.json
 	rm public-package.json
 	rm public-package-lock.json
+
+update-private-packages-version:
+	node bin/sync-versions
+	git add private*
+	git commit -m "Sync private package.json version"

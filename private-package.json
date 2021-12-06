@@ -14,7 +14,7 @@
     "dist": "docs"
   },
   "scripts": {
-    "prepublishOnly": "make create-install-private-packages",
+    "prepublishOnly": "make update-private-packages-version",
     "pretest": "NODE_ENV=test node test/setup",
     "test": "NODE_ENV=test nyc --reporter=lcov --reporter=text-summary mocha --recursive",
     "lint": "standard",
