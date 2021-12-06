@@ -14,7 +14,6 @@
     "dist": "docs"
   },
   "scripts": {
-    "prepublishOnly": "make update-private-packages-version",
     "pretest": "NODE_ENV=test node test/setup",
     "test": "NODE_ENV=test nyc --reporter=lcov --reporter=text-summary mocha --recursive",
     "lint": "standard",
@@ -31,6 +30,7 @@
   "engineStrict": true,
   "license": "ISC",
   "dependencies": {
+    "@inkohx/git-time": "^0.0.1",
     "@qubit/buble": "^0.19.10",
     "@qubit/buble-loader": "^0.5.1",
     "@qubit/experience-defaults": "^1.7.1",
