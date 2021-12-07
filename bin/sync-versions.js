@@ -15,7 +15,7 @@ async function syncVersions () {
   privatePkgLock.version = pkg.version
 
   await writeJson('../private-package.json', privatePkg)
-  await writeJson('../private-package-lock.json', privatePkgLock)
+  await writeJson('../private-npm-shrinkwrap.json', privatePkgLock)
 }
 
 syncVersions()

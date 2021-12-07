@@ -23,9 +23,8 @@ describe('package.json', () => {
   })
 
   it('should have an up to date private package lock', async () => {
-    const msg = `
-      We detected that some recent changes were made to your package.json or package-lock.json file without
-      updating your private-package.json or private-package-lock.json
+    const msg = fileName => `
+      We detected that some recent changes were made to your ${fileName} file without updating your private-${fileName}
 
       Please run the following command and commit your changes:
       
@@ -39,12 +38,15 @@ describe('package.json', () => {
       privateTS,
       privateLockTS
     ] = await Promise.all([
-      gitTime('M', './package.json'),
-      gitTime('M', './package-lock.json'),
-      gitTime('M', './private-package.json'),
-      gitTime('M', './private-package-lock.json')
+      gitTime('ACDMR', './package.json'),
+      gitTime('ACDMR', './npm-shrinkwrap.json'),
+      gitTime('ACDMR', './private-package.json'),
+      gitTime('ACDMR', './private-npm-shrinkwrap.json')
     ])
-    expect(privateTS).to.be.greaterThanOrEqual(publicTS, msg)
-    expect(privateLockTS).to.be.greaterThanOrEqual(publicLockTS, msg)
+    expect(privateTS).to.be.greaterThanOrEqual(publicTS, msg('package.json'))
+    expect(privateLockTS).to.be.greaterThanOrEqual(
+      publicLockTS,
+      msg('npm-shrinkwrap.json')
+    )
   })
 })
