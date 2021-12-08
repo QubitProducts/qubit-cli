@@ -1,18 +1,17 @@
-const _ = require('lodash')
 const path = require('path')
 const execa = require('execa')
 const log = require('./log')
 const { getRegistryToken } = require('./get-delegate-token')
-const dependencies = {
-  '@qubit/buble': '^0.19.10',
-  '@qubit/buble-loader': '^0.5.1',
-  '@qubit/experience-defaults': '^1.2.4',
-  '@qubit/jolt': '^7.33.0',
-  '@qubit/poller': '^2.0.1',
-  '@qubit/uv-api': '*',
-  '@qubit/http-api': '^1.6.1',
-  '@qubit/placement-engine': '^1.9.0'
-}
+const dependencies = [
+  '@qubit/buble',
+  '@qubit/buble-loader',
+  '@qubit/experience-defaults',
+  '@qubit/jolt',
+  '@qubit/poller',
+  '@qubit/uv-api',
+  '@qubit/http-api',
+  '@qubit/placement-engine'
+]
 
 module.exports = async function installQubitDeps (login = true) {
   if (!hasDeps()) {
@@ -23,23 +22,17 @@ module.exports = async function installQubitDeps (login = true) {
       await getRegistryToken()
     }
     log.info('Installing additional dependencies...')
-    await execa(
-      'npm',
-      ['install', '--no-save'].concat(
-        _.map(dependencies, (version, name) => `${name}@${version}`)
-      ),
-      {
-        cwd: path.resolve(__dirname, '../../'),
-        stdio: 'inherit'
-      }
-    )
+    await execa('make', ['install-private-packages'], {
+      cwd: path.resolve(__dirname, '../../'),
+      stdio: 'inherit'
+    })
     log.info('Additional installation steps complete!')
     return true
   }
 }
 
 function hasDeps () {
-  const missing = _.keys(dependencies)
+  const missing = dependencies
     .filter(name => !['@qubit/jolt', '@qubit/placement-engine'].includes(name))
     .map(name => {
       try {

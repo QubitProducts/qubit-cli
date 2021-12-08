@@ -9,5 +9,3 @@ _docpress
 .idea/dictionaries
 .idea/markdown-navigator/*
 config/local*
-/deps/package-lock.json
-/xp-tmp-example/package-lock.json
