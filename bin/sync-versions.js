@@ -2,7 +2,7 @@
 const fs = require('fs-extra')
 const path = require('path')
 const privatePkg = require('../private-package.json')
-const privatePkgLock = require('../private-package-lock.json')
+const privatePkgLock = require('../private-npm-shrinkwrap.json')
 const pkg = require('../package.json')
 const writeJson = (location, data) =>
   fs.writeFile(
