@@ -2,7 +2,7 @@ const program = require('commander')
 const chalk = require('chalk')
 const hasYarn = require('has-yarn')
 const log = require('../lib/log')
-const installQubitDeps = require('../lib/install-qubit-deps')
+const { installQubitDeps } = require('../lib/install-qubit-deps')
 const pre = require('./pre')
 const placement = require('./placement')
 

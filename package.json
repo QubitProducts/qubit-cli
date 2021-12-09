@@ -14,11 +14,12 @@
     "dist": "docs"
   },
   "scripts": {
-    "prepublishOnly": "make update-private-packages-version",
+    "prepublishOnly": "node bin/tasks syncVersions && git add private* && git commit -m 'Sync package.json versions'",
     "pretest": "NODE_ENV=test node test/setup",
     "test": "NODE_ENV=test nyc --reporter=lcov --reporter=text-summary mocha --recursive",
     "lint": "standard",
-    "format": "prettier-standard"
+    "format": "prettier-standard",
+    "createInstallPrivatePackages": "node bin/tasks createInstallPrivatePackages"
   },
   "author": "Alan Clarke <alan@qubit.com> (qubit.com)",
   "repository": {

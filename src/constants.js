@@ -1,6 +1,7 @@
 const os = require('os')
 const fs = require('fs')
 const path = require('path')
+const ROOT = path.join(__dirname, '../')
 const readFile = (...paths) => String(fs.readFileSync(path.join(...paths)))
 const HOME = process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME']
 const CERT_DIR = path.join(HOME, '.qubit-ssl')
@@ -42,7 +43,19 @@ const FILENAME_PLACEMENT_JS = 'placement.js'
 const FILENAME_PLACEMENT_LESS = 'placement.less'
 const FILENAME_PACKAGE_JSON = 'package.json'
 
+const PRIVATE_DEPS = [
+  '@qubit/buble',
+  '@qubit/buble-loader',
+  '@qubit/experience-defaults',
+  '@qubit/jolt',
+  '@qubit/poller',
+  '@qubit/uv-api',
+  '@qubit/http-api',
+  '@qubit/placement-engine'
+]
+
 module.exports = {
+  ROOT,
   HOME,
   CERT_DIR,
   CERT_PATH,
@@ -64,5 +77,6 @@ module.exports = {
   FILENAME_PAYLOAD_JSON,
   FILENAME_PLACEMENT_JS,
   FILENAME_PLACEMENT_LESS,
-  FILENAME_PACKAGE_JSON
+  FILENAME_PACKAGE_JSON,
+  PRIVATE_DEPS
 }
