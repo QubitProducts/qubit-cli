@@ -1,1 +1,2 @@
-require('../src/lib/install-qubit-deps')(false)
+const { installQubitDeps } = require('../src/lib/install-qubit-deps')
+installQubitDeps(false)

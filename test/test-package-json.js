@@ -11,8 +11,7 @@ describe('package.json', () => {
       need to be installed in a separate step. To enable this please run the following
       command:
       
-      make create-install-private-packages
-
+      npm run createInstallPrivatePackages
 
     `
 
@@ -28,8 +27,7 @@ describe('package.json', () => {
 
       Please run the following command and commit your changes:
       
-      make create-install-private-packages
-
+      npm run createInstallPrivatePackages
 
     `
     const [
