@@ -165,7 +165,7 @@ module.exports = async function run (pkg) {
     .action(cmd('templatize'))
 
   program
-    .command('pull [name]')
+    .command('pull [propertyId] [experienceId]')
     .description(
       'pull remote changes into your local experience (arguments optional)'
     )
