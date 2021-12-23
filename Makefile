@@ -1,4 +1,4 @@
-.PHONY: test bootstrap lint shrinkwrap install-private-packages uninstall-private-packages create-install-private-packages 
+.PHONY: test bootstrap lint
 
 BIN = node_modules/.bin
 
