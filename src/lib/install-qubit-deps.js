@@ -12,8 +12,8 @@ module.exports = {
   syncVersions
 }
 
-async function installQubitDeps (login = true) {
-  if (!hasDeps()) {
+async function installQubitDeps (login = true, devDeps = false) {
+  if (!hasDeps(devDeps)) {
     log.info(
       'Qubit-CLI needs to complete its installation, this may take a minute'
     )
@@ -23,7 +23,7 @@ async function installQubitDeps (login = true) {
     log.info('Installing additional dependencies...')
     await backupPkgJSON('public')
     await installPkgJSON('private')
-    await exec('npm install', true)
+    await exec(`npm install --ignore-scripts ${devDeps ? '--dev' : ''}`, true)
     await installPkgJSON('public')
     await rmPkgJSON('public')
     log.info('Additional installation steps complete!')
@@ -31,10 +31,10 @@ async function installQubitDeps (login = true) {
   }
 }
 
-function hasDeps () {
-  const missing = PRIVATE_DEPS.filter(
-    name => !['@qubit/jolt', '@qubit/placement-engine'].includes(name)
-  )
+function hasDeps (devDeps) {
+  const deps = devDeps ? ['standard'].concat(PRIVATE_DEPS) : PRIVATE_DEPS
+  const missing = deps
+    .filter(name => !['@qubit/jolt', '@qubit/placement-engine'].includes(name))
     .map(name => {
       try {
         require(name)
@@ -57,7 +57,7 @@ async function createInstallPrivatePackages () {
   await rmPkgJSON('public', logging)
 }
 
-async function syncVersions () {
+async function syncVersions (commit = false) {
   const { version } = require('../../package.json')
   const privatePkg = require('../../private-package.json')
   const privatePkgLock = require('../../private-npm-shrinkwrap.json')
@@ -69,10 +69,20 @@ async function syncVersions () {
     'private-npm-shrinkwrap.json',
     Object.assign({}, privatePkgLock, { version })
   )
+
+  const changed =
+    version !== privatePkg.version || version !== privatePkgLock.version
+  if (changed && commit) {
+    await exec('git add private*', true)
+    await exec('git commit --amend --no-edit', true)
+  }
 }
 
 async function installPrivatePackages (logging) {
-  await exec(`npm install --dev ${PRIVATE_DEPS.join(' ')}`, logging)
+  await exec(
+    `npm install --ignore-scripts --dev ${PRIVATE_DEPS.join(' ')}`,
+    logging
+  )
 }
 
 async function uninstallPrivatePackages (logging) {

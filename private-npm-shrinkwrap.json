@@ -6,7 +6,8 @@
   "packages": {
     "": {
       "name": "qubit-cli",
-      "version": "1.77.5",
+      "version": "1.77.6",
+      "hasInstallScript": true,
       "license": "ISC",
       "dependencies": {
         "@inkohx/git-time": "^0.0.1",
