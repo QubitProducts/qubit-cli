@@ -14,7 +14,7 @@
     "dist": "docs"
   },
   "scripts": {
-    "prepublishOnly": "node bin/tasks syncVersions && git add private* && git commit -m 'Sync package.json versions'",
+    "prepublishOnly": "node bin/tasks syncVersions --commit'",
     "pretest": "NODE_ENV=test node test/setup",
     "test": "NODE_ENV=test nyc --reporter=lcov --reporter=text-summary mocha --recursive",
     "lint": "standard",

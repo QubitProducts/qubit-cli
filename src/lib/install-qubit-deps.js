@@ -57,7 +57,7 @@ async function createInstallPrivatePackages () {
   await rmPkgJSON('public', logging)
 }
 
-async function syncVersions () {
+async function syncVersions (commit = false) {
   const { version } = require('../../package.json')
   const privatePkg = require('../../private-package.json')
   const privatePkgLock = require('../../private-npm-shrinkwrap.json')
@@ -69,6 +69,13 @@ async function syncVersions () {
     'private-npm-shrinkwrap.json',
     Object.assign({}, privatePkgLock, { version })
   )
+
+  const changed =
+    version !== privatePkg.version || version !== privatePkgLock.version
+  if (changed && commit) {
+    await exec(`git add private*`, true)
+    await exec(`git commit -m "sync_package_json_versions"`, true)
+  }
 }
 
 async function installPrivatePackages (logging) {

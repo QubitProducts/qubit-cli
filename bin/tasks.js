@@ -18,7 +18,8 @@ program
 
 program
   .command('syncVersions')
+  .option('-c, --commit', 'commit changes')
   .description('Sync private package & npm shrinkwrap versions')
-  .action(syncVersions)
+  .action(program => syncVersions(program.opts().commit))
 
 program.parse(process.argv)
