@@ -143,19 +143,26 @@ function createWebpackConfig (options, pkg) {
       __VARIATION_STYLE_EXTENSION__: `'${STYLE_EXTENSION}'`
     })
   )
-  config.module.loaders.forEach(rule => {
-    rule.use.forEach(loader => {
-      if (options.fileName.includes('variation')) {
-        if (_.get(loader, ['options', 'variationMasterId'])) {
-          loader.options.variationMasterId = Number(
-            options.fileName.replace(/[^0-9]/gi, '')
-          )
-        }
-        if (_.get(loader, ['options', 'experienceId'])) {
-          loader.options.experienceId = _.get(pkg, ['meta', 'experienceId'], 1)
-        }
-      }
-    })
-  })
+
+  const rule = config.module.loaders
+    .find(loader => loader.use.find(rule => rule.loader === 'experience-less'))
+    .use.find(rule => rule.loader === 'experience-less')
+
+  const meta = pkg.meta || {}
+  if (options.fileName.includes('variation')) {
+    const ids = {
+      variationMasterId: options.fileName.replace(/[^0-9]/gi, ''),
+      experienceId: meta.experienceId
+    }
+    Object.assign(rule.options, ids)
+  }
+
+  if (options.fileName.includes('placement')) {
+    const ids = {
+      placementId: meta.placementId
+    }
+    Object.assign(rule.options, ids)
+  }
+
   return config
 }

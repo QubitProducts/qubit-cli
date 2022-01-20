@@ -59,15 +59,16 @@ module.exports = function createWebpackConfig () {
           test: MANAGED_STYLES,
           use: [
             'raw-loader',
+            'less-loader',
             {
               // Add variables to .less files
               loader: 'experience-less',
               options: {
                 variationMasterId: true,
-                experienceId: true
+                experienceId: true,
+                placementId: true
               }
-            },
-            'less-loader'
+            }
           ]
         },
 
