@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const path = require('path')
 const axios = require('axios')
 const fs = require('fs-extra')
@@ -8,6 +9,9 @@ const config = require('../../../config')
 const createApp = require('../app')
 const log = require('../../lib/log')
 const REDIRECT_URI = `https://localhost:${config.port}/callback`
+const getHtml = _.memoize(async () =>
+  String(await fs.readFile(path.join(__dirname, '../public', 'index.html')))
+)
 
 module.exports = async function getPrimaryToken (name, scope, message) {
   if (process.env.QUBIT_TOKEN) return process.env.QUBIT_TOKEN
@@ -35,10 +39,8 @@ module.exports = async function getPrimaryToken (name, scope, message) {
     app.get('/callback', async (req, res, next) => {
       try {
         token = await swapCodeForToken(req.query.code, verifier)
-        const response = String(
-          await fs.readFile(path.join(__dirname, '../public', 'index.html'))
-        )
-        res.send(response.replace(/{{message}}/, message))
+        const html = await getHtml()
+        res.send(html.replace(/{{message}}/, message))
         await app.stop()
         resolve(token)
       } catch (err) {
