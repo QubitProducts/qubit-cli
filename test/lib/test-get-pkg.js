@@ -5,6 +5,10 @@ const pkgInCwd = rewire('../..//package.json')
 
 describe('getPkg', function () {
   it('should return package.json from CWD', async function () {
-    expect(await getPkg()).to.eql(pkgInCwd)
+    expect(getPkg()).to.eql(pkgInCwd)
+  })
+
+  it('should return {} otherwise', async function () {
+    expect(getPkg(__dirname)).to.eql({})
   })
 })
