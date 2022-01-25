@@ -7,6 +7,7 @@ module.exports = function getPkg (root) {
     return require(path.join(root, 'package.json'))
   } catch (err) {
     if (err.message.includes('ENOENT: no such file')) return {}
+    if (err.message.includes('Cannot find module')) return {}
     throw err
   }
 }
