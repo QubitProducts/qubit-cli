@@ -6,7 +6,7 @@
   "packages": {
     "": {
       "name": "qubit-cli",
-      "version": "1.77.6",
+      "version": "1.77.11",
       "hasInstallScript": true,
       "license": "ISC",
       "dependencies": {
@@ -15,8 +15,8 @@
         "@qubit/buble-loader": "^0.5.1",
         "@qubit/experience-defaults": "^1.7.1",
         "@qubit/http-api": "^1.6.2",
-        "@qubit/jolt": "^7.66.3",
-        "@qubit/placement-engine": "^1.14.0",
+        "@qubit/jolt": "^7.68.2",
+        "@qubit/placement-engine": "^1.16.5",
         "@qubit/poller": "^2.2.0",
         "@qubit/uv-api": "^4.1.0",
         "axios": "^0.24.0",
@@ -62,7 +62,6 @@
         "slapdash": "^1.3.3",
         "slash": "^1.0.0",
         "style-loader": "^0.19.0",
-        "sudo-prompt": "^9.1.1",
         "sync-p": "^1.1.3",
         "terminal-kit": "^1.26.2",
         "update-notifier": "^2.3.0",
@@ -569,9 +568,9 @@
       }
     },
     "node_modules/@qubit/jolt": {
-      "version": "7.66.3",
-      "resolved": "https://registry.qubit.com/@qubit/jolt/download/@qubit/jolt-7.66.3.tgz",
-      "integrity": "sha1-9mjUiRIY7gyqsS1wO7StqOGZnYs=",
+      "version": "7.68.2",
+      "resolved": "https://registry.qubit.com/@qubit/jolt/download/@qubit/jolt-7.68.2.tgz",
+      "integrity": "sha1-XCJSHhWFngpxpNNtc85B5wOlkGk=",
       "license": "ISC",
       "dependencies": {
         "@qubit/funnelweb": "^1.0.0",
@@ -591,9 +590,9 @@
       }
     },
     "node_modules/@qubit/placement-api": {
-      "version": "3.18.0",
-      "resolved": "https://registry.qubit.com/@qubit/placement-api/download/@qubit/placement-api-3.18.0.tgz",
-      "integrity": "sha1-AXPWrdLCUbHs2uq4+zTqSFxC4Cw=",
+      "version": "3.21.0",
+      "resolved": "https://registry.qubit.com/@qubit/placement-api/download/@qubit/placement-api-3.21.0.tgz",
+      "integrity": "sha1-1QKqNczozomTM6mHdEBM+Q0Nh10=",
       "license": "MIT",
       "dependencies": {
         "@qubit/get-ga-client-id": "^1.0.0",
@@ -606,9 +605,9 @@
       }
     },
     "node_modules/@qubit/placement-engine": {
-      "version": "1.14.0",
-      "resolved": "https://registry.qubit.com/@qubit/placement-engine/download/@qubit/placement-engine-1.14.0.tgz",
-      "integrity": "sha1-Ni0DA0E/Uczvzz42uuvXWNVClpc=",
+      "version": "1.16.5",
+      "resolved": "https://registry.qubit.com/@qubit/placement-engine/download/@qubit/placement-engine-1.16.5.tgz",
+      "integrity": "sha1-AIG1YGS/OKDR5DTtFtpYBUeHNpU=",
       "license": "ISC",
       "dependencies": {
         "@qubit/placement-api": "^3.13.1",
@@ -630,10 +629,20 @@
       }
     },
     "node_modules/@qubit/ua-parser-js": {
-      "version": "0.7.13",
-      "resolved": "https://registry.qubit.com/@qubit/ua-parser-js/download/@qubit/ua-parser-js-0.7.13.tgz",
-      "integrity": "sha1-vPf5d40bbgmkmc1Y6HsRVH9k6sk=",
-      "license": "(GPL-2.0 OR MIT)",
+      "version": "0.7.31",
+      "resolved": "https://registry.qubit.com/@qubit/ua-parser-js/download/@qubit/ua-parser-js-0.7.31.tgz",
+      "integrity": "sha1-4BdQNF2s/irtKfmU5SPVR2kVd+U=",
+      "funding": [
+        {
+          "type": "opencollective",
+          "url": "https://opencollective.com/ua-parser-js"
+        },
+        {
+          "type": "paypal",
+          "url": "https://paypal.me/faisalman"
+        }
+      ],
+      "license": "MIT",
       "engines": {
         "node": "*"
       }
@@ -1885,7 +1894,7 @@
     "node_modules/cidr_match": {
       "version": "0.0.7",
       "resolved": "https://registry.npmjs.org/cidr_match/-/cidr_match-0.0.7.tgz",
-      "integrity": "sha1-9A8VDr57hNSY/FJ/+4em6qgXy6s=",
+      "integrity": "sha512-C4XNoZl2JekRkrdKpUp8GVYZ3VF65fOu3S/JZTlg+80jxGqQFziv8nTS4rWYDp/vdc1GzyR/4tHWpmzBIKYkjA==",
       "deprecated": "Package no longer supported. Contact support@npmjs.com for more info."
     },
     "node_modules/cipher-base": {
@@ -7410,11 +7419,11 @@
       }
     },
     "node_modules/magic-string": {
-      "version": "0.25.7",
-      "resolved": "https://registry.npmjs.org/magic-string/-/magic-string-0.25.7.tgz",
-      "integrity": "sha512-4CrMT5DOHTDk4HYDlzmwu4FVCcIYI8gauveasrdCu2IKIFOJ3f0v/8MDGJCDL9oD2ppz/Av1b0Nj345H9M+XIA==",
+      "version": "0.25.9",
+      "resolved": "https://registry.npmjs.org/magic-string/-/magic-string-0.25.9.tgz",
+      "integrity": "sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==",
       "dependencies": {
-        "sourcemap-codec": "^1.4.4"
+        "sourcemap-codec": "^1.4.8"
       }
     },
     "node_modules/make-dir": {
@@ -9895,9 +9904,9 @@
       }
     },
     "node_modules/really-unique-id": {
-      "version": "1.2.1",
-      "resolved": "https://registry.npmjs.org/really-unique-id/-/really-unique-id-1.2.1.tgz",
-      "integrity": "sha1-18XQ+oaSfwIfwbvNbXPuTZ+jmVc="
+      "version": "1.2.2",
+      "resolved": "https://registry.npmjs.org/really-unique-id/-/really-unique-id-1.2.2.tgz",
+      "integrity": "sha512-edeicVEStCB5XtzbeneUJm1Yde7B8NPO+EGo1xJ8JhNyCG23r4PgqTYSO8TC7VkIENLntnkPLxqqGu8RuiY3Ww=="
     },
     "node_modules/redent": {
       "version": "2.0.0",
@@ -11097,9 +11106,9 @@
       }
     },
     "node_modules/smurl/node_modules/urlite": {
-      "version": "3.0.0",
-      "resolved": "https://registry.npmjs.org/urlite/-/urlite-3.0.0.tgz",
-      "integrity": "sha512-Ffgts2pTfFFybsHm1uk8s01jBpIBIU8/ZBrTVFpsM5eA1AYVsEfBYkiSahyJcuCEdLvfOkjq5vXznlcI1HhfRw=="
+      "version": "3.0.1",
+      "resolved": "https://registry.npmjs.org/urlite/-/urlite-3.0.1.tgz",
+      "integrity": "sha512-PNX5BVIamSlX8suZYnhTOj9NX1tZauQdWMrcecuOa0wkJxbzuPIByvQR55AmGfgQZS/7VTpbhBUjFQb7rXEW4A=="
     },
     "node_modules/snapdragon": {
       "version": "0.8.2",
@@ -12225,11 +12234,6 @@
       "engines": {
         "node": ">= 0.12.0"
       }
-    },
-    "node_modules/sudo-prompt": {
-      "version": "9.2.1",
-      "resolved": "https://registry.npmjs.org/sudo-prompt/-/sudo-prompt-9.2.1.tgz",
-      "integrity": "sha512-Mu7R0g4ig9TUuGSxJavny5Rv0egCEtpZRNMrZaYS1vxkiIxGiGUwoezU3LazIQ+KE04hTrTfNPgxU5gzi7F5Pw=="
     },
     "node_modules/supports-color": {
       "version": "5.5.0",
@@ -14574,9 +14578,9 @@
       }
     },
     "@qubit/jolt": {
-      "version": "7.66.3",
-      "resolved": "https://registry.qubit.com/@qubit/jolt/download/@qubit/jolt-7.66.3.tgz",
-      "integrity": "sha1-9mjUiRIY7gyqsS1wO7StqOGZnYs=",
+      "version": "7.68.2",
+      "resolved": "https://registry.qubit.com/@qubit/jolt/download/@qubit/jolt-7.68.2.tgz",
+      "integrity": "sha1-XCJSHhWFngpxpNNtc85B5wOlkGk=",
       "requires": {
         "@qubit/funnelweb": "^1.0.0",
         "@qubit/get-ga-client-id": "^1.0.0",
@@ -14595,9 +14599,9 @@
       }
     },
     "@qubit/placement-api": {
-      "version": "3.18.0",
-      "resolved": "https://registry.qubit.com/@qubit/placement-api/download/@qubit/placement-api-3.18.0.tgz",
-      "integrity": "sha1-AXPWrdLCUbHs2uq4+zTqSFxC4Cw=",
+      "version": "3.21.0",
+      "resolved": "https://registry.qubit.com/@qubit/placement-api/download/@qubit/placement-api-3.21.0.tgz",
+      "integrity": "sha1-1QKqNczozomTM6mHdEBM+Q0Nh10=",
       "requires": {
         "@qubit/get-ga-client-id": "^1.0.0",
         "@qubit/http-api": "^1.6.1",
@@ -14609,9 +14613,9 @@
       }
     },
     "@qubit/placement-engine": {
-      "version": "1.14.0",
-      "resolved": "https://registry.qubit.com/@qubit/placement-engine/download/@qubit/placement-engine-1.14.0.tgz",
-      "integrity": "sha1-Ni0DA0E/Uczvzz42uuvXWNVClpc=",
+      "version": "1.16.5",
+      "resolved": "https://registry.qubit.com/@qubit/placement-engine/download/@qubit/placement-engine-1.16.5.tgz",
+      "integrity": "sha1-AIG1YGS/OKDR5DTtFtpYBUeHNpU=",
       "requires": {
         "@qubit/placement-api": "^3.13.1",
         "@qubit/poller": "^2.2.0",
@@ -14631,9 +14635,9 @@
       }
     },
     "@qubit/ua-parser-js": {
-      "version": "0.7.13",
-      "resolved": "https://registry.qubit.com/@qubit/ua-parser-js/download/@qubit/ua-parser-js-0.7.13.tgz",
-      "integrity": "sha1-vPf5d40bbgmkmc1Y6HsRVH9k6sk="
+      "version": "0.7.31",
+      "resolved": "https://registry.qubit.com/@qubit/ua-parser-js/download/@qubit/ua-parser-js-0.7.31.tgz",
+      "integrity": "sha1-4BdQNF2s/irtKfmU5SPVR2kVd+U="
     },
     "@qubit/uv-api": {
       "version": "4.1.0",
@@ -15627,7 +15631,7 @@
     "cidr_match": {
       "version": "0.0.7",
       "resolved": "https://registry.npmjs.org/cidr_match/-/cidr_match-0.0.7.tgz",
-      "integrity": "sha1-9A8VDr57hNSY/FJ/+4em6qgXy6s="
+      "integrity": "sha512-C4XNoZl2JekRkrdKpUp8GVYZ3VF65fOu3S/JZTlg+80jxGqQFziv8nTS4rWYDp/vdc1GzyR/4tHWpmzBIKYkjA=="
     },
     "cipher-base": {
       "version": "1.0.4",
@@ -19910,11 +19914,11 @@
       }
     },
     "magic-string": {
-      "version": "0.25.7",
-      "resolved": "https://registry.npmjs.org/magic-string/-/magic-string-0.25.7.tgz",
-      "integrity": "sha512-4CrMT5DOHTDk4HYDlzmwu4FVCcIYI8gauveasrdCu2IKIFOJ3f0v/8MDGJCDL9oD2ppz/Av1b0Nj345H9M+XIA==",
+      "version": "0.25.9",
+      "resolved": "https://registry.npmjs.org/magic-string/-/magic-string-0.25.9.tgz",
+      "integrity": "sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==",
       "requires": {
-        "sourcemap-codec": "^1.4.4"
+        "sourcemap-codec": "^1.4.8"
       }
     },
     "make-dir": {
@@ -21855,9 +21859,9 @@
       }
     },
     "really-unique-id": {
-      "version": "1.2.1",
-      "resolved": "https://registry.npmjs.org/really-unique-id/-/really-unique-id-1.2.1.tgz",
-      "integrity": "sha1-18XQ+oaSfwIfwbvNbXPuTZ+jmVc="
+      "version": "1.2.2",
+      "resolved": "https://registry.npmjs.org/really-unique-id/-/really-unique-id-1.2.2.tgz",
+      "integrity": "sha512-edeicVEStCB5XtzbeneUJm1Yde7B8NPO+EGo1xJ8JhNyCG23r4PgqTYSO8TC7VkIENLntnkPLxqqGu8RuiY3Ww=="
     },
     "redent": {
       "version": "2.0.0",
@@ -22811,9 +22815,9 @@
       },
       "dependencies": {
         "urlite": {
-          "version": "3.0.0",
-          "resolved": "https://registry.npmjs.org/urlite/-/urlite-3.0.0.tgz",
-          "integrity": "sha512-Ffgts2pTfFFybsHm1uk8s01jBpIBIU8/ZBrTVFpsM5eA1AYVsEfBYkiSahyJcuCEdLvfOkjq5vXznlcI1HhfRw=="
+          "version": "3.0.1",
+          "resolved": "https://registry.npmjs.org/urlite/-/urlite-3.0.1.tgz",
+          "integrity": "sha512-PNX5BVIamSlX8suZYnhTOj9NX1tZauQdWMrcecuOa0wkJxbzuPIByvQR55AmGfgQZS/7VTpbhBUjFQb7rXEW4A=="
         }
       }
     },
@@ -23631,11 +23635,6 @@
         "loader-utils": "^1.0.2",
         "schema-utils": "^0.3.0"
       }
-    },
-    "sudo-prompt": {
-      "version": "9.2.1",
-      "resolved": "https://registry.npmjs.org/sudo-prompt/-/sudo-prompt-9.2.1.tgz",
-      "integrity": "sha512-Mu7R0g4ig9TUuGSxJavny5Rv0egCEtpZRNMrZaYS1vxkiIxGiGUwoezU3LazIQ+KE04hTrTfNPgxU5gzi7F5Pw=="
     },
     "supports-color": {
       "version": "5.5.0",

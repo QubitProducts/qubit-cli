@@ -1,7 +1,7 @@
 const pem = require('pem')
 const opn = require('opn')
+const { exec } = require('child_process')
 const execa = require('execa')
-const sudo = require('sudo-prompt')
 const fs = require('fs-extra')
 const windosu = require('windosu')
 const confirm = require('confirmer')
@@ -117,16 +117,12 @@ async function installCerts () {
 }
 
 async function installCertsOSX () {
-  return new Promise((resolve, reject) => {
-    sudo.exec(
-      `security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "${CERT_PATH}"`,
-      {},
-      error => {
-        if (error) return reject(error)
-        resolve()
-      }
-    )
-  })
+  await execa.shell(
+    'security set-keychain-settings -t 3600 -l ~/Library/Keychains/login.keychain'
+  )
+  return rawExec(
+    `sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "${CERT_PATH}"`
+  )
 }
 
 async function installCertsLinux () {
@@ -137,19 +133,14 @@ async function installCertsLinux () {
     childProcess.spawnSync('which', ['update-ca-certificates']).status === 0
   ) {
     certDir = '/usr/local/share/ca-certificates'
-    updateCmd = 'update-ca-certificates'
+    updateCmd = 'sudo update-ca-certificates'
   } else {
     certDir = '/etc/ca-certificates/trust-source/anchors'
-    updateCmd = 'trust extract-compat'
+    updateCmd = 'sudo trust extract-compat'
   }
   await fs.ensureDir(certDir)
   await fs.copy(CERT_PATH, certDir)
-  return new Promise((resolve, reject) => {
-    sudo.exec(updateCmd, {}, error => {
-      if (error) return reject(error)
-      resolve()
-    })
-  })
+  return rawExec(updateCmd)
 }
 
 function installCertsWin () {
@@ -157,3 +148,13 @@ function installCertsWin () {
     `certutil -addstore -enterprise -f -v root "${CERT_PATH}"`
   )
 }
+
+const rawExec = cmd =>
+  new Promise((resolve, reject) => {
+    exec(cmd, (err, stdout) => {
+      if (err) {
+        return reject(err)
+      }
+      return resolve(stdout)
+    })
+  })
