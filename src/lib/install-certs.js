@@ -1,6 +1,6 @@
 const pem = require('pem')
 const opn = require('opn')
-const { exec } = require('child_process')
+const sudo = require('exec-root')
 const execa = require('execa')
 const fs = require('fs-extra')
 const windosu = require('windosu')
@@ -117,16 +117,15 @@ async function installCerts () {
 }
 
 async function installCertsOSX () {
-  for (const cmd of [
-    'sudo security authorizationdb read com.apple.trust-settings.admin > rights',
-    'sudo security authorizationdb write com.apple.trust-settings.admin allow',
-    'security set-keychain-settings -t 3600 -l ~/Library/Keychains/login.keychain',
-    `sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "${CERT_PATH}"`,
-    'sudo security authorizationdb write com.apple.trust-settings.admin < rights',
-    'sudo rm rights'
-  ]) {
-    await rawExec(cmd)
-  }
+  await rawExec(
+    [
+      'security authorizationdb read com.apple.trust-settings.admin > rights',
+      'security authorizationdb write com.apple.trust-settings.admin allow',
+      `security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "${CERT_PATH}"`,
+      'security authorizationdb write com.apple.trust-settings.admin < rights',
+      'rm rights'
+    ].join(' && ')
+  )
 }
 
 async function installCertsLinux () {
@@ -137,10 +136,10 @@ async function installCertsLinux () {
     childProcess.spawnSync('which', ['update-ca-certificates']).status === 0
   ) {
     certDir = '/usr/local/share/ca-certificates'
-    updateCmd = 'sudo update-ca-certificates'
+    updateCmd = 'update-ca-certificates'
   } else {
     certDir = '/etc/ca-certificates/trust-source/anchors'
-    updateCmd = 'sudo trust extract-compat'
+    updateCmd = 'trust extract-compat'
   }
   await fs.ensureDir(certDir)
   await fs.copy(CERT_PATH, certDir)
@@ -154,11 +153,6 @@ function installCertsWin () {
 }
 
 const rawExec = cmd =>
-  new Promise((resolve, reject) => {
-    exec(cmd, (err, stdout) => {
-      if (err) {
-        return reject(err)
-      }
-      return resolve(stdout)
-    })
+  sudo.exec(cmd, {
+    name: 'Qubit CLI'
   })

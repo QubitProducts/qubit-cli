@@ -15,7 +15,7 @@
   },
   "scripts": {
     "prepublishOnly": "node bin/tasks syncVersions --commit",
-    "pretest": "NODE_ENV=test node bin/tasks installQubitDeps --dev",
+    "pretest": "npm install --ignore-scripts && NODE_ENV=test node bin/tasks installQubitDeps --dev",
     "test": "NODE_ENV=test nyc --reporter=lcov --reporter=text-summary mocha --recursive",
     "lint": "standard",
     "format": "prettier-standard",
@@ -46,6 +46,7 @@
     "diff": "^3.4.0",
     "driftwood": "^1.5.0",
     "event-kitten": "^1.1.0",
+    "exec-root": "^1.0.9",
     "execa": "^0.8.0",
     "express": "^4.16.2",
     "form-data": "^2.3.2",
