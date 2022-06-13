@@ -117,12 +117,16 @@ async function installCerts () {
 }
 
 async function installCertsOSX () {
-  await execa.shell(
-    'security set-keychain-settings -t 3600 -l ~/Library/Keychains/login.keychain'
-  )
-  return rawExec(
-    `sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "${CERT_PATH}"`
-  )
+  for (const cmd of [
+    'sudo security authorizationdb read com.apple.trust-settings.admin > rights',
+    'sudo security authorizationdb write com.apple.trust-settings.admin allow',
+    'security set-keychain-settings -t 3600 -l ~/Library/Keychains/login.keychain',
+    `sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain "${CERT_PATH}"`,
+    'sudo security authorizationdb write com.apple.trust-settings.admin < rights',
+    'sudo rm rights'
+  ]) {
+    await rawExec(cmd)
+  }
 }
 
 async function installCertsLinux () {
