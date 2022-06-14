@@ -10,4 +10,3 @@ test: lint
 
 lint:
 	npm run lint
-
