@@ -61,7 +61,10 @@ async function getRegistryToken (force) {
       }
     )).data
     registryToken = accessToken
-    await qubitrc.login(registryToken, _.uniq(scopes))
+    await qubitrc.login(
+      registryToken,
+      _.uniq(scopes.concat(['@qubit', '@qutics']))
+    )
   }
   return registryToken
 }

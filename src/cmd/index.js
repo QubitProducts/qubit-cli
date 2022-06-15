@@ -276,6 +276,11 @@ module.exports = async function run (pkg) {
     .description('revoke an auth token')
     .action(cmd('revoke'))
 
+  program
+    .command('install-certs')
+    .description('install qubit cli certificates')
+    .action(cmd('install-certs'))
+
   const placementCommand = program
     .command('placement')
     .description('run `qubit placement --help` for more information')
