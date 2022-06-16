@@ -4,7 +4,11 @@ module.exports = function applyStyles (id, styles) {
 
   // Keep alignment with experiences which appends styles first before module styles
   const styleTags = document.getElementsByTagName('style')
-  if (styleTags && styleTags.length && styleTags[0].parentElement.nodeName === 'HEAD') {
+  if (
+    styleTags &&
+    styleTags.length &&
+    styleTags[0].parentElement.nodeName === 'HEAD'
+  ) {
     document.head.insertBefore(el, styleTags[0])
   } else {
     document.head.appendChild(el)

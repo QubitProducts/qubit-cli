@@ -25,12 +25,10 @@ module.exports = async function create (
 
   name =
     name ||
-    (
-      await input.text(
-        formatLog('   What would you like to call your placement?'),
-        { default: 'My new placement' }
-      )
-    ).trim()
+    (await input.text(
+      formatLog('   What would you like to call your placement?'),
+      { default: 'My new placement' }
+    )).trim()
 
   const placementSpec = initialPlacement({
     tagId,

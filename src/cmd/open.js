@@ -11,7 +11,9 @@ module.exports = async function previewLink (page = 'editor', options) {
 
   if (!propertyId || !experienceId) return required()
 
-  const experienceUrl = `${config.services.app}/p/${propertyId}/experiences/${experienceId}`
+  const experienceUrl = `${
+    config.services.app
+  }/p/${propertyId}/experiences/${experienceId}`
 
   if (/^editor|settings|overview$/.test(page)) {
     return opn(`${experienceUrl}/${page === 'overview' ? '' : page}`, {
