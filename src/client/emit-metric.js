@@ -10,8 +10,8 @@ module.exports = function createEmitMetric (uv, meta, logger) {
       productId: productId,
       metadata: metadata
         ? typeof metadata === 'string'
-          ? metadata
-          : JSON.stringify(metadata)
+            ? metadata
+            : JSON.stringify(metadata)
         : metadata
     })
   }
