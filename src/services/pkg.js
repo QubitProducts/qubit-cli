@@ -10,8 +10,8 @@ function getCode (property, experience, iteration, goals, qfns, variations) {
   // TODO: remove this conditional once API returns parsed package_json
   const pkgJSON = iteration.package_json
     ? _.isString(iteration.package_json)
-        ? JSON.parse(iteration.package_json)
-        : iteration.package_json
+      ? JSON.parse(iteration.package_json)
+      : iteration.package_json
     : {}
   files['package.json'] = JSON.stringify(
     Object.assign(

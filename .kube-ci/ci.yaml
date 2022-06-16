@@ -9,78 +9,78 @@ spec:
   arguments: {}
   entrypoint: run
   templates:
-  - inputs: {}
-    metadata: {}
-    name: main
-    outputs: {}
-    steps:
-    - - arguments: {}
-        name: run
-        template: run
-        when: '{{workflow.parameters.branch}} != "gh-pages"'
-  - container:
-      args:
-      - sh
-      - -c
-      - |
-        set -x
-        set -e
+    - inputs: {}
+      metadata: {}
+      name: main
+      outputs: {}
+      steps:
+        - - arguments: {}
+            name: run
+            template: run
+            when: '{{workflow.parameters.branch}} != "gh-pages"'
+    - container:
+        args:
+          - sh
+          - -c
+          - |
+            set -x
+            set -e
 
-        cp /.ci-secrets/npmrc $HOME/.npmrc
-        export XDG_CACHE_HOME=/cache/.cache
-        export CYPRESS_CACHE_FOLDER=/cache/.cache
+            cp /.ci-secrets/npmrc $HOME/.npmrc
+            export XDG_CACHE_HOME=/cache/.cache
+            export CYPRESS_CACHE_FOLDER=/cache/.cache
 
-        npm set cache /cache/npm
-        PATH=$PATH:$(pwd)/node_modules/.bin
+            npm set cache /cache/npm
+            PATH=$PATH:$(pwd)/node_modules/.bin
 
-        npm config set @qubit:registry https://registry.qubit.com
-        npm config set @qutics:registry https://registry.qubit.com
+            npm config set @qubit:registry https://registry.qubit.com
+            npm config set @qutics:registry https://registry.qubit.com
 
-        make bootstrap
-        npm run lint
-        npm run test
-      command:
-      - docker-entrypoint.sh
-      env:
-      - name: SAUCE_USERNAME
-        valueFrom:
-          secretKeyRef:
-            key: SAUCE_USERNAME
-            name: ci-secrets
-      - name: SAUCE_ACCESS_KEY
-        valueFrom:
-          secretKeyRef:
-            key: SAUCE_ACCESS_KEY
-            name: ci-secrets
-      image: node:16
-      name: ""
-      resources: {}
-      volumeMounts:
-      - mountPath: /.ci-secrets
-        name: secrets
-      - mountPath: /cache
-        name: build-cache
-      workingDir: /src
-    inputs:
-      artifacts:
-      - git:
-          repo: '{{workflow.parameters.repo}}'
-          revision: '{{workflow.parameters.revision}}'
-          sshPrivateKeySecret:
-            key: ssh-private-key
-            name: ci-secrets
-        name: code
-        path: /src
-    metadata: {}
-    name: run
-    outputs: {}
+            make bootstrap
+            npm run lint
+            npm run test
+        command:
+          - docker-entrypoint.sh
+        env:
+          - name: SAUCE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                key: SAUCE_USERNAME
+                name: ci-secrets
+          - name: SAUCE_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                key: SAUCE_ACCESS_KEY
+                name: ci-secrets
+        image: node:16
+        name: ''
+        resources: {}
+        volumeMounts:
+          - mountPath: /.ci-secrets
+            name: secrets
+          - mountPath: /cache
+            name: build-cache
+        workingDir: /src
+      inputs:
+        artifacts:
+          - git:
+              repo: '{{workflow.parameters.repo}}'
+              revision: '{{workflow.parameters.revision}}'
+              sshPrivateKeySecret:
+                key: ssh-private-key
+                name: ci-secrets
+            name: code
+            path: /src
+      metadata: {}
+      name: run
+      outputs: {}
   volumes:
-  - name: secrets
-    secret:
-      secretName: ci-secrets
-  - name: build-cache
-    persistentVolumeClaim:
-      claimName: '{{workflow.parameters.cacheVolumeClaimName}}'
+    - name: secrets
+      secret:
+        secretName: ci-secrets
+    - name: build-cache
+      persistentVolumeClaim:
+        claimName: '{{workflow.parameters.cacheVolumeClaimName}}'
 status:
   finishedAt: null
   startedAt: null
