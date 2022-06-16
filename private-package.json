@@ -1,6 +1,6 @@
 {
   "name": "qubit-cli",
-  "version": "1.77.15",
+  "version": "1.77.16",
   "description": "Qubit command line interface",
   "main": "src/index.js",
   "bin": {
@@ -96,8 +96,17 @@
     "windosu": "^0.3.0"
   },
   "standard": {
-    "ignore": ["/src/templates/placement.js"],
-    "globals": ["describe", "it", "before", "after", "beforeEach", "afterEach"]
+    "ignore": [
+      "/src/templates/placement.js"
+    ],
+    "globals": [
+      "describe",
+      "it",
+      "before",
+      "after",
+      "beforeEach",
+      "afterEach"
+    ]
   },
   "devDependencies": {
     "chai": "^4.2.0",
