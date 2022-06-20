@@ -22,5 +22,7 @@ clear-ssl:
 replicate: clear-ssl
 	npm uninstall -g .
 	rm -rf node_modules
+	git checkout .
+	git clean -fd
 	npm install --ignore-scripts
 	npm install -g .
