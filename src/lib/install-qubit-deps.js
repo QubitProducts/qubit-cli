@@ -23,7 +23,7 @@ async function installQubitDeps (login = true, devDeps = false) {
     log.info('Installing additional dependencies...')
     await backupPkgJSON('public')
     await installPkgJSON('private')
-    await exec(`npm install --ignore-scripts ${devDeps ? '--dev' : ''}`, true)
+    await exec(`npm install --ignore-scripts${devDeps ? ' --dev' : ''}`, true)
     await installPkgJSON('public')
     await rmPkgJSON('public')
     log.info('Additional installation steps complete!')
@@ -80,7 +80,7 @@ async function syncVersions (commit = false) {
 
 async function installPrivatePackages (logging) {
   await exec(
-    `npm install --ignore-scripts --dev ${PRIVATE_DEPS.join(' ')}`,
+    `npm install --ignore-scripts --dev${' ' + PRIVATE_DEPS.join(' ')}`,
     logging
   )
 }

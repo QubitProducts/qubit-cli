@@ -19,7 +19,7 @@ clear-ssl:
 	npm uninstall -g qubit-cli
 	-sudo security delete-certificate -c "localhost"
 
-replicate: clear-ssl
+replicate-global-install: clear-ssl
 	npm uninstall -g .
 	rm -rf node_modules
 	git checkout .
