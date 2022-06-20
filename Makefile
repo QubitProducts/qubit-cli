@@ -15,6 +15,6 @@ clear-ssl:
 	rm -rf ~/.qubit-ssl
 	rm -rf ~/.qubitrc
 	rm -rf ~/.npmrc
-	rm -rf ~/Library/Application Support/fnm/node-versions/v17.5.0/installation/etc/npmrc
+	rm -rf "`npm config get globalconfig`"
 	npm uninstall -g qubit-cli
 	sudo security delete-certificate -c "localhost"
