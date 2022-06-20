@@ -19,7 +19,6 @@
     "test": "NODE_ENV=test nyc --reporter=lcov --reporter=text-summary mocha --recursive",
     "lint": "standard",
     "format": "prettier-standard",
-    "postinstall": "node bin/tasks installQubitDeps --login",
     "createInstallPrivatePackages": "node bin/tasks createInstallPrivatePackages"
   },
   "author": "Alan Clarke <alan@qubit.com> (qubit.com)",
