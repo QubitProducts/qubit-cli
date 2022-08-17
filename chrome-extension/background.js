@@ -9,7 +9,7 @@ chrome.browserAction.onClicked.addListener(() => {
   chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
     const tabId = tabs.length && tabs[0].id
     if (tabId) {
-      getState(tabId, state =>
+      getState(tabId, (state = {}) =>
         setState(tabId, { enabled: !state.enabled }, render)
       )
     }
@@ -45,7 +45,7 @@ function render () {
   })
   chrome.tabs.query({}, tabs => {
     tabs.forEach(tab => {
-      getState(tab.id, state => {
+      getState(tab.id, (state = {}) => {
         chrome.browserAction.setIcon({
           path: state.enabled ? ICONS.on : ICONS.off,
           tabId: tab.id
@@ -66,10 +66,10 @@ function getState (id, callback) {
     state = state[id] || {}
     if (callback) callback(state)
   })
-  return cache[id]
+  return cache[id] || {}
 }
 
-function setState (id, state, callback) {
+function setState (id, state = {}, callback) {
   chrome.storage.local.get(NAMESPACE, obj => {
     obj = obj || {}
     obj[NAMESPACE] = obj[NAMESPACE] || {}
@@ -88,9 +88,9 @@ chrome.webRequest.onHeadersReceived.addListener(
   ['blocking', 'responseHeaders']
 )
 
-function responseListener (details) {
+function responseListener (details = {}) {
   let responseHeaders = details.responseHeaders
-  const state = getState(details.tabId)
+  const state = getState(details.tabId) || {}
   if (state.enabled) {
     responseHeaders = responseHeaders.filter(
       elem => elem.name.toLowerCase() !== 'content-security-policy'

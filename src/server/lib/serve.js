@@ -23,8 +23,16 @@ module.exports = async function serve (options) {
   await installQubitDeps()
   const app = await createApp()
   const pkg = await getPkg()
-
-  app.use(cors())
+  app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Private-Network', 'true')
+    next()
+  })
+  app.use(
+    cors({
+      origin: true,
+      credentials: true
+    })
+  )
   options.verbose = options.verbose || false
 
   if (/(triggers|global|\.less|\.css$)/.test(options.fileName)) {

@@ -41,6 +41,8 @@ function runCli (state) {
 
 function appendScript () {
   const script = document.createElement('script')
-  script.src = 'https://localhost:41337/bundle.js'
+  script.setAttribute('id', 'qubit-cli-bundle')
+  script.setAttribute('crossorigin', 'anonymous')
+  script.setAttribute('src', 'https://localhost:41337/bundle.js')
   document.body.appendChild(script)
 }
