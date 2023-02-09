@@ -67,7 +67,7 @@ function getEnv () {
 }
 
 function parse (value) {
-  return _.pick(value ? yaml.load(value) : {}, [
+  return _.pick(value ? yaml.safeLoad(value) : {}, [
     'debug',
     'development',
     'staging',
