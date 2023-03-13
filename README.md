@@ -31,7 +31,7 @@ _Automate your workflow by interacting with the platform from the command line:_
 
 ## Installation
 
-`npm install -g qubit-cli`
+`npm install --location=global qubit-cli`
 
 ## Windows
 

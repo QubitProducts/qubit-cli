@@ -3,7 +3,7 @@
 BIN = node_modules/.bin
 
 bootstrap:
-	npm i --dev --ignore-scripts
+	npm i --include=dev --ignore-scripts
 
 test: lint
 	npm test
