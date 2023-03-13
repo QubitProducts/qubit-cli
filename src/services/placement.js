@@ -208,7 +208,8 @@ async function normalisePlacement (
       namespace: property.qp_namespace,
       trackingId: property.tracking_id,
       remoteUpdatedAt: implementation.updatedAt,
-      triggers: implementation.triggers
+      triggers: implementation.triggers,
+      productSource: implementation.productSource
     },
     dependencies: { ..._.get(packageJson, 'dependencies', {}) },
     devDependencies: { ..._.get(packageJson, 'devDependencies', {}) }
@@ -244,17 +245,13 @@ schema {
   samplePayload
 }
 activeImplementation {
-  id
-  type
-  code {
-    js
-    css
-    packageJson
-  }
-  triggers
-  updatedAt
+  ${implementationFields}
 }
 draftImplementation {
+  ${implementationFields}
+}`
+
+const implementationFields = `
   id
   type
   code {
@@ -264,4 +261,6 @@ draftImplementation {
   }
   triggers
   updatedAt
-}`
+  catalogConfig
+  productSource
+`
