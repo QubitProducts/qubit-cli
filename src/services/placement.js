@@ -234,23 +234,6 @@ function createReadme (packageJson) {
   return name ? `# ${name}` : ''
 }
 
-const fields = `
-id
-name
-personalisationType
-tags {
-  id
-}
-schema {
-  samplePayload
-}
-activeImplementation {
-  ${implementationFields}
-}
-draftImplementation {
-  ${implementationFields}
-}`
-
 const implementationFields = `
   id
   type
@@ -264,3 +247,20 @@ const implementationFields = `
   catalogConfig
   productSource
 `
+
+const fields = `
+id
+name
+personalisationType
+tags {
+  id
+}
+schema {
+  samplePayload
+}
+activeImplementation {
+${implementationFields}
+}
+draftImplementation {
+${implementationFields}
+}`
