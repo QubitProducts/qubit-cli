@@ -49,6 +49,20 @@ module.exports = async function create (
   log.info('Done ✨')
 }
 
+const configTypes = {
+  PERSONALISED_CONTENT: {},
+  RECOMMENDATIONS: {
+    clickthroughTrackingContent: true,
+    clickthroughTrackingNoContent: true,
+    recsMinItems: 1,
+    recsMaxItems: 10
+  },
+  EVIDENCE_SELECTION: {
+    clickthroughTrackingContent: false,
+    clickthroughTrackingNoContent: false
+  }
+}
+
 const schemaTypes = {
   PERSONALISED_CONTENT: {
     type: 'object',
@@ -105,5 +119,6 @@ const initialPlacement = ({ tagId, name, personalisationType }) => ({
     js: PLACEMENT_JS,
     packageJson: JSON.parse(PLACEMENT_PKG_JSON)
   },
-  catalogConfig: 'PRODUCTS'
+  catalogConfig: 'PRODUCTS',
+  config: configTypes[personalisationType]
 })
