@@ -49,52 +49,58 @@ module.exports = async function create (
   log.info('Done ✨')
 }
 
+const configTypes = {
+  PERSONALISED_CONTENT: {},
+  RECOMMENDATIONS: {
+    clickthroughTrackingContent: true,
+    clickthroughTrackingNoContent: true,
+    recsMinItems: 1,
+    recsMaxItems: 10
+  },
+  EVIDENCE_SELECTION: {
+    clickthroughTrackingContent: false,
+    clickthroughTrackingNoContent: false
+  }
+}
+
 const schemaTypes = {
   PERSONALISED_CONTENT: {
-    label: '',
     type: 'object',
-    order: 0,
     required: [],
+    reserved: [],
     properties: {}
   },
   RECOMMENDATIONS: {
-    label: '',
     type: 'object',
-    order: 0,
-    required: ['recommendations'],
+    required: ['headline'],
+    reserved: ['headline', 'recs'],
     properties: {
       headline: {
-        key: 'headline',
-        type: 'string',
-        order: 0,
-        label: 'Heading'
-      },
-      recommendations: {
-        key: 'recommendations',
-        required: true,
-        type: 'array',
-        minItems: 0,
-        maxItems: 10
+        type: ['string'],
+        typeForUi: 'string',
+        label: 'Heading',
+        requiredForUi: true,
+        order: 0
       }
     }
   },
   EVIDENCE_SELECTION: {
-    label: '',
     type: 'object',
-    order: 0,
     required: [],
+    reserved: ['message', 'imageUrl'],
     properties: {
       message: {
-        key: 'message',
-        type: 'string',
-        order: 0,
-        label: 'Message'
+        type: ['string', 'null'],
+        typeForUi: 'string',
+        label: 'Message',
+        order: 0
       },
       imageUrl: {
-        key: 'imageUrl',
-        type: 'image',
-        order: 1,
-        label: 'Image'
+        type: ['string', 'null'],
+        typeForUi: 'image',
+        format: 'custom-uri',
+        label: 'Image',
+        order: 1
       }
     }
   }
@@ -112,5 +118,7 @@ const initialPlacement = ({ tagId, name, personalisationType }) => ({
   code: {
     js: PLACEMENT_JS,
     packageJson: JSON.parse(PLACEMENT_PKG_JSON)
-  }
+  },
+  catalogConfig: 'PRODUCTS',
+  config: configTypes[personalisationType]
 })

@@ -208,7 +208,8 @@ async function normalisePlacement (
       namespace: property.qp_namespace,
       trackingId: property.tracking_id,
       remoteUpdatedAt: implementation.updatedAt,
-      triggers: implementation.triggers
+      triggers: implementation.triggers,
+      productSource: implementation.productSource
     },
     dependencies: { ..._.get(packageJson, 'dependencies', {}) },
     devDependencies: { ..._.get(packageJson, 'devDependencies', {}) }
@@ -233,6 +234,20 @@ function createReadme (packageJson) {
   return name ? `# ${name}` : ''
 }
 
+const implementationFields = `
+  id
+  type
+  code {
+    js
+    css
+    packageJson
+  }
+  triggers
+  updatedAt
+  catalogConfig
+  productSource
+`
+
 const fields = `
 id
 name
@@ -244,24 +259,8 @@ schema {
   samplePayload
 }
 activeImplementation {
-  id
-  type
-  code {
-    js
-    css
-    packageJson
-  }
-  triggers
-  updatedAt
+${implementationFields}
 }
 draftImplementation {
-  id
-  type
-  code {
-    js
-    css
-    packageJson
-  }
-  triggers
-  updatedAt
+${implementationFields}
 }`
