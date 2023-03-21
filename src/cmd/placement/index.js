@@ -4,7 +4,7 @@ const log = require('../../lib/log')
 const program = new Command('placement')
 
 program
-  .command('create [propertyId] [locationId] [personalisationType] [name]')
+  .command('create [propertyId] [tagId] [personalisationType] [name]')
   .description('create a new placement')
   .action(cmd('create'))
 

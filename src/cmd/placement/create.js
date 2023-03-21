@@ -3,14 +3,17 @@ const placementService = require('../../services/placement')
 const {
   getPropertyId,
   getTagId,
-  getPersonalisationType
+  getPersonalisationType,
+  getProductSource
 } = require('../../lib/get-resource-ids')
 const exec = require('execa')
 const formatLog = require('../../lib/format-log')
 const throwIf = require('../../lib/throw-if')
 const clone = require('./clone')
 const log = require('../../lib/log')
-const { PLACEMENT_JS, PLACEMENT_PKG_JSON } = require('../../constants')
+const { PLACEMENT_JS, PLACEMENT_PKG_JSON, CAMPAIGN_TYPES } = require('../../constants')
+
+const { EVIDENCE_SELECTION, PERSONALISED_CONTENT, RECOMMENDATIONS } = CAMPAIGN_TYPES
 
 module.exports = async function create (
   propertyId,
@@ -22,6 +25,10 @@ module.exports = async function create (
   propertyId = await getPropertyId(propertyId, {})
   tagId = await getTagId(propertyId, tagId, {})
   personalisationType = await getPersonalisationType(personalisationType, {})
+  const productSource =
+    personalisationType === EVIDENCE_SELECTION
+      ? await getProductSource(null, {})
+      : null
 
   name =
     name ||
@@ -33,7 +40,8 @@ module.exports = async function create (
   const placementSpec = initialPlacement({
     tagId,
     name,
-    personalisationType
+    personalisationType,
+    productSource
   })
 
   const placementId = await placementService.create(propertyId, placementSpec)
@@ -50,27 +58,27 @@ module.exports = async function create (
 }
 
 const configTypes = {
-  PERSONALISED_CONTENT: {},
-  RECOMMENDATIONS: {
+  [PERSONALISED_CONTENT]: {},
+  [RECOMMENDATIONS]: {
     clickthroughTrackingContent: true,
     clickthroughTrackingNoContent: true,
     recsMinItems: 1,
     recsMaxItems: 10
   },
-  EVIDENCE_SELECTION: {
+  [EVIDENCE_SELECTION]: {
     clickthroughTrackingContent: false,
     clickthroughTrackingNoContent: false
   }
 }
 
 const schemaTypes = {
-  PERSONALISED_CONTENT: {
+  [PERSONALISED_CONTENT]: {
     type: 'object',
     required: [],
     reserved: [],
     properties: {}
   },
-  RECOMMENDATIONS: {
+  [RECOMMENDATIONS]: {
     type: 'object',
     required: ['headline'],
     reserved: ['headline', 'recs'],
@@ -84,7 +92,7 @@ const schemaTypes = {
       }
     }
   },
-  EVIDENCE_SELECTION: {
+  [EVIDENCE_SELECTION]: {
     type: 'object',
     required: [],
     reserved: ['message', 'imageUrl'],
@@ -106,10 +114,11 @@ const schemaTypes = {
   }
 }
 
-const initialPlacement = ({ tagId, name, personalisationType }) => ({
+const initialPlacement = ({ tagId, name, personalisationType, productSource }) => ({
   name,
   tags: [tagId],
   personalisationType,
+  productSource,
   schema: {
     definition: schemaTypes[personalisationType],
     samplePayload: {}
