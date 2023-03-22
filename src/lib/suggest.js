@@ -13,7 +13,7 @@ const {
   yesOrNo,
   createAutoComplete
 } = require('./terminal')
-const { CAMPAIGN_TYPES } = require('../constants')
+const { CAMPAIGN_TYPES, PRODUCT_SOURCES } = require('../constants')
 
 async function property (message) {
   const suggestions = await getAutoCompleteMap({
@@ -83,6 +83,21 @@ async function personalisationType () {
   })
   return createAutoComplete(
     msg('Select a campaign type (start typing to filter the list)'),
+    suggestions
+  ).response()
+}
+
+async function productSource () {
+  const suggestions = await getAutoCompleteMap({
+    arr: _.map(PRODUCT_SOURCES, type => ({
+      name: type.toLowerCase(),
+      id: type
+    })),
+    title: 'name',
+    value: 'id'
+  })
+  return createAutoComplete(
+    msg('Select a product source (start typing to filter the list)'),
     suggestions
   ).response()
 }
@@ -198,5 +213,6 @@ module.exports = {
   placement,
   tags,
   personalisationType,
+  productSource,
   both
 }
