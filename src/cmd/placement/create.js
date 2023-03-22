@@ -27,7 +27,7 @@ module.exports = async function create (
   personalisationType = await getPersonalisationType(personalisationType, {})
   const productSource =
     personalisationType === EVIDENCE_SELECTION
-      ? await getProductSource(null, {})
+      ? await getProductSource()
       : null
 
   name =

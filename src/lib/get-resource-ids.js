@@ -104,14 +104,8 @@ async function getPersonalisationType (personalisationType, pkg) {
   return personalisationType
 }
 
-async function getProductSource (productSource, pkg) {
-  if (productSource) {
-    return productSource
-  }
-  productSource = _.get(pkg, 'meta.productSource')
-  if (!productSource) {
-    productSource = await suggest.productSource()
-  }
+async function getProductSource () {
+  const productSource = await suggest.productSource()
   if (!productSource) {
     throw new Error('This command requires a product source')
   }
