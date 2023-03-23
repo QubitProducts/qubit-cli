@@ -1,0 +1,7 @@
+{
+  "makefile.extensionOutputFolder": "./.vscode",
+  "[javascript]": {
+    "editor.defaultFormatter": "numso.prettier-standard-vscode"
+  },
+  "standard.enable": true
+}
