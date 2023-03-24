@@ -8,7 +8,6 @@ renderExtensionIcon()
 chrome.action.onClicked.addListener(() => {
   chrome.tabs.query({ active: true, currentWindow: true }, async tabs => {
     const tabId = tabs.length && tabs[0].id
-    console.log(tabId)
     if (tabId) {
       await getState(tabId, (state = {}) =>
         setState(tabId, { enabled: !state.enabled }, renderExtensionIcon)
