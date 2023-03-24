@@ -1,31 +1,43 @@
 {
   "name": "qubit-cli",
-  "version": "0.0.1",
-  "manifest_version": 2,
+  "version": "1.0.0",
+  "manifest_version": 3,
   "description": "Qubit-CLI chrome extension",
-  "browser_action": {},
+  "background": {
+    "service_worker": "service_worker.js"
+  },
   "icons": {
     "16": "icons/on16.png",
     "48": "icons/on48.png",
     "128": "icons/on128.png"
   },
-  "background": {
-    "scripts": ["background.js"],
-    "persistent": true
-  },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["index.js"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "index.js"
+      ],
       "run_at": "document_start"
     }
+  ],
+  "host_permissions": [
+    "<all_urls>"
   ],
   "permissions": [
     "storage",
     "cookies",
     "tabs",
-    "webRequest",
-    "webRequestBlocking",
-    "<all_urls>"
-  ]
+    "declarativeNetRequest"
+  ],
+  "action": {
+    "type": "modifyHeaders",
+    "responseHeaders": [
+      {
+        "header": "content-security-policy",
+        "operation": "remove"
+      }
+    ]
+  }
 }
